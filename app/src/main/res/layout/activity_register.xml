@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".login.RegisterActivity"
+    android:background="@drawable/background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/regi_form"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="45dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginBottom="45dp"
+            android:orientation="vertical">
+
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/login_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_marginTop="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="-----------------    OR    -----------------"
+                android:layout_gravity="center" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:text="Fill the form to become a member"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:gravity="right"
+                    android:textColor="@color/black"
+                    android:layout_weight="1"
+                    android:text="I am: "/>
+
+                <RadioGroup
+                    android:id="@+id/regi_rg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:orientation="horizontal">
+                    <RadioButton
+                        android:id="@+id/regi_rb_girl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:layout_weight="1"
+                        android:buttonTint="@color/black"
+                        android:textColor="@color/black"
+                        android:drawablePadding="5dp"
+                        android:drawableLeft="@drawable/ic_action_girl"
+                        android:text="Girl" />
+
+                    <RadioButton
+                        android:id="@+id/regi_rb_man"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:drawablePadding="10dp"
+                        android:layout_weight="1"
+                        android:buttonTint="@color/black"
+                        android:textColor="@color/black"
+                        android:drawableLeft="@drawable/ic_action_man"
+                        android:text="Man"/>
+                </RadioGroup>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="15dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Name"
+                    android:textSize="18sp"
+                    android:gravity="right"
+                    android:textColor="@color/black"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"/>
+
+                <EditText
+                    android:id="@+id/regi_et_name"
+                    android:padding="5dp"
+                    android:inputType="textCapCharacters"
+                    android:textCursorDrawable="@drawable/black_cursor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border"
+                    android:layout_weight="0.5" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="E-mail"
+                    android:gravity="right"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"/>
+
+                <EditText
+                    android:id="@+id/regi_et_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:textCursorDrawable="@drawable/black_cursor"
+                    android:background="@drawable/border"
+                    android:layout_weight="0.5"
+                    android:padding="5dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Password"
+                    android:textColor="@color/black"
+                    android:gravity="right"
+                    android:textSize="18sp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"/>
+
+                <EditText
+                    android:id="@+id/regi_et_pass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border"
+                    android:drawableRight="@drawable/ic_action_eye_off"
+                    android:layout_weight="0.5"
+                    android:textCursorDrawable="@drawable/black_cursor"
+                    android:inputType="textPassword"
+                    android:padding="5dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Age"
+                    android:textColor="@color/black"
+                    android:gravity="right"
+                    android:textSize="18sp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    android:padding="5dp"
+                    android:background="@drawable/border">
+
+                    <Spinner
+                        android:id="@+id/sp_age"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:padding="5dp"/>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Finish registration"
+                android:textSize="18sp"
+                android:id="@+id/btn_register"
+                android:textColor="@color/white"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/button_atm"
+                android:textAllCaps="false"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/travelprefer_form"
+        android:visibility="gone"
+        android:gravity="center"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:text="I Prefer to travel with..."/>
+
+            <TextView
+                android:layout_marginTop="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:text="Adjust your preferences to see and be seen by those who fit them ."/>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="20dp">
+
+
+
+                <CheckBox
+                    android:id="@+id/cb_regi_girl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="60dp"
+                    android:textSize="15sp"
+                    android:layout_weight="1"
+                    android:gravity="right|center"
+                    android:textColor="@color/black"
+                    android:buttonTint="@color/black"
+                    android:layoutDirection="rtl"
+                    android:drawableLeft="@drawable/ic_action_girl"
+                    android:text="Girls" />
+
+                <CheckBox
+                    android:id="@+id/cb_regi_men"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:buttonTint="@color/black"
+                    android:gravity="right|center"
+                    android:layout_marginRight="60dp"
+                    android:layout_weight="1"
+                    android:layoutDirection="rtl"
+                    android:textColor="@color/black"
+                    android:drawableLeft="@drawable/ic_action_man"
+                    android:text="Men"/>
+
+            </LinearLayout>
+
+
+
+
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Age"
+                    android:textColor="@color/black"
+                    android:gravity="left"
+                    android:textSize="18sp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_weight="0.2"
+                    android:padding="5dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/border"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="15dp">
+                    <Spinner
+                        android:id="@+id/sp_age_from"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:singleLine="true" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/border"
+                        android:layout_height="wrap_content">
+                    <Spinner
+                        android:id="@+id/sp_age_to"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:singleLine="true"
+                        />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:paddingTop="10dp"
+                android:text="You can change your preferences in your Settings"/>
+
+            <Button
+                android:id="@+id/btn_save_register"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Save Preferences"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/button_atm"
+                android:textAllCaps="false"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
