@@ -38,7 +38,8 @@
         <activity android:name=".trips.ProfileVisitorActivity"/>
         <activity android:name=".chat.MessageActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
-        <activity android:name=".trips.ProfileActivity" />
+        <activity android:name=".trips.ProfileActivity"
+            android:parentActivityName=".trips.TripActivity"/>
 
 <activity android:name=".login.RegisterActivity"/>
         <activity android:name=".login.ResetPasswordActivity"/>

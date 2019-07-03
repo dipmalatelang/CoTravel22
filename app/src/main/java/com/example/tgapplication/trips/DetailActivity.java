@@ -170,7 +170,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 iv_profile_visitor.setVisibility(View.VISIBLE);
 
 
-                setDetails(userList.get(0).getName(), userList.get(0).getGender(), userList.get(0).getAge(), userList.get(0).getLook(), tripL.getUserLocation(), tripL.getNationality());
+                setDetails(userList.get(0).getName(), userList.get(0).getGender(), userList.get(0).getAge(), userList.get(0).getLook(),  userList.get(0).getLocation(),  userList.get(0).getNationality(),  userList.get(0).getLang(),  userList.get(0).getHeight(),  userList.get(0).getBody_type(),  userList.get(0).getEyes(),  userList.get(0).getHair(),  userList.get(0).getVisit(), "",  "", userList.get(0).getImageURL());
             } else {
                 tripL = (TripList) getIntent().getSerializableExtra("MyObj");
                 int faValue = getIntent().getIntExtra("FavId", 0);
@@ -189,13 +189,14 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                     iv_fav.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_fav_add));
                     iv_fav.setTag("ic_action_fav_add");
                 }
-                setDetails(tripL.getName(), tripL.getGender(), tripL.getAge(), tripL.getLook(),tripL.getUserLocation(),tripL.getNationality());
+                setDetails(tripL.getName(), tripL.getGender(), tripL.getAge(), tripL.getLook(),tripL.getUserLocation(),tripL.getNationality(),
+                        tripL.getLang(),tripL.getHeight(),tripL.getBody_type(),tripL.getEyes(),tripL.getHair(),tripL.getVisit(),tripL.getPlanLocation(),tripL.getFrom_to_date(), tripL.getImageUrl());
 //            if(tripL==null)
 //            {
 //                ArrayList<User> userL=getIntent().getSerializableExtra()
 //            }
 
-                Glide.with(DetailActivity.this).load(tripL.getImageUrl()).into(mTrip);
+
 
 
 //            mDate.setText(tripL.getFrom_to_date());
@@ -204,17 +205,29 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
-    private void setDetails(String name, String gender, String age, ArrayList<String> look, String userLocation, String nationality) {
+    private void setDetails(String name, String gender, String age, ArrayList<String> look, String userLocation, String nationality, String lang, String height, String body_type, String eyes, String hair, String visit, String planLocation, String from_to_date, String imageUrl) {
 
         String str_look = null;
         mToolbar.setTitle(name);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        tvName.setText(name);
+        if(name!=null && !name.equalsIgnoreCase(""))
+        {
+            tvName.setText(name);
+        }
 
-        tvSex.setText(gender);
-        tvAge.setText(age + " years");
+        if(gender!=null && !gender.equalsIgnoreCase("")) {
+            tvSex.setText(gender);
+            labelSex.setVisibility(View.VISIBLE);
+        }
+        else {
+            labelSex.setVisibility(View.GONE);
+        }
+
+        if(age!=null && !age.equalsIgnoreCase("")) {
+            tvAge.setText(age + " years");
+        }
 
         for (int j = 0; j < look.size(); j++) {
             if (str_look != null) {
@@ -224,20 +237,93 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             }
 
         }
-        tvLooking.setText(str_look);
 
-        mCity.setText(userLocation);
-        tvNatioanlity.setText(nationality);
-        tvLanguage.setText(tripL.getLang());
-        tvHeight.setText(tripL.getHeight());
-        tvBodyType.setText(tripL.getBody_type());
-        tvEyes.setText(tripL.getEyes());
-        tvHairs.setText(tripL.getHair());
+        if(str_look!=null && !str_look.equalsIgnoreCase("")) {
+            tvLooking.setText(str_look);
+            labelLooking.setVisibility(View.VISIBLE);
+        }
+        else {
+            labelLooking.setVisibility(View.GONE);
+        }
 
+        if(userLocation!=null && !userLocation.equalsIgnoreCase("")) {
+            mCity.setText(userLocation);
+            labelCity.setVisibility(View.VISIBLE);
+        }
+        else {
+            labelCity.setVisibility(View.GONE);
+        }
 
-        tvWantToVisit.setText(tripL.getVisit());
-        tvPlannedtrip.setText(tripL.getPlanLocation());
-        tvDate.setText(tripL.getFrom_to_date());
+        if(nationality!=null && !nationality.equalsIgnoreCase("")) {
+            tvNatioanlity.setText(nationality);
+            labelNationality.setVisibility(View.VISIBLE);
+        }
+        else {
+            labelNationality.setVisibility(View.GONE);
+        }
+
+        if(lang!=null && !lang.equalsIgnoreCase("")) {
+            tvLanguage.setText(lang);
+            labelLanguage.setVisibility(View.VISIBLE);
+        }
+        else {
+            labelLanguage.setVisibility(View.GONE);
+        }
+
+        if(height!=null && !height.equalsIgnoreCase("")) {
+            tvHeight.setText(height);
+            labelHeight.setVisibility(View.VISIBLE);
+        }
+        else {
+            labelHeight.setVisibility(View.GONE);
+        }
+
+        if(body_type!=null && !body_type.equalsIgnoreCase("")) {
+            tvBodyType.setText(body_type);
+            labelBodyType.setVisibility(View.VISIBLE);
+        }
+        else {
+            labelBodyType.setVisibility(View.GONE);
+        }
+
+        if(eyes!=null && !eyes.equalsIgnoreCase("")) {
+            tvEyes.setText(eyes);
+            labelEyes.setVisibility(View.VISIBLE);
+        }
+        else {
+            labelEyes.setVisibility(View.GONE);
+        }
+
+        if(hair!=null && !hair.equalsIgnoreCase("")) {
+            tvHairs.setText(hair);
+            labelHairs.setVisibility(View.VISIBLE);
+        }
+        else {
+            labelHairs.setVisibility(View.GONE);
+        }
+
+        if(visit!=null && !visit.equalsIgnoreCase("")) {
+            tvWantToVisit.setText(visit);
+            labelWantToVisit.setVisibility(View.VISIBLE);
+        }
+        else {
+            labelWantToVisit.setVisibility(View.GONE);
+        }
+
+        if(planLocation!=null && !planLocation.equalsIgnoreCase("")) {
+            tvPlannedtrip.setText(planLocation);
+            tvDate.setText(from_to_date);
+            labelPlannedtrip.setVisibility(View.VISIBLE);
+        }
+        else {
+            labelPlannedtrip.setVisibility(View.GONE);
+        }
+
+        if(imageUrl!=null && !imageUrl.equalsIgnoreCase("") && !imageUrl.equalsIgnoreCase("default"))
+        {
+            Glide.with(DetailActivity.this).load(imageUrl).into(mTrip);
+        }
+
 
     }
 
@@ -425,7 +511,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 break;
 
             case R.id.iv_profile_edit:
-                Intent msgIntent = new Intent(this, ProfileActivity.class);
+                Intent msgIntent = new Intent(this, LoginActivity.class);
                 msgIntent.putExtra("nextActivity", "profileEdit");
                 startActivity(msgIntent);
                 break;

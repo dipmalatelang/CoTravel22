@@ -96,15 +96,15 @@ public class TripActivity extends AppCompatActivity {
 
         Toast.makeText(this, ""+str_city, Toast.LENGTH_SHORT).show();
 
-
-        if(str_city.equalsIgnoreCase("not_defined"))
-        {
-            tripList();
-        }
-        else{
-            Toast.makeText(this, "Data: "+str_city+" "+str_lang+" "+str_look+" "+str_from+" "+str_to+" "+str_visit, Toast.LENGTH_SHORT).show();
-            getDataToFilter();
-        }
+        tripList();
+//        if(str_city.equalsIgnoreCase("not_defined"))
+//        {
+//            tripList();
+//        }
+//        else{
+//            Toast.makeText(this, "Data: "+str_city+" "+str_lang+" "+str_look+" "+str_from+" "+str_to+" "+str_visit, Toast.LENGTH_SHORT).show();
+//            getDataToFilter();
+//        }
 
 //        getFav();
 
@@ -479,14 +479,14 @@ public class TripActivity extends AppCompatActivity {
             startActivity(new Intent(this, FilterTripActivity.class));
             return true;
         }
-//        else if(item.getItemId() ==R.id.trip_edit)
-//        {
-//            Intent msgIntent=new Intent(this,ProfileActivity.class);
-//            msgIntent.putExtra("nextActivity","profileEdit");
-//            startActivity(msgIntent);
-//
-//            return true;
-//        }
+        else if(item.getItemId() ==R.id.trip_edit)
+        {
+            Intent msgIntent=new Intent(this,LoginActivity.class);
+            msgIntent.putExtra("nextActivity","profileEdit");
+            startActivity(msgIntent);
+
+            return true;
+        }
         else if(item.getItemId() ==R.id.trip_info)
         {
             Intent mIntent = new Intent(this, DetailActivity.class);

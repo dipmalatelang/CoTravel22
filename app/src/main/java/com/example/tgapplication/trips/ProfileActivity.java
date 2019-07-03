@@ -271,12 +271,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 finish();
                 Toast.makeText(this, "in"+account, Toast.LENGTH_SHORT).show();
             }
-            else if(value.equalsIgnoreCase("profileEdit"))
-            {
+//            else if(value.equalsIgnoreCase("profileEdit"))
+//            {
 //                regi_form.setVisibility(View.GONE);
 //                regi_more_form.setVisibility(View.VISIBLE);
-                Toast.makeText(this, "Profile edited Successfully", Toast.LENGTH_SHORT).show();
-            }
+//                Toast.makeText(this, "Profile edited Successfully", Toast.LENGTH_SHORT).show();
+//            }
         }
         else {
             Toast.makeText(this, "out", Toast.LENGTH_SHORT).show();
@@ -293,7 +293,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 //                str_look, str_location, str_name, user.getPhoneNumber(), str_nationality, str_visit);
 //        databaseReference.setValue(userClass);
 
-        updateUI(user);
+//        updateUI(user);
 
 //            hashMap=new HashMap<>();
 //        hashMap.put("id",user.getUid());

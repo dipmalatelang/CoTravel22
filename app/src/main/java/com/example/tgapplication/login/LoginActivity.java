@@ -10,7 +10,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +20,7 @@ import com.example.tgapplication.R;
 import com.example.tgapplication.chat.ChatActivity;
 import com.example.tgapplication.chat.MessageActivity;
 import com.example.tgapplication.trips.AddTripActivity;
+import com.example.tgapplication.trips.ProfileActivity;
 import com.example.tgapplication.trips.TripActivity;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -35,17 +35,12 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
     LoginButton loginButton;
     Button btn_login;
-    @BindView(R.id.regi_form)
-    LinearLayout regiForm;
-    @BindView(R.id.regi_more_form)
-    LinearLayout regiMoreForm;
     private CallbackManager mCallbackManager;
     private FirebaseAuth mAuth;
     String value;
@@ -168,9 +163,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 finish();
                 Toast.makeText(this, "in" + account, Toast.LENGTH_SHORT).show();
             } else if (value.equalsIgnoreCase("profileEdit")) {
-                regiForm.setVisibility(View.GONE);
-                regiMoreForm.setVisibility(View.VISIBLE);
-                Toast.makeText(this, "Profile edited Successfully", Toast.LENGTH_SHORT).show();
+                Intent msgIntent=new Intent(LoginActivity.this, ProfileActivity.class);
+//                msgIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                msgIntent.putExtra("nextActivity","profileEdit");
+                startActivity(msgIntent);
+//                Toast.makeText(this, "Profile edited Successfully", Toast.LENGTH_SHORT).show();
             }
         } else {
             Toast.makeText(this, "out", Toast.LENGTH_SHORT).show();
