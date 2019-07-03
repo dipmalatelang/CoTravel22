@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     LoginButton loginButton;
     Button btn_login;
-    @BindView(R.id.regi_form)
+    @BindView(R.id.cl_register_form)
     LinearLayout regiForm;
     @BindView(R.id.regi_more_form)
     LinearLayout regiMoreForm;
