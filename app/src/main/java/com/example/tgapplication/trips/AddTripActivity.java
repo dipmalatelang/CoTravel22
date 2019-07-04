@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,31 +27,38 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class AddTripActivity extends AppCompatActivity implements View.OnClickListener {
 
     DatabaseReference reference;
     FirebaseUser fuser;
     Button btn_add_trip;
-    TextView tv_from_date,tv_to_date;
+    TextView tv_from_date, tv_to_date;
     EditText et_location, et_note;
     Calendar mcalendar = Calendar.getInstance();
     int day, month, year;
     ArrayList tripList;
     RecyclerView recyclerView;
     TripListAdapter mtripAdapter;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_trip);
+        ButterKnife.bind(this);
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
-        btn_add_trip=findViewById(R.id.btn_add_trip);
-        et_location=findViewById(R.id.et_location);
-        tv_from_date=findViewById(R.id.tv_from_date);
-        tv_to_date=findViewById(R.id.tv_to_date);
-        et_note=findViewById(R.id.et_note);
+        btn_add_trip = findViewById(R.id.btn_add_trip);
+        et_location = findViewById(R.id.et_location);
+        tv_from_date = findViewById(R.id.tv_from_date);
+        tv_to_date = findViewById(R.id.tv_to_date);
+        et_note = findViewById(R.id.et_note);
 
         tv_from_date.setOnClickListener(this);
         tv_to_date.setOnClickListener(this);
@@ -72,21 +80,23 @@ public class AddTripActivity extends AppCompatActivity implements View.OnClickLi
         LinearLayoutManager ll_manager = new LinearLayoutManager(AddTripActivity.this);
         recyclerView.setLayoutManager(ll_manager);
 
-        assert getSupportActionBar() != null; //null check
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        assert getSupportActionBar() != null; //null check
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         displayTripList();
 
     }
 
     @Override
-    public boolean onSupportNavigateUp(){
+    public boolean onSupportNavigateUp() {
         finish();
         return true;
     }
 
-    private void displayTripList()
-    {
+    private void displayTripList() {
         tripList = new ArrayList<>();
 
         final ArrayList<TripData> trips = new ArrayList<>();
@@ -96,29 +106,24 @@ public class AddTripActivity extends AppCompatActivity implements View.OnClickLi
                 .child("Trips");
         reference1.orderByKey().equalTo(fuser.getUid())
                 .addValueEventListener(
-                        new ValueEventListener()
-                        {
+                        new ValueEventListener() {
                             @Override
-                            public void onDataChange(DataSnapshot dataSnapshot)
-                            {
+                            public void onDataChange(DataSnapshot dataSnapshot) {
 
-                                for (DataSnapshot snapshot : dataSnapshot.getChildren())
-                                {
-                                    String city="";
-                                    String tripNote="";
-                                    String date="";
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                    String city = "";
+                                    String tripNote = "";
+                                    String date = "";
 
-                                    for(DataSnapshot snapshot1: snapshot.getChildren())
-                                    {
-                                        TripData tripData  = snapshot1.getValue(TripData.class);
+                                    for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                                        TripData tripData = snapshot1.getValue(TripData.class);
                                         //Log.i("VishalD",""+fuser.getUsername()+" , "+tripData.getLocation());
 
                                         trips.add(tripData);
                                     }
                                 }
-                                for(int j=0;j<trips.size();j++)
-                                {
-                                    Log.i("List now",""+trips.get(j).getLocation());
+                                for (int j = 0; j < trips.size(); j++) {
+                                    Log.i("List now", "" + trips.get(j).getLocation());
                                 }
                                 // add code here of adapter
                                 mtripAdapter = new TripListAdapter(AddTripActivity.this, trips);
@@ -126,20 +131,18 @@ public class AddTripActivity extends AppCompatActivity implements View.OnClickLi
                             }
 
                             @Override
-                            public void onCancelled(DatabaseError databaseError)
-                            {
+                            public void onCancelled(DatabaseError databaseError) {
 
                             }
                         });
     }
 
-    private void Trips()
-    {
-        reference= FirebaseDatabase.getInstance().getReference("Trips").child(fuser.getUid());
+    private void Trips() {
+        reference = FirebaseDatabase.getInstance().getReference("Trips").child(fuser.getUid());
 
         String userId = reference.push().getKey();
-        TripData tripData=new TripData(fuser.getUid(),et_location.getText().toString(),et_note.getText().toString(),
-                tv_from_date.getText().toString(),tv_to_date.getText().toString());
+        TripData tripData = new TripData(fuser.getUid(), et_location.getText().toString(), et_note.getText().toString(),
+                tv_from_date.getText().toString(), tv_to_date.getText().toString());
 
         reference.child(userId).setValue(tripData);
 
@@ -152,13 +155,9 @@ public class AddTripActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
-
-
-
     @Override
     public void onClick(View v) {
-        switch (v.getId())
-        {
+        switch (v.getId()) {
             case R.id.btn_add_trip:
                 Trips();
                 break;
@@ -167,19 +166,19 @@ public class AddTripActivity extends AppCompatActivity implements View.OnClickLi
                 DatePickerDialog.OnDateSetListener fromlistener = new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        String sMonth,sDay;
-                        month = monthOfYear+1;
+                        String sMonth, sDay;
+                        month = monthOfYear + 1;
                         day = dayOfMonth;
 
-                        if (month<10){
-                            sMonth = "0"+month;
-                        }else {
+                        if (month < 10) {
+                            sMonth = "0" + month;
+                        } else {
                             sMonth = String.valueOf(month);
                         }
 
-                        if (day<10){
-                            sDay = "0"+day;
-                        }else {
+                        if (day < 10) {
+                            sDay = "0" + day;
+                        } else {
                             sDay = String.valueOf(day);
                         }
 
@@ -199,19 +198,19 @@ public class AddTripActivity extends AppCompatActivity implements View.OnClickLi
                 DatePickerDialog.OnDateSetListener tolistener = new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        String sMonth,sDay;
-                        month = monthOfYear+1;
+                        String sMonth, sDay;
+                        month = monthOfYear + 1;
                         day = dayOfMonth;
 
-                        if (month<10){
-                            sMonth = "0"+month;
-                        }else {
+                        if (month < 10) {
+                            sMonth = "0" + month;
+                        } else {
                             sMonth = String.valueOf(month);
                         }
 
-                        if (day<10){
-                            sDay = "0"+day;
-                        }else {
+                        if (day < 10) {
+                            sDay = "0" + day;
+                        } else {
                             sDay = String.valueOf(day);
                         }
 

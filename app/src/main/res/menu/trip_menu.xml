@@ -15,12 +15,6 @@
         android:title="@string/edit"/>
 
     <item
-        android:id="@+id/trip_filter"
-        android:icon="@drawable/ic_action_filter"
-        app:showAsAction="ifRoom"
-        android:title="@string/filter"/>
-
-    <item
         android:id="@+id/trip_add"
         android:icon="@drawable/ic_action_add"
         app:showAsAction="ifRoom"

@@ -34,6 +34,7 @@
             android:theme="@style/Theme.AppCompat.NoActionBar"
             android:parentActivityName=".MainActivity"/>
         <activity android:name=".trips.AddTripActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
             android:parentActivityName=".trips.TripActivity"/>
         <activity android:name=".trips.ProfileVisitorActivity"/>
         <activity android:name=".chat.MessageActivity"
