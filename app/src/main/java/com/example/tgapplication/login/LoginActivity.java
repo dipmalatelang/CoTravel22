@@ -167,7 +167,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 //                msgIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 //                msgIntent.putExtra("nextActivity","profileEdit");
                 startActivity(msgIntent);
-//                Toast.makeText(this, "Profile edited Successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Profile edited Successfully", Toast.LENGTH_SHORT).show();
             }
         } else {
             Toast.makeText(this, "out", Toast.LENGTH_SHORT).show();
