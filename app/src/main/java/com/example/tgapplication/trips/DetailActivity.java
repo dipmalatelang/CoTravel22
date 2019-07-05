@@ -1,26 +1,46 @@
 package com.example.tgapplication.trips;
 
+import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tgapplication.R;
 import com.example.tgapplication.login.LoginActivity;
+import com.example.tgapplication.photo.MyAdapter;
+import com.example.tgapplication.photo.Upload;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -28,6 +48,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class DetailActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -41,6 +62,8 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     Button btn_details, btn_images;
     List<TripList> myFavArray = new ArrayList<>();
     List<TripList> myVisitArray = new ArrayList<>();
+
+    private static final int PICK_IMAGE_REQUEST = 234;
 
 
     //    Gallery simpleGallery;
@@ -75,6 +98,17 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     LinearLayout labelWantToVisit;
     @BindView(R.id.labelPlannedtrip)
     LinearLayout labelPlannedtrip;
+    @BindView(R.id.iv_my_pic)
+    ImageView ivMyPic;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+    private DatabaseReference mDatabase;
+    private ProgressDialog progressDialog;
+    private ArrayList<Upload> uploads;
+    private MyAdapter adapter;
+    private Uri filePath;
+    private String getDownloadImageUrl;
+    private StorageReference storageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,6 +176,41 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         btn_details.setOnClickListener(this);
         btn_images.setOnClickListener(this);
 
+        GridLayoutManager mGridLayoutManager = new GridLayoutManager(this, 2);
+        recyclerView.setLayoutManager(mGridLayoutManager);
+
+        progressDialog = new ProgressDialog(this);
+
+        uploads = new ArrayList<>();
+
+//displaying progress dialog while fetching images
+        progressDialog.setMessage("Please wait...");
+        progressDialog.show();
+        storageReference = FirebaseStorage.getInstance().getReference();
+        mDatabase = FirebaseDatabase.getInstance().getReference("Pictures").child(fuser.getUid());
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+//dismissing the progress dialog
+                progressDialog.dismiss();
+
+//iterating through all the values in database
+                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                    Upload upload = postSnapshot.getValue(Upload.class);
+                    uploads.add(upload);
+                }
+//creating adapter
+                adapter = new MyAdapter(getApplicationContext(), uploads);
+
+//adding adapter to recyclerview
+                recyclerView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                progressDialog.dismiss();
+            }
+        });
 
 //        Log.i("Got Data back ",""+fav_int);
 //        if(fav_int)
@@ -168,9 +237,10 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 iv_profile_edit.setVisibility(View.VISIBLE);
                 iv_my_fav.setVisibility(View.VISIBLE);
                 iv_profile_visitor.setVisibility(View.VISIBLE);
+                ivMyPic.setVisibility(View.VISIBLE);
 
 
-                setDetails(userList.get(0).getName(), userList.get(0).getGender(), userList.get(0).getAge(), userList.get(0).getLook(),  userList.get(0).getLocation(),  userList.get(0).getNationality(),  userList.get(0).getLang(),  userList.get(0).getHeight(),  userList.get(0).getBody_type(),  userList.get(0).getEyes(),  userList.get(0).getHair(),  userList.get(0).getVisit(), "",  "", userList.get(0).getImageURL());
+                setDetails(userList.get(0).getName(), userList.get(0).getGender(), userList.get(0).getAge(), userList.get(0).getLook(), userList.get(0).getLocation(), userList.get(0).getNationality(), userList.get(0).getLang(), userList.get(0).getHeight(), userList.get(0).getBody_type(), userList.get(0).getEyes(), userList.get(0).getHair(), userList.get(0).getVisit(), "", "", userList.get(0).getImageURL());
             } else {
                 tripL = (TripList) getIntent().getSerializableExtra("MyObj");
                 int faValue = getIntent().getIntExtra("FavId", 0);
@@ -180,6 +250,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 iv_profile_edit.setVisibility(View.GONE);
                 iv_my_fav.setVisibility(View.GONE);
                 iv_profile_visitor.setVisibility(View.GONE);
+                ivMyPic.setVisibility(View.GONE);
 
                 Log.i("Fav Value", " " + faValue);
                 if (faValue == 1) {
@@ -189,14 +260,12 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                     iv_fav.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_fav_add));
                     iv_fav.setTag("ic_action_fav_add");
                 }
-                setDetails(tripL.getName(), tripL.getGender(), tripL.getAge(), tripL.getLook(),tripL.getUserLocation(),tripL.getNationality(),
-                        tripL.getLang(),tripL.getHeight(),tripL.getBody_type(),tripL.getEyes(),tripL.getHair(),tripL.getVisit(),tripL.getPlanLocation(),tripL.getFrom_to_date(), tripL.getImageUrl());
+                setDetails(tripL.getName(), tripL.getGender(), tripL.getAge(), tripL.getLook(), tripL.getUserLocation(), tripL.getNationality(),
+                        tripL.getLang(), tripL.getHeight(), tripL.getBody_type(), tripL.getEyes(), tripL.getHair(), tripL.getVisit(), tripL.getPlanLocation(), tripL.getFrom_to_date(), tripL.getImageUrl());
 //            if(tripL==null)
 //            {
 //                ArrayList<User> userL=getIntent().getSerializableExtra()
 //            }
-
-
 
 
 //            mDate.setText(tripL.getFrom_to_date());
@@ -212,20 +281,18 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if(name!=null && !name.equalsIgnoreCase(""))
-        {
+        if (name != null && !name.equalsIgnoreCase("")) {
             tvName.setText(name);
         }
 
-        if(gender!=null && !gender.equalsIgnoreCase("")) {
+        if (gender != null && !gender.equalsIgnoreCase("")) {
             tvSex.setText(gender);
             labelSex.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             labelSex.setVisibility(View.GONE);
         }
 
-        if(age!=null && !age.equalsIgnoreCase("")) {
+        if (age != null && !age.equalsIgnoreCase("")) {
             tvAge.setText(age + " years");
         }
 
@@ -238,89 +305,78 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
         }
 
-        if(str_look!=null && !str_look.equalsIgnoreCase("")) {
+        if (str_look != null && !str_look.equalsIgnoreCase("")) {
             tvLooking.setText(str_look);
             labelLooking.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             labelLooking.setVisibility(View.GONE);
         }
 
-        if(userLocation!=null && !userLocation.equalsIgnoreCase("")) {
+        if (userLocation != null && !userLocation.equalsIgnoreCase("")) {
             mCity.setText(userLocation);
             labelCity.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             labelCity.setVisibility(View.GONE);
         }
 
-        if(nationality!=null && !nationality.equalsIgnoreCase("")) {
+        if (nationality != null && !nationality.equalsIgnoreCase("")) {
             tvNatioanlity.setText(nationality);
             labelNationality.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             labelNationality.setVisibility(View.GONE);
         }
 
-        if(lang!=null && !lang.equalsIgnoreCase("")) {
+        if (lang != null && !lang.equalsIgnoreCase("")) {
             tvLanguage.setText(lang);
             labelLanguage.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             labelLanguage.setVisibility(View.GONE);
         }
 
-        if(height!=null && !height.equalsIgnoreCase("")) {
+        if (height != null && !height.equalsIgnoreCase("")) {
             tvHeight.setText(height);
             labelHeight.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             labelHeight.setVisibility(View.GONE);
         }
 
-        if(body_type!=null && !body_type.equalsIgnoreCase("")) {
+        if (body_type != null && !body_type.equalsIgnoreCase("")) {
             tvBodyType.setText(body_type);
             labelBodyType.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             labelBodyType.setVisibility(View.GONE);
         }
 
-        if(eyes!=null && !eyes.equalsIgnoreCase("")) {
+        if (eyes != null && !eyes.equalsIgnoreCase("")) {
             tvEyes.setText(eyes);
             labelEyes.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             labelEyes.setVisibility(View.GONE);
         }
 
-        if(hair!=null && !hair.equalsIgnoreCase("")) {
+        if (hair != null && !hair.equalsIgnoreCase("")) {
             tvHairs.setText(hair);
             labelHairs.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             labelHairs.setVisibility(View.GONE);
         }
 
-        if(visit!=null && !visit.equalsIgnoreCase("")) {
+        if (visit != null && !visit.equalsIgnoreCase("")) {
             tvWantToVisit.setText(visit);
             labelWantToVisit.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             labelWantToVisit.setVisibility(View.GONE);
         }
 
-        if(planLocation!=null && !planLocation.equalsIgnoreCase("")) {
+        if (planLocation != null && !planLocation.equalsIgnoreCase("")) {
             tvPlannedtrip.setText(planLocation);
             tvDate.setText(from_to_date);
             labelPlannedtrip.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             labelPlannedtrip.setVisibility(View.GONE);
         }
 
-        if(imageUrl!=null && !imageUrl.equalsIgnoreCase("") && !imageUrl.equalsIgnoreCase("default"))
-        {
+        if (imageUrl != null && !imageUrl.equalsIgnoreCase("") && !imageUrl.equalsIgnoreCase("default")) {
             Glide.with(DetailActivity.this).load(imageUrl).into(mTrip);
         }
 
@@ -555,6 +611,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         }
         Intent mIntent = new Intent(this, ProfileVisitorActivity.class);
         mIntent.putExtra("myVisit", (Serializable) myVisitArray);
+        mIntent.putExtra("ListFav",(Serializable) favArray);
         startActivity(mIntent);
     }
 
@@ -570,8 +627,10 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             }
 
         }
+        Log.i("Checking Size",myFavArray.size()+" "+favArray.size());
         Intent mIntent = new Intent(this, ProfileVisitorActivity.class);
         mIntent.putExtra("myFav", (Serializable) myFavArray);
+        mIntent.putExtra("ListFav",(Serializable) favArray);
         startActivity(mIntent);
     }
 
@@ -593,4 +652,102 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         visitorRef.child(id).removeValue();
 
     }
+
+    @OnClick(R.id.iv_my_pic)
+    public void onViewClicked() {
+        showFileChooser();
+    }
+
+    private void showFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            filePath = data.getData();
+            uploadFile(filePath);
+//            try {
+//                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+//                imageView.setImageBitmap(bitmap);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+        }
+    }
+
+    public String getFileExtension(Uri uri) {
+        ContentResolver cR = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
+
+    private void uploadFile(Uri filePath) {
+//checking if file is available
+        Log.i("Result",""+filePath);
+        if (filePath != null) {
+//displaying progress dialog while image is uploading
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading");
+            progressDialog.show();
+
+//getting the storage reference
+            final StorageReference sRef = storageReference.child("uploads/" + System.currentTimeMillis() + "." + getFileExtension(filePath));
+
+//adding the file to reference
+            sRef.putFile(filePath)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
+//dismissing the progress dialog
+                            progressDialog.dismiss();
+
+//displaying success toast
+                            Toast.makeText(getApplicationContext(), "File Uploaded ", Toast.LENGTH_LONG).show();
+
+                            sRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Uri> task) {
+                                    getDownloadImageUrl = task.getResult().toString();
+                                    Log.i("FirebaseImages",getDownloadImageUrl);
+
+//creating the upload object to store uploaded image details
+                                    Upload upload = new Upload("Image", taskSnapshot.getMetadata().getReference().getDownloadUrl().toString(),getDownloadImageUrl);
+
+//adding an upload to firebase database
+                                    String uploadId = mDatabase.push().getKey();
+                                    mDatabase.child(uploadId).setValue(upload);
+                                }
+                            });
+                        }
+                    })
+
+
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            progressDialog.dismiss();
+                            Log.i("Failure",exception.getMessage());
+//                            Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+//displaying the upload progress
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                            progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
+                        }
+                    });
+        } else {
+            Toast.makeText(this, "Please Select a Image", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
 }

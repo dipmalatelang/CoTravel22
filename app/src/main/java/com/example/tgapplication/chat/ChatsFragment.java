@@ -1,6 +1,7 @@
 package com.example.tgapplication.chat;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,10 +57,11 @@ public class ChatsFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 usersList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+
                     Chatlist chatlist = snapshot.getValue(Chatlist.class);
                     usersList.add(chatlist);
                 }
-
+                Log.i("ChatFrag",""+dataSnapshot.getChildren());
                 chatList();
             }
 

@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -134,16 +135,16 @@ public class TripActivity extends AppCompatActivity {
     }
 
     private void getAllVisit() {
-        visitArray.clear();
-        final DatabaseReference visitRef = FirebaseDatabase.getInstance().getReference("ProfileVisitor")
+
+        DatabaseReference visitRef = FirebaseDatabase.getInstance().getReference("ProfileVisitor")
                 .child(fuser.getUid());
 //        Log.i("Fav",visitorRef.getKey());
 
         visitRef.addValueEventListener(new ValueEventListener() {
 
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                visitArray.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
 //                            for (DataSnapshot snapshot1 : snapshot.getChildren()) {
@@ -162,23 +163,27 @@ public class TripActivity extends AppCompatActivity {
     }
 
     private void getAllFav() {
-        favArray.clear();
-        final DatabaseReference favRef = FirebaseDatabase.getInstance().getReference("Favorites")
+
+        DatabaseReference favRef = FirebaseDatabase.getInstance().getReference("Favorites")
                 .child(fuser.getUid());
 //        Log.i("Fav",visitorRef.getKey());
 
         favRef.addValueEventListener(new ValueEventListener() {
 
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                favArray.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
 //                            for (DataSnapshot snapshot1 : snapshot.getChildren()) {
 
-                    FavList favData = snapshot.getValue(FavList.class);
-                    favArray.add(favData.getId());
+                                FavList favData = snapshot.getValue(FavList.class);
+                    if (favData != null) {
+                        favArray.add(favData.getId());
+                    }
+//                            }
                 }
+                Log.i("Checking Size in Trip",""+dataSnapshot.getChildren());
             }
 
             @Override
