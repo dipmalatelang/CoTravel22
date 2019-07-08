@@ -13,8 +13,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tgapplication.R;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -22,10 +25,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
     private Context mcontext;
     private List<Upload> mUploads;
     String TAG = "AdapterClass";
+    String uid;
     private StorageReference storageReference;
+    private DatabaseReference reference;
 
-    public MyAdapter(Context context,List<Upload> uploads)
+    public MyAdapter(Context context, String uid, List<Upload> uploads)
     {
+        this.uid=uid;
         mcontext =context;
         mUploads =uploads;
     }
@@ -43,7 +49,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
 
         Upload uploadCurrent = mUploads.get(position);
-        holder.textViewName.setText(uploadCurrent.getName());
+//        holder.textViewName.setText(uploadCurrent.getName());
 
         Glide
                 .with(mcontext)
@@ -54,6 +60,19 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
 
 
         Log.i(TAG, "onBindViewHolder: " + uploadCurrent.getUrl());
+
+        holder.imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                reference = FirebaseDatabase.getInstance().getReference("Users").child(uid);
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("imageURL", ""+uploadCurrent.getimage());
+                reference.updateChildren(map);
+
+                holder.ivTitle.setImageDrawable(mcontext.getResources().getDrawable(R.drawable.ic_action_fav_remove));
+            }
+        });
     }
 
     @Override
@@ -62,13 +81,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
     }
 
     public class ImageViewHolder extends RecyclerView.ViewHolder{
-    public TextView textViewName;
-    public ImageView imageView;
+    public ImageView imageView,ivTitle;
 
     public ImageViewHolder(@NonNull View itemView) {
         super(itemView);
-        textViewName =  itemView.findViewById(R.id.textViewName);
          imageView = itemView.findViewById(R.id.imageView);
+        ivTitle=itemView.findViewById(R.id.ivTitle);
     }
 }
 

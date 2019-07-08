@@ -200,7 +200,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                     uploads.add(upload);
                 }
 //creating adapter
-                adapter = new MyAdapter(getApplicationContext(), uploads);
+                adapter = new MyAdapter(getApplicationContext(),fuser.getUid(), uploads);
 
 //adding adapter to recyclerview
                 recyclerView.setAdapter(adapter);
@@ -645,7 +645,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     }
 
 
-    private void removeFav(String uid, String id) {
+    public void removeFav(String uid, String id) {
 
         final DatabaseReference visitorRef = FirebaseDatabase.getInstance().getReference("Favorites")
                 .child(uid);

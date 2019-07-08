@@ -44,8 +44,7 @@ public class ProfileVisitorActivity extends AppCompatActivity {
                 favList = (List<TripList>) getIntent().getSerializableExtra("myVisit");
                 favArray = (List<String>) getIntent().getSerializableExtra("ListFav");
                 Log.i("Visit", "" + favList.size());
-
-                ProfileVisitorAdapter tripAdapter = new ProfileVisitorAdapter(this, fuser.getUid(), favArray, favList);
+                ProfileVisitorAdapter tripAdapter = new ProfileVisitorAdapter(this, fuser.getUid(), favArray, favList,"visit");
                 myProfileRV.setAdapter(tripAdapter);
 
             } else {
@@ -54,7 +53,7 @@ public class ProfileVisitorActivity extends AppCompatActivity {
 
                 favArray = (List<String>) getIntent().getSerializableExtra("ListFav");
 
-                ProfileVisitorAdapter tripAdapter = new ProfileVisitorAdapter(this, fuser.getUid(), favArray, favList);
+                ProfileVisitorAdapter tripAdapter = new ProfileVisitorAdapter(this, fuser.getUid(), favArray, favList,"fav");
                 myProfileRV.setAdapter(tripAdapter);
             }
         }
