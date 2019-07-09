@@ -267,7 +267,7 @@
                     android:textColor="@color/white"
                     android:buttonTint="@color/white"
                     android:layoutDirection="rtl"
-                    android:drawableStart="@drawable/ic_action_girl"
+                    android:drawableStart="@drawable/avatar_girl_32"
                     android:text="Girls" />
 
                 <CheckBox
@@ -281,7 +281,7 @@
                     android:layout_weight="1"
                     android:layoutDirection="rtl"
                     android:textColor="@color/white"
-                    android:drawableStart="@drawable/ic_action_man"
+                    android:drawableStart="@drawable/avatar_boy_32"
                     android:text="Men"/>
 
             </LinearLayout>
@@ -357,7 +357,7 @@
                 android:textSize="18sp"
                 android:textColor="@color/white"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/button_atm"
+                android:background="@color/colorPrimary"
                 android:textAllCaps="false"/>
 
         </LinearLayout>

@@ -1,52 +1,64 @@
 package com.example.tgapplication;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
-import com.example.tgapplication.login.LoginActivity;
+import com.example.tgapplication.fragment.account.AccountFragment;
+import com.example.tgapplication.fragment.chat.ChatFragment;
+import com.example.tgapplication.fragment.favourite.FavouriteFragment;
+import com.example.tgapplication.fragment.trip.TripFragment;
+import com.example.tgapplication.fragment.visitor.VisitorFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
-public class MainActivity extends AppCompatActivity {
-
-
-    @BindView(R.id.trip)
-    Button trip;
-    @BindView(R.id.chat)
-    Button chat;
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView.setOnNavigationItemSelectedListener(this);
 
     }
 
-    @OnClick({R.id.trip, R.id.chat})
-    public void onViewClicked(View v) {
-        switch (v.getId())
-        {
-            case R.id.chat:
-                Intent chatIntent= new Intent(this, LoginActivity.class);
-                chatIntent.putExtra("nextActivity","Chat");
-                startActivity(chatIntent);
 
+    private boolean loadFragment(Fragment fragment) {
+        //switching fragment
+        if (fragment != null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_main_screen, fragment)
+                    .commit();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Fragment fragment = null;
+        switch (item.getItemId()) {
+            case R.id.nav_account:
+                fragment = new AccountFragment();
                 break;
-
-            case R.id.trip:
-                Intent tripIntent = new Intent(this, LoginActivity.class);
-                tripIntent.putExtra("nextActivity", "Trips");
-                startActivity(tripIntent);
+            case R.id.nav_chat:
+                fragment = new ChatFragment();
+                break;
+            case R.id.nav_favorites:
+                fragment = new FavouriteFragment();
+                break;
+            case R.id.nav_trip:
+                fragment = new TripFragment();
+                break;
+            case R.id.nav_vistor:
+                fragment = new VisitorFragment();
                 break;
         }
 
+        return loadFragment(fragment);
     }
-
 }

@@ -42,6 +42,7 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,8 +75,6 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     List<String> favArray;
     List<String> visitArray;
 
-    int[] images = {R.drawable.image1, R.drawable.image2, R.drawable.image3, R.drawable.image4, R.drawable.image5,
-            R.drawable.image6, R.drawable.image7, R.drawable.image8, R.drawable.image9, R.drawable.image10};
     @BindView(R.id.labelCity)
     LinearLayout labelCity;
     @BindView(R.id.labelSex)
@@ -707,6 +706,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 //dismissing the progress dialog
                             progressDialog.dismiss();
 
+
 //displaying success toast
                             Toast.makeText(getApplicationContext(), "File Uploaded ", Toast.LENGTH_LONG).show();
 
@@ -717,7 +717,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                                     Log.i("FirebaseImages",getDownloadImageUrl);
 
 //creating the upload object to store uploaded image details
-                                    Upload upload = new Upload("Image", taskSnapshot.getMetadata().getReference().getDownloadUrl().toString(),getDownloadImageUrl);
+                                    Upload upload = new Upload("Image", getDownloadImageUrl);
 
 //adding an upload to firebase database
                                     String uploadId = mDatabase.push().getKey();

@@ -1,6 +1,7 @@
 package com.example.tgapplication.login;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.chat.ChatActivity;
 import com.example.tgapplication.chat.MessageActivity;
@@ -62,6 +64,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         loginButton = findViewById(R.id.login_button);
         tv_register = findViewById(R.id.tv_register);
 
+        tv_register.setPaintFlags(tv_register.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        tv_register.setText(getResources().getString(R.string.register));
+
         link_signup = findViewById(R.id.link_signup);
         link_signup.setOnClickListener(this);
         btn_login = findViewById(R.id.btn_login);
@@ -74,7 +79,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         tv_register.setOnClickListener(this);
 
-        value = getIntent().getExtras().getString("nextActivity");
+//        value = getIntent().getExtras().getString("nextActivity");
 
         loginButton.setReadPermissions("email", "public_profile");
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
@@ -129,7 +134,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         updateUI(currentUser);
     }
 
-    private void updateUI(FirebaseUser account) {
+   /* private void updateUI(FirebaseUser account) {
         if (account != null) {
             Log.i("FBData", "" + account.getIdToken(true) + " " + account.getMetadata() + " " + account.getProviderData());
             Log.i("NextNow", value);
@@ -171,6 +176,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         } else {
             Toast.makeText(this, "out", Toast.LENGTH_SHORT).show();
+        }
+    }*/
+
+    private void updateUI(FirebaseUser account) {
+        if (account != null) {
+            startActivity(new Intent(this, MainActivity.class));
         }
     }
 

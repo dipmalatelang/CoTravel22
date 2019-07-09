@@ -53,13 +53,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
 
         Glide
                 .with(mcontext)
-                .load(uploadCurrent.getimage())
+                .load(uploadCurrent.getUrl())
                 .centerCrop()
                 .placeholder(R.mipmap.ic_launcher_round)
                 .into(holder.imageView);
 
 
-        Log.i(TAG, "onBindViewHolder: " + uploadCurrent.getUrl());
+//        Log.i(TAG, "onBindViewHolder: " + uploadCurrent.getUrl());
 
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,7 +67,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
 
                 reference = FirebaseDatabase.getInstance().getReference("Users").child(uid);
                 HashMap<String, Object> map = new HashMap<>();
-                map.put("imageURL", ""+uploadCurrent.getimage());
+                map.put("imageURL", ""+uploadCurrent.getUrl());
                 reference.updateChildren(map);
 
                 holder.ivTitle.setImageDrawable(mcontext.getResources().getDrawable(R.drawable.ic_action_fav_remove));

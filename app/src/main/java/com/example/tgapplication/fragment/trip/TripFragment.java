@@ -1,26 +1,29 @@
-package com.example.tgapplication.trips;
+package com.example.tgapplication.fragment.trip;
+
 
 import android.annotation.TargetApi;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tgapplication.R;
-import com.example.tgapplication.login.LoginActivity;
+import com.example.tgapplication.fragment.trip.adapter.TripAdapter;
+import com.example.tgapplication.fragment.trip.module.FavList;
+import com.example.tgapplication.fragment.trip.module.PlanTrip;
+import com.example.tgapplication.fragment.trip.module.TripData;
+import com.example.tgapplication.fragment.trip.module.TripList;
+import com.example.tgapplication.fragment.trip.module.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -29,7 +32,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -41,54 +43,45 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+//import android.widget.Toast;
 
-public class TripActivity extends AppCompatActivity {
 
-    Toolbar mToolbar;
-    RecyclerView mRecyclerView;
-//    List<TripData> mTripList;
-    List<TripList> tripList;
-    List<User> myDetail;
-    FirebaseUser fuser;
-    TripAdapter tripAdapter;
-    @BindView(R.id.trip_filter)
+public class TripFragment extends Fragment {
+
     TextView tripFilter;
-    String city = "";
-    String tripNote = "";
-    String date = "";
+    RecyclerView recyclerview;
+    private View view;
+    SharedPreferences prefs;
+    FirebaseUser fuser;
+    String str_city, str_lang, str_eyes, str_hairs, str_height, str_bodytype, str_look, str_from, str_to, str_visit;
+    private TripAdapter tripAdapter;
+    private Date closest;
+    List<PlanTrip> from_to_dates = new ArrayList<>();
     final long now = System.currentTimeMillis();
     List<Date> dates = new ArrayList<>();
-    List<PlanTrip> from_to_dates = new ArrayList<>();
+    List<User> myDetail;
     List<String> favArray = new ArrayList<>();
     List<String> visitArray = new ArrayList<>();
-    Date closest;
-    String str_city, str_lang, str_eyes, str_hairs, str_height, str_bodytype, str_look, str_from, str_to, str_visit;
-    SharedPreferences.Editor editor;
-    SharedPreferences prefs;
+    List<TripList> tripList;
+    String tripNote = "";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_trip);
-        ButterKnife.bind(this);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        view = inflater.inflate(R.layout.fragment_trip, container, false);
 
-        mToolbar = findViewById(R.id.trip_toolbar);
-        setSupportActionBar(mToolbar);
-
-        mToolbar.setTitle(getResources().getString(R.string.trips));
-
-        mRecyclerView = findViewById(R.id.recyclerview);
-        GridLayoutManager mGridLayoutManager = new GridLayoutManager(TripActivity.this, 2);
-        mRecyclerView.setLayoutManager(mGridLayoutManager);
+        tripFilter=view.findViewById(R.id.trip_filter);
+        GridLayoutManager mGridLayoutManager = new GridLayoutManager(getActivity(), 2);
+        recyclerview=view.findViewById(R.id.recyclerview);
+        recyclerview.setLayoutManager(mGridLayoutManager);
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
 
 //        mTripList = new ArrayList<>();
+//        mTripList1 = new ArrayList<>();
 
-        prefs = getSharedPreferences("Filter_TripList", MODE_PRIVATE);
+        prefs = getActivity().getSharedPreferences("Filter_TripList", 0);
 
         str_city = prefs.getString("str_city", "not_defined");//"No name defined" is the default value.
         str_lang = prefs.getString("str_lang", "not_defined"); //0 is the default value.
@@ -103,7 +96,8 @@ public class TripActivity extends AppCompatActivity {
         str_to = prefs.getString("str_to", "not_defined");
         str_visit = prefs.getString("str_visit", "not_defined");
 
-        Toast.makeText(this, "" + str_city, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(, "", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "" + str_city, Toast.LENGTH_SHORT).show();
 
 //        tripList();
         if (str_city.equalsIgnoreCase("not_defined")) {
@@ -111,7 +105,7 @@ public class TripActivity extends AppCompatActivity {
             tripFilter.setText("Filter");
         } else {
             tripFilter.setText("Clear Filter");
-            Toast.makeText(this, "Data: " + str_city + " " + str_lang + " " + str_look + " " + str_from + " " + str_to + " " + str_visit, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Data: " + str_city + " " + str_lang + " " + str_look + " " + str_from + " " + str_to + " " + str_visit, Toast.LENGTH_SHORT).show();
             getDataToFilter();
 
         }
@@ -121,92 +115,7 @@ public class TripActivity extends AppCompatActivity {
         getAllFav();
         getAllVisit();
 
-        assert getSupportActionBar() != null; //null check
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-    }
-
-    @Override
-    protected void onResume() {
-        getAllFav();
-        super.onResume();
-    }
-
-    private void getAllVisit() {
-
-        DatabaseReference visitRef = FirebaseDatabase.getInstance().getReference("ProfileVisitor")
-                .child(fuser.getUid());
-//        Log.i("Fav",visitorRef.getKey());
-
-        visitRef.addValueEventListener(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                visitArray.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-
-//                            for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-
-                    FavList favData = snapshot.getValue(FavList.class);
-                    visitArray.add(favData.getId());
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-    }
-
-    private void getAllFav() {
-
-        DatabaseReference favRef = FirebaseDatabase.getInstance().getReference("Favorites")
-                .child(fuser.getUid());
-//        Log.i("Fav",visitorRef.getKey());
-
-        favRef.addValueEventListener(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                favArray.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-
-//                            for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-
-                                FavList favData = snapshot.getValue(FavList.class);
-                    if (favData != null) {
-                        favArray.add(favData.getId());
-                    }
-//                            }
-                }
-                Log.i("Checking Size in Trip",""+dataSnapshot.getChildren());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-    }
-
-    private void getDataToFilter() {
-        if (str_lang == "All") {
-            str_lang = "Arabic,Danish,German,Belorussian,Dutch,Greek,Japanese,Portuguese,Italian,Polish,Spanish,Swedish,Bulgarian,English,Hebrew,Korean,Romanian,Thai,Catalan,Estonian,Hindi,Latvian,Russian,Turkish,Chinese,Filipino,Hungarian,Lithuanian,Serbian,Ukrainian,Croatian,Finnish,Icelandic,Norwegian,Slovak,Urdu,Czech,French,Indonesian,Persian,Slovenian,Vietnamese,Nepali,Armenian,Kurdish";
-        }
-
-        if (str_look == "All") {
-            str_look = "Girls,Male";
-        }
-        filterTripList(str_city, str_lang, str_eyes, str_hairs, str_height, str_bodytype, str_look, str_from, str_to, str_visit);
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        finish();
-        return true;
+        return view;
     }
 
     private void tripList() {
@@ -268,8 +177,8 @@ public class TripActivity extends AppCompatActivity {
                                                     Log.i("TripFromTo", "" + from_to_dates.size());
                                                     findClosestDate(dates, user);
                                                 }
-                                                tripAdapter = new TripAdapter(TripActivity.this, fuser.getUid(), favArray, tripList);
-                                                mRecyclerView.setAdapter(tripAdapter);
+                                                tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), favArray, tripList);
+                                                recyclerview.setAdapter(tripAdapter);
                                             }
 
                                             @Override
@@ -290,6 +199,17 @@ public class TripActivity extends AppCompatActivity {
                     }
                 }
         );
+    }
+
+    private void getDataToFilter() {
+        if (str_lang == "All") {
+            str_lang = "Arabic,Danish,German,Belorussian,Dutch,Greek,Japanese,Portuguese,Italian,Polish,Spanish,Swedish,Bulgarian,English,Hebrew,Korean,Romanian,Thai,Catalan,Estonian,Hindi,Latvian,Russian,Turkish,Chinese,Filipino,Hungarian,Lithuanian,Serbian,Ukrainian,Croatian,Finnish,Icelandic,Norwegian,Slovak,Urdu,Czech,French,Indonesian,Persian,Slovenian,Vietnamese,Nepali,Armenian,Kurdish";
+        }
+
+        if (str_look == "All") {
+            str_look = "Girls,Male";
+        }
+        filterTripList(str_city, str_lang, str_eyes, str_hairs, str_height, str_bodytype, str_look, str_from, str_to, str_visit);
     }
 
     private void filterTripList(final String str_city, final String str_lang, final String str_eyes, final String str_hairs, final String str_height, final String str_bodytype, final String str_look,
@@ -371,8 +291,8 @@ public class TripActivity extends AppCompatActivity {
                                                                 }
                                                             }
                                                         }
-                                                        tripAdapter = new TripAdapter(TripActivity.this, fuser.getUid(), favArray, tripList);
-                                                        mRecyclerView.setAdapter(tripAdapter);
+                                                        tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), favArray, tripList);
+                                                        recyclerview.setAdapter(tripAdapter);
                                                     }
 
                                                     @Override
@@ -395,6 +315,38 @@ public class TripActivity extends AppCompatActivity {
         );
     }
 
+    private void getAllFav() {
+
+        DatabaseReference favRef = FirebaseDatabase.getInstance().getReference("Favorites")
+                .child(fuser.getUid());
+//        Log.i("Fav",visitorRef.getKey());
+
+        favRef.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                favArray.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+//                            for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+
+                    FavList favData = snapshot.getValue(FavList.class);
+                    if (favData != null) {
+                        favArray.add(favData.getId());
+                    }
+//                            }
+                }
+                Log.i("Checking Size in Trip",""+dataSnapshot.getChildren());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
     private void findClosestDate(List<Date> dates, User user) {
 
         closest = Collections.min(dates, new Comparator<Date>() {
@@ -414,8 +366,8 @@ public class TripActivity extends AppCompatActivity {
         Log.i("closest Date", " " + closest + " " + dateOutput + " " + dateOutput1);
 
         for (int i = 0; i < from_to_dates.size(); i++) {
-            Log.i("This data", from_to_dates.get(i).date_from + " " + dateOutput1);
-            if (from_to_dates.get(i).date_from.contains(dateOutput1)) {
+            Log.i("This data", from_to_dates.get(i).getDate_from() + " " + dateOutput1);
+            if (from_to_dates.get(i).getDate_from().contains(dateOutput1)) {
 //                String ageValue= getBirthday(user.getDob());
                 String dateFromTo = from_to_dates.get(i).getDate_from() + " - " + from_to_dates.get(i).getDate_to();
                 TripList tripListClass = new TripList(user.getId(), user.getUsername(), user.getImageURL(), user.getAge(), user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), from_to_dates.get(i).getLocation(), tripNote, dateFromTo);
@@ -423,7 +375,6 @@ public class TripActivity extends AppCompatActivity {
             }
         }
     }
-
 
     private void getDataForDisplay(List<Date> dates, User user) {
 
@@ -444,7 +395,7 @@ public class TripActivity extends AppCompatActivity {
         Log.i("closest Date", " " + closest + " " + dateOutput + " " + dateOutput1);
 
         for (int i = 0; i < from_to_dates.size(); i++) {
-            if (from_to_dates.get(i).date_from.contains(dateOutput1)) {
+            if (from_to_dates.get(i).getDate_from().contains(dateOutput1)) {
 
                 String dateFromTo = from_to_dates.get(i).getDate_from() + " - " + from_to_dates.get(i).getDate_to();
 //                String ageValue= getBirthday(user.getDob());
@@ -458,120 +409,31 @@ public class TripActivity extends AppCompatActivity {
             }
         }
     }
+    private void getAllVisit() {
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.trip_menu, menu);
-        return true;
-    }
+        DatabaseReference visitRef = FirebaseDatabase.getInstance().getReference("ProfileVisitor")
+                .child(fuser.getUid());
+//        Log.i("Fav",visitorRef.getKey());
 
+        visitRef.addValueEventListener(new ValueEventListener() {
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.trip_add) {
-            Intent msgIntent = new Intent(this, LoginActivity.class);
-            msgIntent.putExtra("nextActivity", "AddTrips");
-            startActivity(msgIntent);
-//            startActivity(new Intent(this, AddTripActivity.class));
-            return true;
-        }
-//        else if (item.getItemId() == R.id.trip_filter) {
-//            startActivity(new Intent(this, FilterTripActivity.class));
-//            return true;
-//        }
-        else if (item.getItemId() == R.id.trip_edit) {
-            Intent msgIntent = new Intent(this, LoginActivity.class);
-            msgIntent.putExtra("nextActivity", "profileEdit");
-            startActivity(msgIntent);
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                visitArray.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-            return true;
-        } else if (item.getItemId() == R.id.trip_info) {
-            Intent mIntent = new Intent(this, DetailActivity.class);
-            mIntent.putExtra("MyDataObj", (Serializable) myDetail);
-            mIntent.putExtra("ListTrip", (Serializable) tripList);
-            mIntent.putExtra("ListFav", (Serializable) favArray);
-            mIntent.putExtra("ListVisit", (Serializable) visitArray);
-            startActivity(mIntent);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//                            for (DataSnapshot snapshot1 : snapshot.getChildren()) {
 
-    @OnClick(R.id.trip_filter)
-    public void onViewClicked() {
-//        Toast.makeText(this, "Data: " + str_city + " " + str_lang + " " + str_look + " " + str_from + " " + str_to + " " + str_visit, Toast.LENGTH_SHORT).show();
+                    FavList favData = snapshot.getValue(FavList.class);
+                    visitArray.add(favData.getId());
+                }
+            }
 
-        String city=prefs.getString("str_city", "not_defined");
-        if (!city.equalsIgnoreCase("not_defined")) {
-            tripFilter.setText("Clear Filter");
-            editor = prefs.edit();
-            editor.clear();
-            editor.apply();
-            tripList();
-            tripFilter.setText("Filter");
-        }
-        else {
-            tripFilter.setText("Filter");
-            startActivity(new Intent(TripActivity.this, FilterTripActivity.class));
-        }
-    }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
+            }
+        });
 
-//    public String getBirthday(String dob){
-//        Date today = new Date();
-//        Date birth = new Date();
-//        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-//        try {
-//            birth = sdf.parse(dob);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//
-//        int age = today.getYear() - birth.getYear();
-//
-//        return String.valueOf(age);
-//    }
-
-
-    private class PlanTrip {
-        private String location;
-        private String date_from;
-        private String date_to;
-
-        public PlanTrip() {
-
-        }
-
-        public PlanTrip(String location, String date_from, String date_to) {
-            this.location = location;
-            this.date_from = date_from;
-            this.date_to = date_to;
-
-        }
-
-        public String getLocation() {
-            return location;
-        }
-
-        public void setLocation(String location) {
-            this.location = location;
-        }
-
-        public String getDate_from() {
-            return date_from;
-        }
-
-        public void setDate_from(String date_from) {
-            this.date_from = date_from;
-        }
-
-        public String getDate_to() {
-            return date_to;
-        }
-
-        public void setDate_to(String date_to) {
-            this.date_to = date_to;
-        }
     }
 }
