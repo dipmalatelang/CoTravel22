@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -81,6 +82,8 @@ public class TripFragment extends Fragment {
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerview=view.findViewById(R.id.recyclerview);
         recyclerview.setLayoutManager(mGridLayoutManager);
+
+        setHasOptionsMenu(true);
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
 

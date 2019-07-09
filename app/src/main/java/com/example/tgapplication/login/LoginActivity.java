@@ -227,9 +227,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
                 break;
             case R.id.tv_register:
-                Log.i("Send while Login", value);
+//                Log.i("Send while Login", value);
                 Intent loginIntent = new Intent(LoginActivity.this, RegisterActivity.class);
-                loginIntent.putExtra("nextActivity", value);
+//                loginIntent.putExtra("nextActivity", value);
                 startActivity(loginIntent);
                 break;
         }

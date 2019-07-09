@@ -25,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.chat.ChatActivity;
 import com.example.tgapplication.chat.MessageActivity;
@@ -112,9 +113,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
-        value = getIntent().getExtras().getString("nextActivity");
+//        value = getIntent().getExtras().getString("nextActivity");
 
-        Log.i("Got Value in Register",value);
+//        Log.i("Got Value in Register",value);
 
 
         initAge();
@@ -220,7 +221,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     //   0
-    private void updateUI(FirebaseUser account) {
+   /* private void updateUI(FirebaseUser account) {
         if (account != null){
             Log.i("FBData",""+account.getIdToken(true)+" "+account.getMetadata()+" "+account.getProviderData());
             Log.i("NextNow",value);
@@ -269,8 +270,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         else {
             Toast.makeText(RegisterActivity.this, "out", Toast.LENGTH_SHORT).show();
         }
-    }
+    }*/
 
+
+    private void updateUI(FirebaseUser account) {
+        if (account != null) {
+            startActivity(new Intent(this, MainActivity.class));
+        }
+    }
     private void handleFacebookAccessToken(String token) {
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token);
