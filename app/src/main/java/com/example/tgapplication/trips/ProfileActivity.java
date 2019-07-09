@@ -229,59 +229,59 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    private void updateUI(FirebaseUser account) {
-        if (account != null){
-            Log.i("FBData",""+account.getIdToken(true)+" "+account.getMetadata()+" "+account.getProviderData());
-            value = getIntent().getExtras().getString("nextActivity");
-            Log.i("NextNow",value);
-            if(value.equalsIgnoreCase("Chat"))
-            {
-                Intent intent=new Intent(ProfileActivity.this, ChatActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                startActivity(intent);
-                finish();
-                Toast.makeText(this, "in"+account, Toast.LENGTH_SHORT).show();
-            }
-            else if(value.equalsIgnoreCase("AddTrips"))
-            {
-                Intent intent=new Intent(ProfileActivity.this, AddTripActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                startActivity(intent);
-                finish();
-                Toast.makeText(this, "in"+account, Toast.LENGTH_SHORT).show();
-            }
-            else if(value.equalsIgnoreCase("Trips"))
-            {
-                Intent intent=new Intent(ProfileActivity.this, TripActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                startActivity(intent);
-                finish();
-                Toast.makeText(this, "in"+account, Toast.LENGTH_SHORT).show();
-            }
-            else if(value.equalsIgnoreCase("TripsMsg"))
-            {
-                String user = getIntent().getExtras().getString("nextActivityUser");
-                Intent intent=new Intent(ProfileActivity.this, MessageActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("userid", user);
-                startActivity(intent);
-                finish();
-                Toast.makeText(this, "in"+account, Toast.LENGTH_SHORT).show();
-            }
-//            else if(value.equalsIgnoreCase("profileEdit"))
+//    private void updateUI(FirebaseUser account) {
+//        if (account != null){
+//            Log.i("FBData",""+account.getIdToken(true)+" "+account.getMetadata()+" "+account.getProviderData());
+//            value = getIntent().getExtras().getString("nextActivity");
+//            Log.i("NextNow",value);
+//            if(value.equalsIgnoreCase("Chat"))
 //            {
-//                regi_form.setVisibility(View.GONE);
-//                regi_more_form.setVisibility(View.VISIBLE);
-//                Toast.makeText(this, "Profile edited Successfully", Toast.LENGTH_SHORT).show();
+//                Intent intent=new Intent(ProfileActivity.this, ChatActivity.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
+//
+//                startActivity(intent);
+//                finish();
+//                Toast.makeText(this, "in"+account, Toast.LENGTH_SHORT).show();
 //            }
-        }
-        else {
-            Toast.makeText(this, "out", Toast.LENGTH_SHORT).show();
-        }
-    }
+//            else if(value.equalsIgnoreCase("AddTrips"))
+//            {
+//                Intent intent=new Intent(ProfileActivity.this, AddTripActivity.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
+//
+//                startActivity(intent);
+//                finish();
+//                Toast.makeText(this, "in"+account, Toast.LENGTH_SHORT).show();
+//            }
+//            else if(value.equalsIgnoreCase("Trips"))
+//            {
+//                Intent intent=new Intent(ProfileActivity.this, TripActivity.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
+//
+//                startActivity(intent);
+//                finish();
+//                Toast.makeText(this, "in"+account, Toast.LENGTH_SHORT).show();
+//            }
+//            else if(value.equalsIgnoreCase("TripsMsg"))
+//            {
+//                String user = getIntent().getExtras().getString("nextActivityUser");
+//                Intent intent=new Intent(ProfileActivity.this, MessageActivity.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
+//                intent.putExtra("userid", user);
+//                startActivity(intent);
+//                finish();
+//                Toast.makeText(this, "in"+account, Toast.LENGTH_SHORT).show();
+//            }
+////            else if(value.equalsIgnoreCase("profileEdit"))
+////            {
+////                regi_form.setVisibility(View.GONE);
+////                regi_more_form.setVisibility(View.VISIBLE);
+////                Toast.makeText(this, "Profile edited Successfully", Toast.LENGTH_SHORT).show();
+////            }
+//        }
+//        else {
+//            Toast.makeText(this, "out", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
     private void register(final FirebaseUser user, String str_name, String str_dob, String str_gender, String age, String str_location, String str_nationality, String str_lang, ArrayList<String> str_look, String str_height, String str_body_type, String str_eyes, String str_hair, String str_visit) {
         databaseReference= FirebaseDatabase.getInstance().getReference("Users").child(user.getUid());

@@ -27,14 +27,11 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
     private Context mContext;
     private List<TripList> mTrip;
    private String uid;
-    private int fav_int;
-    private List<String> favArray;
 
-    public TripAdapter(Context mContext, String uid, List<String> favArray, List<TripList> mTrip) {
+    public TripAdapter(Context mContext, String uid, List<TripList> mTrip) {
         this.uid=uid;
         this.mContext = mContext;
         this.mTrip = mTrip;
-        this.favArray=favArray;
     }
 
 
@@ -51,7 +48,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
         final TripList tList = mTrip.get(position);
         if(tList.getImageUrl().equalsIgnoreCase("default"))
         {
-            Glide.with(mContext).load(R.drawable.default_toast).into(holder.mImage);
+            Glide.with(mContext).load(R.drawable.ic_services_ratings_user_pic).into(holder.mImage);
         }
         else {
             Glide.with(mContext).load(tList.getImageUrl()).into(holder.mImage);
@@ -66,30 +63,16 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
             @Override
             public void onClick(View view) {
                 setProfileVisit(uid,tList.getId());
-               int fav_id= getFav(favArray,tList.getId());
-               Log.i("Got Needed Value"," "+fav_id);
+
+               Log.i("Got Needed Value"," "+tList.getFavid());
                 Intent mIntent = new Intent(mContext, DetailActivity.class);
                 mIntent.putExtra("MyObj", tList);
-                mIntent.putExtra("FavId",fav_id);
                 mContext.startActivity(mIntent);
             }
         });
     }
 
-    private int getFav(List<String> favArray, String id) {
-        for(int i=0;i<favArray.size();i++)
-        {
-            if(favArray.get(i).equalsIgnoreCase(id))
-            {
-                fav_int=1;
-                return fav_int;
-            }
-            else {
-                fav_int=0;
-            }
-        }
-        return fav_int;
-    }
+
 
     private void setProfileVisit(String uid, String id) {
 
@@ -102,6 +85,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
 
     @Override
     public int getItemCount() {
+        Log.i("Inside Adapter",""+mTrip.size());
         return mTrip.size();
     }
 

@@ -247,7 +247,6 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
             } else {
 
                 tripL = (TripList) getIntent().getSerializableExtra("MyObj");
-                int faValue = getIntent().getIntExtra("FavId", 0);
 
                 iv_send_msg.setVisibility(View.VISIBLE);
                 iv_fav.setVisibility(View.VISIBLE);
@@ -256,8 +255,8 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 iv_profile_visitor.setVisibility(View.GONE);
                 ivMyPic.setVisibility(View.GONE);
 
-                Log.i("Fav Value", " " + faValue);
-                if (faValue == 1) {
+                Log.i("Fav Value", " " + tripL.getFavid());
+                if (tripL.getFavid() == 1) {
                     iv_fav.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_fav_remove));
                     iv_fav.setTag("ic_action_fav_remove");
                 } else {

@@ -23,7 +23,7 @@ import com.example.tgapplication.chat.ChatActivity;
 import com.example.tgapplication.chat.MessageActivity;
 import com.example.tgapplication.trips.AddTripActivity;
 import com.example.tgapplication.trips.ProfileActivity;
-import com.example.tgapplication.trips.TripActivity;
+//import com.example.tgapplication.trips.TripActivity;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;

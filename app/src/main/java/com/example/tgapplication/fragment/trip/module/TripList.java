@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 public class TripList implements Serializable {
 
+    private int favid;
     private String id;
     private String name;
     private String imageUrl;
@@ -21,7 +22,7 @@ public class TripList implements Serializable {
 
     }
 
-    public TripList(String id, String name, String imageUrl, String age, String gender, String userLocation, String nationality, String lang, String height, String body_type, String eyes, String hair, ArrayList<String> look, String visit, String planLocation, String trip_note, String from_to_date) {        this.id=id;
+    public TripList(String id, String name, String imageUrl, String age, String gender, String userLocation, String nationality, String lang, String height, String body_type, String eyes, String hair, ArrayList<String> look, String visit, String planLocation, String trip_note, String from_to_date, int favid) {        this.id=id;
         this.name=name;
         this.imageUrl=imageUrl;
         this.planLocation = planLocation;
@@ -38,6 +39,15 @@ public class TripList implements Serializable {
         this.hair=hair;
         this.look=look;
         this.visit= visit;
+        this.favid=favid;
+    }
+
+    public int getFavid() {
+        return favid;
+    }
+
+    public void setFavid(int favid) {
+        this.favid = favid;
     }
 
     public String getGender() {
