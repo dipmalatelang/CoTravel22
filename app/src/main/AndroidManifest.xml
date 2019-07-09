@@ -26,7 +26,7 @@
 
         <activity android:name=".trips.DetailActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"
-            android:parentActivityName=".trips.TripActivity"/>
+            android:parentActivityName=".MainActivity"/>
         <activity android:name=".trips.FilterTripActivity"
             android:parentActivityName=".trips.TripActivity"/>
         <activity android:name=".trips.TripActivity"
@@ -39,6 +39,7 @@
             android:parentActivityName=".trips.TripActivity"/>
         <activity android:name=".trips.ProfileVisitorActivity"/>
         <activity android:name=".chat.MessageActivity"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity android:name=".trips.ProfileActivity"
             android:parentActivityName=".trips.TripActivity"/>

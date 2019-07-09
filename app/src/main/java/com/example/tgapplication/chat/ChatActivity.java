@@ -15,7 +15,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.example.tgapplication.R;
-import com.example.tgapplication.trips.User;
+import com.example.tgapplication.fragment.trip.module.User;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

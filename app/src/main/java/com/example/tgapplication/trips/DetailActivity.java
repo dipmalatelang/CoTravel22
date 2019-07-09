@@ -23,6 +23,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tgapplication.R;
+import com.example.tgapplication.chat.ChatActivity;
+import com.example.tgapplication.chat.MessageActivity;
+import com.example.tgapplication.fragment.trip.module.TripList;
+import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.login.LoginActivity;
 import com.example.tgapplication.photo.MyAdapter;
 import com.example.tgapplication.photo.Upload;
@@ -241,6 +245,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
                 setDetails(userList.get(0).getName(), userList.get(0).getGender(), userList.get(0).getAge(), userList.get(0).getLook(), userList.get(0).getLocation(), userList.get(0).getNationality(), userList.get(0).getLang(), userList.get(0).getHeight(), userList.get(0).getBody_type(), userList.get(0).getEyes(), userList.get(0).getHair(), userList.get(0).getVisit(), "", "", userList.get(0).getImageURL());
             } else {
+
                 tripL = (TripList) getIntent().getSerializableExtra("MyObj");
                 int faValue = getIntent().getIntExtra("FavId", 0);
 
@@ -558,11 +563,11 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 break;
 
             case R.id.iv_send_msg:
-//              startActivity(new Intent(this,ChatActivity.class));
-                Intent chatIntent = new Intent(this, LoginActivity.class);
-                chatIntent.putExtra("nextActivityUser", tripL.getId());
-                chatIntent.putExtra("nextActivity", "TripsMsg");
-                startActivity(chatIntent);
+                Intent intent = new Intent(this, MessageActivity.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("userid", tripL.getId());
+                startActivity(intent);
+
                 break;
 
             case R.id.iv_profile_edit:

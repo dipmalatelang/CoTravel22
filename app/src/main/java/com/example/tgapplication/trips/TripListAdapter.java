@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tgapplication.R;
+import com.example.tgapplication.fragment.trip.module.TripData;
 
 import java.util.List;
 

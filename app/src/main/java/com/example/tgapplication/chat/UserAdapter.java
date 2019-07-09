@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tgapplication.R;
-import com.example.tgapplication.trips.User;
+import com.example.tgapplication.fragment.trip.module.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -114,7 +114,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private void lastMessage(final String userid, final TextView last_msg){
         theLastMessage = "default";
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Addis_Ababa/Chats");
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Chats");
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override

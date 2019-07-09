@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.TripList;
+import com.example.tgapplication.trips.DetailActivity;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -67,7 +68,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
                 setProfileVisit(uid,tList.getId());
                int fav_id= getFav(favArray,tList.getId());
                Log.i("Got Needed Value"," "+fav_id);
-                Intent mIntent = new Intent(mContext, MainActivity.class);
+                Intent mIntent = new Intent(mContext, DetailActivity.class);
                 mIntent.putExtra("MyObj", tList);
                 mIntent.putExtra("FavId",fav_id);
                 mContext.startActivity(mIntent);

@@ -2,11 +2,15 @@ package com.example.tgapplication.fragment.trip;
 
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -24,6 +28,8 @@ import com.example.tgapplication.fragment.trip.module.PlanTrip;
 import com.example.tgapplication.fragment.trip.module.TripData;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
+import com.example.tgapplication.login.LoginActivity;
+import com.example.tgapplication.trips.DetailActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +38,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -70,7 +77,6 @@ public class TripFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_trip, container, false);
-
         tripFilter=view.findViewById(R.id.trip_filter);
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerview=view.findViewById(R.id.recyclerview);
@@ -117,6 +123,7 @@ public class TripFragment extends Fragment {
 
         return view;
     }
+
 
     private void tripList() {
         tripList = new ArrayList<>();

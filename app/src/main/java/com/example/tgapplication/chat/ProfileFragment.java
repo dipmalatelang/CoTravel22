@@ -17,7 +17,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.tgapplication.R;
-import com.example.tgapplication.trips.User;
+import com.example.tgapplication.fragment.trip.module.User;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;

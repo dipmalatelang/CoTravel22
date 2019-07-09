@@ -20,6 +20,10 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tgapplication.R;
+import com.example.tgapplication.fragment.trip.module.FavList;
+import com.example.tgapplication.fragment.trip.module.TripData;
+import com.example.tgapplication.fragment.trip.module.TripList;
+import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.login.LoginActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
