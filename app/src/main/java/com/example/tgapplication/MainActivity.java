@@ -1,14 +1,10 @@
 package com.example.tgapplication;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.example.tgapplication.fragment.account.AccountFragment;
@@ -21,9 +17,6 @@ import com.example.tgapplication.fragment.trip.module.TripData;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.fragment.visitor.VisitorFragment;
-import com.example.tgapplication.login.LoginActivity;
-import com.example.tgapplication.trips.AddTripActivity;
-import com.example.tgapplication.trips.DetailActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,7 +24,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -50,9 +42,11 @@ public class MainActivity extends BaseMethod implements BottomNavigationView.OnN
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(this);
 
-        getAllFav();
-        tripList();
 
+        getAllFav();
+        getAllVisit();
+        tripList();
+//        loadFragment(new TripFragment(tripList));
     }
 
     public void getAllFav() {
@@ -85,6 +79,33 @@ public class MainActivity extends BaseMethod implements BottomNavigationView.OnN
             }
         });
         Log.i("Check Now",""+favArray.size());
+    }
+
+    public void getAllVisit() {
+
+        DatabaseReference visitRef = FirebaseDatabase.getInstance().getReference("ProfileVisitor")
+                .child(fUserId);
+//        Log.i("Fav",visitorRef.getKey());
+
+        visitRef.addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                visitArray.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+//                            for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+
+                    FavList favData = snapshot.getValue(FavList.class);
+                    visitArray.add(favData.getId());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void tripList() {
@@ -146,7 +167,8 @@ public class MainActivity extends BaseMethod implements BottomNavigationView.OnN
                                                     }
                                                     Log.i("TripFromTo", "" + from_to_dates.size());
                                                     tripList= (List<TripList>) findClosestDate(dates, user);
-                                                }
+
+                                                    }
 //                                                tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), favArray, tripList);
 //                                                recyclerview.setAdapter(tripAdapter);
                                             }
@@ -187,7 +209,7 @@ public class MainActivity extends BaseMethod implements BottomNavigationView.OnN
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        Fragment fragment = null;
+        Fragment fragment= null;
         switch (item.getItemId()) {
             case R.id.nav_account:
                 fragment = new AccountFragment();
@@ -196,55 +218,16 @@ public class MainActivity extends BaseMethod implements BottomNavigationView.OnN
                 fragment = new ChatFragment();
                 break;
             case R.id.nav_favorites:
-                fragment = new FavouriteFragment();
+                fragment = new FavouriteFragment(tripList);
                 break;
             case R.id.nav_trip:
                 fragment = new TripFragment(tripList);
                 break;
             case R.id.nav_vistor:
-                fragment = new VisitorFragment();
+                fragment = new VisitorFragment(tripList);
                 break;
         }
 
         return loadFragment(fragment);
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.trip_menu, menu);
-        return true;
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.trip_add) {
-            Intent msgIntent = new Intent(this, AddTripActivity.class);
-//            msgIntent.putExtra("nextActivity", "AddTrips");
-            startActivity(msgIntent);
-//            startActivity(new Intent(this, AddTripActivity.class));
-            return true;
-        }
-//        else if (item.getItemId() == R.id.trip_filter) {
-//            startActivity(new Intent(this, FilterTripActivity.class));
-//            return true;
-//        }
-        else if (item.getItemId() == R.id.trip_edit) {
-            Intent msgIntent = new Intent(this, LoginActivity.class);
-            msgIntent.putExtra("nextActivity", "profileEdit");
-            startActivity(msgIntent);
-
-            return true;
-        } else if (item.getItemId() == R.id.trip_info) {
-            Intent mIntent = new Intent(this, DetailActivity.class);
-//            mIntent.putExtra("MyDataObj", (Serializable) myDetail);
-//            mIntent.putExtra("ListTrip", (Serializable) tripList);
-//            mIntent.putExtra("ListFav", (Serializable) favArray);
-//            mIntent.putExtra("ListVisit", (Serializable) visitArray);
-            startActivity(mIntent);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.tgapplication.trips;
+package com.example.tgapplication.fragment.trip;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.TripData;
+import com.example.tgapplication.fragment.trip.adapter.TripListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -30,9 +31,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class AddTripActivity extends AppCompatActivity implements View.OnClickListener {
 
     DatabaseReference reference;
@@ -45,14 +43,12 @@ public class AddTripActivity extends AppCompatActivity implements View.OnClickLi
     ArrayList tripList;
     RecyclerView recyclerView;
     TripListAdapter mtripAdapter;
-    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_trip);
-        ButterKnife.bind(this);
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
         btn_add_trip = findViewById(R.id.btn_add_trip);
@@ -60,6 +56,7 @@ public class AddTripActivity extends AppCompatActivity implements View.OnClickLi
         tv_from_date = findViewById(R.id.tv_from_date);
         tv_to_date = findViewById(R.id.tv_to_date);
         et_note = findViewById(R.id.et_note);
+        toolbar=findViewById(R.id.toolbar);
 
         tv_from_date.setOnClickListener(this);
         tv_to_date.setOnClickListener(this);

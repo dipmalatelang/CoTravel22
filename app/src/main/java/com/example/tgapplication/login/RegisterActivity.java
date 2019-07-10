@@ -27,10 +27,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
-import com.example.tgapplication.chat.ChatActivity;
-import com.example.tgapplication.chat.MessageActivity;
 import com.example.tgapplication.fragment.trip.module.User;
-import com.example.tgapplication.trips.AddTripActivity;
 //import com.example.tgapplication.trips.TripActivity;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -397,10 +394,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
                 if(str_gender.equalsIgnoreCase("girl"))
                 {
-                    look.add("male");
+                    look.add("female");
                 }
                 else if(str_gender.equalsIgnoreCase("boy")) {
-                    look.add("female");
+                    look.add("male");
                 }
                 else {
                     look.add("female");

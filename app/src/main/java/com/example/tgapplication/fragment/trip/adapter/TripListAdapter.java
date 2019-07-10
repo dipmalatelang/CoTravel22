@@ -1,4 +1,4 @@
-package com.example.tgapplication.trips;
+package com.example.tgapplication.fragment.trip.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;

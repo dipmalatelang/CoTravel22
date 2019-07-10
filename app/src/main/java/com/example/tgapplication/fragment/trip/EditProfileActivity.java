@@ -1,7 +1,6 @@
-package com.example.tgapplication.trips;
+package com.example.tgapplication.fragment.trip;
 
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,13 +16,10 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tgapplication.R;
-import com.example.tgapplication.chat.ChatActivity;
-import com.example.tgapplication.chat.MessageActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -36,7 +32,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
+public class EditProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
     private FirebaseAuth mAuth;
     Button btn_regi;
@@ -174,7 +170,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     }
                 };
 
-                DatePickerDialog dobDialog = new DatePickerDialog(ProfileActivity.this, dob, year, month, day);
+                DatePickerDialog dobDialog = new DatePickerDialog(EditProfileActivity.this, dob, year, month, day);
 //               Date datenew= new DateTime().minusYears(14);
                 dobDialog.getDatePicker().setMaxDate(mcalendar.getTimeInMillis());
                 dobDialog.show();
@@ -236,7 +232,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 //            Log.i("NextNow",value);
 //            if(value.equalsIgnoreCase("Chat"))
 //            {
-//                Intent intent=new Intent(ProfileActivity.this, ChatActivity.class);
+//                Intent intent=new Intent(EditProfileActivity.this, ChatActivity.class);
 //                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
 //
 //                startActivity(intent);
@@ -245,7 +241,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 //            }
 //            else if(value.equalsIgnoreCase("AddTrips"))
 //            {
-//                Intent intent=new Intent(ProfileActivity.this, AddTripActivity.class);
+//                Intent intent=new Intent(EditProfileActivity.this, AddTripActivity.class);
 //                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
 //
 //                startActivity(intent);
@@ -254,7 +250,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 //            }
 //            else if(value.equalsIgnoreCase("Trips"))
 //            {
-//                Intent intent=new Intent(ProfileActivity.this, TripActivity.class);
+//                Intent intent=new Intent(EditProfileActivity.this, TripActivity.class);
 //                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
 //
 //                startActivity(intent);
@@ -264,7 +260,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 //            else if(value.equalsIgnoreCase("TripsMsg"))
 //            {
 //                String user = getIntent().getExtras().getString("nextActivityUser");
-//                Intent intent=new Intent(ProfileActivity.this, MessageActivity.class);
+//                Intent intent=new Intent(EditProfileActivity.this, MessageActivity.class);
 //                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
 //                intent.putExtra("userid", user);
 //                startActivity(intent);

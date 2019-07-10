@@ -24,24 +24,24 @@
 
         <activity android:name=".MainActivity"/>
 
-        <activity android:name=".trips.DetailActivity"
+        <activity android:name=".fragment.trip.DetailActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"
             android:parentActivityName=".MainActivity"/>
-        <activity android:name=".trips.FilterTripActivity"
+        <activity android:name=".fragment.trip.FilterTripActivity"
             android:parentActivityName=".trips.TripActivity"/>
         <activity android:name=".trips.TripActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
         <activity android:name=".chat.ChatActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"
             android:parentActivityName=".MainActivity"/>
-        <activity android:name=".trips.AddTripActivity"
+        <activity android:name=".fragment.trip.AddTripActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"
             android:parentActivityName=".trips.TripActivity"/>
         <activity android:name=".trips.ProfileVisitorActivity"/>
         <activity android:name=".chat.MessageActivity"
             android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
-        <activity android:name=".trips.ProfileActivity"
+        <activity android:name=".fragment.trip.EditProfileActivity"
             android:parentActivityName=".trips.TripActivity"/>
 
 <activity android:name=".login.RegisterActivity"/>

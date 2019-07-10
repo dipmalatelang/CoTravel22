@@ -19,10 +19,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
-import com.example.tgapplication.chat.ChatActivity;
-import com.example.tgapplication.chat.MessageActivity;
-import com.example.tgapplication.trips.AddTripActivity;
-import com.example.tgapplication.trips.ProfileActivity;
 //import com.example.tgapplication.trips.TripActivity;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -168,7 +164,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 finish();
                 Toast.makeText(this, "in" + account, Toast.LENGTH_SHORT).show();
             } else if (value.equalsIgnoreCase("profileEdit")) {
-                Intent msgIntent=new Intent(LoginActivity.this, ProfileActivity.class);
+                Intent msgIntent=new Intent(LoginActivity.this, EditProfileActivity.class);
 //                msgIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 //                msgIntent.putExtra("nextActivity","profileEdit");
                 startActivity(msgIntent);

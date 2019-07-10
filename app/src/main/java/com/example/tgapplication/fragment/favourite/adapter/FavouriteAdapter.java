@@ -1,9 +1,7 @@
-/*
-package com.example.tgapplication.trips;
+package com.example.tgapplication.fragment.favourite.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,45 +13,49 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tgapplication.R;
-import com.example.tgapplication.fragment.trip.DetailActivity;
 import com.example.tgapplication.fragment.trip.module.TripList;
+import com.example.tgapplication.fragment.trip.DetailActivity;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
-public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder > {
+public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.ProfileVisitorViewHolder >
+{
 
     private Context mContext;
     private List<TripList> mTrip;
-   private String uid;
+    private String uid;
     private int fav_int;
     private List<String> favArray;
 
-    public TripAdapter(Context mContext, String uid, List<String> favArray,List<TripList> mTrip) {
+    public FavouriteAdapter(Context mContext, String uid, List<TripList> mTrip)
+    {
         this.uid=uid;
         this.mContext = mContext;
         this.mTrip = mTrip;
-        this.favArray=favArray;
+//        this.favArray=favArray;
     }
 
 
     @Override
-    public TripViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        View mView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item_row, parent, false);
-        return new TripViewHolder(mView);
+    public ProfileVisitorViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    {
+        View mView = LayoutInflater.from(parent.getContext()).inflate(R.layout.favisit_item, parent, false);
+        return new ProfileVisitorViewHolder(mView);
     }
 
     @Override
-    public void onBindViewHolder(final TripViewHolder holder, int position) {
+    public void onBindViewHolder(final ProfileVisitorViewHolder holder, int position)
+    {
 
         final TripList tList = mTrip.get(position);
         if(tList.getImageUrl().equalsIgnoreCase("default"))
         {
             Glide.with(mContext).load(R.drawable.ic_action_girl).into(holder.mImage);
         }
-        else {
+        else
+        {
             Glide.with(mContext).load(tList.getImageUrl()).into(holder.mImage);
         }
 
@@ -66,32 +68,30 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
             @Override
             public void onClick(View view) {
                 setProfileVisit(uid,tList.getId());
-               int fav_id= getFav(favArray,tList.getId());
-               Log.i("Got Needed Value"," "+fav_id);
+//                int fav_id= getFav(favArray,tList.getId());
+//                Log.i("Got Needed Value"," "+fav_id);
                 Intent mIntent = new Intent(mContext, DetailActivity.class);
                 mIntent.putExtra("MyObj", tList);
-                mIntent.putExtra("FavId",fav_id);
+//                mIntent.putExtra("FavId",fav_id);
                 mContext.startActivity(mIntent);
+            }
+        });
+
+
+        holder.ivTitle.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_action_fav_remove));
+
+        holder.ivTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DetailActivity().removeFav(uid, mTrip.get(position).getId());
+                mTrip.get(position).setFavid(0);
+                notifyDataSetChanged();
             }
         });
     }
 
-    private int getFav(List<String> favArray, String id) {
-        for(int i=0;i<favArray.size();i++)
-        {
-            if(favArray.get(i).equalsIgnoreCase(id))
-            {
-                fav_int=1;
-                return fav_int;
-            }
-            else {
-                fav_int=0;
-            }
-        }
-        return fav_int;
-    }
-
-    private void setProfileVisit(String uid, String id) {
+    private void setProfileVisit(String uid, String id)
+    {
 
         final DatabaseReference visitedRef = FirebaseDatabase.getInstance().getReference("ProfileVisitor")
                 .child(id)
@@ -105,20 +105,23 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
         return mTrip.size();
     }
 
-    class TripViewHolder extends RecyclerView.ViewHolder {
+    class ProfileVisitorViewHolder extends RecyclerView.ViewHolder
+    {
 
-        ImageView mImage;
+        ImageView mImage, ivTitle;
         TextView mTitle, mCity, mDate;
         CardView mCardView;
 
-        TripViewHolder(View itemView) {
+        ProfileVisitorViewHolder(View itemView)
+        {
             super(itemView);
 
             mImage = itemView.findViewById(R.id.ivImage);
+            ivTitle=itemView.findViewById(R.id.ivTitle);
             mTitle = itemView.findViewById(R.id.tvTitle);
             mCity = itemView.findViewById(R.id.tvCity);
             mDate = itemView.findViewById(R.id.tvDate);
             mCardView = itemView.findViewById(R.id.cardview);
         }
     }
-}*/
+}

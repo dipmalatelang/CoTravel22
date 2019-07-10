@@ -1,23 +1,15 @@
 package com.example.tgapplication.fragment.trip;
 
 
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,32 +17,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.tgapplication.BaseMethod;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.adapter.TripAdapter;
-import com.example.tgapplication.fragment.trip.module.FavList;
-import com.example.tgapplication.fragment.trip.module.PlanTrip;
-import com.example.tgapplication.fragment.trip.module.TripData;
 import com.example.tgapplication.fragment.trip.module.TripList;
-import com.example.tgapplication.fragment.trip.module.User;
-import com.example.tgapplication.login.LoginActivity;
-import com.example.tgapplication.trips.DetailActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 //import android.widget.Toast;
 
@@ -68,6 +40,8 @@ public class TripFragment extends Fragment {
     private FirebaseUser fuser;
     String str_city, str_lang, str_eyes, str_hairs, str_height, str_bodytype, str_look, str_from, str_to, str_visit;
     BaseMethod baseMethod;
+    FloatingActionButton floatingActionButton;
+    SharedPreferences.Editor editor;
 
     public TripFragment(List<TripList> tripList) {
         this.tripList=tripList;
@@ -86,6 +60,13 @@ public class TripFragment extends Fragment {
         setHasOptionsMenu(true);
 
         fuser=FirebaseAuth.getInstance().getCurrentUser();
+        floatingActionButton=view.findViewById(R.id.floatingActionButton);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), AddTripActivity.class));
+            }
+        });
 
 //        mTripList = new ArrayList<>();
 //        mTripList1 = new ArrayList<>();
@@ -127,6 +108,25 @@ public class TripFragment extends Fragment {
         recyclerview.setAdapter(tripAdapter);
 //        getFav();
 
+        tripFilter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+        String city=prefs.getString("str_city", "not_defined");
+        if (!city.equalsIgnoreCase("not_defined")) {
+            tripFilter.setText("Clear Filter");
+            editor = prefs.edit();
+            editor.clear();
+            editor.apply();
+//          tripList();
+            tripFilter.setText("Filter");
+        }
+        else {
+            tripFilter.setText("Filter");
+            startActivity(new Intent(getActivity(), FilterTripActivity.class));
+        }
+            }
+        });
         return view;
     }
 

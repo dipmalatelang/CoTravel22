@@ -4,11 +4,9 @@ import android.annotation.TargetApi;
 import android.os.Build;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.tgapplication.fragment.trip.module.FavList;
 import com.example.tgapplication.fragment.trip.module.PlanTrip;
 import com.example.tgapplication.fragment.trip.module.TripData;
 import com.example.tgapplication.fragment.trip.module.TripList;
@@ -45,34 +43,7 @@ public abstract class BaseMethod extends AppCompatActivity {
     List<PlanTrip> from_to_dates = new ArrayList<>();
     String str_city, str_lang, str_eyes, str_hairs, str_height, str_bodytype, str_look, str_from, str_to, str_visit;
     String tripNote = "";
-
-    private List<String> getAllVisit() {
-
-        DatabaseReference visitRef = FirebaseDatabase.getInstance().getReference("ProfileVisitor")
-                .child(fUserId);
-//        Log.i("Fav",visitorRef.getKey());
-
-        visitRef.addValueEventListener(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                visitArray.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-
-//                            for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-
-                    FavList favData = snapshot.getValue(FavList.class);
-                    visitArray.add(favData.getId());
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        return visitArray;
-    }
+    public List<TripList> myFavArray = new ArrayList<>();
 
     public List<TripList> findClosestDate(List<Date> dates, User user) {
 
@@ -95,18 +66,53 @@ public abstract class BaseMethod extends AppCompatActivity {
         for (int i = 0; i < from_to_dates.size(); i++) {
             Log.i("This data", from_to_dates.get(i).getDate_from() + " " + dateOutput1);
             int fav_id= getFav(favArray,user.getId());
+            int visit_id=getVisit(visitArray,user.getId());
             if (from_to_dates.get(i).getDate_from().contains(dateOutput1)) {
 //                String ageValue= getBirthday(user.getDob());
                 String dateFromTo = from_to_dates.get(i).getDate_from() + " - " + from_to_dates.get(i).getDate_to();
-                TripList tripListClass = new TripList(user.getId(), user.getUsername(), user.getImageURL(), user.getAge(), user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), from_to_dates.get(i).getLocation(), tripNote, dateFromTo,fav_id);
+                TripList tripListClass = new TripList(user.getId(), user.getUsername(), user.getImageURL(), user.getAge(), user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), from_to_dates.get(i).getLocation(), tripNote, dateFromTo,fav_id,visit_id);
                 tripList.add(tripListClass);
             }
         }
         return tripList;
     }
 
+    public List<TripList> getMyFav() {
+        for (int i = 0; i < tripList.size(); i++) {
+            for (int j = 0; j < favArray.size(); j++) {
+                Log.i("Compare", tripList.get(i).getId() + " ==> " + favArray.get(j));
+                if (tripList.get(i).getId().equalsIgnoreCase(favArray.get(j))) {
+                    myFavArray.add(tripList.get(i));
+                    Log.i("Got In Here ", tripList.get(i).getId());
+                }
+            }
+
+        }
+//        Log.i("Checking Size",myFavArray.size()+" "+favArray.size());
+//        Intent mIntent = new Intent(this, ProfileVisitorActivity.class);
+//        mIntent.putExtra("myFav", (Serializable) myFavArray);
+//        mIntent.putExtra("ListFav",(Serializable) favArray);
+//        startActivity(mIntent);
+        return myFavArray;
+    }
+
 
     private int getFav(List<String> favArray, String id) {
+        for(int i=0;i<favArray.size();i++)
+        {
+            if(favArray.get(i).equalsIgnoreCase(id))
+            {
+                fav_int=1;
+                return fav_int;
+            }
+            else {
+                fav_int=0;
+            }
+        }
+        return fav_int;
+    }
+
+    private int getVisit(List<String> favArray, String id) {
         for(int i=0;i<favArray.size();i++)
         {
             if(favArray.get(i).equalsIgnoreCase(id))
@@ -250,8 +256,9 @@ public abstract class BaseMethod extends AppCompatActivity {
                 String ageValue = user.getAge();
                 Log.i("Age Range", str_from + " <= " + ageValue + " <= " + str_to);
                 int fav_id= getFav(favArray,user.getId());
+                int visit_id=getVisit(visitArray,user.getId());
                 if (Integer.parseInt(str_from) <= Integer.parseInt(ageValue) && Integer.parseInt(ageValue) <= Integer.parseInt(str_to)) {
-                    TripList tripListClass = new TripList(user.getId(), user.getUsername(), user.getImageURL(), ageValue, user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), from_to_dates.get(i).getLocation(), tripNote, dateFromTo,fav_id);
+                    TripList tripListClass = new TripList(user.getId(), user.getUsername(), user.getImageURL(), ageValue, user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), from_to_dates.get(i).getLocation(), tripNote, dateFromTo,fav_id,visit_id);
                     tripList.add(tripListClass);
                 }
 

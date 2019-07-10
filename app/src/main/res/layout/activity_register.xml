@@ -56,7 +56,6 @@
                 app:layout_constraintStart_toEndOf="@+id/tv_iam_text">
 
                 <RadioButton
-                    android:id="@+id/regi_rb_girl"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
@@ -69,7 +68,6 @@
 
                 <RadioButton
                     android:layout_marginStart="5dp"
-                    android:id="@+id/regi_rb_man"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="15sp"

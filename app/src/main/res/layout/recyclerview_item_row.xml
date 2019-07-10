@@ -7,6 +7,8 @@
     app:cardElevation="3dp"
     android:layout_margin="4dp"
     app:cardUseCompatPadding="true"
+    app:cardCornerRadius="10dp"
+    style="@style/Widget.MaterialComponents.CardView"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 

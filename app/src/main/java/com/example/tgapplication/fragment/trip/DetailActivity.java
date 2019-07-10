@@ -1,4 +1,4 @@
-package com.example.tgapplication.trips;
+package com.example.tgapplication.fragment.trip;
 
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
@@ -16,20 +16,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.tgapplication.BaseMethod;
 import com.example.tgapplication.R;
-import com.example.tgapplication.chat.ChatActivity;
 import com.example.tgapplication.chat.MessageActivity;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.login.LoginActivity;
 import com.example.tgapplication.photo.MyAdapter;
 import com.example.tgapplication.photo.Upload;
+//import com.example.tgapplication.trips.ProfileVisitorActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -46,7 +46,6 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +54,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class DetailActivity extends AppCompatActivity implements View.OnClickListener {
+public class DetailActivity extends BaseMethod implements View.OnClickListener {
 
     Toolbar mToolbar;
     ImageView mTrip;
@@ -65,7 +64,6 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
     FirebaseUser fuser;
     LinearLayout detail_list, image_list;
     Button btn_details, btn_images;
-    List<TripList> myFavArray = new ArrayList<>();
     List<TripList> myVisitArray = new ArrayList<>();
 
     private static final int PICK_IMAGE_REQUEST = 234;
@@ -226,7 +224,7 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 //            iv_fav.setTag("ic_action_fav_add");
 //        }
 
-
+        Log.i("Detail",""+tripList.size());
         if (getIntent() != null) {
             if (getIntent().getSerializableExtra("MyObj") == null) {
                 userList = (List<User>) getIntent().getSerializableExtra("MyDataObj");
@@ -575,13 +573,13 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                 startActivity(msgIntent);
                 break;
 
-            case R.id.iv_profile_visitor:
+     /*       case R.id.iv_profile_visitor:
                 getMyVisit();
-                break;
+                break;*/
 
-            case R.id.iv_my_fav:
+         /*   case R.id.iv_my_fav:
                 getMyFav();
-                break;
+                break;*/
 
             case R.id.iv_fav:
                 Log.i("GotTag", iv_fav.getTag().toString());
@@ -594,48 +592,30 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
                     iv_fav.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_fav_add));
                     iv_fav.setTag("ic_action_fav_add");
                 }
-
                 break;
         }
     }
 
-    private void getMyVisit() {
-        myVisitArray.clear();
-        Log.i("VisitArray", "" + visitArray.size());
-        for (int i = 0; i < listTrip.size(); i++) {
-            for (int j = 0; j < visitArray.size(); j++) {
-                Log.i("Compare", listTrip.get(i).getId() + " ==> " + visitArray.get(j));
-                if (listTrip.get(i).getId().equalsIgnoreCase(visitArray.get(j))) {
-                    myVisitArray.add(listTrip.get(i));
-                    Log.i("Got In Here ", listTrip.get(i).getId());
-                }
-            }
+//    private void getMyVisit() {
+//        myVisitArray.clear();
+//        Log.i("VisitArray", "" + visitArray.size());
+//        for (int i = 0; i < listTrip.size(); i++) {
+//            for (int j = 0; j < visitArray.size(); j++) {
+//                Log.i("Compare", listTrip.get(i).getId() + " ==> " + visitArray.get(j));
+//                if (listTrip.get(i).getId().equalsIgnoreCase(visitArray.get(j))) {
+//                    myVisitArray.add(listTrip.get(i));
+//                    Log.i("Got In Here ", listTrip.get(i).getId());
+//                }
+//            }
+//
+//        }
+//        Intent mIntent = new Intent(this, ProfileVisitorActivity.class);
+//        mIntent.putExtra("myVisit", (Serializable) myVisitArray);
+//        mIntent.putExtra("ListFav",(Serializable) favArray);
+//        startActivity(mIntent);
+//    }
 
-        }
-        Intent mIntent = new Intent(this, ProfileVisitorActivity.class);
-        mIntent.putExtra("myVisit", (Serializable) myVisitArray);
-        mIntent.putExtra("ListFav",(Serializable) favArray);
-        startActivity(mIntent);
-    }
 
-    private void getMyFav() {
-        myFavArray.clear();
-        for (int i = 0; i < listTrip.size(); i++) {
-            for (int j = 0; j < favArray.size(); j++) {
-                Log.i("Compare", listTrip.get(i).getId() + " ==> " + favArray.get(j));
-                if (listTrip.get(i).getId().equalsIgnoreCase(favArray.get(j))) {
-                    myFavArray.add(listTrip.get(i));
-                    Log.i("Got In Here ", listTrip.get(i).getId());
-                }
-            }
-
-        }
-        Log.i("Checking Size",myFavArray.size()+" "+favArray.size());
-        Intent mIntent = new Intent(this, ProfileVisitorActivity.class);
-        mIntent.putExtra("myFav", (Serializable) myFavArray);
-        mIntent.putExtra("ListFav",(Serializable) favArray);
-        startActivity(mIntent);
-    }
 
 
     private void setFav(String uid, String id) {

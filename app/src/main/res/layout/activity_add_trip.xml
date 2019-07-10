@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".trips.AddTripActivity">
+    tools:context=".fragment.trip.AddTripActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -67,7 +67,6 @@
                 <TextView
                     android:textSize="20.0sp"
                     android:gravity="center"
-                    android:id="@+id/tvSymbolName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="-"
