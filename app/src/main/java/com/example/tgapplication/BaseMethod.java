@@ -31,6 +31,7 @@ import java.util.Locale;
 
 public abstract class BaseMethod extends AppCompatActivity {
 
+    //Global Method and Variable
     String fUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
     List<String> visitArray = new ArrayList<>();
   public List<String> favArray = new ArrayList<>();
