@@ -6,10 +6,12 @@
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
 
+    <color name="green">#1A7A00</color>
+
     <color name="gray_bg">#e4e4e4</color>
 
     <color name="atm_normal">#c3cfc6b9</color>
-    <color name="atm_clicked">#50afa597</color>
 
     <color name="transparent">#00000000</color>
+
 </resources>

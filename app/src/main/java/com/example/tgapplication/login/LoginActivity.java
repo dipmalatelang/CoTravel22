@@ -1,6 +1,7 @@
 package com.example.tgapplication.login;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
@@ -16,12 +17,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
-import com.example.tgapplication.chat.ChatActivity;
-import com.example.tgapplication.chat.MessageActivity;
-import com.example.tgapplication.trips.AddTripActivity;
-import com.example.tgapplication.trips.ProfileActivity;
-import com.example.tgapplication.trips.TripActivity;
+//import com.example.tgapplication.trips.TripActivity;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -62,6 +60,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         loginButton = findViewById(R.id.login_button);
         tv_register = findViewById(R.id.tv_register);
 
+        tv_register.setPaintFlags(tv_register.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        tv_register.setText(getResources().getString(R.string.register));
+
         link_signup = findViewById(R.id.link_signup);
         link_signup.setOnClickListener(this);
         btn_login = findViewById(R.id.btn_login);
@@ -74,7 +75,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         tv_register.setOnClickListener(this);
 
-        value = getIntent().getExtras().getString("nextActivity");
+//        value = getIntent().getExtras().getString("nextActivity");
 
         loginButton.setReadPermissions("email", "public_profile");
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
@@ -129,7 +130,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         updateUI(currentUser);
     }
 
-    private void updateUI(FirebaseUser account) {
+   /* private void updateUI(FirebaseUser account) {
         if (account != null) {
             Log.i("FBData", "" + account.getIdToken(true) + " " + account.getMetadata() + " " + account.getProviderData());
             Log.i("NextNow", value);
@@ -163,14 +164,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 finish();
                 Toast.makeText(this, "in" + account, Toast.LENGTH_SHORT).show();
             } else if (value.equalsIgnoreCase("profileEdit")) {
-                Intent msgIntent=new Intent(LoginActivity.this, ProfileActivity.class);
+                Intent msgIntent=new Intent(LoginActivity.this, EditProfileActivity.class);
 //                msgIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 //                msgIntent.putExtra("nextActivity","profileEdit");
                 startActivity(msgIntent);
-//                Toast.makeText(this, "Profile edited Successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Profile edited Successfully", Toast.LENGTH_SHORT).show();
             }
         } else {
             Toast.makeText(this, "out", Toast.LENGTH_SHORT).show();
+        }
+    }*/
+
+    private void updateUI(FirebaseUser account) {
+        if (account != null) {
+            startActivity(new Intent(this, MainActivity.class));
         }
     }
 
@@ -216,9 +223,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
                 break;
             case R.id.tv_register:
-                Log.i("Send while Login", value);
+//                Log.i("Send while Login", value);
                 Intent loginIntent = new Intent(LoginActivity.this, RegisterActivity.class);
-                loginIntent.putExtra("nextActivity", value);
+//                loginIntent.putExtra("nextActivity", value);
                 startActivity(loginIntent);
                 break;
         }

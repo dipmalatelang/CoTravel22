@@ -1,6 +1,7 @@
 package com.example.tgapplication.login;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
@@ -8,6 +9,7 @@ import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -16,17 +18,17 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
-import com.example.tgapplication.chat.ChatActivity;
-import com.example.tgapplication.chat.MessageActivity;
-import com.example.tgapplication.trips.AddTripActivity;
-import com.example.tgapplication.trips.TripActivity;
-import com.example.tgapplication.trips.User;
+import com.example.tgapplication.fragment.trip.module.User;
+//import com.example.tgapplication.trips.TripActivity;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -63,7 +65,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     EditText regi_et_name, regi_et_email, regi_et_pass;
     DatabaseReference databaseReference;
 
-    LinearLayout regi_form,travelprefer_form;
+    LinearLayout travelprefer_form;
+    ConstraintLayout regi_form;
     RadioGroup regi_rg;
     RadioButton rb_gender;
     CheckBox cb_regi_girl,cb_regi_men;
@@ -94,7 +97,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         cb_regi_girl.setOnClickListener(this);
         cb_regi_men.setOnClickListener(this);
 
-        regi_form=findViewById(R.id.regi_form);
+        regi_form=findViewById(R.id.cl_register_form);
         travelprefer_form=findViewById(R.id.travelprefer_form);
 
         btn_register=findViewById(R.id.btn_register);
@@ -107,9 +110,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
-        value = getIntent().getExtras().getString("nextActivity");
+//        value = getIntent().getExtras().getString("nextActivity");
 
-        Log.i("Got Value in Register",value);
+//        Log.i("Got Value in Register",value);
 
 
         initAge();
@@ -152,21 +155,31 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 "71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90",
                 "91","92","93","94","95","96","97","98","99"));
 
-        adapter_age = new ArrayAdapter<>(RegisterActivity.this,
-                android.R.layout.simple_spinner_item, array_age);
+        adapter_age = new ArrayAdapter<>(RegisterActivity.this, android.R.layout.simple_spinner_item, array_age);
         adapter_age.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        adapter_age_from = new ArrayAdapter<>(RegisterActivity.this,
-                android.R.layout.simple_spinner_item, array_age);
+        adapter_age_from = new ArrayAdapter<>(RegisterActivity.this, android.R.layout.simple_spinner_item, array_age);
         adapter_age_from.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        adapter_age_to = new ArrayAdapter<>(RegisterActivity.this,
-                android.R.layout.simple_spinner_item, array_age);
+        adapter_age_to = new ArrayAdapter<>(RegisterActivity.this, android.R.layout.simple_spinner_item, array_age);
         adapter_age_to.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
 
         sp_age.setAdapter(adapter_age);
         sp_age_from.setAdapter(adapter_age_from);
         sp_age_to.setAdapter(adapter_age_to);
+
+        sp_age.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ((TextView) view).setTextColor(Color.WHITE); //Change selected text color
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
     }
 
@@ -205,7 +218,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     //   0
-    private void updateUI(FirebaseUser account) {
+   /* private void updateUI(FirebaseUser account) {
         if (account != null){
             Log.i("FBData",""+account.getIdToken(true)+" "+account.getMetadata()+" "+account.getProviderData());
             Log.i("NextNow",value);
@@ -254,8 +267,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         else {
             Toast.makeText(RegisterActivity.this, "out", Toast.LENGTH_SHORT).show();
         }
-    }
+    }*/
 
+
+    private void updateUI(FirebaseUser account) {
+        if (account != null) {
+            startActivity(new Intent(this, MainActivity.class));
+        }
+    }
     private void handleFacebookAccessToken(String token) {
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token);
@@ -375,10 +394,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
                 if(str_gender.equalsIgnoreCase("girl"))
                 {
-                    look.add("male");
-                }
-                else if(str_gender.equalsIgnoreCase("man")) {
                     look.add("female");
+                }
+                else if(str_gender.equalsIgnoreCase("boy")) {
+                    look.add("male");
                 }
                 else {
                     look.add("female");

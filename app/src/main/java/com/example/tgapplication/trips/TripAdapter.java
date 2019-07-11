@@ -1,3 +1,4 @@
+/*
 package com.example.tgapplication.trips;
 
 import android.content.Context;
@@ -14,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tgapplication.R;
+import com.example.tgapplication.fragment.trip.DetailActivity;
+import com.example.tgapplication.fragment.trip.module.TripList;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -118,4 +121,4 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
             mCardView = itemView.findViewById(R.id.cardview);
         }
     }
-}
+}*/
