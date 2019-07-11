@@ -3,14 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     tools:context=".fragment.favourite.FavouriteFragment">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/button_atm_normal">
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/myFavRV"
-        android:background="@drawable/button_atm_normal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="vertical" />
+    </RelativeLayout>
 
 </FrameLayout>

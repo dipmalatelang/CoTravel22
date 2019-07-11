@@ -12,9 +12,16 @@
         <!--android:layout_height="match_parent"-->
         <!--android:text="Chat" />-->
 
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/button_atm_normal">
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+    </RelativeLayout>
 
 </FrameLayout>

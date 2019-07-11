@@ -6,11 +6,15 @@
     android:background="@color/white"
     tools:context=".fragment.visitor.VisitorFragment">
 
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/button_atm_normal">
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/myVisitRV"
-        android:background="@drawable/button_atm_normal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="vertical" />
-
+    </RelativeLayout>
 </FrameLayout>

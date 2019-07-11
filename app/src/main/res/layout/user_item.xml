@@ -61,5 +61,11 @@
         android:textColor="@color/colorPrimaryDark"
         android:layout_marginLeft="20dp"
         android:maxLines="1"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="3dp"
+        android:layout_below="@id/last_msg"
+        android:background="@color/black"/>
 
 </RelativeLayout>
