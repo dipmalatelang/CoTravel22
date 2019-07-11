@@ -188,30 +188,7 @@ public class DetailActivity extends BaseMethod implements View.OnClickListener {
         progressDialog.setMessage("Please wait...");
         progressDialog.show();
         storageReference = FirebaseStorage.getInstance().getReference();
-        mDatabase = FirebaseDatabase.getInstance().getReference("Pictures").child(fuser.getUid());
-        mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-//dismissing the progress dialog
-                progressDialog.dismiss();
 
-//iterating through all the values in database
-                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                    Upload upload = postSnapshot.getValue(Upload.class);
-                    uploads.add(upload);
-                }
-//creating adapter
-                adapter = new MyAdapter(getApplicationContext(),fuser.getUid(), uploads);
-
-//adding adapter to recyclerview
-                recyclerView.setAdapter(adapter);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                progressDialog.dismiss();
-            }
-        });
 
 //        Log.i("Got Data back ",""+fav_int);
 //        if(fav_int)
@@ -270,6 +247,30 @@ public class DetailActivity extends BaseMethod implements View.OnClickListener {
 
 
 //            mDate.setText(tripL.getFrom_to_date());
+                mDatabase = FirebaseDatabase.getInstance().getReference("Pictures").child(tripL.getId());
+                mDatabase.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+//dismissing the progress dialog
+                        progressDialog.dismiss();
+
+//iterating through all the values in database
+                        for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                            Upload upload = postSnapshot.getValue(Upload.class);
+                            uploads.add(upload);
+                        }
+//creating adapter
+                        adapter = new MyAdapter(getApplicationContext(),tripL.getId(), uploads);
+
+//adding adapter to recyclerview
+                        recyclerView.setAdapter(adapter);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        progressDialog.dismiss();
+                    }
+                });
             }
         }
 

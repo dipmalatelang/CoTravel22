@@ -32,11 +32,11 @@ import java.util.Locale;
 public abstract class BaseMethod extends AppCompatActivity {
 
     //Global Method and Variable
-    String fUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//    String fUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
     List<String> visitArray = new ArrayList<>();
   public List<String> favArray = new ArrayList<>();
     public int fav_int;
-    List<User> myDetail = new ArrayList<>();
+   public List<User> myDetail = new ArrayList<>();
    public List<TripList> tripList = new ArrayList<>();
     final long now = System.currentTimeMillis();
     List<Date> dates = new ArrayList<>();
@@ -97,7 +97,6 @@ public abstract class BaseMethod extends AppCompatActivity {
         return myFavArray;
     }
 
-
     private int getFav(List<String> favArray, String id) {
         for(int i=0;i<favArray.size();i++)
         {
@@ -128,7 +127,7 @@ public abstract class BaseMethod extends AppCompatActivity {
         return fav_int;
     }
 
-    private void filterTripList(final String str_city, final String str_lang, final String str_eyes, final String str_hairs, final String str_height, final String str_bodytype, final String str_look,
+   /* private void filterTripList(final String str_city, final String str_lang, final String str_eyes, final String str_hairs, final String str_height, final String str_bodytype, final String str_look,
                                 final String str_from, final String str_to, final String str_visit) {
         tripList = new ArrayList<>();
         myDetail = new ArrayList<>();
@@ -185,7 +184,7 @@ public abstract class BaseMethod extends AppCompatActivity {
                                                                         + user.getVisit());
 
                                                                 if (city.toLowerCase().contains(str_city.toLowerCase()) && user.getEyes().contains(str_eyes) && user.getHair().contains(str_hairs) && user.getHeight().contains(str_height) && user.getBody_type().contains(str_bodytype)
-                                                                    /* && user.getLook().contains(str_look)*/) {
+                                                                    *//* && user.getLook().contains(str_look)*//*) {
                                                                     Log.i("FilterFromTo", "" + from_to_dates.size());
                                                                     getDataForDisplay(dates, user);
                                                                     List<String> lang_item = Arrays.asList(user.getLang().split("\\s*,\\s*"));
@@ -229,7 +228,7 @@ public abstract class BaseMethod extends AppCompatActivity {
                     }
                 }
         );
-    }
+    }*/
 
     private void getDataForDisplay(List<Date> dates, User user) {
 
@@ -267,7 +266,7 @@ public abstract class BaseMethod extends AppCompatActivity {
         }
     }
 
-    private void getDataToFilter() {
+/*    private void getDataToFilter() {
         if (str_lang == "All") {
             str_lang = "Arabic,Danish,German,Belorussian,Dutch,Greek,Japanese,Portuguese,Italian,Polish,Spanish,Swedish,Bulgarian,English,Hebrew,Korean,Romanian,Thai,Catalan,Estonian,Hindi,Latvian,Russian,Turkish,Chinese,Filipino,Hungarian,Lithuanian,Serbian,Ukrainian,Croatian,Finnish,Icelandic,Norwegian,Slovak,Urdu,Czech,French,Indonesian,Persian,Slovenian,Vietnamese,Nepali,Armenian,Kurdish";
         }
@@ -276,5 +275,5 @@ public abstract class BaseMethod extends AppCompatActivity {
             str_look = "Girls,Male";
         }
         filterTripList(str_city, str_lang, str_eyes, str_hairs, str_height, str_bodytype, str_look, str_from, str_to, str_visit);
-    }
+    }*/
 }

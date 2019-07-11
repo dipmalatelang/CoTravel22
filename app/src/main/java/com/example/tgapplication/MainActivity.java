@@ -1,11 +1,13 @@
 package com.example.tgapplication;
 
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.tgapplication.fragment.account.AccountFragment;
 import com.example.tgapplication.fragment.chat.ChatFragment;
@@ -18,6 +20,7 @@ import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.fragment.visitor.VisitorFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,20 +36,23 @@ import java.util.Locale;
 
 public class MainActivity extends BaseMethod implements BottomNavigationView.OnNavigationItemSelectedListener {
 
-
-
+    String fUserId;
+    Fragment fragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        BottomNavigationView navView = findViewById(R.id.nav_view);
-        navView.setOnNavigationItemSelectedListener(this);
-
+        fUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         getAllFav();
         getAllVisit();
         tripList();
-//        loadFragment(new TripFragment(tripList));
+
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView.setSelectedItemId(R.id.nav_trip);
+        navView.setOnNavigationItemSelectedListener(this);
+        fragment=new TripFragment(tripList);
+        loadFragment(fragment);
     }
 
     public void getAllFav() {
@@ -194,7 +200,6 @@ public class MainActivity extends BaseMethod implements BottomNavigationView.OnN
     }
 
 
-
     private boolean loadFragment(Fragment fragment) {
         //switching fragment
         if (fragment != null) {
@@ -209,10 +214,10 @@ public class MainActivity extends BaseMethod implements BottomNavigationView.OnN
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        Fragment fragment= null;
+
         switch (item.getItemId()) {
             case R.id.nav_account:
-                fragment = new AccountFragment();
+                fragment = new AccountFragment(myDetail);
                 break;
             case R.id.nav_chat:
                 fragment = new ChatFragment();
