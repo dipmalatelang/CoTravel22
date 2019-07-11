@@ -17,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.tgapplication.BaseMethod;
 import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
 //import com.example.tgapplication.trips.TripActivity;
@@ -35,7 +36,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import butterknife.ButterKnife;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
+public class LoginActivity extends BaseMethod implements View.OnClickListener, View.OnTouchListener {
 
     LoginButton loginButton;
     Button btn_login;
