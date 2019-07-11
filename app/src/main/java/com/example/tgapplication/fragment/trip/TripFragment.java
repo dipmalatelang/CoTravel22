@@ -106,6 +106,7 @@ public class TripFragment extends Fragment {
         Log.i("Fav Array",""+ tripList.size());
         tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), tripList);
         recyclerview.setAdapter(tripAdapter);
+
 //        getFav();
 
         tripFilter.setOnClickListener(new View.OnClickListener() {
