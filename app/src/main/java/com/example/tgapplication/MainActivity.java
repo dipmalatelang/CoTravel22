@@ -257,12 +257,16 @@ public class MainActivity extends BaseMethod implements BottomNavigationView.OnN
         switch (item.getItemId())
         {
             case R.id.home:
+                navView.setSelectedItemId(R.id.nav_trip);
                 fragment=new TripFragment(tripList);
                 loadFragment(fragment);
                 Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.logout:
+                FirebaseAuth.getInstance().signOut();
+                finish();
+                startActivity(new Intent(this,LoginActivity.class));
                 Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();
                 break;
 
