@@ -354,6 +354,10 @@ public class EditProfileActivity extends BaseMethod implements View.OnClickListe
 
 
                     Log.i("Simu"," "+str_height);
+
+                    register(user,str_name,str_dob,str_gender,age,str_location,str_nationality,str_lang,str_look,str_height,str_body_type,str_eyes,str_hair,str_visit);
+
+
                 }
 
 
