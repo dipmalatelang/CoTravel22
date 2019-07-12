@@ -1,5 +1,6 @@
 package com.example.tgapplication.login;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -7,8 +8,10 @@ import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -35,9 +38,11 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Objects;
+
 import butterknife.ButterKnife;
 
-public class LoginActivity extends BaseMethod implements View.OnClickListener, View.OnTouchListener {
+public class LoginActivity extends BaseMethod implements View.OnClickListener, View.OnTouchListener, View.OnKeyListener {
 
     LoginButton loginButton;
     Button btn_login;
@@ -80,6 +85,7 @@ public class LoginActivity extends BaseMethod implements View.OnClickListener, V
         input_password = findViewById(R.id.input_password);
 
         input_password.setOnTouchListener(this);
+        input_password.setOnKeyListener(this);
 
         tv_register.setOnClickListener(this);
 
@@ -206,7 +212,7 @@ public class LoginActivity extends BaseMethod implements View.OnClickListener, V
                 startActivity(resetIntent);
                 break;
             case R.id.btn_login:
-
+                hideKeyboard();
                 String txt_email = input_email.getText().toString().trim();
                 String txt_password = input_password.getText().toString();
 
@@ -253,16 +259,28 @@ public class LoginActivity extends BaseMethod implements View.OnClickListener, V
         if (event.getAction() == MotionEvent.ACTION_UP) {
             if (event.getRawX() >= (input_password.getRight() - input_password.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                 // your action here
+
                 if (!input_password.getTransformationMethod().toString().contains("Password")) {
                     input_password.setTransformationMethod(new PasswordTransformationMethod());
+                    input_password.setSelection(input_password.getText().length());
                     input_password.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_eye_off, 0);
 
                 } else {
                     input_password.setTransformationMethod(new HideReturnsTransformationMethod());
+                    input_password.setSelection(input_password.getText().length());
                     input_password.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_eye, 0);
                 }
                 return true;
             }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+        if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+            btn_login.performClick();
+            return true;
         }
         return false;
     }
