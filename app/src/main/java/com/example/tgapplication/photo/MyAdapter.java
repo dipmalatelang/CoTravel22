@@ -55,7 +55,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
                 .with(mcontext)
                 .load(uploadCurrent.getUrl())
                 .centerCrop()
-                .placeholder(R.mipmap.ic_launcher_round)
+                .placeholder(R.drawable.ic_services_ratings_user_pic)
                 .into(holder.imageView);
 
 

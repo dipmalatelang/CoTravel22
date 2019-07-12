@@ -172,8 +172,11 @@ public class LoginActivity extends BaseMethod implements View.OnClickListener, V
                 String txt_password = input_password.getText().toString();
 
                 if (TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)) {
-                    snackBar(constrainlayout,"Authentication failed !");
-                } else {
+                    snackBar(constrainlayout,"All fileds are required !");
+                }else if(!android.util.Patterns.EMAIL_ADDRESS.matcher(txt_email).matches())
+                {
+                    snackBar(constrainlayout, "please enter valid email address");}
+               else {
 
                     mAuth.signInWithEmailAndPassword(txt_email, txt_password)
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
