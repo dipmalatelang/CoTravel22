@@ -634,7 +634,6 @@ public class DetailActivity extends BaseMethod implements View.OnClickListener {
         final DatabaseReference visitorRef = FirebaseDatabase.getInstance().getReference("Favorites")
                 .child(uid);
         visitorRef.child(id).removeValue();
-
     }
 
     @OnClick(R.id.iv_my_pic)

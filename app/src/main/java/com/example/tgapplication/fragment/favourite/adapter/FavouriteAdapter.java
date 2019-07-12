@@ -52,7 +52,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
         final TripList tList = mTrip.get(position);
         if(tList.getImageUrl().equalsIgnoreCase("default"))
         {
-            Glide.with(mContext).load(R.drawable.ic_action_girl).into(holder.mImage);
+            Glide.with(mContext).load(R.drawable.ic_services_ratings_user_pic).into(holder.mImage);
         }
         else
         {

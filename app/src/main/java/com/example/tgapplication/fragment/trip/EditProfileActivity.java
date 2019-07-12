@@ -17,9 +17,13 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tgapplication.R;
+import com.example.tgapplication.fragment.trip.module.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -31,6 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 
 public class EditProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -216,9 +221,9 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
             android.widget.ListPopupWindow EyespopupWindow = (android.widget.ListPopupWindow) popup1.get(Sp_eyes);
 
             // Set popupWindow height to 500px
-            BodypopupWindow.setHeight(300);
-            HairpopupWindow.setHeight(400);
-            EyespopupWindow.setHeight(400);
+            BodypopupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+            HairpopupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+            EyespopupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
         }
         catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {
             // silently fail...
@@ -288,9 +293,9 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
 //                user.getProviderId(),str_body_type, str_dob, str_eyes, str_hair, str_height, str_lang,
 //                str_look, str_location, str_name, user.getPhoneNumber(), str_nationality, str_visit);
 //        databaseReference.setValue(userClass);
-
+//
 //        updateUI(user);
-
+//
 //            hashMap=new HashMap<>();
 //        hashMap.put("id",user.getUid());
 //        hashMap.put("username",user.getDisplayName());
