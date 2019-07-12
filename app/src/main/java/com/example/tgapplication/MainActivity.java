@@ -1,9 +1,13 @@
 package com.example.tgapplication;
 
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -12,6 +16,7 @@ import androidx.fragment.app.FragmentManager;
 import com.example.tgapplication.fragment.account.AccountFragment;
 import com.example.tgapplication.fragment.chat.ChatFragment;
 import com.example.tgapplication.fragment.favourite.FavouriteFragment;
+import com.example.tgapplication.fragment.trip.DetailActivity;
 import com.example.tgapplication.fragment.trip.TripFragment;
 import com.example.tgapplication.fragment.trip.module.FavList;
 import com.example.tgapplication.fragment.trip.module.PlanTrip;
@@ -19,6 +24,7 @@ import com.example.tgapplication.fragment.trip.module.TripData;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.fragment.visitor.VisitorFragment;
+import com.example.tgapplication.login.LoginActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -27,6 +33,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,6 +45,7 @@ public class MainActivity extends BaseMethod implements BottomNavigationView.OnN
 
     String fUserId;
     Fragment fragment;
+    BottomNavigationView navView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,9 +56,10 @@ public class MainActivity extends BaseMethod implements BottomNavigationView.OnN
         getAllVisit();
         tripList();
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView = findViewById(R.id.nav_view);
         navView.setSelectedItemId(R.id.nav_trip);
         navView.setOnNavigationItemSelectedListener(this);
+
         fragment=new TripFragment(tripList);
         loadFragment(fragment);
     }
@@ -234,5 +243,30 @@ public class MainActivity extends BaseMethod implements BottomNavigationView.OnN
         }
 
         return loadFragment(fragment);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.trip_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case R.id.home:
+                startActivity(new Intent(this,MainActivity.class));
+                Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show();
+                break;
+
+            case R.id.logout:
+                Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();
+                break;
+
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

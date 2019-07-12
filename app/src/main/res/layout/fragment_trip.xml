@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="#bfdecc"
     tools:context=".fragment.trip.TripFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -13,10 +13,7 @@
         <!--android:layout_height="match_parent"-->
         <!--android:text="Trip" />-->
 
-    <RelativeLayout
-        android:background="@drawable/button_atm_normal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+
 
 
         <LinearLayout
@@ -55,16 +52,18 @@
         </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingActionButton"
+            style="@style/Widget.MaterialComponents.FloatingActionButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/floatingActionButton"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="24dp"
             android:src="@drawable/ic_add_white_48dp"
             app:elevation="6dp"
-            app:pressedTranslationZ="12dp"
-            style="@style/Widget.MaterialComponents.FloatingActionButton"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true" />
-    </RelativeLayout>
+            app:pressedTranslationZ="12dp" />
 
-</FrameLayout>
+
+</RelativeLayout>

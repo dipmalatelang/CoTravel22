@@ -41,7 +41,7 @@ public abstract class BaseMethod extends AppCompatActivity {
     public int fav_int;
    public List<User> myDetail = new ArrayList<>();
    public List<TripList> tripList = new ArrayList<>();
-    final long now = System.currentTimeMillis();
+    public long now = System.currentTimeMillis();
     List<Date> dates = new ArrayList<>();
     private Date closest;
     List<PlanTrip> from_to_dates = new ArrayList<>();
