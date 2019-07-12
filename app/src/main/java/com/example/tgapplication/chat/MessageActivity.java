@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -114,7 +114,6 @@ public class MessageActivity extends BaseMethod {
                 if (!msg.equals("")){
                     sendMessage(fuser.getUid(), userid, msg);
                 } else {
-//                    Toast.makeText(MessageActivity.this, "You can't send empty message", Toast.LENGTH_SHORT).show();
                     snackBar(message_realtivelayout,"You can't send empty message");
                 }
 //                text_send.setText("");
@@ -247,7 +246,6 @@ public class MessageActivity extends BaseMethod {
                                 public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
                                     if (response.code() == 200){
                                         if (response.body().success != 1){
-//                                            Toast.makeText(MessageActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
                                             snackBar(message_realtivelayout,"Failed!");
                                         }
                                     }

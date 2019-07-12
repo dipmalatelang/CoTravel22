@@ -14,17 +14,19 @@ import android.widget.LinearLayout;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.tgapplication.BaseFragment;
+import com.example.tgapplication.BaseMethod;
 import com.example.tgapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.sdsmdg.tastytoast.TastyToast;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
@@ -32,7 +34,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class EditProfileActivity extends AppCompatActivity implements View.OnClickListener {
+public class EditProfileActivity extends BaseMethod implements View.OnClickListener {
 
     private FirebaseAuth mAuth;
     Button btn_regi;
@@ -42,6 +44,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     TextView TV_dob;
     int day, month, year;
     CheckBox cb_girl,cb_men;
+    RelativeLayout activity_profile_relativelayout;
 
     String value;
     ArrayList<String> str_look = new ArrayList<>();
@@ -66,6 +69,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         et_visit=findViewById(R.id.et_visit);
         rg_gender=findViewById(R.id.rg_gender);
         TV_dob = findViewById(R.id.tv_dob);
+        activity_profile_relativelayout= findViewById(R.id.activity_profile_relativelayout);
 
         Sp_bodytype = findViewById(R.id.sp_body_type);
         Sp_hairs = findViewById(R.id.sp_hair);
@@ -225,59 +229,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-//    private void updateUI(FirebaseUser account) {
-//        if (account != null){
-//            Log.i("FBData",""+account.getIdToken(true)+" "+account.getMetadata()+" "+account.getProviderData());
-//            value = getIntent().getExtras().getString("nextActivity");
-//            Log.i("NextNow",value);
-//            if(value.equalsIgnoreCase("Chat"))
-//            {
-//                Intent intent=new Intent(EditProfileActivity.this, ChatActivity.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
-//
-//                startActivity(intent);
-//                finish();
-//                Toast.makeText(this, "in"+account, Toast.LENGTH_SHORT).show();
-//            }
-//            else if(value.equalsIgnoreCase("AddTrips"))
-//            {
-//                Intent intent=new Intent(EditProfileActivity.this, AddTripActivity.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
-//
-//                startActivity(intent);
-//                finish();
-//                Toast.makeText(this, "in"+account, Toast.LENGTH_SHORT).show();
-//            }
-//            else if(value.equalsIgnoreCase("Trips"))
-//            {
-//                Intent intent=new Intent(EditProfileActivity.this, TripActivity.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
-//
-//                startActivity(intent);
-//                finish();
-//                Toast.makeText(this, "in"+account, Toast.LENGTH_SHORT).show();
-//            }
-//            else if(value.equalsIgnoreCase("TripsMsg"))
-//            {
-//                String user = getIntent().getExtras().getString("nextActivityUser");
-//                Intent intent=new Intent(EditProfileActivity.this, MessageActivity.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
-//                intent.putExtra("userid", user);
-//                startActivity(intent);
-//                finish();
-//                Toast.makeText(this, "in"+account, Toast.LENGTH_SHORT).show();
-//            }
-////            else if(value.equalsIgnoreCase("profileEdit"))
-////            {
-////                regi_form.setVisibility(View.GONE);
-////                regi_more_form.setVisibility(View.VISIBLE);
-////                Toast.makeText(this, "Profile edited Successfully", Toast.LENGTH_SHORT).show();
-////            }
-//        }
-//        else {
-//            Toast.makeText(this, "out", Toast.LENGTH_SHORT).show();
-//        }
-//    }
+
 
     private void register(final FirebaseUser user, String str_name, String str_dob, String str_gender, String age, String str_location, String str_nationality, String str_lang, ArrayList<String> str_look, String str_height, String str_body_type, String str_eyes, String str_hair, String str_visit) {
         databaseReference= FirebaseDatabase.getInstance().getReference("Users").child(user.getUid());
@@ -371,13 +323,15 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
                 final FirebaseUser user = mAuth.getCurrentUser();
 
                 if (et_name.getText().toString().length() <=0){
-                    TastyToast.makeText(this, "Please enter your name", TastyToast.LENGTH_SHORT, TastyToast.ERROR).show();
+
+                    snackBar(activity_profile_relativelayout,"Please enter your name");
                 }
                 else if (et_location.getText().toString().length()<=0){
-                    TastyToast.makeText(this, "Enter a city you want to visit", TastyToast.LENGTH_SHORT, TastyToast.ERROR).show();
+                    snackBar(activity_profile_relativelayout,"Enter a city you want to visit");
                 }
                 else if (et_visit.getText().toString().length()<=0){
-                    TastyToast.makeText(this, "Please enter your location", TastyToast.LENGTH_SHORT, TastyToast.ERROR).show();
+                    snackBar(activity_profile_relativelayout,"Please enter your location");
+
                 }
                 else
                 {
@@ -398,15 +352,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
                     String str_gender=rb_gender.getText().toString();
                     String age="18";
 
-//                    String checkDOB=validateDOB(str_dob);
-//                    if(checkDOB.equalsIgnoreCase("valid"))
-//                    {
-                    register(user,str_name,str_dob,str_gender,age,str_location,str_nationality,str_lang,str_look,str_height,str_body_type,str_eyes,str_hair,str_visit);
-//                    }
-//                    else
-//                        {
-//                        Toast.makeText(this, "Enter valid DOB", Toast.LENGTH_SHORT).show();
-//                    }
+
                     Log.i("Simu"," "+str_height);
                 }
 

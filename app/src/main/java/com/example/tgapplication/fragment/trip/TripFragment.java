@@ -24,7 +24,6 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
-//import android.widget.Toast;
 
 
 public class TripFragment extends Fragment {
@@ -86,8 +85,7 @@ public class TripFragment extends Fragment {
         str_to = prefs.getString("str_to", "not_defined");
         str_visit = prefs.getString("str_visit", "not_defined");
 
-//        Toast.makeText(, "", Toast.LENGTH_SHORT).show();
-//        Toast.makeText(this, "" + str_city, Toast.LENGTH_SHORT).show();
+
 
 //        tripList();
         if (str_city.equalsIgnoreCase("not_defined")) {
@@ -97,8 +95,7 @@ public class TripFragment extends Fragment {
 
         } else {
             tripFilter.setText("Clear Filter");
-//            Toast.makeText(this, "Data: " + str_city + " " + str_lang + " " + str_look + " " + str_from + " " + str_to + " " + str_visit, Toast.LENGTH_SHORT).show();
-//            getDataToFilter();
+
 
         }
 

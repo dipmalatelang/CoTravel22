@@ -20,7 +20,6 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -222,57 +221,7 @@ public class RegisterActivity extends BaseMethod implements View.OnClickListener
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    //   0
-   /* private void updateUI(FirebaseUser account) {
-        if (account != null){
-            Log.i("FBData",""+account.getIdToken(true)+" "+account.getMetadata()+" "+account.getProviderData());
-            Log.i("NextNow",value);
-            if(value.equalsIgnoreCase("Chat"))
-            {
-                Intent intent=new Intent(RegisterActivity.this, ChatActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                startActivity(intent);
-                finish();
-                Toast.makeText(RegisterActivity.this, "in"+account, Toast.LENGTH_SHORT).show();
-            }
-            else if(value.equalsIgnoreCase("AddTrips"))
-            {
-                Intent intent=new Intent(RegisterActivity.this, AddTripActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                startActivity(intent);
-                finish();
-                Toast.makeText(RegisterActivity.this, "in"+account, Toast.LENGTH_SHORT).show();
-            }
-            else if(value.equalsIgnoreCase("Trips"))
-            {
-                Intent intent=new Intent(RegisterActivity.this, TripActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                startActivity(intent);
-                finish();
-                Toast.makeText(RegisterActivity.this, "in"+account, Toast.LENGTH_SHORT).show();
-            }
-            else if(value.equalsIgnoreCase("TripsMsg"))
-            {
-                String user = getIntent().getExtras().getString("nextActivityUser");
-                Intent intent=new Intent(RegisterActivity.this, MessageActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("userid", user);
-                startActivity(intent);
-                finish();
-                Toast.makeText(RegisterActivity.this, "in"+account, Toast.LENGTH_SHORT).show();
-            }
-            else if(value.equalsIgnoreCase("profileEdit"))
-            {
-                Toast.makeText(RegisterActivity.this, "Profile edited Successfully", Toast.LENGTH_SHORT).show();
-            }
-        }
-        else {
-            Toast.makeText(RegisterActivity.this, "out", Toast.LENGTH_SHORT).show();
-        }
-    }*/
 
 
     private void updateUI(FirebaseUser account) {
@@ -315,7 +264,6 @@ public class RegisterActivity extends BaseMethod implements View.OnClickListener
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
-//                            Toast.makeText(RegisterActivity.this, "Success", Toast.LENGTH_SHORT).show();
                             snackBar(relativelayout,"Success");
 
                             FirebaseUser firebaseUser = mAuth.getCurrentUser();
@@ -404,7 +352,6 @@ public class RegisterActivity extends BaseMethod implements View.OnClickListener
                     look.add("male");
                 }
                 if (TextUtils.isEmpty(txt_username) || TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password )) {
-//                    Toast.makeText(RegisterActivity.this, "All fileds are required", Toast.LENGTH_SHORT).show();
                     snackBar(relativelayout, "All fileds are required");
 
                 } else if(!android.util.Patterns.EMAIL_ADDRESS.matcher(txt_email).matches())
@@ -413,13 +360,12 @@ public class RegisterActivity extends BaseMethod implements View.OnClickListener
 
                 else if (txt_password.length() < 6 ) {
 
-//                    Toast.makeText(RegisterActivity.this, "password must be at least 6 characters", Toast.LENGTH_SHORT).show();
                     snackBar(relativelayout, "password must be at least 6 characters");
 
 
                 }
                 else {
-//                 Toast.makeText(this, " "+txt_username+" "+txt_email+" "+txt_password+" "+str_gender+" "+str_age+" "+look, Toast.LENGTH_SHORT).show();
+
 //                    snackBar(relativelayout, "Register Successfully..!");
                     register(txt_username, txt_email, txt_password, str_gender, str_age, look, range_age);
                 }
