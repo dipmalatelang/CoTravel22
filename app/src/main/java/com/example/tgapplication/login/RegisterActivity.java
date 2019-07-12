@@ -52,6 +52,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Objects;
 
 public class RegisterActivity extends BaseMethod implements View.OnClickListener, View.OnTouchListener {
 
@@ -75,6 +76,7 @@ public class RegisterActivity extends BaseMethod implements View.OnClickListener
 
     ArrayList<String> array_age;
     ArrayAdapter<String> adapter_age, adapter_age_from, adapter_age_to;
+    private String TAG="RegisterActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,6 +178,33 @@ public class RegisterActivity extends BaseMethod implements View.OnClickListener
         sp_age.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+//                hideKeyboard();
+                ((TextView) view).setTextColor(Color.WHITE); //Change selected text color
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        sp_age_from.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                ((TextView) view).setTextColor(Color.WHITE); //Change selected text color
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        sp_age_to.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
                 ((TextView) view).setTextColor(Color.WHITE); //Change selected text color
             }
 
@@ -283,7 +312,15 @@ public class RegisterActivity extends BaseMethod implements View.OnClickListener
                             look.clear();
 
                         }
+                        else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "createUserWithEmail:failure"+ Objects.requireNonNull(task.getException()).getMessage());
+                            snackBar(relativelayout,task.getException().getMessage());
+                            updateUI(null);
+                        }
+
                     }
+
                 });
     }
 
@@ -428,12 +465,14 @@ public class RegisterActivity extends BaseMethod implements View.OnClickListener
                 if(!regi_et_pass.getTransformationMethod().toString().contains("Password"))
                 {
                     regi_et_pass.setTransformationMethod(new PasswordTransformationMethod());
+                    regi_et_pass.setSelection(regi_et_pass.getText().length());
                     regi_et_pass.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_eye_off, 0);
 
                 }
                 else
                 {
                     regi_et_pass.setTransformationMethod(new HideReturnsTransformationMethod());
+                    regi_et_pass.setSelection(regi_et_pass.getText().length());
                     regi_et_pass.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_eye, 0);
                 }
                 return true;
