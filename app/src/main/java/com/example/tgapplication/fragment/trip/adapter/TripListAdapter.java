@@ -60,6 +60,15 @@ public class TripListAdapter extends RecyclerView.Adapter<TripListAdapter.TripHo
         holder.tv_city.setText(tripDetails.getLocation());
         holder.tv_date.setText(tripDetails.getFrom_date()+" - "+tripDetails.getTo_date());
 
+        holder.btn_delete.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                TripData RemoveItem = tripDataList.get(position);
+                // remove your item from data base
+                tripDataList.remove(position);  // remove the item from list
+                notifyItemRemoved(position); // notify the adapter about the removed item
+            }
+        });
+
 //        holder.btn_edit.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
