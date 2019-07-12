@@ -1,9 +1,11 @@
 package com.example.tgapplication;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
@@ -31,6 +33,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public abstract class BaseMethod extends AppCompatActivity {
 
@@ -280,6 +283,15 @@ public abstract class BaseMethod extends AppCompatActivity {
         textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_android_green_24dp, 0, 0, 0);
         textView.setCompoundDrawablePadding(20);
         snackbar.show();
+    }
+
+    public void hideKeyboard()
+    {
+        InputMethodManager inputManager = (InputMethodManager)
+                getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        inputManager.hideSoftInputFromWindow(Objects.requireNonNull(getCurrentFocus()).getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
 /*    private void getDataToFilter() {
