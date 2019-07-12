@@ -260,7 +260,6 @@ public class MainActivity extends BaseMethod implements BottomNavigationView.OnN
                 navView.setSelectedItemId(R.id.nav_trip);
                 fragment=new TripFragment(tripList);
                 loadFragment(fragment);
-                Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.logout:

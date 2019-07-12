@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="8dp"
-    tools:context=".chat.ProfileFragment">
+    tools:context=".chat.ProfileFragment"
+    android:id="@+id/profile_relativelayout">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"

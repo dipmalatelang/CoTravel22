@@ -18,11 +18,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.tgapplication.BaseFragment;
+import com.example.tgapplication.BaseMethod;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.EditProfileActivity;
 import com.example.tgapplication.fragment.trip.module.TripList;
@@ -60,7 +63,7 @@ import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 
 
-public class AccountFragment extends Fragment implements View.OnClickListener {
+public class AccountFragment extends BaseFragment implements View.OnClickListener {
 
 
     ImageView mTrip;
@@ -73,6 +76,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
     Button btn_details, btn_images;
     List<TripList> myFavArray = new ArrayList<>();
     List<TripList> myVisitArray = new ArrayList<>();
+    ConstraintLayout fragment_acc_constraintLayout;
 
     private static final int PICK_IMAGE_REQUEST = 234;
 
@@ -139,7 +143,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         String str_to = prefs.getString("str_to", "not_defined");
         String str_visit = prefs.getString("str_visit", "not_defined");
 
-        Toast.makeText(getActivity(), "" + str_city, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), "" + str_city, Toast.LENGTH_SHORT).show();
 
 //        if(str_city.equalsIgnoreCase("not_defined"))
 //        {

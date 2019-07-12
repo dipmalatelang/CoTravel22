@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +26,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.example.tgapplication.BaseMethod;
 import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.User;
@@ -52,7 +54,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
-public class RegisterActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
+public class RegisterActivity extends BaseMethod implements View.OnClickListener, View.OnTouchListener {
 
     private FirebaseAuth mAuth;
     private CallbackManager mCallbackManager;
@@ -70,6 +72,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     RadioGroup regi_rg;
     RadioButton rb_gender;
     CheckBox cb_regi_girl,cb_regi_men;
+    RelativeLayout relativelayout;
 
     ArrayList<String> array_age;
     ArrayAdapter<String> adapter_age, adapter_age_from, adapter_age_to;
@@ -107,6 +110,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         btn_save_register.setOnClickListener(this);
 
         loginButton = findViewById(R.id.login_button);
+
+        relativelayout = findViewById(R.id.relativelayout);
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
@@ -310,7 +315,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
-                            Toast.makeText(RegisterActivity.this, "Success", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(RegisterActivity.this, "Success", Toast.LENGTH_SHORT).show();
+                            snackBar(relativelayout,"Success");
+
                             FirebaseUser firebaseUser = mAuth.getCurrentUser();
                             assert firebaseUser != null;
                             String userid = firebaseUser.getUid();
@@ -327,33 +334,30 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             range_age.clear();
                             look.clear();
 
+                        }
                     }
-                }
-    });
+                });
     }
+
+
+
     @Override
     public void onClick(View v) {
-        switch (v.getId())
-        {
+        switch (v.getId()) {
             case R.id.cb_regi_girl:
                 boolean checked = ((CheckBox) v).isChecked();
-                if (checked)
-                {
+                if (checked) {
                     look.add("female");
-                }
-                else
-                {
+                } else {
                     look.remove("female");
                 }
 
                 break;
             case R.id.cb_regi_men:
                 boolean checkedmen = ((CheckBox) v).isChecked();
-                if (checkedmen)
-                {
+                if (checkedmen) {
                     look.add("male");
-                }
-                else {
+                } else {
                     look.remove("male");
                 }
                 break;
@@ -365,58 +369,68 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 String str_age_to = sp_age_to.getSelectedItem().toString();
                 range_age.add(str_age_from);
                 range_age.add(str_age_to);
-                updateRegister(look,range_age);
+                updateRegister(look, range_age);
                 updateUI(mAuth.getCurrentUser());
                 break;
 
             case R.id.btn_register:
-                int selectedId= regi_rg.getCheckedRadioButtonId();
-                rb_gender=findViewById(selectedId);
+                int selectedId = regi_rg.getCheckedRadioButtonId();
+                rb_gender = findViewById(selectedId);
 
-                String str_gender= rb_gender.getText().toString();
+                String str_gender = rb_gender.getText().toString();
                 String txt_username = regi_et_name.getText().toString();
                 String txt_email = regi_et_email.getText().toString();
                 String txt_password = regi_et_pass.getText().toString();
                 String str_age = sp_age.getSelectedItem().toString();
 
-                int age_value=Integer.parseInt(str_age);
-                if(age_value<=25)
-                {
+
+
+                int age_value = Integer.parseInt(str_age);
+                if (age_value <= 25) {
                     range_age.add("18");
-                    range_age.add(""+(age_value+7));
-                }
-                else if(age_value>=25)
-                {
-                    range_age.add(""+(age_value-7));
-                    range_age.add(""+(age_value+7));
+                    range_age.add("" + (age_value + 7));
+                } else if (age_value >= 25) {
+                    range_age.add("" + (age_value - 7));
+                    range_age.add("" + (age_value + 7));
                 }
 
 
-                if(str_gender.equalsIgnoreCase("girl"))
-                {
+                if (str_gender.equalsIgnoreCase("girl")) {
                     look.add("female");
-                }
-                else if(str_gender.equalsIgnoreCase("boy")) {
+                } else if (str_gender.equalsIgnoreCase("boy")) {
                     look.add("male");
+                } else {
+                    look.add("female");
+                    look.add("male");
+                }
+                if (TextUtils.isEmpty(txt_username) || TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password )) {
+//                    Toast.makeText(RegisterActivity.this, "All fileds are required", Toast.LENGTH_SHORT).show();
+                    snackBar(relativelayout, "All fileds are required");
+
+                } else if(!android.util.Patterns.EMAIL_ADDRESS.matcher(txt_email).matches())
+                {
+                    snackBar(relativelayout, "please enter valid email address");}
+
+                else if (txt_password.length() < 6 ) {
+
+//                    Toast.makeText(RegisterActivity.this, "password must be at least 6 characters", Toast.LENGTH_SHORT).show();
+                    snackBar(relativelayout, "password must be at least 6 characters");
+
+
                 }
                 else {
-                    look.add("female");
-                    look.add("male");
-                }
-
-                if (TextUtils.isEmpty(txt_username) || TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)){
-                    Toast.makeText(RegisterActivity.this, "All fileds are required", Toast.LENGTH_SHORT).show();
-                } else if (txt_password.length() < 6 ){
-                    Toast.makeText(RegisterActivity.this, "password must be at least 6 characters", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, " "+txt_username+" "+txt_email+" "+txt_password+" "+str_gender+" "+str_age+" "+look, Toast.LENGTH_SHORT).show();
-                    register(txt_username, txt_email, txt_password, str_gender,str_age,look,range_age);
+//                 Toast.makeText(this, " "+txt_username+" "+txt_email+" "+txt_password+" "+str_gender+" "+str_age+" "+look, Toast.LENGTH_SHORT).show();
+//                    snackBar(relativelayout, "Register Successfully..!");
+                    register(txt_username, txt_email, txt_password, str_gender, str_age, look, range_age);
                 }
 
                 break;
 
         }
     }
+
+
+
 
     private void updateRegister(final ArrayList<String> look, ArrayList<String> age) {
 
@@ -457,29 +471,29 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-            final int DRAWABLE_LEFT = 0;
-            final int DRAWABLE_TOP = 1;
-            final int DRAWABLE_RIGHT = 2;
-            final int DRAWABLE_BOTTOM = 3;
+        final int DRAWABLE_LEFT = 0;
+        final int DRAWABLE_TOP = 1;
+        final int DRAWABLE_RIGHT = 2;
+        final int DRAWABLE_BOTTOM = 3;
 
-            if(event.getAction() == MotionEvent.ACTION_UP) {
-                if(event.getRawX() >= (regi_et_pass.getRight() - regi_et_pass.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                    // your action here
-                    if(!regi_et_pass.getTransformationMethod().toString().contains("Password"))
-                    {
-                        regi_et_pass.setTransformationMethod(new PasswordTransformationMethod());
-                        regi_et_pass.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_eye_off, 0);
+        if(event.getAction() == MotionEvent.ACTION_UP) {
+            if(event.getRawX() >= (regi_et_pass.getRight() - regi_et_pass.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                // your action here
+                if(!regi_et_pass.getTransformationMethod().toString().contains("Password"))
+                {
+                    regi_et_pass.setTransformationMethod(new PasswordTransformationMethod());
+                    regi_et_pass.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_eye_off, 0);
 
-                    }
-                    else
-                    {
-                        regi_et_pass.setTransformationMethod(new HideReturnsTransformationMethod());
-                        regi_et_pass.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_eye, 0);
-                    }
-                    return true;
                 }
+                else
+                {
+                    regi_et_pass.setTransformationMethod(new HideReturnsTransformationMethod());
+                    regi_et_pass.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_eye, 0);
+                }
+                return true;
             }
-            return false;
+        }
+        return false;
     }
 }
 
