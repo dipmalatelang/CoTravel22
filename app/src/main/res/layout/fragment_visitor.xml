@@ -10,7 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/button_atm_normal">
+        android:background="#bfdecc">
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/myVisitRV"
         android:layout_width="match_parent"
