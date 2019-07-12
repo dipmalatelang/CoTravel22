@@ -280,8 +280,8 @@ public abstract class BaseMethod extends AppCompatActivity {
         });
         View snackbarLayout = snackbar.getView();
         TextView textView = (TextView)snackbarLayout.findViewById(R.id.snackbar_text);
-        textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_android_green_24dp, 0, 0, 0);
-        textView.setCompoundDrawablePadding(20);
+//        textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_android_green_24dp, 0, 0, 0);
+//        textView.setCompoundDrawablePadding(20);
         snackbar.show();
     }
 
