@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.tgapplication.BaseMethod;
 import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.User;
@@ -38,7 +40,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MessageActivity extends AppCompatActivity {
+public class MessageActivity extends BaseMethod {
 
     CircleImageView profile_image;
     TextView username;
@@ -63,6 +65,7 @@ public class MessageActivity extends AppCompatActivity {
     APIService apiService;
 
     boolean notify = false;
+    RelativeLayout message_realtivelayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +98,7 @@ public class MessageActivity extends AppCompatActivity {
         username = findViewById(R.id.username);
         btn_send = findViewById(R.id.btn_send);
         text_send = findViewById(R.id.text_send);
+        message_realtivelayout= findViewById(R.id.message_realtivelayout);
 
         intent = getIntent();
         userid = intent.getStringExtra("userid");
@@ -110,7 +114,8 @@ public class MessageActivity extends AppCompatActivity {
                 if (!msg.equals("")){
                     sendMessage(fuser.getUid(), userid, msg);
                 } else {
-                    Toast.makeText(MessageActivity.this, "You can't send empty message", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MessageActivity.this, "You can't send empty message", Toast.LENGTH_SHORT).show();
+                    snackBar(message_realtivelayout,"You can't send empty message");
                 }
 //                text_send.setText("");
                 text_send.getText().clear();
@@ -242,7 +247,8 @@ public class MessageActivity extends AppCompatActivity {
                                 public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
                                     if (response.code() == 200){
                                         if (response.body().success != 1){
-                                            Toast.makeText(MessageActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
+//                                            Toast.makeText(MessageActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
+                                            snackBar(message_realtivelayout,"Failed!");
                                         }
                                     }
                                 }

@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.tgapplication.BaseMethod;
 import com.example.tgapplication.MainActivity;
@@ -45,6 +46,7 @@ public class LoginActivity extends BaseMethod implements View.OnClickListener, V
     String value;
     TextView tv_register, link_signup;
     EditText input_email, input_password;
+    ConstraintLayout constrainlayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,10 @@ public class LoginActivity extends BaseMethod implements View.OnClickListener, V
         loginButton = findViewById(R.id.login_button);
         tv_register = findViewById(R.id.tv_register);
 
+
+        constrainlayout = findViewById(R.id.constrainlayout);
+
+
         tv_register.setPaintFlags(tv_register.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         tv_register.setText(getResources().getString(R.string.register));
 
@@ -68,6 +74,7 @@ public class LoginActivity extends BaseMethod implements View.OnClickListener, V
         link_signup.setOnClickListener(this);
         btn_login = findViewById(R.id.btn_login);
         btn_login.setOnClickListener(this);
+
 
         input_email = findViewById(R.id.input_email);
         input_password = findViewById(R.id.input_password);
@@ -199,11 +206,13 @@ public class LoginActivity extends BaseMethod implements View.OnClickListener, V
                 startActivity(resetIntent);
                 break;
             case R.id.btn_login:
-                String txt_email = input_email.getText().toString();
+
+                String txt_email = input_email.getText().toString().trim();
                 String txt_password = input_password.getText().toString();
 
                 if (TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)) {
-                    Toast.makeText(LoginActivity.this, "All fileds are required", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(LoginActivity.this, "All fileds are required", Toast.LENGTH_SHORT).show();
+                    snackBar(constrainlayout,"Authentication failed !");
                 } else {
 
                     mAuth.signInWithEmailAndPassword(txt_email, txt_password)
@@ -217,7 +226,8 @@ public class LoginActivity extends BaseMethod implements View.OnClickListener, V
 //                                        startActivity(intent);
 //                                        finish();
                                     } else {
-                                        Toast.makeText(LoginActivity.this, "Authentication failed!", Toast.LENGTH_SHORT).show();
+//                                        Toast.makeText(LoginActivity.this, "Authentication failed!", Toast.LENGTH_SHORT).show();
+                                        snackBar(constrainlayout,"Authentication failed !");
                                     }
                                 }
                             });

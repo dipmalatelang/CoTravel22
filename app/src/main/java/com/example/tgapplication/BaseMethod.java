@@ -3,6 +3,8 @@ package com.example.tgapplication;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +13,7 @@ import com.example.tgapplication.fragment.trip.module.PlanTrip;
 import com.example.tgapplication.fragment.trip.module.TripData;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -264,6 +267,19 @@ public abstract class BaseMethod extends AppCompatActivity {
 
             }
         }
+    }
+    public void snackBar(View constrainlayout, String s){
+        Snackbar snackbar = Snackbar.make(constrainlayout,s, Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("Action Button", "onClick triggered");
+            }
+        });
+        View snackbarLayout = snackbar.getView();
+        TextView textView = (TextView)snackbarLayout.findViewById(R.id.snackbar_text);
+        textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_android_green_24dp, 0, 0, 0);
+        textView.setCompoundDrawablePadding(20);
+        snackbar.show();
     }
 
 /*    private void getDataToFilter() {

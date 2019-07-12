@@ -8,6 +8,7 @@
     android:backgroundTint="#CC000000"
     android:backgroundTintMode="src_over"
     tools:context=".login.RegisterActivity"
+    android:id="@+id/relativelayout"
     android:background="@drawable/login_bg">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -56,6 +57,7 @@
                 app:layout_constraintStart_toEndOf="@+id/tv_iam_text">
 
                 <RadioButton
+                    android:id="@+id/rb_girl"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="15sp"
@@ -64,9 +66,12 @@
                     android:drawableEnd="@drawable/avatar_girl_32"
                     android:drawablePadding="5dp"
                     android:text="Girl"
-                    android:checked="true"/>
+                    android:checked="true"
+
+                  />
 
                 <RadioButton
+                    android:id="@+id/rb_boy"
                     android:layout_marginStart="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -75,7 +80,9 @@
                     android:textColor="@color/white"
                     android:drawableEnd="@drawable/avatar_boy_32"
                     android:text="Boy"
-                    android:drawablePadding="5dp"/>
+                    android:drawablePadding="5dp"
+                    android:checked="false"
+                   />
 
             </RadioGroup>
 
