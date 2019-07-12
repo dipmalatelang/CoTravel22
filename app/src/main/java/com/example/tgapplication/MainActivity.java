@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -46,10 +47,13 @@ public class MainActivity extends BaseMethod implements BottomNavigationView.OnN
     String fUserId;
     Fragment fragment;
     BottomNavigationView navView;
+    ConstraintLayout container;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
         fUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         getAllFav();
@@ -59,6 +63,8 @@ public class MainActivity extends BaseMethod implements BottomNavigationView.OnN
         navView = findViewById(R.id.nav_view);
         navView.setSelectedItemId(R.id.nav_trip);
         navView.setOnNavigationItemSelectedListener(this);
+
+        container =findViewById(R.id.container);
 
         fragment=new TripFragment(tripList);
         loadFragment(fragment);
@@ -266,7 +272,7 @@ public class MainActivity extends BaseMethod implements BottomNavigationView.OnN
                 FirebaseAuth.getInstance().signOut();
                 finish();
                 startActivity(new Intent(this,LoginActivity.class));
-                Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();
+                snackBar(container,"Logout");
                 break;
 
         }

@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -143,14 +143,12 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
         String str_to = prefs.getString("str_to", "not_defined");
         String str_visit = prefs.getString("str_visit", "not_defined");
 
-//        Toast.makeText(getActivity(), "" + str_city, Toast.LENGTH_SHORT).show();
 
 //        if(str_city.equalsIgnoreCase("not_defined"))
 //        {
 //            tripList();
 //        }
 //        else{
-//            Toast.makeText(this, "Data: "+str_city+" "+str_lang+" "+str_look+" "+str_from+" "+str_to+" "+str_visit, Toast.LENGTH_SHORT).show();
 //            filterTripList(str_city);
 //        }
 
@@ -181,6 +179,7 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
         tvWantToVisit = v.findViewById(R.id.tvWantToVisit);
         tvPlannedtrip = v.findViewById(R.id.tvPlannedtrip);
         tvDate = v.findViewById(R.id.tvDate);
+        fragment_acc_constraintLayout=v.findViewById(R.id.fragment_acc_constraintLayout);
 
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
@@ -575,7 +574,7 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
 
 
 //displaying success toast
-                            Toast.makeText(getActivity().getApplicationContext(), "File Uploaded ", Toast.LENGTH_LONG).show();
+                            snackBar(fragment_acc_constraintLayout,"File Uploaded ");
 
                             sRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                                 @Override
@@ -600,7 +599,7 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
                         public void onFailure(@NonNull Exception exception) {
                             progressDialog.dismiss();
                             Log.i("Failure",exception.getMessage());
-//                            Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+//
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -612,7 +611,8 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
                         }
                     });
         } else {
-            Toast.makeText(getActivity(), "Please Select a Image", Toast.LENGTH_SHORT).show();
+            snackBar(fragment_acc_constraintLayout,"Please Select a Image");
+
         }
     }
 

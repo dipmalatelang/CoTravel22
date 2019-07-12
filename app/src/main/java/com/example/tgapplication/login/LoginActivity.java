@@ -15,7 +15,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -144,50 +143,6 @@ public class LoginActivity extends BaseMethod implements View.OnClickListener, V
         updateUI(currentUser);
     }
 
-   /* private void updateUI(FirebaseUser account) {
-        if (account != null) {
-            Log.i("FBData", "" + account.getIdToken(true) + " " + account.getMetadata() + " " + account.getProviderData());
-            Log.i("NextNow", value);
-            if (value.equalsIgnoreCase("Chat")) {
-                Intent intent = new Intent(LoginActivity.this, ChatActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                startActivity(intent);
-                finish();
-                Toast.makeText(this, "in" + account, Toast.LENGTH_SHORT).show();
-            } else if (value.equalsIgnoreCase("AddTrips")) {
-                Intent intent = new Intent(LoginActivity.this, AddTripActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                startActivity(intent);
-                finish();
-                Toast.makeText(this, "in" + account, Toast.LENGTH_SHORT).show();
-            } else if (value.equalsIgnoreCase("Trips")) {
-                Intent intent = new Intent(LoginActivity.this, TripActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                startActivity(intent);
-                finish();
-                Toast.makeText(this, "in" + account, Toast.LENGTH_SHORT).show();
-            } else if (value.equalsIgnoreCase("TripsMsg")) {
-                String user = getIntent().getExtras().getString("nextActivityUser");
-                Intent intent = new Intent(LoginActivity.this, MessageActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("userid", user);
-                startActivity(intent);
-                finish();
-                Toast.makeText(this, "in" + account, Toast.LENGTH_SHORT).show();
-            } else if (value.equalsIgnoreCase("profileEdit")) {
-                Intent msgIntent=new Intent(LoginActivity.this, EditProfileActivity.class);
-//                msgIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-//                msgIntent.putExtra("nextActivity","profileEdit");
-                startActivity(msgIntent);
-                Toast.makeText(this, "Profile edited Successfully", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            Toast.makeText(this, "out", Toast.LENGTH_SHORT).show();
-        }
-    }*/
 
     private void updateUI(FirebaseUser account) {
         if (account != null) {
@@ -217,7 +172,6 @@ public class LoginActivity extends BaseMethod implements View.OnClickListener, V
                 String txt_password = input_password.getText().toString();
 
                 if (TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)) {
-//                    Toast.makeText(LoginActivity.this, "All fileds are required", Toast.LENGTH_SHORT).show();
                     snackBar(constrainlayout,"Authentication failed !");
                 } else {
 
@@ -232,7 +186,6 @@ public class LoginActivity extends BaseMethod implements View.OnClickListener, V
 //                                        startActivity(intent);
 //                                        finish();
                                     } else {
-//                                        Toast.makeText(LoginActivity.this, "Authentication failed!", Toast.LENGTH_SHORT).show();
                                         snackBar(constrainlayout,"Authentication failed !");
                                     }
                                 }

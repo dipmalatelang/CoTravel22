@@ -9,19 +9,21 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.tgapplication.BaseMethod;
 import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
-import com.sdsmdg.tastytoast.TastyToast;
+
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class FilterTripActivity extends AppCompatActivity implements View.OnClickListener {
+public class FilterTripActivity extends BaseMethod implements View.OnClickListener {
 
     Spinner spinner_lang, spinner_look,spinner_from,spinner_to, spinner_eyes, spinner_hairs, spinner_height, spinner_bodytype;
     ArrayList<String> array_lang,array_look,array_from,array_to, array_eyes, array_hairs, array_height, array_bodytype;
@@ -32,11 +34,13 @@ public class FilterTripActivity extends AppCompatActivity implements View.OnClic
     RadioGroup rg_trip;
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
+    RelativeLayout activity_filter_trip_relativelayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter_trip);
+        activity_filter_trip_relativelayout =findViewById(R.id.activity_filter_trip_relativelayout);
 
         initComponent();
 
@@ -227,7 +231,8 @@ public class FilterTripActivity extends AppCompatActivity implements View.OnClic
 
                 if (et_city.getText().toString().length()<=0){
 
-                    TastyToast.makeText(this, "Please enter city name", TastyToast.LENGTH_SHORT, TastyToast.ERROR).show();
+
+                    snackBar(activity_filter_trip_relativelayout,"Please enter city name");
                 }
                 else
                 {
@@ -263,7 +268,6 @@ public class FilterTripActivity extends AppCompatActivity implements View.OnClic
                 }
 
 
-//                Toast.makeText(this, "Clicked "+str_city+ " "+lang+" "+look+" "+from+" "+to+" "+str_visit, Toast.LENGTH_SHORT).show();
                 break;
         }
     }

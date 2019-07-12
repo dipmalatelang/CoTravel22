@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -155,7 +154,6 @@ public class ProfileFragment extends BaseFragment {
 
                         pd.dismiss();
                     } else {
-//                        Toast.makeText(getContext(), "Failed!", Toast.LENGTH_SHORT).show();
                         snackBar(profile_relativelayout,"Failed!");
                         pd.dismiss();
                     }
@@ -163,14 +161,12 @@ public class ProfileFragment extends BaseFragment {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-//                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
 
                     snackBar(profile_relativelayout,e.getMessage());
                     pd.dismiss();
                 }
             });
         } else {
-//            Toast.makeText(getContext(), "No image selected", Toast.LENGTH_SHORT).show();
             snackBar(profile_relativelayout,"No image selected");
         }
     }
@@ -184,7 +180,7 @@ public class ProfileFragment extends BaseFragment {
             imageUri = data.getData();
 
             if (uploadTask != null && uploadTask.isInProgress()){
-//                Toast.makeText(getContext(), "Upload in progress....", Toast.LENGTH_SHORT).show();
+
                 snackBar(profile_relativelayout,"Upload in progress....");
             } else {
                 uploadImage();
