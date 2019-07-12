@@ -257,7 +257,8 @@ public class MainActivity extends BaseMethod implements BottomNavigationView.OnN
         switch (item.getItemId())
         {
             case R.id.home:
-                startActivity(new Intent(this,MainActivity.class));
+                fragment=new TripFragment(tripList);
+                loadFragment(fragment);
                 Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show();
                 break;
 
