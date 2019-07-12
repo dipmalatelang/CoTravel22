@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.example.tgapplication.BaseFragment;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.google.android.gms.tasks.Continuation;
@@ -43,7 +45,7 @@ import static android.app.Activity.RESULT_OK;
 //import com.koddev.chatapp.R;
 
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends BaseFragment {
 
     CircleImageView image_profile;
     TextView username;
@@ -55,6 +57,7 @@ public class ProfileFragment extends Fragment {
     private static final int IMAGE_REQUEST = 1;
     private Uri imageUri;
     private StorageTask uploadTask;
+    RelativeLayout profile_relativelayout;
 
 
     @Override
@@ -65,6 +68,7 @@ public class ProfileFragment extends Fragment {
 
         image_profile = view.findViewById(R.id.profile_image);
         username = view.findViewById(R.id.username);
+        profile_relativelayout= view.findViewById(R.id.profile_relativelayout);
 
         storageReference = FirebaseStorage.getInstance().getReference("uploads");
 
@@ -151,19 +155,23 @@ public class ProfileFragment extends Fragment {
 
                         pd.dismiss();
                     } else {
-                        Toast.makeText(getContext(), "Failed!", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getContext(), "Failed!", Toast.LENGTH_SHORT).show();
+                        snackBar(profile_relativelayout,"Failed!");
                         pd.dismiss();
                     }
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+
+                    snackBar(profile_relativelayout,e.getMessage());
                     pd.dismiss();
                 }
             });
         } else {
-            Toast.makeText(getContext(), "No image selected", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getContext(), "No image selected", Toast.LENGTH_SHORT).show();
+            snackBar(profile_relativelayout,"No image selected");
         }
     }
 
@@ -176,7 +184,8 @@ public class ProfileFragment extends Fragment {
             imageUri = data.getData();
 
             if (uploadTask != null && uploadTask.isInProgress()){
-                Toast.makeText(getContext(), "Upload in progress....", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), "Upload in progress....", Toast.LENGTH_SHORT).show();
+                snackBar(profile_relativelayout,"Upload in progress....");
             } else {
                 uploadImage();
             }

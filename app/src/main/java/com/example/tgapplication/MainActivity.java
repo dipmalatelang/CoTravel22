@@ -259,11 +259,11 @@ public class MainActivity extends BaseMethod implements BottomNavigationView.OnN
             case R.id.home:
                 fragment=new TripFragment(tripList);
                 loadFragment(fragment);
-                Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.logout:
-                Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();
                 break;
 
         }
