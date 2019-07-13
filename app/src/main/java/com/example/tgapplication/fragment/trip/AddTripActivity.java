@@ -2,21 +2,23 @@ package com.example.tgapplication.fragment.trip;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tgapplication.BaseMethod;
 import com.example.tgapplication.R;
-import com.example.tgapplication.fragment.trip.module.TripData;
 import com.example.tgapplication.fragment.trip.adapter.TripListAdapter;
+import com.example.tgapplication.fragment.trip.module.TripData;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -31,7 +33,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
-public class AddTripActivity extends AppCompatActivity implements View.OnClickListener {
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class AddTripActivity extends BaseMethod implements View.OnClickListener {
 
     DatabaseReference reference;
     FirebaseUser fuser;
@@ -40,15 +45,18 @@ public class AddTripActivity extends AppCompatActivity implements View.OnClickLi
     EditText et_location, et_note;
     Calendar mcalendar = Calendar.getInstance();
     int day, month, year;
-    ArrayList tripList;
     RecyclerView recyclerView;
     TripListAdapter mtripAdapter;
     Toolbar toolbar;
+    ArrayList<TripData> trips = new ArrayList<>();
+    @BindView(R.id.trip_relativelayout)
+    RelativeLayout tripRelativelayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_trip);
+        ButterKnife.bind(this);
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
         btn_add_trip = findViewById(R.id.btn_add_trip);
@@ -56,7 +64,7 @@ public class AddTripActivity extends AppCompatActivity implements View.OnClickLi
         tv_from_date = findViewById(R.id.tv_from_date);
         tv_to_date = findViewById(R.id.tv_to_date);
         et_note = findViewById(R.id.et_note);
-        toolbar=findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
 
         tv_from_date.setOnClickListener(this);
         tv_to_date.setOnClickListener(this);
@@ -84,7 +92,7 @@ public class AddTripActivity extends AppCompatActivity implements View.OnClickLi
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        displayTripList();
+        displayTripList(fuser.getUid());
 
     }
 
@@ -94,20 +102,17 @@ public class AddTripActivity extends AppCompatActivity implements View.OnClickLi
         return true;
     }
 
-    private void displayTripList() {
-        tripList = new ArrayList<>();
-
-        final ArrayList<TripData> trips = new ArrayList<>();
+    public void displayTripList(String uid) {
 
         DatabaseReference reference1 = FirebaseDatabase.getInstance()
                 .getReference()
                 .child("Trips");
-        reference1.orderByKey().equalTo(fuser.getUid())
+        reference1.orderByKey().equalTo(uid)
                 .addValueEventListener(
                         new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                                trips.clear();
                                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                     String city = "";
                                     String tripNote = "";
@@ -124,7 +129,7 @@ public class AddTripActivity extends AppCompatActivity implements View.OnClickLi
                                     Log.i("List now", "" + trips.get(j).getLocation());
                                 }
                                 // add code here of adapter
-                                mtripAdapter = new TripListAdapter(AddTripActivity.this, trips);
+                                mtripAdapter = new TripListAdapter(AddTripActivity.this, uid, trips);
                                 recyclerView.setAdapter(mtripAdapter);
                             }
 
@@ -139,12 +144,16 @@ public class AddTripActivity extends AppCompatActivity implements View.OnClickLi
         reference = FirebaseDatabase.getInstance().getReference("Trips").child(fuser.getUid());
 
         String userId = reference.push().getKey();
-        TripData tripData = new TripData(fuser.getUid(), et_location.getText().toString(), et_note.getText().toString(),
+        TripData tripData = new TripData(userId, et_location.getText().toString(), et_note.getText().toString(),
                 tv_from_date.getText().toString(), tv_to_date.getText().toString());
 
         reference.child(userId).setValue(tripData);
 
-        displayTripList();
+        snackBar(tripRelativelayout, "Trip added Successfully..!");
+        displayTripList(fuser.getUid());
+//        trips.add(tripData);
+//        mtripAdapter.notifyDataSetChanged();
+//        recyclerView.setAdapter(mtripAdapter);
 //                    Intent intent = new Intent(AddTripActivity.this, TripActivity.class);
 //                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 //                    startActivity(intent);
@@ -157,7 +166,17 @@ public class AddTripActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_add_trip:
-                Trips();
+
+                String et_locations = et_location.getText().toString().trim();
+                String et_notes = et_note.getText().toString().trim();
+                String tv_from_dates = tv_from_date.getText().toString().trim();
+
+                if (TextUtils.isEmpty(et_locations) || TextUtils.isEmpty(et_notes) || TextUtils.isEmpty(tv_from_dates) || TextUtils.isEmpty(tv_from_dates)) {
+                    snackBar(tripRelativelayout, "All fileds are required !");
+                } else {
+                    Trips();
+
+                }
                 break;
 
             case R.id.tv_from_date:
