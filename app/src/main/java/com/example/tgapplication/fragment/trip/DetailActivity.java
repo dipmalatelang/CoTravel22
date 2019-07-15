@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.tgapplication.BaseMethod;
+import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.chat.MessageActivity;
 import com.example.tgapplication.fragment.trip.module.TripList;
@@ -46,7 +46,6 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +53,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class DetailActivity extends BaseMethod implements View.OnClickListener {
+public class DetailActivity extends BaseActivity implements View.OnClickListener {
 
     Toolbar mToolbar;
     ImageView mTrip;
@@ -203,7 +202,7 @@ public class DetailActivity extends BaseMethod implements View.OnClickListener {
 //            iv_fav.setTag("ic_action_fav_add");
 //        }
 
-        Log.i("Detail",""+tripList.size());
+//        Log.i("Detail",""+tripList.size());
         if (getIntent() != null) {
             if (getIntent().getSerializableExtra("MyObj") == null) {
                 userList = (List<User>) getIntent().getSerializableExtra("MyDataObj");
@@ -631,6 +630,12 @@ public class DetailActivity extends BaseMethod implements View.OnClickListener {
     }
 
 
+    public void removeVisit(String uid, String id)
+    {
+        final DatabaseReference visitorRef = FirebaseDatabase.getInstance().getReference("ProfileVisitor")
+                .child(uid);
+        visitorRef.child(id).removeValue();
+    }
     public void removeFav(String uid, String id) {
 
         final DatabaseReference visitorRef = FirebaseDatabase.getInstance().getReference("Favorites")

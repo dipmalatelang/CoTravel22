@@ -1,6 +1,5 @@
 package com.example.tgapplication.login;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -11,16 +10,14 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.example.tgapplication.BaseMethod;
+import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
 //import com.example.tgapplication.trips.TripActivity;
@@ -37,11 +34,9 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.Objects;
-
 import butterknife.ButterKnife;
 
-public class LoginActivity extends BaseMethod implements View.OnClickListener, View.OnTouchListener, View.OnKeyListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener, View.OnTouchListener, View.OnKeyListener {
 
     LoginButton loginButton;
     Button btn_login;

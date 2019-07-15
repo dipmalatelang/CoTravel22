@@ -1,6 +1,7 @@
 package com.example.tgapplication.fragment.trip.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,10 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tgapplication.R;
+import com.example.tgapplication.fragment.trip.AddTripActivity;
 import com.example.tgapplication.fragment.trip.module.TripData;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -20,19 +24,22 @@ import java.util.List;
 
 public class TripListAdapter extends RecyclerView.Adapter<TripListAdapter.TripHolder>{
 
+    String uid;
     Context context;
     List<TripData> tripDataList;
-    TripData tripDetails;
+//    TripData tripDetails;
 
 
-    public TripListAdapter(Context context, List<TripData> tripDataList) {
+    public TripListAdapter(Context context, String uid, List<TripData> tripDataList) {
         this.context = context;
         this.tripDataList = tripDataList;
+        this.uid=uid;
     }
 
 
     @Override
     public int getItemCount() {
+        Log.i("tripData",""+tripDataList.size());
         return tripDataList.size();
     }
 
@@ -62,10 +69,14 @@ public class TripListAdapter extends RecyclerView.Adapter<TripListAdapter.TripHo
 
         holder.btn_delete.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                TripData RemoveItem = tripDataList.get(position);
                 // remove your item from data base
+//                Log.i("CheckId",tripDataList.get(position).getId());
+                removeTrip(uid,tripDataList.get(position).getId());
                 tripDataList.remove(position);  // remove the item from list
-                notifyItemRemoved(position); // notify the adapter about the removed item
+//                notifyDataSetChanged(); // notify the adapter about the removed item
+                notifyItemRemoved(position);
+                notifyDataSetChanged();
+//                new AddTripActivity().displayTripList(uid);
             }
         });
 
@@ -78,6 +89,11 @@ public class TripListAdapter extends RecyclerView.Adapter<TripListAdapter.TripHo
         
     }
 
+    private void removeTrip(String uid, String id) {
+        final DatabaseReference visitorRef = FirebaseDatabase.getInstance().getReference("Trips")
+                .child(uid);
+        visitorRef.child(id).removeValue();
+    }
 
 
     @Override

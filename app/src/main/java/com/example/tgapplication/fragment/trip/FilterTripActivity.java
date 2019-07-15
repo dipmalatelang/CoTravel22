@@ -12,9 +12,7 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.tgapplication.BaseMethod;
+import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
 
@@ -23,7 +21,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class FilterTripActivity extends BaseMethod implements View.OnClickListener {
+public class FilterTripActivity extends BaseActivity implements View.OnClickListener {
 
     Spinner spinner_lang, spinner_look,spinner_from,spinner_to, spinner_eyes, spinner_hairs, spinner_height, spinner_bodytype;
     ArrayList<String> array_lang,array_look,array_from,array_to, array_eyes, array_hairs, array_height, array_bodytype;

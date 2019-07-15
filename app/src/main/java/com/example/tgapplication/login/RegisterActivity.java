@@ -22,10 +22,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.example.tgapplication.BaseMethod;
+import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.User;
@@ -54,7 +53,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
 
-public class RegisterActivity extends BaseMethod implements View.OnClickListener, View.OnTouchListener {
+public class RegisterActivity extends BaseActivity implements View.OnClickListener, View.OnTouchListener {
 
     private FirebaseAuth mAuth;
     private CallbackManager mCallbackManager;

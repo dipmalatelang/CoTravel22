@@ -19,18 +19,19 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tgapplication.BaseFragment;
-import com.example.tgapplication.BaseMethod;
 import com.example.tgapplication.R;
+import com.example.tgapplication.fragment.trip.DetailActivity;
 import com.example.tgapplication.fragment.trip.EditProfileActivity;
+import com.example.tgapplication.fragment.trip.adapter.TripAdapter;
+import com.example.tgapplication.fragment.trip.module.PlanTrip;
+import com.example.tgapplication.fragment.trip.module.TripData;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
-import com.example.tgapplication.login.LoginActivity;
 import com.example.tgapplication.photo.MyAdapter;
 import com.example.tgapplication.photo.Upload;
 
@@ -51,15 +52,18 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 
 
@@ -84,7 +88,7 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
     //    Gallery simpleGallery;
 //    CustomGalleryAdapter customGalleryAdapter;
     TripList tripL;
-    List<User> userList;
+    List<User> userList=new ArrayList<>();
     List<TripList> listTrip;
     List<String> favArray;
     List<String> visitArray;
@@ -122,10 +126,6 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
     private Uri filePath;
     private String getDownloadImageUrl;
     private StorageReference storageReference;
-
-    public AccountFragment(List<User> myDetail) {
-        this.userList=myDetail;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -183,7 +183,7 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
 
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
-
+        myList(fuser);
         iv_fav.setOnClickListener(this);
 //        btn_send_msg.setOnClickListener(this);
         iv_profile_edit.setOnClickListener(this);
@@ -243,13 +243,12 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
 
 //        btn_send_msg.setVisibility(View.GONE);
         iv_fav.setVisibility(View.GONE);
-                iv_profile_edit.setVisibility(View.VISIBLE);
+        iv_profile_edit.setVisibility(View.VISIBLE);
 //                iv_my_fav.setVisibility(View.VISIBLE);
 //                iv_profile_visitor.setVisibility(View.VISIBLE);
         ivMyPic.setVisibility(View.VISIBLE);
 
 
-        setDetails(userList.get(0).getName(), userList.get(0).getGender(), userList.get(0).getAge(), userList.get(0).getLook(), userList.get(0).getLocation(), userList.get(0).getNationality(), userList.get(0).getLang(), userList.get(0).getHeight(), userList.get(0).getBody_type(), userList.get(0).getEyes(), userList.get(0).getHair(), userList.get(0).getVisit(), "", "", userList.get(0).getImageURL());
 
       /*  if (getActivity().getIntent() != null) {
             if (getActivity().getIntent().getSerializableExtra("MyObj") == null) {
@@ -516,6 +515,34 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
                 .child(uid);
         visitorRef.child(id).removeValue();
 
+    }
+
+    public void myList(FirebaseUser fuser) {
+        // any way you managed to go the node that has the 'grp_key'
+        DatabaseReference MembersRef = FirebaseDatabase.getInstance()
+                .getReference()
+                .child("Users");
+        MembersRef.addValueEventListener(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        userList.clear();
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                            final User user = snapshot.getValue(User.class);
+                            if (user.getId().equalsIgnoreCase(fuser.getUid()))  {
+                                userList.add(user);
+                            }
+                        }
+                        setDetails(userList.get(0).getName(), userList.get(0).getGender(), userList.get(0).getAge(), userList.get(0).getLook(), userList.get(0).getLocation(), userList.get(0).getNationality(), userList.get(0).getLang(), userList.get(0).getHeight(), userList.get(0).getBody_type(), userList.get(0).getEyes(), userList.get(0).getHair(), userList.get(0).getVisit(), "", "", userList.get(0).getImageURL());
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                }
+        );
     }
 
     @OnClick(R.id.tv_my_pic)
