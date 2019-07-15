@@ -18,15 +18,8 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.tgapplication.BaseFragment;
-import com.example.tgapplication.BaseMethod;
+import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
-import com.example.tgapplication.fragment.trip.module.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -37,9 +30,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 
-public class EditProfileActivity extends BaseMethod implements View.OnClickListener {
+public class EditProfileActivity extends BaseActivity implements View.OnClickListener {
 
     private FirebaseAuth mAuth;
     Button btn_regi;

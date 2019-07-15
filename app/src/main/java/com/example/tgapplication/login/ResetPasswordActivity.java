@@ -9,15 +9,14 @@ import android.widget.LinearLayout;
 
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.tgapplication.BaseMethod;
+import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class ResetPasswordActivity extends BaseMethod implements View.OnClickListener {
+public class ResetPasswordActivity extends BaseActivity implements View.OnClickListener {
 
     EditText send_email;
     Button btn_reset;

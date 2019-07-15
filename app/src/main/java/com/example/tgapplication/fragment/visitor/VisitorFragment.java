@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tgapplication.BaseFragment;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.favourite.adapter.FavouriteAdapter;
 import com.example.tgapplication.fragment.trip.module.TripList;
@@ -21,18 +22,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class VisitorFragment extends Fragment {
+public class VisitorFragment extends BaseFragment {
 
 
-    private final List<TripList> tripList;
     private RecyclerView myVisitRV;
     private FirebaseUser fuser;
     View view;
     private List<TripList> myFavArray=new ArrayList<>();
     
-    public VisitorFragment(List<TripList> tripList) {
-        this.tripList=tripList;
-    }
 
 
     @Override

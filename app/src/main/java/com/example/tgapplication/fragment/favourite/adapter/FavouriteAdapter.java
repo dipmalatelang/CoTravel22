@@ -13,8 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tgapplication.R;
+import com.example.tgapplication.fragment.trip.adapter.TripAdapter;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.DetailActivity;
+import com.example.tgapplication.fragment.trip.module.User;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -24,12 +26,12 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
 {
 
     private Context mContext;
-    private List<TripList> mTrip;
+    private List<User> mTrip;
     private String uid;
     private int fav_int;
     private List<String> favArray;
 
-    public FavouriteAdapter(Context mContext, String uid, List<TripList> mTrip)
+    public FavouriteAdapter(Context mContext, String uid, List<User> mTrip)
     {
         this.uid=uid;
         this.mContext = mContext;
@@ -49,20 +51,21 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
     public void onBindViewHolder(final ProfileVisitorViewHolder holder, int position)
     {
 
-        final TripList tList = mTrip.get(position);
-        if(tList.getImageUrl().equalsIgnoreCase("default"))
+        final User tList = mTrip.get(position);
+        if(tList.getImageURL().equalsIgnoreCase("default"))
         {
             Glide.with(mContext).load(R.drawable.ic_services_ratings_user_pic).into(holder.mImage);
         }
         else
         {
-            Glide.with(mContext).load(tList.getImageUrl()).into(holder.mImage);
+            Glide.with(mContext).load(tList.getImageURL()).into(holder.mImage);
         }
 
         holder.mTitle.setText(tList.getName());
-
-        holder.mCity.setText(tList.getPlanLocation());
-        holder.mDate.setText(tList.getFrom_to_date());
+//        holder.mCity.setVisibility(View.GONE);
+        holder.mDate.setVisibility(View.GONE);
+        holder.mCity.setText(tList.getLocation());
+////        holder.mDate.setText(tList.getFrom_to_date());
 
         holder.mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +87,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
             @Override
             public void onClick(View view) {
                 new DetailActivity().removeFav(uid, mTrip.get(position).getId());
-                mTrip.get(position).setFavid(0);
+                mTrip.remove(position);
                 notifyDataSetChanged();
             }
         });

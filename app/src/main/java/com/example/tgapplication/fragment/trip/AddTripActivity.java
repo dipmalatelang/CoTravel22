@@ -15,7 +15,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.tgapplication.BaseMethod;
+import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.adapter.TripListAdapter;
 import com.example.tgapplication.fragment.trip.module.TripData;
@@ -36,7 +36,7 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class AddTripActivity extends BaseMethod implements View.OnClickListener {
+public class AddTripActivity extends BaseActivity implements View.OnClickListener {
 
     DatabaseReference reference;
     FirebaseUser fuser;

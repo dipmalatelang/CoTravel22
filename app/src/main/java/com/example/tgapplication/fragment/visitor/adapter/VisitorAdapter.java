@@ -83,7 +83,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
         holder.ivTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new DetailActivity().removeFav(uid, mTrip.get(position).getId());
+                new DetailActivity().removeVisit(uid, mTrip.get(position).getId());
                 mTrip.get(position).setFavid(0);
                 notifyDataSetChanged();
             }
@@ -93,7 +93,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
     private void setProfileVisit(String uid, String id)
     {
 
-        final DatabaseReference visitedRef = FirebaseDatabase.getInstance().getReference("Visitor")
+        final DatabaseReference visitedRef = FirebaseDatabase.getInstance().getReference("ProfileVisitor")
                 .child(id)
                 .child(uid);
         visitedRef.child("id").setValue(uid);

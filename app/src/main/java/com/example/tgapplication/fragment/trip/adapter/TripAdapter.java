@@ -27,10 +27,11 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
     private List<TripList> mTrip;
    private String uid;
 
-    public TripAdapter(Context mContext, String uid, List<TripList> mTrip) {
+    public TripAdapter(Context mContext, String uid, List<TripList> mTrip,ProfileData listener) {
         this.uid=uid;
         this.mContext = mContext;
         this.mTrip = mTrip;
+        this.listener = listener;
     }
 
 
@@ -61,17 +62,19 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
         holder.mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                listener.setData(tList);
                 setProfileVisit(uid,tList.getId());
 
                Log.i("Got Needed Value"," "+tList.getFavid());
-                Intent mIntent = new Intent(mContext, DetailActivity.class);
-                mIntent.putExtra("MyObj", tList);
-                mContext.startActivity(mIntent);
             }
         });
     }
 
 
+    ProfileData listener ;
+    public interface ProfileData{
+        void setData(TripList tList);
+    }
 
 
     private void setProfileVisit(String uid, String id) {
