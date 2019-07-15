@@ -31,13 +31,15 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
     private int fav_int;
     private List<String> favArray;
 
-    public FavouriteAdapter(Context mContext, String uid, List<User> mTrip)
+    public FavouriteAdapter(Context mContext, String uid, List<User> mTrip,FavouriteInterface listener)
     {
         this.uid=uid;
         this.mContext = mContext;
         this.mTrip = mTrip;
+        this.listener = listener;
 //        this.favArray=favArray;
     }
+
 
 
     @Override
@@ -67,7 +69,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
         holder.mCity.setText(tList.getLocation());
 ////        holder.mDate.setText(tList.getFrom_to_date());
 
-        holder.mCardView.setOnClickListener(new View.OnClickListener() {
+        /*holder.mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 setProfileVisit(uid,tList.getId());
@@ -78,8 +80,21 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
 //                mIntent.putExtra("FavId",fav_id);
                 mContext.startActivity(mIntent);
             }
-        });
+        });*/
 
+        holder.mCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setProfileVisit(uid,tList.getId());
+//                int fav_id= getFav(favArray,tList.getId());
+//                Log.i("Got Needed Value"," "+fav_id);
+                listener.sendFavourite(tList.getId());
+//                Intent mIntent = new Intent(mContext, DetailActivity.class);
+//                mIntent.putExtra("MyObj", tList);
+////                mIntent.putExtra("FavId",fav_id);
+//                mContext.startActivity(mIntent);
+            }
+        });
 
         holder.ivTitle.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_action_fav_remove));
 
@@ -126,5 +141,10 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
             mDate = itemView.findViewById(R.id.tvDate);
             mCardView = itemView.findViewById(R.id.cardview);
         }
+    }
+
+    FavouriteInterface listener;
+    public interface FavouriteInterface{
+        void sendFavourite(String id);
     }
 }

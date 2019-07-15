@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
+import com.example.tgapplication.fragment.trip.module.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -34,7 +35,6 @@ import java.util.Date;
 
 public class EditProfileActivity extends BaseActivity implements View.OnClickListener {
 
-    private FirebaseAuth mAuth;
     Button btn_regi;
     EditText et_name, et_location, et_visit;
     RadioGroup rg_gender;
@@ -43,7 +43,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     int day, month, year;
     CheckBox cb_girl,cb_men;
     RelativeLayout activity_profile_relativelayout;
-
+    FirebaseUser fuser;
     String value;
     ArrayList<String> str_look = new ArrayList<>();
 
@@ -84,6 +84,10 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         cb_girl.setOnClickListener(this);
         cb_men.setOnClickListener(this);
 
+        // Initialize Firebase Auth
+
+        fuser = FirebaseAuth.getInstance().getCurrentUser();
+
         day = mcalendar.get(Calendar.DAY_OF_MONTH);
         month = mcalendar.get(Calendar.MONTH);
         year = mcalendar.get(Calendar.YEAR);
@@ -98,8 +102,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
 
 
         mcalendar.add(Calendar.YEAR, -18);
-        // Initialize Firebase Auth
-        mAuth = FirebaseAuth.getInstance();
+
 
         String[] nationalitySpinner = new String[]{
                 "Afghan", "Albanian", "Algerian", "American", "Andorran", "Angolan", "Antiguans", "Argentinean", "Armenian", "Australian", "Austrian", "Azerbaijani", "Bahamian", "Bahraini", "Bangladeshi", "Barbadian", "Barbudans", "Batswana", "Belarusian", "Belgian", "Belizean", "Beninese", "Bhutanese", "Bolivian", "Bosnian", "Brazilian", "British", "Bruneian", "Bulgarian", "Burkinabe", "Burmese", "Burundian", "Cambodian", "Cameroonian", "Canadian", "Cape Verdean", "Central African", "Chadian", "Chilean", "Chinese", "Colombian", "Comoran", "Congolese", "Costa Rican", "Croatian", "Cuban", "Cypriot", "Czech", "Danish", "Djibouti", "Dominican", "Dutch", "East Timorese", "Ecuadorean", "Egyptian", "Emirian", "Equatorial Guinean", "Eritrean", "Estonian", "Ethiopian", "Fijian", "Filipino", "Finnish", "French", "Gabonese", "Gambian", "Georgian", "German", "Ghanaian", "Greek", "Grenadian", "Guatemalan", "Guinea-Bissauan", "Guinean", "Guyanese", "Haitian", "Herzegovinian", "Honduran", "Hungarian", "Icelander", "Indian", "Indonesian", "Iranian", "Iraqi", "Irish", "Israeli", "Italian", "Ivorian", "Jamaican", "Japanese", "Jordanian", "Kazakhstani", "Kenyan", "Kittian and Nevisian", "Kuwaiti", "Kyrgyz", "Laotian", "Latvian", "Lebanese", "Liberian", "Libyan", "Liechtensteiner", "Lithuanian", "Luxembourger", "Macedonian", "Malagasy", "Malawian", "Malaysian", "Maldivan", "Malian", "Maltese", "Marshallese", "Mauritanian", "Mauritian", "Mexican", "Micronesian", "Moldovan", "Monacan", "Mongolian", "Moroccan", "Mosotho", "Motswana", "Mozambican", "Namibian", "Nauruan", "Nepalese", "New Zealander", "Ni-Vanuatu", "Nicaraguan", "Nigerien", "North Korean", "Northern Irish", "Norwegian", "Omani", "Pakistani", "Palauan", "Panamanian", "Papua New Guinean", "Paraguayan", "Peruvian", "Polish", "Portuguese", "Qatari", "Romanian", "Russian", "Rwandan", "Saint Lucian", "Salvadoran", "Samoan", "San Marinese", "Sao Tomean", "Saudi", "Scottish", "Senegalese", "Serbian", "Seychellois", "Sierra Leonean", "Singaporean", "Slovakian", "Slovenian", "Solomon Islander", "Somali", "South African", "South Korean", "Spanish", "Sri Lankan", "Sudanese", "Surinamer", "Swazi", "Swedish", "Swiss", "Syrian", "Taiwanese", "Tajik", "Tanzanian", "Thai", "Togolese", "Tongan", "Trinidadian or Tobagonian", "Tunisian", "Turkish", "Tuvaluan", "Ugandan", "Ukrainian", "Uruguayan", "Uzbekistani", "Venezuelan", "Vietnamese", "Welsh", "Yemenite", "Zambian", "Zimbabwean"
@@ -233,18 +236,18 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
 
 
 
-    private void register(final FirebaseUser user, String str_name, String str_dob, String str_gender, String age, String str_location, String str_nationality, String str_lang, ArrayList<String> str_look, String str_height, String str_body_type, String str_eyes, String str_hair, String str_visit) {
-        databaseReference= FirebaseDatabase.getInstance().getReference("Users").child(user.getUid());
+    private void register(FirebaseUser fuser, String str_name, String str_dob, String str_gender, String age, String str_location, String str_nationality, String str_lang, ArrayList<String> str_look, String str_height, String str_body_type, String str_eyes, String str_hair, String str_visit) {
+        databaseReference= FirebaseDatabase.getInstance().getReference("Users").child(fuser.getUid());
 
         //uncomment this below lines later don't forget
 
-//        User userClass=new User(user.getUid(), user.getDisplayName(), user.getPhotoUrl().toString()+"?type=large", "offline",user.getDisplayName().toLowerCase(), str_gender, age, user.getEmail(),
-//                user.getProviderId(),str_body_type, str_dob, str_eyes, str_hair, str_height, str_lang,
-//                str_look, str_location, str_name, user.getPhoneNumber(), str_nationality, str_visit);
-//        databaseReference.setValue(userClass);
-//
+        User userClass=new User(fuser.getUid(), fuser.getDisplayName(), "offline",fuser.getDisplayName().toLowerCase(), str_gender, age, fuser.getEmail(),
+                fuser.getProviderId(),str_body_type, str_dob, str_eyes, str_hair, str_height, str_lang,
+                str_look, str_location, str_name, fuser.getPhoneNumber(), str_nationality, str_visit);
+        databaseReference.setValue(userClass);
+
 //        updateUI(user);
-//
+
 //            hashMap=new HashMap<>();
 //        hashMap.put("id",user.getUid());
 //        hashMap.put("username",user.getDisplayName());
@@ -322,7 +325,6 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
                 break;
 
             case R.id.btn_regi:
-                final FirebaseUser user = mAuth.getCurrentUser();
 
                 if (et_name.getText().toString().length() <=0){
 
@@ -357,8 +359,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
 
                     Log.i("Simu"," "+str_height);
 
-
-                    register(user,str_name,str_dob,str_gender,age,str_location,str_nationality,str_lang,str_look,str_height,str_body_type,str_eyes,str_hair,str_visit);
+                    register(fuser,str_name,str_dob,str_gender,age,str_location,str_nationality,str_lang,str_look,str_height,str_body_type,str_eyes,str_hair,str_visit);
                     snackBar(activity_profile_relativelayout,"Your profile has been successfully updated");
 
                 }

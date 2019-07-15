@@ -183,7 +183,7 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
 
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
-        myList(fuser);
+
         iv_fav.setOnClickListener(this);
 //        btn_send_msg.setOnClickListener(this);
         iv_profile_edit.setOnClickListener(this);
@@ -301,6 +301,12 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
         }*/
 
         return v;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        myList(fuser);
     }
 
     private void setDetails(String name, String gender, String age, ArrayList<String> look, String userLocation, String nationality, String lang, String height, String body_type, String eyes, String hair, String visit, String planLocation, String from_to_date, String imageUrl) {

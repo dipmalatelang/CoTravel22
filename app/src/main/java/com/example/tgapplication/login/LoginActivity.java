@@ -169,6 +169,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 startActivity(resetIntent);
                 break;
             case R.id.btn_login:
+
                 showProgressDialog();
                 hideKeyboard();
                 String txt_email = input_email.getText().toString().trim();
@@ -185,7 +186,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 }
 
                else {
-
+                    hideKeyboard();
                     mAuth.signInWithEmailAndPassword(txt_email, txt_password)
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
