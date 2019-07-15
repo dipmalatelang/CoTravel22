@@ -2,6 +2,8 @@ package com.example.tgapplication;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +17,7 @@ import com.example.tgapplication.fragment.trip.module.PlanTrip;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.google.android.material.snackbar.Snackbar;
+import com.pnikosis.materialishprogress.ProgressWheel;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,6 +28,7 @@ import java.util.List;
 import java.util.Objects;
 
 public abstract class BaseActivity extends AppCompatActivity {
+
 
     //Global Method and Variable
 //    String fUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -169,6 +173,54 @@ public abstract class BaseActivity extends AppCompatActivity {
         snackbar.show();
     }
 
+    //Progress Bar
+    public void showProgressDialog(){
+        if (!isFinishing()) {
+            ProgressActivity.showDialog(this);
+        }
+    }
+
+    public void dismissProgressDialog(){
+        if (!isFinishing()) {
+            ProgressActivity.dismissDialog();
+        }
+    }
+
+
+    public static class CheckNetwork {
+
+
+        private  final String TAG = CheckNetwork.class.getSimpleName();
+
+
+
+      public static boolean isInternetAvailable(Context context)
+        {
+            NetworkInfo info = (NetworkInfo) ((ConnectivityManager)
+                    context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+
+            if (info == null)
+            {
+                Log.d("","no internet connection");
+                return false;
+            }
+            else
+            {
+                if(info.isConnected())
+                {
+                    Log.d(""," internet connection available...");
+                    return true;
+                }
+                else
+                {
+                    Log.d(""," internet connection");
+                    return true;
+                }
+
+            }
+        }
+    }
+
     public void hideKeyboard()
     {
         InputMethodManager inputManager = (InputMethodManager)
@@ -177,6 +229,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         inputManager.hideSoftInputFromWindow(Objects.requireNonNull(getCurrentFocus()).getWindowToken(),
                 InputMethodManager.HIDE_NOT_ALWAYS);
     }
+
+
 
 /*    private void getDataToFilter() {
         if (str_lang == "All") {

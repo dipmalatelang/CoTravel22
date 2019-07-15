@@ -1,7 +1,10 @@
 package com.example.tgapplication.login;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
@@ -12,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -33,6 +37,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.pnikosis.materialishprogress.ProgressWheel;
 
 import butterknife.ButterKnife;
 
@@ -46,6 +51,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     TextView tv_register, link_signup;
     EditText input_email, input_password;
     ConstraintLayout constrainlayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +88,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         input_password.setOnKeyListener(this);
 
         tv_register.setOnClickListener(this);
+
 
 //        value = getIntent().getExtras().getString("nextActivity");
 
@@ -162,15 +169,21 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 startActivity(resetIntent);
                 break;
             case R.id.btn_login:
+                showProgressDialog();
                 hideKeyboard();
                 String txt_email = input_email.getText().toString().trim();
                 String txt_password = input_password.getText().toString();
 
                 if (TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)) {
                     snackBar(constrainlayout,"All fileds are required !");
+
+
                 }else if(!android.util.Patterns.EMAIL_ADDRESS.matcher(txt_email).matches())
                 {
-                    snackBar(constrainlayout, "please enter valid email address");}
+                    snackBar(constrainlayout, "please enter valid email address");
+                    dismissProgressDialog();
+                }
+
                else {
 
                     mAuth.signInWithEmailAndPassword(txt_email, txt_password)
@@ -183,11 +196,26 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 //                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 //                                        startActivity(intent);
 //                                        finish();
+//
+
                                     } else {
                                         snackBar(constrainlayout,"Authentication failed !");
+                                        dismissProgressDialog();
                                     }
                                 }
                             });
+                    dismissProgressDialog();
+                }
+
+                if(CheckNetwork.isInternetAvailable(this)) //returns true if internet available
+                {
+
+                    showProgressDialog();
+                }
+                else
+                {
+                    dismissProgressDialog();
+                    snackBar(constrainlayout, "no internet connection");
                 }
                 break;
             case R.id.tv_register:
@@ -235,6 +263,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         }
         return false;
     }
+//    private boolean isNetworkConnected() {
+//        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+//
+//        return cm.getActiveNetworkInfo() != null;
+//    }
 }
 
 
