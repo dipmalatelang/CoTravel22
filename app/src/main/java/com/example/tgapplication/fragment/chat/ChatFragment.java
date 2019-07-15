@@ -1,6 +1,7 @@
 package com.example.tgapplication.fragment.chat;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,10 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tgapplication.R;
+import com.example.tgapplication.chat.ChatActivity;
 import com.example.tgapplication.chat.Chatlist;
 import com.example.tgapplication.chat.Token;
 import com.example.tgapplication.chat.UserAdapter;
+import com.example.tgapplication.fragment.trip.AddTripActivity;
 import com.example.tgapplication.fragment.trip.module.User;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -45,6 +49,7 @@ public class ChatFragment extends Fragment {
     DatabaseReference reference;
 
     private List<Chatlist> usersList;
+//    private FloatingActionButton floatingActionButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,6 +64,14 @@ public class ChatFragment extends Fragment {
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
         usersList = new ArrayList<>();
+
+      /*  floatingActionButton=view.findViewById(R.id.floatingActionButton);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), ChatActivity.class));
+            }
+        });*/
 
         reference = FirebaseDatabase.getInstance().getReference("Chatlist").child(fuser.getUid());
         reference.addValueEventListener(new ValueEventListener() {

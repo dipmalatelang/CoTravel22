@@ -162,7 +162,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 startActivity(resetIntent);
                 break;
             case R.id.btn_login:
-                hideKeyboard();
+
                 String txt_email = input_email.getText().toString().trim();
                 String txt_password = input_password.getText().toString();
 
@@ -172,7 +172,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 {
                     snackBar(constrainlayout, "please enter valid email address");}
                else {
-
+                    hideKeyboard();
                     mAuth.signInWithEmailAndPassword(txt_email, txt_password)
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override

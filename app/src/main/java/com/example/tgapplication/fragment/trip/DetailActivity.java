@@ -206,7 +206,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
         if (getIntent() != null) {
             if (getIntent().getSerializableExtra("MyObj") == null) {
                 userList = (List<User>) getIntent().getSerializableExtra("MyDataObj");
-                Log.i("My Name", userList.get(0).getName());
+//                Log.i("My Name", userList.get(0).getName());
                 listTrip = (List<TripList>) getIntent().getSerializableExtra("ListTrip");
                 favArray = (List<String>) getIntent().getSerializableExtra("ListFav");
                 visitArray = (List<String>) getIntent().getSerializableExtra("ListVisit");
@@ -231,13 +231,29 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
                 iv_profile_visitor.setVisibility(View.GONE);
                 ivMyPic.setVisibility(View.GONE);
 
-                Log.i("Fav Value", " " + tripL.getFavid());
-                if (tripL.getFavid() == 1) {
-                    iv_fav.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_fav_remove));
-                    iv_fav.setTag("ic_action_fav_remove");
-                } else {
-                    iv_fav.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_fav_add));
-                    iv_fav.setTag("ic_action_fav_add");
+                DatabaseReference visitorRef = FirebaseDatabase.getInstance().getReference("Favorites")
+                        .child(fuser.getUid());
+
+                visitorRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+
+                        if (snapshot.hasChild(tripL.getId())) {
+                            // run some code
+                            iv_fav.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_fav_remove));
+                            iv_fav.setTag("ic_action_fav_remove");
+                        } else {
+                            iv_fav.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_fav_add));
+                            iv_fav.setTag("ic_action_fav_add");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
                 }
                 setDetails(tripL.getName(), tripL.getGender(), tripL.getAge(), tripL.getLook(), tripL.getUserLocation(), tripL.getNationality(),
                         tripL.getLang(), tripL.getHeight(), tripL.getBody_type(), tripL.getEyes(), tripL.getHair(), tripL.getVisit(), tripL.getPlanLocation(), tripL.getFrom_to_date(), tripL.getImageUrl());
@@ -275,7 +291,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
             }
         }
 
-    }
+
 
     private void setDetails(String name, String gender, String age, ArrayList<String> look, String userLocation, String nationality, String lang, String height, String body_type, String eyes, String hair, String visit, String planLocation, String from_to_date, String imageUrl) {
 
@@ -597,6 +613,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
                 break;
         }
     }
+
 
 //    private void getMyVisit() {
 //        myVisitArray.clear();

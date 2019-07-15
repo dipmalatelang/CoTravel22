@@ -1,7 +1,6 @@
 package com.example.tgapplication.fragment.trip.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.TripList;
-import com.example.tgapplication.fragment.trip.DetailActivity;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -46,7 +44,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
     public void onBindViewHolder(final TripViewHolder holder, int position) {
 
         final TripList tList = mTrip.get(position);
-        if(tList.getImageUrl().equalsIgnoreCase("default"))
+        if(tList.getImageUrl().equalsIgnoreCase("default")||tList.getImageUrl().equalsIgnoreCase(""))
         {
             Glide.with(mContext).load(R.drawable.ic_services_ratings_user_pic).into(holder.mImage);
         }
@@ -62,7 +60,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
         holder.mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.setData(tList);
+                listener.setData(tList,position);
                 setProfileVisit(uid,tList.getId());
 
                Log.i("Got Needed Value"," "+tList.getFavid());
@@ -73,7 +71,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
 
     ProfileData listener ;
     public interface ProfileData{
-        void setData(TripList tList);
+        void setData(TripList tList, int position);
     }
 
 

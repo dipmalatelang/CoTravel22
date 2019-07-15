@@ -31,6 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -51,6 +52,7 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
     ArrayList<TripData> trips = new ArrayList<>();
     @BindView(R.id.trip_relativelayout)
     RelativeLayout tripRelativelayout;
+    String edit_id="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,7 +131,16 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
                                     Log.i("List now", "" + trips.get(j).getLocation());
                                 }
                                 // add code here of adapter
-                                mtripAdapter = new TripListAdapter(AddTripActivity.this, uid, trips);
+                                mtripAdapter = new TripListAdapter(AddTripActivity.this, uid, trips, new TripListAdapter.TripListInterface() {
+                                    @Override
+                                    public void sendTripLiist(List<TripData> tripDataList, int position) {
+                                        et_location.setText(tripDataList.get(position).getLocation());
+                                        et_note.setText(tripDataList.get(position).getTrip_note());
+                                        tv_from_date.setText(tripDataList.get(position).getFrom_date());
+                                        tv_to_date.setText(tripDataList.get(position).getTo_date());
+                                        edit_id=tripDataList.get(position).getId();
+                                    }
+                                });
                                 recyclerView.setAdapter(mtripAdapter);
                             }
 
@@ -140,17 +151,26 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
                         });
     }
 
-    private void Trips() {
+    private void Trips(String edit_id) {
         reference = FirebaseDatabase.getInstance().getReference("Trips").child(fuser.getUid());
-
-        String userId = reference.push().getKey();
+        String userId;
+        if(!edit_id.equalsIgnoreCase(""))
+        {
+            userId=edit_id;
+            snackBar(tripRelativelayout, "Trip edited Successfully..!");
+        }
+        else {
+            userId = reference.push().getKey();
+            snackBar(tripRelativelayout, "Trip added Successfully..!");
+        }
         TripData tripData = new TripData(userId, et_location.getText().toString(), et_note.getText().toString(),
                 tv_from_date.getText().toString(), tv_to_date.getText().toString());
 
         reference.child(userId).setValue(tripData);
 
-        snackBar(tripRelativelayout, "Trip added Successfully..!");
+
         displayTripList(fuser.getUid());
+        clearText();
 //        trips.add(tripData);
 //        mtripAdapter.notifyDataSetChanged();
 //        recyclerView.setAdapter(mtripAdapter);
@@ -159,6 +179,12 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
 //                    startActivity(intent);
 //                    finish();
 
+    }
+
+    private void clearText() {
+        et_location.setText("");
+        et_note.setText("");
+        edit_id="";
     }
 
 
@@ -174,7 +200,7 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
                 if (TextUtils.isEmpty(et_locations) || TextUtils.isEmpty(et_notes) || TextUtils.isEmpty(tv_from_dates) || TextUtils.isEmpty(tv_from_dates)) {
                     snackBar(tripRelativelayout, "All fileds are required !");
                 } else {
-                    Trips();
+                    Trips(edit_id);
 
                 }
                 break;

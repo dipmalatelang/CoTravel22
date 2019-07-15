@@ -7,11 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tgapplication.R;
-import com.example.tgapplication.fragment.trip.AddTripActivity;
 import com.example.tgapplication.fragment.trip.module.TripData;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -30,10 +30,11 @@ public class TripListAdapter extends RecyclerView.Adapter<TripListAdapter.TripHo
 //    TripData tripDetails;
 
 
-    public TripListAdapter(Context context, String uid, List<TripData> tripDataList) {
+    public TripListAdapter(Context context, String uid, List<TripData> tripDataList,TripListInterface listener) {
         this.context = context;
         this.tripDataList = tripDataList;
         this.uid=uid;
+        this.listener=listener;
     }
 
 
@@ -80,13 +81,21 @@ public class TripListAdapter extends RecyclerView.Adapter<TripListAdapter.TripHo
             }
         });
 
-//        holder.btn_edit.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
+        holder.btn_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "Edit", Toast.LENGTH_SHORT).show();
 //                new AddTripActivity().updateTrips(tripDetails);
-//            }
-//        });
+                listener.sendTripLiist(tripDataList,position);
+
+            }
+        });
         
+    }
+
+    TripListInterface listener;
+    public interface TripListInterface{
+        void sendTripLiist(List<TripData> tripDataList, int position);
     }
 
     private void removeTrip(String uid, String id) {

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tgapplication.R;
+import com.example.tgapplication.fragment.favourite.adapter.FavouriteAdapter;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.DetailActivity;
 import com.example.tgapplication.fragment.trip.module.User;
@@ -74,10 +75,10 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
                 setProfileVisit(uid,tList.getId());
 //                int fav_id= getFav(favArray,tList.getId());
 //                Log.i("Got Needed Value"," "+fav_id);
-                Intent mIntent = new Intent(mContext, DetailActivity.class);
+                /*Intent mIntent = new Intent(mContext, DetailActivity.class);
                 mIntent.putExtra("MyObj", tList);
 //                mIntent.putExtra("FavId",fav_id);
-                mContext.startActivity(mIntent);
+                mContext.startActivity(mIntent);*/
             }
         });
 
@@ -129,4 +130,5 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
             mCardView = itemView.findViewById(R.id.cardview);
         }
     }
+
 }

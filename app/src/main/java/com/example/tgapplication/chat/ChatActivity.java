@@ -59,8 +59,8 @@ public class ChatActivity extends AppCompatActivity {
                      profile_image.setImageResource(R.drawable.image1);
                      Log.i("ImageUser",""+user);
 
-                    if (user.getImageURL().equals("default")) {
-                        profile_image.setImageResource(R.drawable.image1);
+                    if (user.getImageURL().equalsIgnoreCase("default")||user.getImageURL().equalsIgnoreCase("")) {
+                        profile_image.setImageResource(R.drawable.ic_services_ratings_user_pic);
                     } else {
                         //change this
                         Glide.with(getApplicationContext()).load(user.getImageURL()).into(profile_image);

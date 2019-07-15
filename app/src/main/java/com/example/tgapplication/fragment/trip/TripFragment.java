@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tgapplication.BaseFragment;
-import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.adapter.TripAdapter;
 import com.example.tgapplication.fragment.trip.module.FavList;
@@ -32,11 +31,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 
@@ -62,8 +61,7 @@ public class TripFragment extends BaseFragment {
         fuser=FirebaseAuth.getInstance().getCurrentUser();
 
 //        getAllFav(fuser);
-        getAllVisit(fuser);
-        tripList(fuser);
+
 
 
         tripFilter=view.findViewById(R.id.trip_filter);
@@ -217,6 +215,14 @@ public class TripFragment extends BaseFragment {
         Log.i("Check Now",""+favArray.size());
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        getAllVisit(fuser);
+        tripList(fuser);
+    }
+
     public void getAllVisit(FirebaseUser fuser) {
 
         DatabaseReference visitRef = FirebaseDatabase.getInstance().getReference("ProfileVisitor")
@@ -321,9 +327,9 @@ public class TripFragment extends BaseFragment {
 //                                                recyclerview.setAdapter(tripAdapter);
                                                         tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), tripList, new TripAdapter.ProfileData() {
                                                             @Override
-                                                            public void setData(TripList tList) {
+                                                            public void setData(TripList tList, int position) {
                                                                 Intent mIntent = new Intent(getActivity(), DetailActivity.class);
-                                                                mIntent.putExtra("MyObj", tList);
+                                                                mIntent.putExtra("MyObj", (Serializable) tripList.get(position));
                                                                 startActivity(mIntent);
                                                             }
                                                         });
