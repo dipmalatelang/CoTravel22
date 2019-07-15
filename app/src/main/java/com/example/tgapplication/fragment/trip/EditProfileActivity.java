@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.pnikosis.materialishprogress.ProgressWheel;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
@@ -55,6 +56,8 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     Spinner Sp_bodytype, Sp_hairs, Sp_eyes;
 
     Calendar mcalendar = Calendar.getInstance();
+
+    ProgressWheel progress_wheel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +98,8 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         TV_dob.setText(dateTostr);
 
         btn_regi.setOnClickListener(this);
+        progress_wheel=findViewById(R.id.progress_wheel);
+
 
         mcalendar.add(Calendar.YEAR, -18);
 
@@ -355,7 +360,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
                     Log.i("Simu"," "+str_height);
 
                     register(fuser,str_name,str_dob,str_gender,age,str_location,str_nationality,str_lang,str_look,str_height,str_body_type,str_eyes,str_hair,str_visit);
-
+                    snackBar(activity_profile_relativelayout,"Your profile has been successfully updated");
 
                 }
 

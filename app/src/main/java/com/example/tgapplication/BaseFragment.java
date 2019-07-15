@@ -152,4 +152,17 @@ public abstract class BaseFragment extends Fragment {
         snackbar.show();
     }
 
+    //Progress Bar
+    public void showProgressDialog(){
+        if (!getActivity().isFinishing()) {
+            ProgressActivity.showDialog(getActivity());
+        }
+    }
+
+    public void dismissProgressDialog(){
+        if (!getActivity().isFinishing()) {
+            ProgressActivity.dismissDialog();
+        }
+    }
+
 }
