@@ -158,10 +158,12 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
         {
             userId=edit_id;
             snackBar(tripRelativelayout, "Trip edited Successfully..!");
+            dismissProgressDialog();
         }
         else {
             userId = reference.push().getKey();
             snackBar(tripRelativelayout, "Trip added Successfully..!");
+            dismissProgressDialog();
         }
         TripData tripData = new TripData(userId, et_location.getText().toString(), et_note.getText().toString(),
                 tv_from_date.getText().toString(), tv_to_date.getText().toString());
@@ -182,8 +184,10 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void clearText() {
-        et_location.setText("");
         et_note.setText("");
+        et_location.setText("");
+        et_location.clearFocus();
+        et_note.clearFocus();
         edit_id="";
     }
 
@@ -192,13 +196,15 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_add_trip:
-
+                hideKeyboard();
+                showProgressDialog();
                 String et_locations = et_location.getText().toString().trim();
                 String et_notes = et_note.getText().toString().trim();
                 String tv_from_dates = tv_from_date.getText().toString().trim();
 
                 if (TextUtils.isEmpty(et_locations) || TextUtils.isEmpty(et_notes) || TextUtils.isEmpty(tv_from_dates) || TextUtils.isEmpty(tv_from_dates)) {
                     snackBar(tripRelativelayout, "All fileds are required !");
+                    dismissProgressDialog();
                 } else {
                     Trips(edit_id);
 

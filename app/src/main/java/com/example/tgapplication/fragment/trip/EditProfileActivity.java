@@ -245,7 +245,13 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         et_location.setText(location);
         et_visit.setText(visit);
         suggestion_nationality.setText(nationality);
-        suggestion_lang.setText(lang);
+        if(lang!=null && !lang.equalsIgnoreCase(""))
+        {
+            suggestion_lang.setText(lang+", ");
+        }
+        else {
+            suggestion_lang.setText(lang);
+        }
         suggestion_height.setText(height);
         TV_dob.setText(dob);
         str_look=look;

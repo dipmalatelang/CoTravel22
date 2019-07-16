@@ -82,48 +82,6 @@ public abstract class BaseFragment extends Fragment {
         return tripList;
     }
 
-
-    private void getDataForDisplay(List<Date> dates, User user) {
-
-        closest = Collections.min(dates, new Comparator<Date>() {
-            @TargetApi(Build.VERSION_CODES.KITKAT)
-            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-            public int compare(Date d1, Date d2) {
-                long diff1 = Math.abs(d1.getTime() - now);
-                long diff2 = Math.abs(d2.getTime() - now);
-                return Long.compare(diff1, diff2);
-            }
-        });
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM dd");
-        SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("dd/MM/yyyy");
-        String dateOutput = simpleDateFormat.format(closest);
-        String dateOutput1 = simpleDateFormat1.format(closest);
-        Log.i("closest Date", " " + closest + " " + dateOutput + " " + dateOutput1);
-
-        for (int i = 0; i < from_to_dates.size(); i++) {
-            if (from_to_dates.get(i).getDate_from().contains(dateOutput1)) {
-
-                String dateFromTo = from_to_dates.get(i).getDate_from() + " - " + from_to_dates.get(i).getDate_to();
-//                String ageValue= getBirthday(user.getDob());
-                String ageValue = user.getAge();
-                Log.i("Age Range", str_from + " <= " + ageValue + " <= " + str_to);
-//                int fav_id= getFav(favArray,user.getId());
-                int visit_id=getVisit(visitArray,user.getId());
-                if (Integer.parseInt(str_from) <= Integer.parseInt(ageValue) && Integer.parseInt(ageValue) <= Integer.parseInt(str_to)) {
-
-                    //Don't forget to uncomment
-
-//                    TripList tripListClass = new TripList(user.getId(), user.getUsername(), user.getImageURL(), ageValue, user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), from_to_dates.get(i).getLocation(), tripNote, dateFromTo,fav_id,visit_id);
-//                    tripList.add(tripListClass);
-                }
-
-            }
-        }
-    }
-
-
-
     private int getVisit(List<String> favArray, String id) {
         for(int i=0;i<favArray.size();i++)
         {
