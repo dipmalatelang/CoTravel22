@@ -41,30 +41,6 @@ public class User implements Serializable{
 
     public User() { }
 
-    public User(String id, String username, String status, String search, String gender, String age, String email, String social_media, String body_type, String dob, String eyes, String hair, String height, String lang, ArrayList<String> look, String location, String name, String phone, String nationality, String visit) {
-        this.id = id;
-        this.username = username;
-        this.name = name;
-        this.dob = dob;
-        this.gender=gender;
-        this.age=age;
-        this.location = location;
-        this.nationality = nationality;
-        this.lang = lang;
-        this.look= look;
-        this.height = height;
-        this.body_type = body_type;
-        this.eyes = eyes;
-        this.hair = hair;
-        this.visit = visit;
-        this.email = email;
-        this.social_media = social_media;
-        this.phone=phone;
-        this.status = status;
-        this.search = search;
-    }
-
-
     public User(String id, String username, String imageURL, String status, String search, String gender, String age, String email, String social_media, String body_type, String dob, String eyes, String hair, String height, String lang, ArrayList<String> look, ArrayList<String> range_age, String location, String name, String phone, String nationality, String visit) {
         this.id = id;
         this.username = username;
@@ -91,11 +67,11 @@ public class User implements Serializable{
     }
 
 
-    public ArrayList<String> getRangeAge() {
+    public ArrayList<String> getRange_age() {
         return range_age;
     }
 
-    public void setRangeAge(ArrayList<String> range_age) {
+    public void setRange_age(ArrayList<String> range_age) {
         this.range_age = range_age;
     }
 

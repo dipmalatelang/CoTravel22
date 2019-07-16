@@ -260,7 +260,6 @@ public class TripFragment extends BaseFragment {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         tripList.clear();
-                        myDetail.clear();
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
                             final User user = snapshot.getValue(User.class);
@@ -334,6 +333,7 @@ public class TripFragment extends BaseFragment {
                                                             }
                                                         });
                                                         recyclerview.setAdapter(tripAdapter);
+                                                        tripAdapter.notifyDataSetChanged();
                                                     }
 
                                                     @Override
@@ -349,8 +349,6 @@ public class TripFragment extends BaseFragment {
                                     }
                                 });
 
-                            } else {
-                                myDetail.add(user);
                             }
                         }
                     }

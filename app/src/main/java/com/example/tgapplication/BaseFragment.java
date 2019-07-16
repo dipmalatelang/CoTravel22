@@ -76,6 +76,7 @@ public abstract class BaseFragment extends Fragment {
                 String dateFromTo = from_to_dates.get(i).getDate_from() + " - " + from_to_dates.get(i).getDate_to();
                 TripList tripListClass = new TripList(user.getId(), user.getUsername(), user.getImageURL(), user.getAge(), user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), from_to_dates.get(i).getLocation(), tripNote, dateFromTo,fav_id,visit_id);
                 tripList.add(tripListClass);
+                Log.i("TAG", "findClosestDate: "+tripList.get(i).getName());
             }
         }
         return tripList;

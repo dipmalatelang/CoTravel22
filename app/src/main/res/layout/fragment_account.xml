@@ -56,7 +56,7 @@
         android:text="Edit Profile"
         android:drawablePadding="5dp"
         android:layout_marginTop="4dp"
-        android:textColor="@color/white"
+        android:textColor="@drawable/color_white_to_black"
         app:layout_constraintStart_toStartOf="@+id/tvName"
         app:layout_constraintTop_toBottomOf="@+id/tvAge" />
 
@@ -71,7 +71,7 @@
         android:gravity="center"
         android:padding="2dp"
         android:text="Add Photo"
-        android:textColor="@color/white"
+        android:textColor="@drawable/color_white_to_black"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/iv_profile_edit"
         app:layout_constraintStart_toEndOf="@+id/iv_profile_edit"
@@ -105,6 +105,7 @@
             android:layout_weight="1"
             android:textSize="14sp"
             android:layout_marginRight="5dp"
+            android:textColor="@drawable/color_black_to_white"
             android:background="@drawable/bg_white_grey_border"
             android:text="Details"
             android:textAllCaps="false"/>
@@ -115,6 +116,7 @@
             android:layout_height="30dp"
             android:layout_weight="1"
             android:text="Images"
+            android:textColor="@drawable/color_black_to_white"
             android:textSize="14sp"
             android:layout_marginLeft="5dp"
             android:background="@drawable/bg_white_grey_border"
@@ -126,7 +128,8 @@
         android:id="@+id/scroll_details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
+        android:fillViewport="true"
+        android:animateLayoutChanges="true"
         app:layout_constraintTop_toBottomOf="@+id/ll_oo">
 
         <LinearLayout
@@ -144,7 +147,7 @@
                 android:paddingBottom="5dp">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:id="@+id/labelCity"
@@ -167,7 +170,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:id="@+id/labelSex"
@@ -191,7 +194,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:id="@+id/labelNationality"
@@ -215,7 +218,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:id="@+id/labelLanguage"
@@ -239,7 +242,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:id="@+id/labelHeight"
@@ -263,7 +266,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:id="@+id/labelBodyType"
@@ -287,7 +290,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:id="@+id/labelEyes"
@@ -311,7 +314,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:id="@+id/labelHairs"
@@ -335,7 +338,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:id="@+id/labelLooking"
@@ -359,7 +362,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:id="@+id/labelWantToVisit"
@@ -383,7 +386,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:id="@+id/labelPlannedtrip"

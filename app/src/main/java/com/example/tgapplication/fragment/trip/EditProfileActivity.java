@@ -11,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListPopupWindow;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -23,8 +24,11 @@ import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.pnikosis.materialishprogress.ProgressWheel;
 
 import java.lang.reflect.Field;
@@ -32,6 +36,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class EditProfileActivity extends BaseActivity implements View.OnClickListener {
 
@@ -41,11 +48,12 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     RadioButton rb_gender;
     TextView TV_dob;
     int day, month, year;
-    CheckBox cb_girl,cb_men;
+    CheckBox cb_girl, cb_men;
     RelativeLayout activity_profile_relativelayout;
     FirebaseUser fuser;
     String value;
-    ArrayList<String> str_look = new ArrayList<>();
+    User prevUser;
+    ArrayList<String> str_look=new ArrayList<>();
 
     DatabaseReference databaseReference;
 
@@ -58,18 +66,25 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     Calendar mcalendar = Calendar.getInstance();
 
     ProgressWheel progress_wheel;
+    @BindView(R.id.rb_male)
+    RadioButton rbMale;
+    @BindView(R.id.rb_female)
+    RadioButton rbFemale;
+    private ArrayList<User> prevUserList = new ArrayList<>();
+    ArrayAdapter<String> Nationalityadapter, Languageadapter, Heightadapter, Bodyadapter, Hairadapter, Eyesadapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        btn_regi=findViewById(R.id.btn_regi);
-        et_name=findViewById(R.id.et_name);
-        et_location=findViewById(R.id.et_location);
-        et_visit=findViewById(R.id.et_visit);
-        rg_gender=findViewById(R.id.rg_gender);
+        ButterKnife.bind(this);
+        btn_regi = findViewById(R.id.btn_regi);
+        et_name = findViewById(R.id.et_name);
+        et_location = findViewById(R.id.et_location);
+        et_visit = findViewById(R.id.et_visit);
+        rg_gender = findViewById(R.id.rg_gender);
         TV_dob = findViewById(R.id.tv_dob);
-        activity_profile_relativelayout= findViewById(R.id.activity_profile_relativelayout);
+        activity_profile_relativelayout = findViewById(R.id.activity_profile_relativelayout);
 
         Sp_bodytype = findViewById(R.id.sp_body_type);
         Sp_hairs = findViewById(R.id.sp_hair);
@@ -79,29 +94,31 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         suggestion_lang = findViewById(R.id.Lang_suggestion);
         suggestion_height = findViewById(R.id.Height_suggestion);
 
-        cb_girl=findViewById(R.id.cb_girl);
-        cb_men=findViewById(R.id.cb_men);
+        cb_girl = findViewById(R.id.cb_girl);
+        cb_men = findViewById(R.id.cb_men);
         cb_girl.setOnClickListener(this);
         cb_men.setOnClickListener(this);
 
-        // Initialize Firebase Auth
-
-        fuser = FirebaseAuth.getInstance().getCurrentUser();
 
         day = mcalendar.get(Calendar.DAY_OF_MONTH);
         month = mcalendar.get(Calendar.MONTH);
         year = mcalendar.get(Calendar.YEAR);
 
+        mcalendar.add(Calendar.YEAR, -18);
         Date today = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String dateTostr = simpleDateFormat.format(today);
         TV_dob.setText(dateTostr);
 
+        // Initialize Firebase Auth
+
+        fuser = FirebaseAuth.getInstance().getCurrentUser();
+        myList(fuser);
+
         btn_regi.setOnClickListener(this);
-        progress_wheel=findViewById(R.id.progress_wheel);
 
 
-        mcalendar.add(Calendar.YEAR, -18);
+
 
 
         String[] nationalitySpinner = new String[]{
@@ -128,28 +145,28 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
                 "Brown", "Blue", "Green", "Hazel", "Gray", "Amber", "Other"
         };
 
-        ArrayAdapter<String> Nationalityadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, nationalitySpinner);
+        Nationalityadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, nationalitySpinner);
         Nationalityadapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         suggestion_nationality.setAdapter(Nationalityadapter);
 
-        ArrayAdapter<String>Languageadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, langSpinner);
+        Languageadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, langSpinner);
         Languageadapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         suggestion_lang.setAdapter(Languageadapter);
         suggestion_lang.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
 
-        ArrayAdapter<String>Heightadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, heightSpinner);
+        Heightadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, heightSpinner);
         Heightadapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         suggestion_height.setAdapter(Heightadapter);
 
-        ArrayAdapter<String>Bodyadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, BodyTypeSpinner);
+        Bodyadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, BodyTypeSpinner);
         Bodyadapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         Sp_bodytype.setAdapter(Bodyadapter);
 
-        ArrayAdapter<String>Hairadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, HairSpinner);
+        Hairadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, HairSpinner);
         Hairadapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         Sp_hairs.setAdapter(Hairadapter);
 
-        ArrayAdapter<String>Eyesadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, EyeSpinner);
+        Eyesadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, EyeSpinner);
         Eyesadapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         Sp_eyes.setAdapter(Eyesadapter);
 
@@ -159,18 +176,18 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
                 DatePickerDialog.OnDateSetListener dob = new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        String sMonth,sDay;
-                        monthOfYear=monthOfYear+1;
+                        String sMonth, sDay;
+                        monthOfYear = monthOfYear + 1;
 
-                        if (monthOfYear<10){
-                            sMonth = "0"+monthOfYear;
-                        }else {
+                        if (monthOfYear < 10) {
+                            sMonth = "0" + monthOfYear;
+                        } else {
                             sMonth = String.valueOf(monthOfYear);
                         }
 
-                        if (day<10){
-                            sDay = "0"+day;
-                        }else {
+                        if (day < 10) {
+                            sDay = "0" + day;
+                        } else {
                             sDay = String.valueOf(day);
                         }
 
@@ -192,6 +209,74 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
 
     }
 
+    public void myList(FirebaseUser fuser) {
+        // any way you managed to go the node that has the 'grp_key'
+        DatabaseReference MembersRef = FirebaseDatabase.getInstance()
+                .getReference()
+                .child("Users");
+        MembersRef.addValueEventListener(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        prevUserList.clear();
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                            prevUser = snapshot.getValue(User.class);
+                            if (prevUser != null && prevUser.getId().equalsIgnoreCase(fuser.getUid())) {
+                                prevUserList.add(prevUser);
+                            }
+                        }
+                        if (prevUserList.size() > 0) {
+                            for (int i = 0; i < prevUserList.size(); i++)
+                                setDefaultVal(prevUserList.get(i).getName(), prevUserList.get(i).getDob(),prevUserList.get(i).getGender(), prevUserList.get(i).getAge(), prevUserList.get(i).getLook(), prevUserList.get(i).getLocation(), prevUserList.get(i).getNationality(), prevUserList.get(i).getLang(), prevUserList.get(i).getHeight(), prevUserList.get(i).getBody_type(), prevUserList.get(i).getEyes(), prevUserList.get(i).getHair(), prevUserList.get(i).getVisit(), "", "", prevUserList.get(i).getImageURL());
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                }
+        );
+    }
+
+    private void setDefaultVal(String name, String dob,String gender, String age, ArrayList<String> look, String location, String nationality, String lang, String height, String body_type, String eyes, String hair, String visit, String s, String s1, String imageURL) {
+        et_name.setText(name);
+        et_location.setText(location);
+        et_visit.setText(visit);
+        suggestion_nationality.setText(nationality);
+        suggestion_lang.setText(lang);
+        suggestion_height.setText(height);
+        TV_dob.setText(dob);
+        str_look=look;
+        Sp_hairs.setSelection(Hairadapter.getPosition(hair));
+        Sp_eyes.setSelection(Eyesadapter.getPosition(eyes));
+        Sp_bodytype.setSelection(Bodyadapter.getPosition(body_type));
+
+        if (gender.equalsIgnoreCase("female")) {
+            rbFemale.setChecked(true);
+        }
+        else if (gender.equalsIgnoreCase("male")) {
+            rbMale.setChecked(true);
+        }
+
+
+        for(int i=0;i<look.size();i++)
+        {
+        Log.i("TAG", "setDefaultVal: "+look.get(i));
+            if(look.get(i).equalsIgnoreCase("female"))
+            {
+                cb_girl.setChecked(true);
+            }
+            else if(look.get(i).equalsIgnoreCase("male"))
+            {
+                cb_men.setChecked(true);
+            }
+        }
+
+
+    }
+
     private void setPopup() {
         Field popup = null;
         try {
@@ -199,16 +284,15 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
             popup.setAccessible(true);
 
             // Get private mPopup member variable and try cast to ListPopupWindow
-            android.widget.ListPopupWindow NationalitypopupWindow = (android.widget.ListPopupWindow) popup.get(suggestion_nationality);
-            android.widget.ListPopupWindow LanguagepopupWindow = (android.widget.ListPopupWindow) popup.get(suggestion_lang);
-            android.widget.ListPopupWindow HeightpopupWindow = (android.widget.ListPopupWindow) popup.get(suggestion_height);
+            ListPopupWindow NationalitypopupWindow = (ListPopupWindow) popup.get(suggestion_nationality);
+            ListPopupWindow LanguagepopupWindow = (ListPopupWindow) popup.get(suggestion_lang);
+            ListPopupWindow HeightpopupWindow = (ListPopupWindow) popup.get(suggestion_height);
 
             // Set popupWindow height to 500px
             NationalitypopupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
             LanguagepopupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
             HeightpopupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
-        }
-        catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {
+        } catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {
             // silently fail...
         }
     }
@@ -220,32 +304,33 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
             popup1.setAccessible(true);
 
             // Get private mPopup member variable and try cast to ListPopupWindow
-            android.widget.ListPopupWindow BodypopupWindow = (android.widget.ListPopupWindow) popup1.get(Sp_bodytype);
-            android.widget.ListPopupWindow HairpopupWindow = (android.widget.ListPopupWindow) popup1.get(Sp_hairs);
-            android.widget.ListPopupWindow EyespopupWindow = (android.widget.ListPopupWindow) popup1.get(Sp_eyes);
+            ListPopupWindow BodypopupWindow = (ListPopupWindow) popup1.get(Sp_bodytype);
+            ListPopupWindow HairpopupWindow = (ListPopupWindow) popup1.get(Sp_hairs);
+            ListPopupWindow EyespopupWindow = (ListPopupWindow) popup1.get(Sp_eyes);
 
             // Set popupWindow height to 500px
             BodypopupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
             HairpopupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
             EyespopupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
-        }
-        catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {
+        } catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {
             // silently fail...
         }
     }
 
 
-
     private void register(FirebaseUser fuser, String str_name, String str_dob, String str_gender, String age, String str_location, String str_nationality, String str_lang, ArrayList<String> str_look, String str_height, String str_body_type, String str_eyes, String str_hair, String str_visit) {
-        databaseReference= FirebaseDatabase.getInstance().getReference("Users").child(fuser.getUid());
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(fuser.getUid());
 
         //uncomment this below lines later don't forget
 
-        User userClass=new User(fuser.getUid(), fuser.getDisplayName(), "offline",fuser.getDisplayName().toLowerCase(), str_gender, age, fuser.getEmail(),
-                fuser.getProviderId(),str_body_type, str_dob, str_eyes, str_hair, str_height, str_lang,
-                str_look, str_location, str_name, fuser.getPhoneNumber(), str_nationality, str_visit);
+        User userClass = new User(fuser.getUid(), prevUserList.get(0).getUsername(), prevUserList.get(0).getImageURL(), "offline", prevUserList.get(0).getSearch(), str_gender, age, prevUserList.get(0).getEmail(),
+                fuser.getProviderId(), str_body_type, str_dob, str_eyes, str_hair, str_height, str_lang,
+                str_look, prevUserList.get(0).getRange_age(), str_location, str_name, fuser.getPhoneNumber(), str_nationality, str_visit);
+
         databaseReference.setValue(userClass);
 
+        snackBar(activity_profile_relativelayout, "Your profile has been successfully updated");
+        finish();
 //        updateUI(user);
 
 //            hashMap=new HashMap<>();
@@ -299,68 +384,60 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()){
+        switch (v.getId()) {
 
             case R.id.cb_girl:
                 boolean checked = ((CheckBox) v).isChecked();
-                if (checked)
-                {
+                if (checked) {
                     str_look.add("female");
-                }
-                else
-                {
+                } else {
                     str_look.remove("female");
                 }
-
+                Log.i("TAG", "onClick: 1"+str_look.size());
                 break;
             case R.id.cb_men:
                 boolean checkedmen = ((CheckBox) v).isChecked();
-                if (checkedmen)
-                {
+                if (checkedmen) {
                     str_look.add("male");
-                }
-                else {
+                } else {
                     str_look.remove("male");
                 }
+                Log.i("TAG", "onClick: 2"+str_look.size());
                 break;
 
             case R.id.btn_regi:
 
-                if (et_name.getText().toString().length() <=0){
+                if (et_name.getText().toString().length() <= 0) {
 
-                    snackBar(activity_profile_relativelayout,"Please enter your name");
-                }
-                else if (et_location.getText().toString().length()<=0){
-                    snackBar(activity_profile_relativelayout,"Enter a city you want to visit");
-                }
-                else if (et_visit.getText().toString().length()<=0){
-                    snackBar(activity_profile_relativelayout,"Please enter your location");
+                    snackBar(activity_profile_relativelayout, "Please enter your name");
+                } else if (et_location.getText().toString().length() <= 0) {
+                    snackBar(activity_profile_relativelayout, "Enter a city you want to visit");
+                } else if (et_visit.getText().toString().length() <= 0) {
+                    snackBar(activity_profile_relativelayout, "Please enter your location");
 
-                }
-                else
-                {
-                    int selectedGender=rg_gender.getCheckedRadioButtonId();
-                    rb_gender=findViewById(selectedGender);
+                } else {
+                    int selectedGender = rg_gender.getCheckedRadioButtonId();
+                    rb_gender = findViewById(selectedGender);
 
-                    String str_name=et_name.getText().toString();
-                    String str_dob=TV_dob.getText().toString();
-                    String str_location= et_location.getText().toString();
-                    String str_nationality= suggestion_nationality.getText().toString();
-                    String str_lang=suggestion_lang.getText().toString();
+                    String str_name = et_name.getText().toString();
+                    String str_dob = TV_dob.getText().toString();
+                    String str_location = et_location.getText().toString();
+                    String str_nationality = suggestion_nationality.getText().toString();
+                    String str_lang = suggestion_lang.getText().toString();
                     str_lang = str_lang.replaceAll(", $", "");
-                    String str_height= suggestion_height.getText().toString();
-                    String str_body_type=Sp_bodytype.getSelectedItem().toString();
-                    String str_eyes=Sp_eyes.getSelectedItem().toString();
-                    String str_hair=Sp_hairs.getSelectedItem().toString();
-                    String str_visit=et_visit.getText().toString();
-                    String str_gender=rb_gender.getText().toString();
-                    String age="18";
+                    String str_height = suggestion_height.getText().toString();
+                    String str_body_type = Sp_bodytype.getSelectedItem().toString();
+                    String str_eyes = Sp_eyes.getSelectedItem().toString();
+                    String str_hair = Sp_hairs.getSelectedItem().toString();
+                    String str_visit = et_visit.getText().toString();
+                    String str_gender = rb_gender.getText().toString();
+                    String age = "18";
 
 
-                    Log.i("Simu"," "+str_height);
+                    Log.i("Simu", " " + str_look.size());
 
-                    register(fuser,str_name,str_dob,str_gender,age,str_location,str_nationality,str_lang,str_look,str_height,str_body_type,str_eyes,str_hair,str_visit);
-                    snackBar(activity_profile_relativelayout,"Your profile has been successfully updated");
+                    register(fuser, str_name, str_dob, str_gender, age, str_location, str_nationality, str_lang, str_look, str_height, str_body_type, str_eyes, str_hair, str_visit);
+
 
                 }
 
