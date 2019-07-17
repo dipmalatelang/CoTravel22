@@ -68,7 +68,8 @@ public class FavouriteFragment extends BaseFragment {
         myFavRV.setLayoutManager(mGridLayoutManager);
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
-//        favList(fuser);
+        favList(fuser);
+
 //
 //        favList = (List<TripList>) getIntent().getSerializableExtra("myFav");
 //        favArray = (List<String>) getIntent().getSerializableExtra("ListFav");
@@ -88,12 +89,9 @@ public class FavouriteFragment extends BaseFragment {
         return view;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        favList(fuser);
-    }
 
+
+/*
     public void favList(FirebaseUser fuser) {
         // any way you managed to go the node that has the 'grp_key'
         DatabaseReference MembersRef = FirebaseDatabase.getInstance()
@@ -147,6 +145,60 @@ public class FavouriteFragment extends BaseFragment {
                 }
         );
     }
+*/
+
+    public void favList(FirebaseUser fuser) {
+        // any way you managed to go the node that has the 'grp_key'
+
+                                DatabaseReference visitorRef = FirebaseDatabase.getInstance().getReference("Favorites")
+                                        .child(fuser.getUid());
+
+                                visitorRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot snapshot) {
+                                        myFavArray.clear();
+                                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+
+                                            String userKey = dataSnapshot.getKey();
+                                            DatabaseReference MembersRef = FirebaseDatabase.getInstance()
+                                                .getReference()
+                                                .child("Users").child(userKey);
+                                        MembersRef.addValueEventListener(
+                                                new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                                            User user = dataSnapshot.getValue(User.class);
+                                                                // HERE WHAT CORRESPONDS TO JOIN
+
+                                                                    // run some code
+                                                                    myFavArray.add(user);
+                                                                    Log.i(TAG, "onDataChange: Rev"+myFavArray.size());
+//                                                                }
+                                                                FavouriteAdapter tripAdapter = new FavouriteAdapter(getActivity(), fuser.getUid(), myFavArray, new FavouriteAdapter.FavouriteInterface() {
+                                                                    @Override
+                                                                    public void sendFavourite(String id) {
+                                                                        getData(id);
+                                                                    }
+                                                                });
+                                                                myFavRV.setAdapter(tripAdapter);
+//                                                            }
+//                                                        }
+                                                    }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+
+                            }}
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                        });
+                    }
+
+
 
     int fav;
     private void getData(String id){
@@ -257,5 +309,6 @@ public class FavouriteFragment extends BaseFragment {
 
     }
         //tList.getId()
+
 
 }

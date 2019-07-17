@@ -23,6 +23,7 @@ import com.example.tgapplication.fragment.trip.module.PlanTrip;
 import com.example.tgapplication.fragment.trip.module.TripData;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
+import com.example.tgapplication.fragment.visitor.VisitorFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -149,6 +150,7 @@ public class TripFragment extends BaseFragment {
             }
         });
 
+//        revTripList(fuser);
         return view;
     }
 
@@ -409,6 +411,100 @@ public class TripFragment extends BaseFragment {
         });
     }
 
+//    List<TripList> tripList1=new ArrayList<>();
+   /* public void revTripList(FirebaseUser fuser) {
+
+
+        // any way you managed to go the node that has the 'grp_key'
+        DatabaseReference visitorRef = FirebaseDatabase.getInstance().getReference("Trips");
+
+        visitorRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+
+                myFavArray.clear();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+
+                    String userKey = dataSnapshot.getKey();
+
+                                                    DatabaseReference MembersRef = FirebaseDatabase.getInstance()
+                                                            .getReference().child("Users").child(userKey);
+                                                    MembersRef.addValueEventListener(
+                                                            new ValueEventListener() {
+                                                                @Override
+                                                                public void onDataChange(DataSnapshot dataSnapshot) {
+//                                                                        tripList.clear();
+
+                                                                    User user = dataSnapshot.getValue(User.class);
+
+
+//                                                                            if (!user.getId().equalsIgnoreCase(fuser.getUid())) {
+//                                getFav(fuser.getUid(),user.getId());
+                                                                    // HERE WHAT CORRESPONDS TO JOIN
+                                                                    DatabaseReference visitorRef = FirebaseDatabase.getInstance().getReference("Favorites")
+                                                                            .child(fuser.getUid());
+
+                                                                    visitorRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                        @Override
+                                                                        public void onDataChange(DataSnapshot snapshot) {
+
+                                                                            if (snapshot.hasChild(user.getId())) {
+                                                                                // run some code
+                                                                                fav = 1;
+                                                                            } else {
+                                                                                fav = 0;
+                                                                            }
+
+//                                                                            tripList1 = findClosestDate(dates, user, fav);
+//                                                                            for (int i = 0; i < tripList1.size(); i++) {
+//                                                                              getData(user.getId());
+                                                                                Log.i(TAG, "onDataChange: Trip" + user.getName()+" ==> "+fav);
+//                                                                            }
+
+                                                                        }
+
+                                                                        @Override
+                                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                        }
+
+//                                                tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), favArray, tripList);
+//                                                recyclerview.setAdapter(tripAdapter);
+                                                       *//* tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), tripList, new TripAdapter.ProfileData() {
+                                                            @Override
+                                                            public void setData(TripList tList, int position) {
+                                                                Intent mIntent = new Intent(getActivity(), DetailActivity.class);
+                                                                mIntent.putExtra("MyObj", (Serializable) tripList.get(position));
+                                                                startActivity(mIntent);
+                                                            }
+                                                        });
+                                                        recyclerview.setAdapter(tripAdapter);
+                                                        tripAdapter.notifyDataSetChanged();*//*
+                                                                    });
+
+                                                                }
+
+
+                                                                @Override
+                                                                public void onCancelled(DatabaseError databaseError) {
+
+                                                                }
+                                                            });
+
+//                                                       for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+
+
+        }
+//                                                }
+                                            }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+
+                            }*/
     public void tripList(FirebaseUser fuser) {
         // any way you managed to go the node that has the 'grp_key'
         DatabaseReference MembersRef = FirebaseDatabase.getInstance()

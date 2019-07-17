@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -29,11 +28,6 @@ import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.login.LoginActivity;
 import com.example.tgapplication.photo.MyAdapter;
 import com.example.tgapplication.photo.Upload;
-//import com.example.tgapplication.trips.ProfileVisitorActivity;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -42,16 +36,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
+
+//import com.example.tgapplication.trips.ProfileVisitorActivity;
 
 public class DetailActivity extends BaseActivity implements View.OnClickListener {
 
@@ -99,8 +92,8 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
     LinearLayout labelWantToVisit;
     @BindView(R.id.labelPlannedtrip)
     LinearLayout labelPlannedtrip;
-    @BindView(R.id.iv_my_pic)
-    ImageView ivMyPic;
+   /* @BindView(R.id.iv_my_pic)
+    ImageView ivMyPic;*/
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     private DatabaseReference mDatabase;
@@ -150,9 +143,9 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
         btn_images = findViewById(R.id.btn_images);
 
         iv_send_msg = findViewById(R.id.iv_send_msg);
-        iv_profile_edit = findViewById(R.id.iv_profile_edit);
-        iv_profile_visitor = findViewById(R.id.iv_profile_visitor);
-        iv_my_fav = findViewById(R.id.iv_my_fav);
+//        iv_profile_edit = findViewById(R.id.iv_profile_edit);
+//        iv_profile_visitor = findViewById(R.id.iv_profile_visitor);
+//        iv_my_fav = findViewById(R.id.iv_my_fav);
         iv_fav = findViewById(R.id.iv_fav);
         tvSex = findViewById(R.id.tvSex);
         tvNatioanlity = findViewById(R.id.tvNatioanlity);
@@ -171,9 +164,9 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
         fuser = FirebaseAuth.getInstance().getCurrentUser();
         iv_send_msg.setOnClickListener(this);
         iv_fav.setOnClickListener(this);
-        iv_profile_edit.setOnClickListener(this);
-        iv_my_fav.setOnClickListener(this);
-        iv_profile_visitor.setOnClickListener(this);
+//        iv_profile_edit.setOnClickListener(this);
+//        iv_my_fav.setOnClickListener(this);
+//        iv_profile_visitor.setOnClickListener(this);
 
         btn_details.setOnClickListener(this);
         btn_images.setOnClickListener(this);
@@ -213,10 +206,10 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
 
                 iv_send_msg.setVisibility(View.GONE);
                 iv_fav.setVisibility(View.GONE);
-                iv_profile_edit.setVisibility(View.VISIBLE);
-                iv_my_fav.setVisibility(View.VISIBLE);
-                iv_profile_visitor.setVisibility(View.VISIBLE);
-                ivMyPic.setVisibility(View.VISIBLE);
+//                iv_profile_edit.setVisibility(View.VISIBLE);
+//                iv_my_fav.setVisibility(View.VISIBLE);
+//                iv_profile_visitor.setVisibility(View.VISIBLE);
+//                ivMyPic.setVisibility(View.VISIBLE);
 
 
                 setDetails(userList.get(0).getName(), userList.get(0).getGender(), userList.get(0).getAge(), userList.get(0).getLook(), userList.get(0).getLocation(), userList.get(0).getNationality(), userList.get(0).getLang(), userList.get(0).getHeight(), userList.get(0).getBody_type(), userList.get(0).getEyes(), userList.get(0).getHair(), userList.get(0).getVisit(), "", "", userList.get(0).getImageURL());
@@ -226,10 +219,10 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
 
                 iv_send_msg.setVisibility(View.VISIBLE);
                 iv_fav.setVisibility(View.VISIBLE);
-                iv_profile_edit.setVisibility(View.GONE);
-                iv_my_fav.setVisibility(View.GONE);
-                iv_profile_visitor.setVisibility(View.GONE);
-                ivMyPic.setVisibility(View.GONE);
+//                iv_profile_edit.setVisibility(View.GONE);
+//                iv_my_fav.setVisibility(View.GONE);
+//                iv_profile_visitor.setVisibility(View.GONE);
+//                ivMyPic.setVisibility(View.GONE);
 
                 DatabaseReference visitorRef = FirebaseDatabase.getInstance().getReference("Favorites")
                         .child(fuser.getUid());
@@ -585,11 +578,11 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
 
                 break;
 
-            case R.id.iv_profile_edit:
+       /*     case R.id.iv_profile_edit:
                 Intent msgIntent = new Intent(this, LoginActivity.class);
                 msgIntent.putExtra("nextActivity", "profileEdit");
                 startActivity(msgIntent);
-                break;
+                break;*/
 
      /*       case R.id.iv_profile_visitor:
                 getMyVisit();
@@ -659,20 +652,20 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
                 .child(uid);
         visitorRef.child(id).removeValue();
     }
-
+/*
     @OnClick(R.id.iv_my_pic)
     public void onViewClicked() {
         showFileChooser();
-    }
+    }*/
 
-    private void showFileChooser() {
+/*    private void showFileChooser() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-    }
+    }*/
 
-    @Override
+ /*   @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -686,7 +679,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
 //                e.printStackTrace();
 //            }
         }
-    }
+    }*/
 
     public String getFileExtension(Uri uri) {
         ContentResolver cR = getContentResolver();
@@ -694,7 +687,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
         return mime.getExtensionFromMimeType(cR.getType(uri));
     }
 
-    private void uploadFile(Uri filePath) {
+   /* private void uploadFile(Uri filePath) {
 //checking if file is available
         Log.i("Result",""+filePath);
         if (filePath != null) {
@@ -758,7 +751,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
             snackBar(detail_activity_linearlayout,"Please Select a Image");
 
         }
-    }
+    }*/
 
 
 }

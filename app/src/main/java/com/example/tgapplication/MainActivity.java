@@ -18,6 +18,7 @@ import com.example.tgapplication.fragment.favourite.FavouriteFragment;
 import com.example.tgapplication.fragment.trip.TripFragment;
 import com.example.tgapplication.fragment.visitor.VisitorFragment;
 import com.example.tgapplication.login.LoginActivity;
+import com.facebook.login.LoginManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -127,6 +128,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
 
             case R.id.logout:
                 FirebaseAuth.getInstance().signOut();
+                LoginManager.getInstance().logOut();
                 finish();
                 startActivity(new Intent(this,LoginActivity.class));
                 snackBar(container,"Logout");
