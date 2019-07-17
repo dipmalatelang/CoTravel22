@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:wheel="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/background"
+    android:background="#bfdecc"
     android:id="@+id/activity_profile_relativelayout"
     android:focusable="true"
     android:focusableInTouchMode="true"
@@ -18,7 +17,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:background="@drawable/border"
             android:layout_margin="2dp">
 
             <TextView
@@ -26,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:text="Enter your profile information"
                 android:textStyle="bold"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:gravity="center"
                 android:layout_margin="5dp"/>
 
@@ -86,6 +84,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:padding="5dp"
+                    android:gravity="center_vertical"
                     android:layout_marginBottom="5dp"
                     android:background="@drawable/border">
 
@@ -93,7 +92,7 @@
                         android:id="@+id/tv_dob"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="start"
+                        android:gravity="center_vertical|start"
                         android:textSize="15sp"
                         android:textColor="@color/black"
                         android:singleLine="true"
