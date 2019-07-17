@@ -210,6 +210,7 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
             @Override
             public void onDataChange(DataSnapshot snapshot) {
 //dismissing the progress dialog
+                uploads.clear();
                 progressDialog.dismiss();
 
 //iterating through all the values in database
@@ -575,7 +576,7 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
-    @Override
+ /*   @Override
     public void startActivityForResult(Intent data, int requestCode) {
         super.startActivityForResult(data, requestCode);
         if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
@@ -588,8 +589,22 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
 //                e.printStackTrace();
 //            }
         }
-    }
+    }*/
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
+            filePath = data.getData();
+            uploadFile(filePath);
+// try {
+// Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+// imageView.setImageBitmap(bitmap);
+// } catch (IOException e) {
+// e.printStackTrace();
+// }
+        }
+    }
 
     public String getFileExtension(Uri uri) {
         ContentResolver cR = getActivity().getContentResolver();

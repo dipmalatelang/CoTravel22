@@ -178,7 +178,7 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
         btn_details.setOnClickListener(this);
         btn_images.setOnClickListener(this);
 
-        GridLayoutManager mGridLayoutManager = new GridLayoutManager(this, 2);
+        GridLayoutManager mGridLayoutManager = new GridLayoutManager(this, 3);
         recyclerView.setLayoutManager(mGridLayoutManager);
 
         progressDialog = new ProgressDialog(this);

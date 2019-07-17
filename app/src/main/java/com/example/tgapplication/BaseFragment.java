@@ -36,6 +36,7 @@ import java.util.Locale;
 
 public abstract class BaseFragment extends Fragment {
 
+    public String TAG="Fragment";
     public List<String> visitArray = new ArrayList<>();
     public List<String> favArray = new ArrayList<>();
     public int fav_int;

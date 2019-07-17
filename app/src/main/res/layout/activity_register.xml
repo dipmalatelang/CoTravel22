@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="20dp"
-            android:text="I am: "
+            android:text="Gender: "
             android:textColor="@color/colorPrimary"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -231,8 +231,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginEnd="25dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:orientation="vertical">
 
             <TextView
@@ -320,9 +320,13 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_weight="1"
-                        android:background="@drawable/border"
+                        android:orientation="vertical"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="15dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:background="@drawable/border"
+                            android:layout_height="wrap_content">
                         <Spinner
                             android:id="@+id/sp_age_from"
                             android:layout_width="match_parent"
@@ -332,13 +336,26 @@
                             android:padding="5dp"
                             app:layout_constraintTop_toBottomOf="@+id/tv_age_text"
                             android:backgroundTint="@color/colorPrimary"/>
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="From"
+                            android:gravity="center"
+                            android:textColor="@color/white"
+                            android:textSize="10sp" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_weight="1"
-                        android:background="@drawable/border"
+                        android:orientation="vertical"
                         android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:background="@drawable/border"
+                            android:layout_height="wrap_content">
                         <Spinner
                             android:id="@+id/sp_age_to"
                             android:layout_width="match_parent"
@@ -349,6 +366,14 @@
                             app:layout_constraintTop_toBottomOf="@+id/tv_age_text"
                             android:backgroundTint="@color/colorPrimary"
                             />
+                        </LinearLayout>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="To"
+                            android:gravity="center"
+                            android:textColor="@color/white"
+                            android:textSize="10sp" />
                     </LinearLayout>
 
                 </LinearLayout>
