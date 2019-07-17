@@ -1,10 +1,7 @@
 package com.example.tgapplication.login;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
@@ -15,7 +12,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,7 +20,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
-//import com.example.tgapplication.trips.TripActivity;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -37,9 +32,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.pnikosis.materialishprogress.ProgressWheel;
 
 import butterknife.ButterKnife;
+
+//import com.example.tgapplication.trips.TripActivity;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener, View.OnTouchListener, View.OnKeyListener {
 
@@ -171,7 +167,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             case R.id.btn_login:
 
                 showProgressDialog();
-                hideKeyboard();
                 String txt_email = input_email.getText().toString().trim();
                 String txt_password = input_password.getText().toString();
 
@@ -182,11 +177,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 }else if(!android.util.Patterns.EMAIL_ADDRESS.matcher(txt_email).matches())
                 {
                     snackBar(constrainlayout, "please enter valid email address");
-                    dismissProgressDialog();
+//                    dismissProgressDialog();
                 }
 
                else {
-                    hideKeyboard();
+//                    hideKeyboard(this);
                     mAuth.signInWithEmailAndPassword(txt_email, txt_password)
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
@@ -200,15 +195,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 //
 
                                     } else {
-                                        snackBar(constrainlayout,"Authentication failed !");
-                                        dismissProgressDialog();
+                                        snackBar(constrainlayout,task.getException().getMessage());
+//                                        dismissProgressDialog();
                                     }
                                 }
                             });
-                    dismissProgressDialog();
-                }
 
-                if(CheckNetwork.isInternetAvailable(this)) //returns true if internet available
+                }
+                dismissProgressDialog();
+           /*     if(CheckNetwork.isInternetAvailable(this)) //returns true if internet available
                 {
 
                     showProgressDialog();
@@ -217,7 +212,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 {
                     dismissProgressDialog();
                     snackBar(constrainlayout, "no internet connection");
-                }
+                }*/
                 break;
             case R.id.tv_register:
 //                Log.i("Send while Login", value);

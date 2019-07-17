@@ -35,7 +35,11 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -99,17 +103,17 @@ public class TripFragment extends BaseFragment {
         str_visit = prefs.getString("str_visit", "not_defined");
 
 
-
+        getAllVisit(fuser);
 //        tripList();
         if (str_city.equalsIgnoreCase("not_defined")) {
 
-
+            tripList(fuser);
             tripFilter.setText("Filter");
 
         } else {
             tripFilter.setText("Clear Filter");
 
-
+            getDataToFilter();
         }
 
 //        Log.i("Fav Array",""+favArray.size());
@@ -128,7 +132,7 @@ public class TripFragment extends BaseFragment {
                     editor = prefs.edit();
                     editor.clear();
                     editor.apply();
-//          tripList();
+                    tripList(fuser);
                     tripFilter.setText("Filter");
                 }
                 else {
@@ -140,6 +144,147 @@ public class TripFragment extends BaseFragment {
 
         return view;
     }
+
+    private void getDataToFilter() {
+        if (str_lang == "All") {
+            str_lang = "Arabic,Danish,German,Belorussian,Dutch,Greek,Japanese,Portuguese,Italian,Polish,Spanish,Swedish,Bulgarian,English,Hebrew,Korean,Romanian,Thai,Catalan,Estonian,Hindi,Latvian,Russian,Turkish,Chinese,Filipino,Hungarian,Lithuanian,Serbian,Ukrainian,Croatian,Finnish,Icelandic,Norwegian,Slovak,Urdu,Czech,French,Indonesian,Persian,Slovenian,Vietnamese,Nepali,Armenian,Kurdish";
+        }
+
+        if (str_look == "All") {
+            str_look = "Female,Male";
+        }
+        filterTripList(str_city, str_lang, str_eyes, str_hairs, str_height, str_bodytype, str_look, str_from, str_to, str_visit);
+    }
+
+    private void filterTripList(final String str_city, final String str_lang, final String str_eyes, final String str_hairs, final String str_height, final String str_bodytype, final String str_look,
+                                final String str_from, final String str_to, final String str_visit) {
+
+
+            // any way you managed to go the node that has the 'grp_key'
+            DatabaseReference MembersRef = FirebaseDatabase.getInstance()
+                    .getReference().child("Users");
+            MembersRef.addValueEventListener(
+                    new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            tripList.clear();
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                                final User user = snapshot.getValue(User.class);
+                                if (!user.getId().equalsIgnoreCase(fuser.getUid())) {
+//                                getFav(fuser.getUid(),user.getId());
+                                    // HERE WHAT CORRESPONDS TO JOIN
+                                    DatabaseReference visitorRef = FirebaseDatabase.getInstance().getReference("Favorites")
+                                            .child(fuser.getUid());
+
+                                    visitorRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot snapshot) {
+
+                                            if (snapshot.hasChild(user.getId())) {
+                                                // run some code
+                                                fav = 1;
+                                            } else {
+                                                fav = 0;
+                                            }
+
+                                            DatabaseReference reference1 = FirebaseDatabase.getInstance()
+                                                    .getReference()
+                                                    .child("Trips");
+                                            reference1.orderByKey().equalTo(user.getId())
+                                                    .addValueEventListener(new ValueEventListener() {
+
+                                                        @Override
+                                                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                                            from_to_dates.clear();
+                                                            dates.clear();
+
+                                                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                                                String city = "";
+                                                                String tripNote = "";
+                                                                String date = "";
+
+                                                                for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+
+                                                                    TripData tripData = snapshot1.getValue(TripData.class);
+//                                                                    Log.i("VishalD", "" + user.getUsername() + " , " + tripData.getLocation());
+
+                                                                    city += tripData.getLocation();
+                                                                    tripNote += tripData.getTrip_note();
+                                                                    date += tripData.getFrom_date() + " - " + tripData.getTo_date();
+
+                                                                    DateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+                                                                    try {
+                                                                        Date date1 = format.parse(tripData.getFrom_date());
+                                                                        dates.add(date1);
+                                                                        PlanTrip planTrip = new PlanTrip(tripData.getLocation(), tripData.getFrom_date(), tripData.getTo_date());
+                                                                        from_to_dates.add(planTrip);
+//                                                                        Log.i("Dates", tripData.getFrom_date() + " " + date1);
+                                                                    } catch (ParseException e) {
+                                                                        e.printStackTrace();
+                                                                    }
+
+                                                                }
+//                                                                Log.i("TripFromTo", "" + from_to_dates.size());
+                                                                List<String> lang_item = Arrays.asList(user.getLang().split("\\s*,\\s*"));
+//                                                                Collections.sort(lang_item);
+                                                                Log.i("Tag", "onDataChange: " +lang_item.size());
+
+                                                                if(city.contains(str_city) && user.getEyes().contains(str_eyes) && user.getHair().contains(str_hairs) && user.getHeight().contains(str_height) && user.getBody_type().contains(str_bodytype)){
+
+
+                                                                            for(int i=0;i<user.getLook().size();i++)
+                                                                            {
+                                                                                if(str_look.contains(user.getLook().get(i)))
+                                                                                {
+                                                                                    tripList = findClosestDate(dates, user, fav);
+                                                                                }
+
+                                                                    }
+
+
+                                                                }
+                                                            }
+//                                                tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), favArray, tripList);
+//                                                recyclerview.setAdapter(tripAdapter);
+                                                            tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), tripList, new TripAdapter.ProfileData() {
+                                                                @Override
+                                                                public void setData(TripList tList, int position) {
+                                                                    Intent mIntent = new Intent(getActivity(), DetailActivity.class);
+                                                                    mIntent.putExtra("MyObj", (Serializable) tripList.get(position));
+                                                                    startActivity(mIntent);
+                                                                }
+                                                            });
+                                                            recyclerview.setAdapter(tripAdapter);
+                                                            tripAdapter.notifyDataSetChanged();
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(DatabaseError databaseError) {
+
+                                                        }
+                                                    });
+
+                                        }
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
+
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    }
+            );
+    }
+
     int fav;
     private void getFav(String uid,String id) {
 
@@ -219,8 +364,7 @@ public class TripFragment extends BaseFragment {
     public void onStart() {
         super.onStart();
 
-        getAllVisit(fuser);
-        tripList(fuser);
+
     }
 
     public void getAllVisit(FirebaseUser fuser) {
@@ -253,14 +397,12 @@ public class TripFragment extends BaseFragment {
     public void tripList(FirebaseUser fuser) {
         // any way you managed to go the node that has the 'grp_key'
         DatabaseReference MembersRef = FirebaseDatabase.getInstance()
-                .getReference()
-                .child("Users");
+                .getReference().child("Users");
         MembersRef.addValueEventListener(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         tripList.clear();
-                        myDetail.clear();
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
                             final User user = snapshot.getValue(User.class);
@@ -334,6 +476,7 @@ public class TripFragment extends BaseFragment {
                                                             }
                                                         });
                                                         recyclerview.setAdapter(tripAdapter);
+                                                        tripAdapter.notifyDataSetChanged();
                                                     }
 
                                                     @Override
@@ -349,8 +492,6 @@ public class TripFragment extends BaseFragment {
                                     }
                                 });
 
-                            } else {
-                                myDetail.add(user);
                             }
                         }
                     }

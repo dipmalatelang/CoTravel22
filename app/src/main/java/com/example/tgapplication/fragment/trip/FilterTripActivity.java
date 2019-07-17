@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -208,13 +209,13 @@ public class FilterTripActivity extends BaseActivity implements View.OnClickList
             android.widget.ListPopupWindow EyespopupWindow = (android.widget.ListPopupWindow) popup.get(spinner_eyes);
 
             // Set popupWindow height to 500px
-            TopopupWindow.setHeight(500);
-            FrompopupWindow.setHeight(500);
-            LanguagepopupWindow.setHeight(500);
-            HeightpopupWindow.setHeight(500);
-            BodypopupWindow.setHeight(300);
-            HairpopupWindow.setHeight(400);
-            EyespopupWindow.setHeight(400);
+            TopopupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+            FrompopupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+            LanguagepopupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+            HeightpopupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+            BodypopupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+            HairpopupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+            EyespopupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
         }
         catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {
             // silently fail...
@@ -228,8 +229,6 @@ public class FilterTripActivity extends BaseActivity implements View.OnClickList
             case R.id.btn_add_trip:
 
                 if (et_city.getText().toString().length()<=0){
-
-
                     snackBar(activity_filter_trip_relativelayout,"Please enter city name");
                 }
                 else

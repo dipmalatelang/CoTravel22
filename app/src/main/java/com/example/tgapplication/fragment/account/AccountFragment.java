@@ -59,6 +59,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -193,7 +194,7 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
         btn_details.setOnClickListener(this);
         btn_images.setOnClickListener(this);
 
-        GridLayoutManager mGridLayoutManager = new GridLayoutManager(getActivity(), 2);
+        GridLayoutManager mGridLayoutManager = new GridLayoutManager(getActivity(), 3);
         recyclerView.setLayoutManager(mGridLayoutManager);
 
         progressDialog = new ProgressDialog(getActivity());
@@ -253,7 +254,7 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
       /*  if (getActivity().getIntent() != null) {
             if (getActivity().getIntent().getSerializableExtra("MyObj") == null) {
                 userList = (List<User>) getActivity().getIntent().getSerializableExtra("MyDataObj");
-                Log.i("My Name", userList.get(0).getName());
+                Log.i("My Name", userList.get(i).getName());
                 listTrip = (List<TripList>) getActivity().getIntent().getSerializableExtra("ListTrip");
                 favArray = (List<String>) getActivity().getIntent().getSerializableExtra("ListFav");
                 visitArray = (List<String>) getActivity().getIntent().getSerializableExtra("ListVisit");
@@ -268,7 +269,7 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
                 ivMyPic.setVisibility(View.VISIBLE);
 
 
-                setDetails(userList.get(0).getName(), userList.get(0).getGender(), userList.get(0).getAge(), userList.get(0).getLook(), userList.get(0).getLocation(), userList.get(0).getNationality(), userList.get(0).getLang(), userList.get(0).getHeight(), userList.get(0).getBody_type(), userList.get(0).getEyes(), userList.get(0).getHair(), userList.get(0).getVisit(), "", "", userList.get(0).getImageURL());
+                setDetails(userList.get(i).getName(), userList.get(i).getGender(), userList.get(i).getAge(), userList.get(i).getLook(), userList.get(i).getLocation(), userList.get(i).getNationality(), userList.get(i).getLang(), userList.get(i).getHeight(), userList.get(i).getBody_type(), userList.get(i).getEyes(), userList.get(i).getHair(), userList.get(i).getVisit(), "", "", userList.get(i).getImageURL());
             } else {
                 tripL = (TripList) getActivity().getIntent().getSerializableExtra("MyObj");
                 int faValue = getActivity().getIntent().getIntExtra("FavId", 0);
@@ -328,21 +329,27 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
             tvAge.setText(age + " years");
         }
 
-        for (int j = 0; j < look.size(); j++) {
-            if (str_look != null) {
-                str_look += ", " + look.get(j);
-            } else {
-                str_look = look.get(j);
+        if(look!=null)
+        {
+            for (int j = 0; j < look.size(); j++) {
+                if (str_look != null) {
+                    str_look += ", " + look.get(j);
+                } else {
+                    str_look = look.get(j);
+                }
+
             }
 
+            if (str_look != null && !str_look.equalsIgnoreCase("")) {
+                tvLooking.setText(str_look);
+                labelLooking.setVisibility(View.VISIBLE);
+            } else {
+                labelLooking.setVisibility(View.GONE);
+            }
         }
 
-        if (str_look != null && !str_look.equalsIgnoreCase("")) {
-            tvLooking.setText(str_look);
-            labelLooking.setVisibility(View.VISIBLE);
-        } else {
-            labelLooking.setVisibility(View.GONE);
-        }
+
+
 
         if (userLocation != null && !userLocation.equalsIgnoreCase("")) {
             mCity.setText(userLocation);
@@ -408,11 +415,12 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
             labelPlannedtrip.setVisibility(View.GONE);
         }
 
-        if (imageUrl != null && !imageUrl.equalsIgnoreCase("") && !imageUrl.equalsIgnoreCase("default")) {
-            Glide.with(getActivity()).load(imageUrl).into(mTrip);
+        if(getActivity()!=null)
+        {
+            if (imageUrl != null && !imageUrl.equalsIgnoreCase("") && !imageUrl.equalsIgnoreCase("default")) {
+                Glide.with(getActivity()).load(imageUrl).into(mTrip);
+            }
         }
-
-
     }
 
     @Override
@@ -535,12 +543,16 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
                         userList.clear();
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                            final User user = snapshot.getValue(User.class);
-                            if (user.getId().equalsIgnoreCase(fuser.getUid()))  {
+                            User user = snapshot.getValue(User.class);
+                            if (user != null && user.getId().equalsIgnoreCase(fuser.getUid())) {
                                 userList.add(user);
                             }
                         }
-                        setDetails(userList.get(0).getName(), userList.get(0).getGender(), userList.get(0).getAge(), userList.get(0).getLook(), userList.get(0).getLocation(), userList.get(0).getNationality(), userList.get(0).getLang(), userList.get(0).getHeight(), userList.get(0).getBody_type(), userList.get(0).getEyes(), userList.get(0).getHair(), userList.get(0).getVisit(), "", "", userList.get(0).getImageURL());
+                        if(userList.size()>0)
+                        {
+                            for(int i=0;i<userList.size();i++)
+                            setDetails(userList.get(i).getName(), userList.get(i).getGender(), userList.get(i).getAge(), userList.get(i).getLook(), userList.get(i).getLocation(), userList.get(i).getNationality(), userList.get(i).getLang(), userList.get(i).getHeight(), userList.get(i).getBody_type(), userList.get(i).getEyes(), userList.get(i).getHair(), userList.get(i).getVisit(), "", "", userList.get(i).getImageURL());
+                        }
                     }
 
                     @Override
@@ -612,15 +624,21 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
                             sRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Uri> task) {
-                                    getDownloadImageUrl = task.getResult().toString();
-                                    Log.i("FirebaseImages",getDownloadImageUrl);
+                                    if(task.isSuccessful())
+                                    {
+                                        getDownloadImageUrl = task.getResult().toString();
+                                        Log.i("FirebaseImages",getDownloadImageUrl);
 
 //creating the upload object to store uploaded image details
-                                    Upload upload = new Upload("Image", getDownloadImageUrl);
+                                        Upload upload = new Upload("Image", getDownloadImageUrl);
 
 //adding an upload to firebase database
-                                    String uploadId = mDatabase.push().getKey();
-                                    mDatabase.child(uploadId).setValue(upload);
+                                        String uploadId = mDatabase.push().getKey();
+                                        mDatabase.child(uploadId).setValue(upload);
+                                    }
+                               else {
+                                   snackBar(fragment_acc_constraintLayout,task.getException().getMessage());
+                                    }
                                 }
                             });
                         }
