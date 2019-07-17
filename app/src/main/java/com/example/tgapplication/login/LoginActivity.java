@@ -165,21 +165,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 startActivity(resetIntent);
                 break;
             case R.id.btn_login:
-
                 showProgressDialog();
                 String txt_email = input_email.getText().toString().trim();
                 String txt_password = input_password.getText().toString();
 
                 if (TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)) {
+                    dismissProgressDialog();
                     snackBar(constrainlayout,"All fileds are required !");
-
 
                 }else if(!android.util.Patterns.EMAIL_ADDRESS.matcher(txt_email).matches())
                 {
+                    dismissProgressDialog();
                     snackBar(constrainlayout, "please enter valid email address");
 //                    dismissProgressDialog();
                 }
-
                else {
 //                    hideKeyboard(this);
                     mAuth.signInWithEmailAndPassword(txt_email, txt_password)
@@ -200,9 +199,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                                     }
                                 }
                             });
-
+                    dismissProgressDialog();
                 }
-                dismissProgressDialog();
+//                dismissProgressDialog();
            /*     if(CheckNetwork.isInternetAvailable(this)) //returns true if internet available
                 {
 
