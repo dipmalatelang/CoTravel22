@@ -113,7 +113,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
 
     private void handleFacebookAccessToken(String token) {
-
+        showProgressDialog();
         AuthCredential credential = FacebookAuthProvider.getCredential(token);
         Log.d("Tiger", "" + credential);
         mAuth.signInWithCredential(credential)
@@ -122,9 +122,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d("Tiger", "handleFacebookAccessToken:" + task.isSuccessful());
                         if (task.isSuccessful()) {
+
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("Tiger", "signInWithCredential:success");
-
+                            dismissProgressDialog();
                             updateUI(mAuth.getCurrentUser());
 
                         }
@@ -177,7 +178,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 {
                     dismissProgressDialog();
                     snackBar(constrainlayout, "please enter valid email address");
-//                    dismissProgressDialog();
                 }
                else {
 //                    hideKeyboard(this);
@@ -186,6 +186,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
+                                        dismissProgressDialog();
                                         updateUI(mAuth.getCurrentUser());
 //                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 //                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -195,13 +196,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
                                     } else {
                                         snackBar(constrainlayout,task.getException().getMessage());
-//                                        dismissProgressDialog();
+                                        dismissProgressDialog();
                                     }
                                 }
                             });
-                    dismissProgressDialog();
                 }
-//                dismissProgressDialog();
+
            /*     if(CheckNetwork.isInternetAvailable(this)) //returns true if internet available
                 {
 

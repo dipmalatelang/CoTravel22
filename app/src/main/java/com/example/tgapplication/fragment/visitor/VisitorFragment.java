@@ -57,6 +57,7 @@ public class VisitorFragment extends BaseFragment {
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(getActivity(), 2);
         myVisitRV.setLayoutManager(mGridLayoutManager);
 
+        showProgressDialog();
         fuser = FirebaseAuth.getInstance().getCurrentUser();
         revVisitList(fuser);
 //
@@ -185,6 +186,7 @@ public class VisitorFragment extends BaseFragment {
                     }
                 }
         );
+                                dismissProgressDialog();
     }
 
     int fav;

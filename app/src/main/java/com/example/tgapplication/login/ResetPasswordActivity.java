@@ -52,9 +52,11 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
         switch (v.getId())
         {
             case R.id.btn_reset:
+                showProgressDialog();
                         String email = send_email.getText().toString();
 
                         if (email.equals("")){
+                            dismissProgressDialog();
                             snackBar(linearLayout,"All fileds are required!");
                         } else {
                             firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -62,6 +64,7 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful())
                                     {
+                                        dismissProgressDialog();
                                        snackBar(linearLayout,"Please check you Email");
                                         Intent resetIntent= new Intent(ResetPasswordActivity.this,LoginActivity.class);
                                         resetIntent.putExtra("nextActivity",value);
@@ -69,6 +72,7 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
                                     }
                                     else
                                     {
+                                        dismissProgressDialog();
                                         String error = task.getException().getMessage();
 
                                         snackBar(linearLayout,error);

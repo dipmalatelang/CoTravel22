@@ -67,6 +67,7 @@ public class FavouriteFragment extends BaseFragment {
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(getActivity(), 2);
         myFavRV.setLayoutManager(mGridLayoutManager);
 
+        showProgressDialog();
         fuser = FirebaseAuth.getInstance().getCurrentUser();
         favList(fuser);
 
@@ -172,7 +173,9 @@ public class FavouriteFragment extends BaseFragment {
 
                                                                     // run some code
                                                                     myFavArray.add(user);
-                                                                    Log.i(TAG, "onDataChange: Rev"+myFavArray.size());
+                                                                        Log.i(TAG, "onDataChange: Rev "+myFavArray.size());
+
+
 //                                                                }
                                                                 FavouriteAdapter tripAdapter = new FavouriteAdapter(getActivity(), fuser.getUid(), myFavArray, new FavouriteAdapter.FavouriteInterface() {
                                                                     @Override
@@ -196,6 +199,7 @@ public class FavouriteFragment extends BaseFragment {
 
                                                     }
                         });
+                                dismissProgressDialog();
                     }
 
 
