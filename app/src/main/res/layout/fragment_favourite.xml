@@ -6,15 +6,13 @@
     android:background="@color/white"
     tools:context=".fragment.favourite.FavouriteFragment">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#bfdecc">
+
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginTop="8dp"
         android:id="@+id/myFavRV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="vertical" />
-    </RelativeLayout>
+
 
 </FrameLayout>

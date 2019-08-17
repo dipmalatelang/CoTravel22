@@ -101,7 +101,7 @@
                 android:padding="10dp"
                 android:inputType="textCapCharacters"
                 android:textColor="@color/white"
-                android:textCursorDrawable="@drawable/white_cursor"
+                android:textCursorDrawable="@drawable/green_cursor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Name"
@@ -124,7 +124,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
                 android:textColor="@color/white"
-                android:textCursorDrawable="@drawable/white_cursor"
+                android:textCursorDrawable="@drawable/green_cursor"
                 android:hint="Email"
                 android:textSize="16sp"/>
 
@@ -143,7 +143,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableEnd="@drawable/ic_action_eye_off"
-                android:textCursorDrawable="@drawable/white_cursor"
+                android:textCursorDrawable="@drawable/green_cursor"
                 android:inputType="textPassword"
                 android:textColor="@color/white"
                 android:padding="10dp"

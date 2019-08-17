@@ -44,17 +44,12 @@ import java.util.Locale;
  */
 public class FavouriteFragment extends BaseFragment {
 
-
+String TAG="Favourite";
     //    private final List<TripList> tripList;
     private RecyclerView myFavRV;
     private FirebaseUser fuser;
     View view;
     private List<User> myFavArray=new ArrayList<>();
-
-/*    public FavouriteFragment(List<TripList> tripList) {
-        // Required empty public constructor
-        this.tripList=tripList;
-    }*/
 
 
     @Override

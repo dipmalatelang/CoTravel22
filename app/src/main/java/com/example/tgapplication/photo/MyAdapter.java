@@ -29,8 +29,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
     private StorageReference storageReference;
     private DatabaseReference reference;
 
-    public MyAdapter(Context context, String uid, List<Upload> uploads)
-    {
+    public MyAdapter(Context context, String uid, List<Upload> uploads) {
         this.uid=uid;
         mcontext =context;
         mUploads =uploads;
@@ -61,17 +60,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
 
 //        Log.i(TAG, "onBindViewHolder: " + uploadCurrent.getUrl());
 
-        holder.imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        holder.imageView.setOnClickListener(view -> {
 
-                reference = FirebaseDatabase.getInstance().getReference("Users").child(uid);
-                HashMap<String, Object> map = new HashMap<>();
-                map.put("imageURL", ""+uploadCurrent.getUrl());
-                reference.updateChildren(map);
+            reference = FirebaseDatabase.getInstance().getReference("Users").child(uid);
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("imageURL", ""+uploadCurrent.getUrl());
+            reference.updateChildren(map);
 
-                holder.ivTitle.setImageDrawable(mcontext.getResources().getDrawable(R.drawable.ic_action_fav_remove));
-            }
+            holder.ivTitle.setImageDrawable(mcontext.getResources().getDrawable(R.drawable.ic_action_fav_remove));
         });
     }
 

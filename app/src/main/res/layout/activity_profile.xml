@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#bfdecc"
+    android:background="@color/white"
     android:id="@+id/activity_profile_relativelayout"
     android:focusable="true"
     android:focusableInTouchMode="true"
@@ -13,476 +13,310 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_margin="2dp">
+            android:layout_marginTop="4dp">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Enter your profile information"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:gravity="center"
-                android:layout_margin="5dp"/>
+                android:text="Name :"
+                style="@style/text_profile_edit_style"/>
 
-            <View
+            <EditText
+                android:id="@+id/et_name"
+                android:textCursorDrawable="@drawable/black_cursor"
                 android:layout_width="match_parent"
-                android:layout_height="0.2dp"
-                android:background="@color/black"/>
+                android:layout_height="wrap_content"
+                android:hint="Name"
+                style="@style/edit_text_profile_edit_style"
+                android:singleLine="true"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Date of Birth :"
+                style="@style/text_profile_edit_style"/>
+
+            <TextView
+                android:id="@+id/tv_dob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start|center_vertical"
+                android:singleLine="true"
+                android:hint="DOB"
+                android:paddingEnd="10dp"
+                android:drawableEnd="@drawable/ic_date_range_black_24dp"
+                style="@style/edit_text_profile_edit_style"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Location :"
+                style="@style/text_profile_edit_style"/>
+
+            <EditText
+                android:id="@+id/et_location"
+                android:textCursorDrawable="@drawable/black_cursor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:hint="Nearest city, country"
+                style="@style/edit_text_profile_edit_style"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nationality :"
+                style="@style/text_profile_edit_style"/>
+
+            <AutoCompleteTextView
+                android:id="@+id/Nationality_suggestion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:completionThreshold="1"
+                android:hint="Nationality"
+                android:singleLine="true"
+                android:paddingEnd="10dp"
+                style="@style/edit_text_profile_edit_style"
+                android:drawableEnd="@drawable/ic_arrow_drop_down_black_24dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Spoken Language :"
+                style="@style/text_profile_edit_style"/>
+
+
+
+            <MultiAutoCompleteTextView
+                android:id="@+id/Lang_suggestion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:completionThreshold="1"
+                android:hint="Languages"
+                android:singleLine="true"
+                android:paddingEnd="10dp"
+                android:drawableRight="@drawable/ic_arrow_drop_down_black_24dp"
+                style="@style/edit_text_profile_edit_style"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Height :"
+                style="@style/text_profile_edit_style"/>
+
+
+
+            <AutoCompleteTextView
+                android:id="@+id/Height_suggestion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:completionThreshold="1"
+                android:hint="Height"
+                android:singleLine="true"
+                android:paddingEnd="10dp"
+                android:drawableRight="@drawable/ic_arrow_drop_down_black_24dp"
+                style="@style/edit_text_profile_edit_style"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Body Type :"
+                style="@style/text_profile_edit_style"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Spinner
+                    android:id="@+id/sp_body_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingTop="4dp"
+                    android:paddingStart="8dp"
+                    android:paddingBottom="4dp"
+                    android:background="@color/transparent"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:paddingEnd="10dp"
+                    android:src="@drawable/ic_arrow_drop_down_black_24dp"/>
+
+            </RelativeLayout>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Eyes :"
+                style="@style/text_profile_edit_style"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Spinner
+                    android:id="@+id/sp_eyes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingTop="4dp"
+                    android:paddingStart="8dp"
+                    android:paddingBottom="4dp"
+                    android:background="@color/transparent"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:paddingEnd="10dp"
+                    android:src="@drawable/ic_arrow_drop_down_black_24dp"/>
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Hair :"
+                style="@style/text_profile_edit_style"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Spinner
+                    android:id="@+id/sp_hair"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingTop="4dp"
+                    android:paddingStart="8dp"
+                    android:paddingBottom="4dp"
+                    android:background="@color/transparent"
+                    />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:paddingEnd="10dp"
+                    android:src="@drawable/ic_arrow_drop_down_black_24dp"/>
+
+            </RelativeLayout>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="I want to visit :"
+                style="@style/text_profile_edit_style"/>
+
+            <EditText
+                android:id="@+id/et_visit"
+                android:textCursorDrawable="@drawable/black_cursor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/background"
+                android:singleLine="true"
+                android:hint="City, Region, Country"
+                style="@style/edit_text_profile_edit_style"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Gender :"
+                android:gravity="start"
+                style="@style/text_profile_edit_style"/>
+
+            <RadioGroup
+                android:id="@+id/rg_gender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingStart="5dp">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:id="@+id/rb_male"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/colorPrimary"
+                    android:text="Male"
+                    android:textColor="@color/ebony"
+                    android:textSize="16sp"/>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Female"
+                    android:id="@+id/rb_female"
+                    android:textSize="16sp"
+                    android:textColor="@color/ebony"
+                    android:buttonTint="@color/colorPrimary"
+                    android:layout_marginLeft="50dp"/>
+
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="I prefer to travel with..."
+                style="@style/text_profile_edit_style"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_margin="10dp">
+                android:paddingStart="5dp">
 
-                <TextView
-                    android:layout_width="match_parent"
+                <CheckBox
+                    android:id="@+id/cb_men"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Name :"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_weight="2"
-                    android:gravity="start"/>
+                    android:text="Men"
+                    android:textSize="16sp"
+                    android:textColor="@color/ebony"
+                    android:buttonTint="@color/colorPrimary"
+                    android:backgroundTint="@color/colorPrimary" />
 
-                <EditText
-                    android:id="@+id/et_name"
-                    android:textCursorDrawable="@drawable/black_cursor"
-                    android:layout_width="match_parent"
+
+                <CheckBox
+                    android:id="@+id/cb_girl"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:padding="5dp"
-                    android:background="@drawable/border"
-                    android:gravity="left"
-                    android:singleLine="true"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginBottom="10dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Date of Birth :"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="2"
-                    android:gravity="start"/>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:padding="5dp"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="5dp"
-                    android:background="@drawable/border">
-
-                    <TextView
-                        android:id="@+id/tv_dob"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical|start"
-                        android:textSize="15sp"
-                        android:textColor="@color/black"
-                        android:singleLine="true"
-                        android:drawableRight="@drawable/calendar"/>
-
-                </RelativeLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginBottom="10dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Location :"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_weight="2"
-                    android:gravity="start"/>
-
-                <EditText
-                    android:id="@+id/et_location"
-                    android:textCursorDrawable="@drawable/black_cursor"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:padding="5dp"
-                    android:background="@drawable/border"
-                    android:gravity="left"
-                    android:singleLine="true"
-                    android:hint="Nearest city, country"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginBottom="10dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Nationality :"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_weight="2"
-                    android:gravity="start" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/border">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/Nationality_suggestion"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:completionThreshold="1"
-                        android:hint="Nationality"
-                        android:padding="5dp"
-                        android:background="@color/transparent"
-                        android:drawableRight="@drawable/ic_dropdown_arrow"
-                        android:layout_marginRight="5dp" />
-
-                </RelativeLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginBottom="10dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Spoken Language :"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_weight="2"
-                    android:gravity="start"
-                    android:paddingBottom="5dp"/>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/border">
-
-                    <MultiAutoCompleteTextView
-                        android:id="@+id/Lang_suggestion"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:completionThreshold="1"
-                        android:padding="5dp"
-                        android:background="@color/transparent"
-                        android:drawableRight="@drawable/ic_dropdown_arrow"
-                        android:layout_marginRight="5dp" />
-
-                </RelativeLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginBottom="10dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Height :"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_weight="2"
-                    android:gravity="start" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/border">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/Height_suggestion"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:completionThreshold="1"
-                        android:padding="5dp"
-                        android:background="@color/transparent"
-                        android:drawableRight="@drawable/ic_dropdown_arrow"
-                        android:layout_marginRight="5dp" />
-
-                </RelativeLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginBottom="10dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Body Type :"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_weight="2"
-                    android:gravity="start" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/border">
-
-                    <Spinner
-                        android:id="@+id/sp_body_type"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:singleLine="true"
-                        android:padding="5dp"/>
-
-                </RelativeLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginBottom="10dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:gravity="start"
-                    android:text="Eyes :"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/border">
-
-                    <Spinner
-                        android:id="@+id/sp_eyes"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:singleLine="true"
-                        android:padding="5dp"/>
-
-                </RelativeLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginBottom="10dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Hair :"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_weight="2"
-                    android:gravity="start" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/border">
-
-                    <Spinner
-                        android:id="@+id/sp_hair"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:singleLine="true"
-                        android:padding="5dp"/>
-
-                </RelativeLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginBottom="10dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="I want to visit :"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_weight="2"
-                    android:gravity="start" />
-
-                <EditText
-                    android:id="@+id/et_visit"
-                    android:textCursorDrawable="@drawable/black_cursor"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:padding="5dp"
-                    android:background="@drawable/border"
-                    android:gravity="left"
-                    android:singleLine="true"
-                    android:hint="City, Region, Country"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginBottom="10dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Gender :"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:layout_weight="2"
-                    android:gravity="start"/>
-
-                <RadioGroup
-                    android:id="@+id/rg_gender"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:buttonTint="@color/black"
-                        android:layout_width="wrap_content"
-                        android:id="@+id/rb_male"
-                        android:layout_height="wrap_content"
-                        android:text="Male"/>
-
-                    <RadioButton
-                        android:buttonTint="@color/black"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Female"
-                        android:id="@+id/rb_female"
-                        android:layout_marginLeft="50dp"/>
-
-                </RadioGroup>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginBottom="10dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="I prefer to travel with..."
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:padding="5dp"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <CheckBox
-                        android:id="@+id/cb_girl"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Girls"
-                        android:buttonTint="@color/black"
-                        android:textSize="18sp"
-                        android:layout_weight="1"/>
-
-                    <CheckBox
-                        android:id="@+id/cb_men"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Men"
-                        android:buttonTint="@color/black"
-                        android:textSize="18sp"
-                        android:layout_weight="1"/>
-
-                </LinearLayout>
-
+                    android:text="Girls"
+                    android:textSize="16sp"
+                    android:layout_marginStart="50dp"
+                    android:textColor="@color/ebony"
+                    android:buttonTint="@color/colorPrimary"
+                    android:backgroundTint="@color/colorPrimary"/>
             </LinearLayout>
 
             <Button
                 android:id="@+id/btn_regi"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_gravity="center"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
                 android:background="@color/colorPrimary"
-                android:textColor="@drawable/color_white_to_black"
-                android:text="Submit"/>
+                android:text="Submit"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:textColor="@drawable/color_white_to_black" />
 
         </LinearLayout>
-
-
     </ScrollView>
 
 </RelativeLayout>

@@ -86,7 +86,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
 
     @Override
     public int getItemCount() {
-        Log.i("Inside Adapter",""+mTrip.size());
+        Log.i("TAGtrip", "getItemCount: "+mTrip.size());
         return mTrip.size();
     }
 
