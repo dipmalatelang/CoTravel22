@@ -7,13 +7,14 @@
     android:layout_height="match_parent"
     tools:context=".fragment.trip.DetailActivity"
     android:orientation="vertical"
+    android:background="@color/background"
     android:id="@+id/detail_activity_linearlayout">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/black"
+        android:background="@color/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
@@ -34,7 +35,8 @@
             android:layout_height="wrap_content"
             android:text="Name"
             android:textStyle="bold"
-            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:textSize="26sp"
             android:layout_marginRight="20dp" />
 
         <TextView
@@ -42,7 +44,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="20 years"
-            android:textSize="15sp" />
+            android:textColor="@color/black"
+            android:textSize="18sp" />
 
     </LinearLayout>
 
@@ -56,7 +59,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="150dp">
+            android:layout_height="250dp">
 
     <ImageView
         android:id="@+id/ivImage"
@@ -71,13 +74,13 @@
                 android:layout_alignParentRight="true"
                 android:orientation="vertical">
 
-                <!--<ImageView-->
-                    <!--android:id="@+id/iv_profile_edit"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:adjustViewBounds="true"-->
-                    <!--android:background="@drawable/ic_action_edit"-->
-                    <!--android:visibility="gone"/>-->
+                <ImageView
+                    android:id="@+id/iv_profile_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:background="@drawable/ic_action_edit"
+                    android:visibility="gone"/>
 
                 <!--<ImageView-->
                     <!--android:id="@+id/iv_profile_visitor"-->
@@ -88,14 +91,14 @@
                     <!--android:visibility="gone"-->
                     <!--android:background="@drawable/ic_action_visitor"/>-->
 
-                <!--<ImageView-->
-                    <!--android:id="@+id/iv_my_fav"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:adjustViewBounds="true"-->
-                    <!--android:layout_marginTop="5dp"-->
-                    <!--android:visibility="gone"-->
-                    <!--android:background="@drawable/ic_action_fav"/>-->
+                <ImageView
+                    android:id="@+id/iv_my_fav"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:layout_marginTop="5dp"
+                    android:visibility="gone"
+                    android:background="@drawable/ic_action_fav"/>
 
                 <!--<ImageView-->
                     <!--android:id="@+id/iv_my_pic"-->
@@ -140,25 +143,25 @@
     <Button
         android:id="@+id/btn_details"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:textColor="@drawable/color_white_to_black"
         android:layout_weight="1"
-        android:textSize="14sp"
-        android:layout_marginRight="5dp"
-        android:textColor="@drawable/color_black_to_white"
-        android:background="@drawable/bg_white_grey_border"
+        android:textSize="18sp"
+        android:layout_marginEnd="5dp"
         android:text="Details"
         android:textAllCaps="false"/>
 
     <Button
         android:id="@+id/btn_images"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:textColor="@drawable/color_white_to_black"
         android:layout_weight="1"
         android:text="Images"
-        android:textColor="@drawable/color_black_to_white"
-        android:textSize="14sp"
+        android:textSize="18sp"
         android:layout_marginLeft="5dp"
-        android:background="@drawable/bg_white_grey_border"
         android:textAllCaps="false"/>
 
 </LinearLayout>
@@ -173,12 +176,12 @@
 
         <LinearLayout
             android:id="@+id/detail_list"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:layout_marginLeft="5dp"
-            android:paddingLeft="10dp"
+            android:layout_marginStart="5dp"
+            android:paddingStart="10dp"
             android:paddingBottom="5dp">
 
             <LinearLayout
@@ -193,13 +196,13 @@
                     android:layout_height="wrap_content"
                     android:text="City, Country: "
                     android:textSize="15sp"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/black"/>
 
                 <TextView
                     android:id="@+id/tvCity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:textColor="@color/black"
                     android:textSize="15sp"/>
 
             </LinearLayout>
@@ -216,14 +219,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Sex : "
-                    android:textSize="15sp"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/black"
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:id="@+id/tvSex"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:textColor="@color/black"
                     android:textSize="15sp"/>
 
             </LinearLayout>
@@ -240,14 +243,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Nationality : "
-                    android:textSize="15sp"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/black"
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:id="@+id/tvNatioanlity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:textColor="@color/black"
                     android:textSize="15sp"/>
 
             </LinearLayout>
@@ -264,14 +267,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Language: "
-                    android:textSize="15sp"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/black"
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:id="@+id/tvLanguage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:textColor="@color/black"
                     android:textSize="15sp" />
 
             </LinearLayout>
@@ -288,14 +291,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Height : "
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/tvHeight"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:textColor="@color/black"
                     android:textSize="15sp" />
 
             </LinearLayout>
@@ -312,14 +315,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Body Type : "
-                    android:textSize="15sp"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/black"
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:id="@+id/tvBodyType"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:textColor="@color/black"
                     android:textSize="15sp"/>
 
             </LinearLayout>
@@ -336,14 +339,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Eyes : "
-                    android:textSize="15sp"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/black"
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:id="@+id/tvEyes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:textColor="@color/black"
                     android:textSize="15sp"/>
 
             </LinearLayout>
@@ -360,14 +363,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Hairs : "
-                    android:textSize="15sp"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/black"
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:id="@+id/tvHairs"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:textColor="@color/black"
                     android:textSize="15sp"/>
 
             </LinearLayout>
@@ -384,14 +387,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Looking for : "
-                    android:textSize="15sp"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/black"
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:id="@+id/tvLooking"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:textColor="@color/black"
                     android:textSize="15sp"/>
 
             </LinearLayout>
@@ -408,14 +411,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Want to visit : "
-                    android:textSize="15sp"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/black"
+                    android:textSize="15sp"/>
 
                 <TextView
                     android:id="@+id/tvWantToVisit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:textColor="@color/black"
                     android:textSize="15sp"/>
 
             </LinearLayout>
@@ -432,8 +435,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Planned trips: "
-                    android:textSize="15sp"
-                    android:textStyle="bold"/>
+                    android:textColor="@color/black"
+                    android:textSize="15sp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -443,7 +446,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text=""
+                    android:textColor="@color/black"
                     android:gravity="center"
                     android:textSize="15sp" />
 
@@ -451,7 +454,7 @@
                     android:id="@+id/tvDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
+                    android:textColor="@color/black"
                     android:layout_weight="1"
                     android:textSize="15sp"
                     android:gravity="center"

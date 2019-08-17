@@ -6,10 +6,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tgapplication.BaseFragment;
@@ -55,7 +57,8 @@ public class VisitorFragment extends BaseFragment {
 
         myVisitRV = view.findViewById(R.id.myVisitRV);
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(getActivity(), 2);
-        myVisitRV.setLayoutManager(mGridLayoutManager);
+        RecyclerView.LayoutManager nLayoutManager = new LinearLayoutManager(getActivity());
+        myVisitRV.setLayoutManager(nLayoutManager);
 
         showProgressDialog();
         fuser = FirebaseAuth.getInstance().getCurrentUser();
@@ -164,12 +167,7 @@ public class VisitorFragment extends BaseFragment {
                                                         User user = dataSnapshot.getValue(User.class);
                                                                 myFavArray.add(user);
 
-                                                                VisitorAdapter tripAdapter = new VisitorAdapter(getActivity(), fuser.getUid(), myFavArray, new VisitorAdapter.VisitorInterface() {
-                                                                    @Override
-                                                                    public void sendVisitor(String id) {
-                                                                        getData(id);
-                                                                    }
-                                                                });
+                                                                VisitorAdapter tripAdapter = new VisitorAdapter(getActivity(), fuser.getUid(), myFavArray);
                                                                 myVisitRV.setAdapter(tripAdapter);
 
                                                             }

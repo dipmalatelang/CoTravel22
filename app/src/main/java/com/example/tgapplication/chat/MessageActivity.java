@@ -104,20 +104,17 @@ public class MessageActivity extends BaseActivity {
         Log.i("Shaila",""+userid);
         fuser = FirebaseAuth.getInstance().getCurrentUser();
 
-        btn_send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                notify = true;
-                String msg = text_send.getText().toString();
-                Log.i("Message",msg);
-                if (!msg.equals("")){
-                    sendMessage(fuser.getUid(), userid, msg);
-                } else {
-                    snackBar(message_realtivelayout,"You can't send empty message");
-                }
-//                text_send.setText("");
-                text_send.getText().clear();
+        btn_send.setOnClickListener(view -> {
+            notify = true;
+            String msg = text_send.getText().toString();
+            Log.i("Message",msg);
+            if (!msg.equals("")){
+                sendMessage(fuser.getUid(), userid, msg);
+            } else {
+                snackBar(message_realtivelayout,"You can't send empty message");
             }
+//                text_send.setText("");
+            text_send.getText().clear();
         });
 
 

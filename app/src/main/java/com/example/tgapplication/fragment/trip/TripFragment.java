@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -23,7 +22,6 @@ import com.example.tgapplication.fragment.trip.module.PlanTrip;
 import com.example.tgapplication.fragment.trip.module.TripData;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
-import com.example.tgapplication.fragment.visitor.VisitorFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -113,16 +111,9 @@ public class TripFragment extends BaseFragment {
             tripFilter.setText("Filter");
 
         } else {
-
-
-//            if (str_lang.equalsIgnoreCase("All")) {
-//                str_lang = "Arabic, Armenian, Belorussian, Bulgarian, Catalan, Chinese, Croatian, Czech, Danish, Dutch, English, Estonian, Filipino, Finnish, French, German, Greek, Hebrew, Hindi, Hungarian, Icelandic, Indonesian, Italian, Japanese, Korean, Kurdish, Latvian, Lithuanian, Nepali, Norwegian, Persian, Polish, Portuguese, Romanian, Russian, Serbian, Slovak, Slovenian, Spanish, Swedish, Thai, Turkish, Ukrainian, Urdu, Vietnamese";
-//            }
-            if (str_look.equalsIgnoreCase("All")) {
-                str_look = "Female,Male";
-            }
-            filterTripList(str_city, str_lang, str_eyes, str_hairs, str_height, str_bodytype, str_look, str_from, str_to, str_visit);
             tripFilter.setText("Clear Filter");
+
+            getDataToFilter();
         }
 
 //        Log.i("Fav Array",""+favArray.size());
@@ -141,6 +132,7 @@ public class TripFragment extends BaseFragment {
                     editor = prefs.edit();
                     editor.clear();
                     editor.apply();
+                    tripList(fuser);
                     tripFilter.setText("Filter");
                 }
                 else {
@@ -150,156 +142,148 @@ public class TripFragment extends BaseFragment {
             }
         });
 
-//        revTripList(fuser);
         return view;
+    }
+
+    private void getDataToFilter() {
+        if (str_lang == "All") {
+            str_lang = "Arabic,Danish,German,Belorussian,Dutch,Greek,Japanese,Portuguese,Italian,Polish,Spanish,Swedish,Bulgarian,English,Hebrew,Korean,Romanian,Thai,Catalan,Estonian,Hindi,Latvian,Russian,Turkish,Chinese,Filipino,Hungarian,Lithuanian,Serbian,Ukrainian,Croatian,Finnish,Icelandic,Norwegian,Slovak,Urdu,Czech,French,Indonesian,Persian,Slovenian,Vietnamese,Nepali,Armenian,Kurdish";
+        }
+
+        if (str_look == "All") {
+            str_look = "Female,Male";
+        }
+        filterTripList(str_city, str_lang, str_eyes, str_hairs, str_height, str_bodytype, str_look, str_from, str_to, str_visit);
     }
 
     private void filterTripList(final String str_city, final String str_lang, final String str_eyes, final String str_hairs, final String str_height, final String str_bodytype, final String str_look,
                                 final String str_from, final String str_to, final String str_visit) {
 
 
-        // any way you managed to go the node that has the 'grp_key'
-        DatabaseReference MembersRef = FirebaseDatabase.getInstance()
-                .getReference().child("Users");
-        MembersRef.addValueEventListener(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        tripList.clear();
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+            // any way you managed to go the node that has the 'grp_key'
+            DatabaseReference MembersRef = FirebaseDatabase.getInstance()
+                    .getReference().child("Users");
+            MembersRef.addValueEventListener(
+                    new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            tripList.clear();
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                            final User user = snapshot.getValue(User.class);
-                            if (!user.getId().equalsIgnoreCase(fuser.getUid())) {
+                                final User user = snapshot.getValue(User.class);
+                                if (!user.getId().equalsIgnoreCase(fuser.getUid())) {
 //                                getFav(fuser.getUid(),user.getId());
-                                // HERE WHAT CORRESPONDS TO JOIN
-                                DatabaseReference visitorRef = FirebaseDatabase.getInstance().getReference("Favorites")
-                                        .child(fuser.getUid());
+                                    // HERE WHAT CORRESPONDS TO JOIN
+                                    DatabaseReference visitorRef = FirebaseDatabase.getInstance().getReference("Favorites")
+                                            .child(fuser.getUid());
 
-                                visitorRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot snapshot) {
+                                    visitorRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot snapshot) {
 
-                                        if (snapshot.hasChild(user.getId())) {
-                                            // run some code
-                                            fav = 1;
-                                        } else {
-                                            fav = 0;
-                                        }
+                                            if (snapshot.hasChild(user.getId())) {
+                                                // run some code
+                                                fav = 1;
+                                            } else {
+                                                fav = 0;
+                                            }
 
-                                        DatabaseReference reference1 = FirebaseDatabase.getInstance()
-                                                .getReference()
-                                                .child("Trips");
-                                        reference1.orderByKey().equalTo(user.getId())
-                                                .addValueEventListener(new ValueEventListener() {
+                                            DatabaseReference reference1 = FirebaseDatabase.getInstance()
+                                                    .getReference()
+                                                    .child("Trips");
+                                            reference1.orderByKey().equalTo(user.getId())
+                                                    .addValueEventListener(new ValueEventListener() {
 
-                                                    @Override
-                                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                                        @Override
+                                                        public void onDataChange(DataSnapshot dataSnapshot) {
 
-                                                        from_to_dates.clear();
-                                                        dates.clear();
+                                                            from_to_dates.clear();
+                                                            dates.clear();
 
-                                                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                                            String city = "";
-                                                            String tripNote = "";
-                                                            String date = "";
+                                                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                                                String city = "";
+                                                                String tripNote = "";
+                                                                String date = "";
 
-                                                            for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                                                                for (DataSnapshot snapshot1 : snapshot.getChildren()) {
 
-                                                                TripData tripData = snapshot1.getValue(TripData.class);
+                                                                    TripData tripData = snapshot1.getValue(TripData.class);
 //                                                                    Log.i("VishalD", "" + user.getUsername() + " , " + tripData.getLocation());
 
-                                                                city += tripData.getLocation();
-                                                                tripNote += tripData.getTrip_note();
-                                                                date += tripData.getFrom_date() + " - " + tripData.getTo_date();
+                                                                    city += tripData.getLocation();
+                                                                    tripNote += tripData.getTrip_note();
+                                                                    date += tripData.getFrom_date() + " - " + tripData.getTo_date();
 
-                                                                DateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
-                                                                try {
-                                                                    Date date1 = format.parse(tripData.getFrom_date());
-                                                                    dates.add(date1);
-                                                                    PlanTrip planTrip = new PlanTrip(tripData.getLocation(), tripData.getFrom_date(), tripData.getTo_date());
-                                                                    from_to_dates.add(planTrip);
+                                                                    DateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+                                                                    try {
+                                                                        Date date1 = format.parse(tripData.getFrom_date());
+                                                                        dates.add(date1);
+                                                                        PlanTrip planTrip = new PlanTrip(tripData.getLocation(), tripData.getFrom_date(), tripData.getTo_date());
+                                                                        from_to_dates.add(planTrip);
 //                                                                        Log.i("Dates", tripData.getFrom_date() + " " + date1);
-                                                                } catch (ParseException e) {
-                                                                    e.printStackTrace();
-                                                                }
+                                                                    } catch (ParseException e) {
+                                                                        e.printStackTrace();
+                                                                    }
 
-                                                            }
+                                                                }
 //                                                                Log.i("TripFromTo", "" + from_to_dates.size());
-                                                            List<String> lang_item = Arrays.asList(user.getLang().split("\\s*,\\s*"));
-                                                            Collections.sort(lang_item);
-                                                            String lang="";
-                                                            for(int i=0;i<lang_item.size();i++)
-                                                            {
+                                                                List<String> lang_item = Arrays.asList(user.getLang().split("\\s*,\\s*"));
+//                                                                Collections.sort(lang_item);
+                                                                Log.i("Tag", "onDataChange: " +lang_item.size());
 
-                                                                if(!lang.equalsIgnoreCase(""))
-                                                                {
-                                                                    lang+=", "+lang_item.get(i);
-                                                                }
-                                                                else {
-                                                                    lang=lang_item.get(i);
-                                                                }
-                                                            }
+                                                                if(city.contains(str_city) && user.getEyes().contains(str_eyes) && user.getHair().contains(str_hairs) && user.getHeight().contains(str_height) && user.getBody_type().contains(str_bodytype)){
 
-                                                            Log.i("Tag", "onDataChange: 123" +user.getLook().size());
-                                                            Collections.sort(user.getLook());
-                                                            String look="";
-                                                            for(int i=0;i<user.getLook().size();i++)
-                                                            {
-                                                                if(look.equalsIgnoreCase(""))
-                                                                {
-                                                                    look=user.getLook().get(i);
-                                                                }
-                                                                else {
-                                                                    look+=","+user.getLook().get(i);
-                                                                }
-                                                            }
-                                                            Log.i(TAG, "onDataChange: look "+look);
 
-                                                            if(city.contains(str_city) && user.getEyes().contains(str_eyes) && user.getHair().contains(str_hairs) && user.getHeight().contains(str_height) && user.getBody_type().contains(str_bodytype) && (Integer.parseInt(str_from)<=Integer.parseInt(user.getAge())) && (Integer.parseInt(user.getAge())<=Integer.parseInt(str_to)) && !str_lang.equalsIgnoreCase("All") && lang.contains(str_lang) && !str_look.equalsIgnoreCase("All") && look.contains(str_look))
-                                                            {
-                                                                  tripList = findClosestDate(dates, user, fav);
+                                                                            for(int i=0;i<user.getLook().size();i++)
+                                                                            {
+                                                                                if(str_look.contains(user.getLook().get(i)))
+                                                                                {
+                                                                                    tripList = findClosestDate(dates, user, fav);
+                                                                                }
+
+                                                                    }
+
+
+                                                                }
                                                             }
-                                                            else {
-                                                                Toast.makeText(getActivity(), "No data", Toast.LENGTH_SHORT).show();
-                                                            }
-                                                        }
 //                                                tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), favArray, tripList);
 //                                                recyclerview.setAdapter(tripAdapter);
-                                                        tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), tripList, new TripAdapter.ProfileData() {
-                                                            @Override
-                                                            public void setData(TripList tList, int position) {
-                                                                Intent mIntent = new Intent(getActivity(), DetailActivity.class);
-                                                                mIntent.putExtra("MyObj", (Serializable) tripList.get(position));
-                                                                startActivity(mIntent);
-                                                            }
-                                                        });
-                                                        recyclerview.setAdapter(tripAdapter);
-                                                        tripAdapter.notifyDataSetChanged();
-                                                    }
 
-                                                    @Override
-                                                    public void onCancelled(DatabaseError databaseError) {
+                                                            tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), tripList, new TripAdapter.ProfileData() {
+                                                                @Override
+                                                                public void setData(TripList tList, int position) {
+                                                                    Intent mIntent = new Intent(getActivity(), DetailActivity.class);
+                                                                    mIntent.putExtra("MyObj", (Serializable) tripList.get(position));
+                                                                    startActivity(mIntent);
+                                                                }
+                                                            });
+                                                            recyclerview.setAdapter(tripAdapter);
+                                                            tripAdapter.notifyDataSetChanged();
+                                                        }
 
-                                                    }
-                                                });
+                                                        @Override
+                                                        public void onCancelled(DatabaseError databaseError) {
 
-                                    }
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                        }
+                                                    });
 
-                                    }
-                                });
+                                        }
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
+                                        }
+                                    });
+
+                                }
                             }
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
+                        }
                     }
-                }
-        );
+            );
     }
 
     int fav;
@@ -411,100 +395,6 @@ public class TripFragment extends BaseFragment {
         });
     }
 
-//    List<TripList> tripList1=new ArrayList<>();
-   /* public void revTripList(FirebaseUser fuser) {
-
-
-        // any way you managed to go the node that has the 'grp_key'
-        DatabaseReference visitorRef = FirebaseDatabase.getInstance().getReference("Trips");
-
-        visitorRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-
-                myFavArray.clear();
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-
-                    String userKey = dataSnapshot.getKey();
-
-                                                    DatabaseReference MembersRef = FirebaseDatabase.getInstance()
-                                                            .getReference().child("Users").child(userKey);
-                                                    MembersRef.addValueEventListener(
-                                                            new ValueEventListener() {
-                                                                @Override
-                                                                public void onDataChange(DataSnapshot dataSnapshot) {
-//                                                                        tripList.clear();
-
-                                                                    User user = dataSnapshot.getValue(User.class);
-
-
-//                                                                            if (!user.getId().equalsIgnoreCase(fuser.getUid())) {
-//                                getFav(fuser.getUid(),user.getId());
-                                                                    // HERE WHAT CORRESPONDS TO JOIN
-                                                                    DatabaseReference visitorRef = FirebaseDatabase.getInstance().getReference("Favorites")
-                                                                            .child(fuser.getUid());
-
-                                                                    visitorRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                                        @Override
-                                                                        public void onDataChange(DataSnapshot snapshot) {
-
-                                                                            if (snapshot.hasChild(user.getId())) {
-                                                                                // run some code
-                                                                                fav = 1;
-                                                                            } else {
-                                                                                fav = 0;
-                                                                            }
-
-//                                                                            tripList1 = findClosestDate(dates, user, fav);
-//                                                                            for (int i = 0; i < tripList1.size(); i++) {
-//                                                                              getData(user.getId());
-                                                                                Log.i(TAG, "onDataChange: Trip" + user.getName()+" ==> "+fav);
-//                                                                            }
-
-                                                                        }
-
-                                                                        @Override
-                                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                                                        }
-
-//                                                tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), favArray, tripList);
-//                                                recyclerview.setAdapter(tripAdapter);
-                                                       *//* tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), tripList, new TripAdapter.ProfileData() {
-                                                            @Override
-                                                            public void setData(TripList tList, int position) {
-                                                                Intent mIntent = new Intent(getActivity(), DetailActivity.class);
-                                                                mIntent.putExtra("MyObj", (Serializable) tripList.get(position));
-                                                                startActivity(mIntent);
-                                                            }
-                                                        });
-                                                        recyclerview.setAdapter(tripAdapter);
-                                                        tripAdapter.notifyDataSetChanged();*//*
-                                                                    });
-
-                                                                }
-
-
-                                                                @Override
-                                                                public void onCancelled(DatabaseError databaseError) {
-
-                                                                }
-                                                            });
-
-//                                                       for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-
-
-
-        }
-//                                                }
-                                            }
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                    }
-                                });
-
-                            }*/
     public void tripList(FirebaseUser fuser) {
         // any way you managed to go the node that has the 'grp_key'
         DatabaseReference MembersRef = FirebaseDatabase.getInstance()
@@ -574,7 +464,7 @@ public class TripFragment extends BaseFragment {
                                                             Log.i("TripFromTo", "" + from_to_dates.size());
                                                             Log.i("Tag", "onDataChange: "+fav);
                                                             tripList = findClosestDate(dates, user,fav);
-
+                                                            Log.i(TAG, "onDataChange: "+tripList);
                                                         }
 //                                                tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), favArray, tripList);
 //                                                recyclerview.setAdapter(tripAdapter);
@@ -592,14 +482,14 @@ public class TripFragment extends BaseFragment {
 
                                                     @Override
                                                     public void onCancelled(DatabaseError databaseError) {
-
+                                                        Log.i(TAG, "DatabaseError1: "+databaseError);
                                                     }
                                                 });
 
                                     }
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                                        Log.i(TAG, "DatabaseError2: "+databaseError);
                                     }
                                 });
 
@@ -609,7 +499,7 @@ public class TripFragment extends BaseFragment {
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-
+                        Log.i(TAG, "DatabaseError3: "+databaseError);
                     }
                 }
         );
