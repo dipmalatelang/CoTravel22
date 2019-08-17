@@ -113,7 +113,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
 
     private void handleFacebookAccessToken(String token) {
-
+        showProgressDialog();
         AuthCredential credential = FacebookAuthProvider.getCredential(token);
         Log.d("Tiger", "" + credential);
         mAuth.signInWithCredential(credential)
@@ -122,9 +122,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d("Tiger", "handleFacebookAccessToken:" + task.isSuccessful());
                         if (task.isSuccessful()) {
+
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("Tiger", "signInWithCredential:success");
-
+                            dismissProgressDialog();
                             updateUI(mAuth.getCurrentUser());
 
                         }
@@ -165,21 +166,19 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 startActivity(resetIntent);
                 break;
             case R.id.btn_login:
-
                 showProgressDialog();
                 String txt_email = input_email.getText().toString().trim();
                 String txt_password = input_password.getText().toString();
 
                 if (TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)) {
+                    dismissProgressDialog();
                     snackBar(constrainlayout,"All fileds are required !");
-
 
                 }else if(!android.util.Patterns.EMAIL_ADDRESS.matcher(txt_email).matches())
                 {
+                    dismissProgressDialog();
                     snackBar(constrainlayout, "please enter valid email address");
-//                    dismissProgressDialog();
                 }
-
                else {
 //                    hideKeyboard(this);
                     mAuth.signInWithEmailAndPassword(txt_email, txt_password)
@@ -187,6 +186,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
+                                        dismissProgressDialog();
                                         updateUI(mAuth.getCurrentUser());
 //                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 //                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -196,13 +196,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
                                     } else {
                                         snackBar(constrainlayout,task.getException().getMessage());
-//                                        dismissProgressDialog();
+                                        dismissProgressDialog();
                                     }
                                 }
                             });
-
                 }
-                dismissProgressDialog();
+
            /*     if(CheckNetwork.isInternetAvailable(this)) //returns true if internet available
                 {
 

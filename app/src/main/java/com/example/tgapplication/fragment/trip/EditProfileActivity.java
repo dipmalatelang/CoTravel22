@@ -444,10 +444,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
 
                     register(fuser, str_name, str_dob, str_gender, age, str_location, str_nationality, str_lang, str_look, str_height, str_body_type, str_eyes, str_hair, str_visit);
 
-
                 }
-
-
                 break;
         }
     }

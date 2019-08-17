@@ -258,7 +258,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         }
     }
     private void handleFacebookAccessToken(String token) {
-
+        showProgressDialog();
         AuthCredential credential = FacebookAuthProvider.getCredential(token);
         Log.d("Tiger",""+credential);
         mAuth.signInWithCredential(credential)
@@ -269,6 +269,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("Tiger", "signInWithCredential:success");
+                            dismissProgressDialog();
                             updateUI(mAuth.getCurrentUser());
 
                         }
@@ -315,6 +316,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure"+ Objects.requireNonNull(task.getException()).getMessage());
                             snackBar(relativelayout,task.getException().getMessage());
+                            showProgressDialog();
                             updateUI(null);
                         }
 
