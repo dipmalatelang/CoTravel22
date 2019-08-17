@@ -19,7 +19,7 @@ import java.util.Objects;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
-
+    public String TAG="Activity";
     //Global Method and Variable
 //    String fUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 

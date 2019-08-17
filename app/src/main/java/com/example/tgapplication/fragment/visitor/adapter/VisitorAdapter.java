@@ -31,11 +31,12 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
     private int fav_int;
     private List<String> favArray;
 
-    public VisitorAdapter(Context mContext, String uid, List<User> mTrip)
+    public VisitorAdapter(Context mContext, String uid, List<User> mTrip, VisitorInterface listener)
     {
         this.uid=uid;
         this.mContext = mContext;
         this.mTrip = mTrip;
+        this.listener=listener;
 //        this.favArray=favArray;
     }
 
@@ -73,6 +74,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
             @Override
             public void onClick(View view) {
                 setProfileVisit(uid,tList.getId());
+                listener.sendVisitor(tList.getId());
 //                int fav_id= getFav(favArray,tList.getId());
 //                Log.i("Got Needed Value"," "+fav_id);
                 /*Intent mIntent = new Intent(mContext, DetailActivity.class);
@@ -129,6 +131,11 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
             mDate = itemView.findViewById(R.id.tvDate);
             mCardView = itemView.findViewById(R.id.cardview);
         }
+    }
+
+    VisitorInterface listener;
+    public interface VisitorInterface{
+        void sendVisitor(String id);
     }
 
 }

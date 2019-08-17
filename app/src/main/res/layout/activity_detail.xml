@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:text="Name"
             android:textStyle="bold"
-            android:textSize="26sp"
+            android:textSize="20sp"
             android:layout_marginRight="20dp" />
 
         <TextView
@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="20 years"
-            android:textSize="18sp" />
+            android:textSize="15sp" />
 
     </LinearLayout>
 
@@ -56,7 +56,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="250dp">
+            android:layout_height="150dp">
 
     <ImageView
         android:id="@+id/ivImage"
@@ -71,40 +71,40 @@
                 android:layout_alignParentRight="true"
                 android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/iv_profile_edit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:background="@drawable/ic_action_edit"
-                    android:visibility="gone"/>
+                <!--<ImageView-->
+                    <!--android:id="@+id/iv_profile_edit"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:adjustViewBounds="true"-->
+                    <!--android:background="@drawable/ic_action_edit"-->
+                    <!--android:visibility="gone"/>-->
 
-                <ImageView
-                    android:id="@+id/iv_profile_visitor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:adjustViewBounds="true"
-                    android:visibility="gone"
-                    android:background="@drawable/ic_action_visitor"/>
+                <!--<ImageView-->
+                    <!--android:id="@+id/iv_profile_visitor"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--android:adjustViewBounds="true"-->
+                    <!--android:visibility="gone"-->
+                    <!--android:background="@drawable/ic_action_visitor"/>-->
 
-                <ImageView
-                    android:id="@+id/iv_my_fav"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:layout_marginTop="5dp"
-                    android:visibility="gone"
-                    android:background="@drawable/ic_action_fav"/>
+                <!--<ImageView-->
+                    <!--android:id="@+id/iv_my_fav"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:adjustViewBounds="true"-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--android:visibility="gone"-->
+                    <!--android:background="@drawable/ic_action_fav"/>-->
 
-                <ImageView
-                    android:id="@+id/iv_my_pic"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:layout_marginTop="5dp"
-                    android:visibility="gone"
-                    android:background="@drawable/ic_add_a_photo_white_24dp"/>
+                <!--<ImageView-->
+                    <!--android:id="@+id/iv_my_pic"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:adjustViewBounds="true"-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--android:visibility="gone"-->
+                    <!--android:background="@drawable/ic_add_a_photo_white_24dp"/>-->
 
                 <ImageView
                     android:id="@+id/iv_send_msg"
@@ -140,23 +140,25 @@
     <Button
         android:id="@+id/btn_details"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button_atm_normal"
+        android:layout_height="30dp"
         android:layout_weight="1"
-        android:textSize="18sp"
+        android:textSize="14sp"
         android:layout_marginRight="5dp"
+        android:textColor="@drawable/color_black_to_white"
+        android:background="@drawable/bg_white_grey_border"
         android:text="Details"
         android:textAllCaps="false"/>
 
     <Button
         android:id="@+id/btn_images"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button_atm_normal"
+        android:layout_height="30dp"
         android:layout_weight="1"
         android:text="Images"
-        android:textSize="18sp"
+        android:textColor="@drawable/color_black_to_white"
+        android:textSize="14sp"
         android:layout_marginLeft="5dp"
+        android:background="@drawable/bg_white_grey_border"
         android:textAllCaps="false"/>
 
 </LinearLayout>

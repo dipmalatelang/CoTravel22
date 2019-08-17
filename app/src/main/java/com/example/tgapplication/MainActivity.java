@@ -2,9 +2,11 @@ package com.example.tgapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -16,6 +18,7 @@ import com.example.tgapplication.fragment.favourite.FavouriteFragment;
 import com.example.tgapplication.fragment.trip.TripFragment;
 import com.example.tgapplication.fragment.visitor.VisitorFragment;
 import com.example.tgapplication.login.LoginActivity;
+import com.facebook.login.LoginManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -29,7 +32,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         fUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -91,6 +93,29 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         return true;
     }
 
+    boolean doubleBackToExitPressedOnce = false;
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            finish();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+//        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+        snackBar(container,"Please click Back again to exit");
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
@@ -103,6 +128,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
 
             case R.id.logout:
                 FirebaseAuth.getInstance().signOut();
+                LoginManager.getInstance().logOut();
                 finish();
                 startActivity(new Intent(this,LoginActivity.class));
                 snackBar(container,"Logout");
