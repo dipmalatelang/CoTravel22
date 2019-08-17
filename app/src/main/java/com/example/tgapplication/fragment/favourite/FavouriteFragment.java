@@ -51,11 +51,6 @@ public class FavouriteFragment extends BaseFragment {
     View view;
     private List<User> myFavArray=new ArrayList<>();
 
-/*    public FavouriteFragment(List<TripList> tripList) {
-        // Required empty public constructor
-        this.tripList=tripList;
-    }*/
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

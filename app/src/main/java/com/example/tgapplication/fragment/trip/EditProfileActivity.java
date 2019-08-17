@@ -145,29 +145,29 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
                 "Brown", "Blue", "Green", "Hazel", "Gray", "Amber", "Other"
         };
 
-        Nationalityadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, nationalitySpinner);
-        Nationalityadapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        Nationalityadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, nationalitySpinner);
+        Nationalityadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         suggestion_nationality.setAdapter(Nationalityadapter);
 
-        Languageadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, langSpinner);
-        Languageadapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        Languageadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, langSpinner);
+        Languageadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         suggestion_lang.setAdapter(Languageadapter);
         suggestion_lang.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
 
-        Heightadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, heightSpinner);
-        Heightadapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        Heightadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, heightSpinner);
+        Heightadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         suggestion_height.setAdapter(Heightadapter);
 
-        Bodyadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, BodyTypeSpinner);
-        Bodyadapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        Bodyadapter = new ArrayAdapter<String>(this, R.layout.spinner_text, BodyTypeSpinner);
+        Bodyadapter.setDropDownViewResource(R.layout.spinner_text);
         Sp_bodytype.setAdapter(Bodyadapter);
 
-        Hairadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, HairSpinner);
-        Hairadapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        Hairadapter = new ArrayAdapter<String>(this, R.layout.spinner_text, HairSpinner);
+        Hairadapter.setDropDownViewResource(R.layout.spinner_text);
         Sp_hairs.setAdapter(Hairadapter);
 
-        Eyesadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, EyeSpinner);
-        Eyesadapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        Eyesadapter = new ArrayAdapter<String>(this, R.layout.spinner_text, EyeSpinner);
+        Eyesadapter.setDropDownViewResource(R.layout.spinner_text);
         Sp_eyes.setAdapter(Eyesadapter);
 
         TV_dob.setOnClickListener(new View.OnClickListener() {

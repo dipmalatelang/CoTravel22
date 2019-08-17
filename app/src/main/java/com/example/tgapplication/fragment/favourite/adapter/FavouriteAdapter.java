@@ -65,7 +65,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
 
         holder.mTitle.setText(tList.getName());
 //        holder.mCity.setVisibility(View.GONE);
-        holder.mDate.setVisibility(View.GONE);
+        //holder.mDate.setVisibility(View.GONE);
         holder.mCity.setText(tList.getLocation());
 ////        holder.mDate.setText(tList.getFrom_to_date());
 
@@ -138,7 +138,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
             ivTitle=itemView.findViewById(R.id.ivTitle);
             mTitle = itemView.findViewById(R.id.tvTitle);
             mCity = itemView.findViewById(R.id.tvCity);
-            mDate = itemView.findViewById(R.id.tvDate);
+           // mDate = itemView.findViewById(R.id.tvDate);
             mCardView = itemView.findViewById(R.id.cardview);
         }
     }

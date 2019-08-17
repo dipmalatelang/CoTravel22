@@ -248,6 +248,7 @@ public class TripFragment extends BaseFragment {
                                                             }
 //                                                tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), favArray, tripList);
 //                                                recyclerview.setAdapter(tripAdapter);
+
                                                             tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), tripList, new TripAdapter.ProfileData() {
                                                                 @Override
                                                                 public void setData(TripList tList, int position) {
@@ -463,7 +464,7 @@ public class TripFragment extends BaseFragment {
                                                             Log.i("TripFromTo", "" + from_to_dates.size());
                                                             Log.i("Tag", "onDataChange: "+fav);
                                                             tripList = findClosestDate(dates, user,fav);
-
+                                                            Log.i(TAG, "onDataChange: "+tripList);
                                                         }
 //                                                tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), favArray, tripList);
 //                                                recyclerview.setAdapter(tripAdapter);
@@ -481,14 +482,14 @@ public class TripFragment extends BaseFragment {
 
                                                     @Override
                                                     public void onCancelled(DatabaseError databaseError) {
-
+                                                        Log.i(TAG, "DatabaseError1: "+databaseError);
                                                     }
                                                 });
 
                                     }
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                                        Log.i(TAG, "DatabaseError2: "+databaseError);
                                     }
                                 });
 
@@ -498,7 +499,7 @@ public class TripFragment extends BaseFragment {
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-
+                        Log.i(TAG, "DatabaseError3: "+databaseError);
                     }
                 }
         );

@@ -6,10 +6,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tgapplication.BaseFragment;
@@ -57,7 +59,8 @@ public class VisitorFragment extends BaseFragment {
 
         myVisitRV = view.findViewById(R.id.myVisitRV);
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(getActivity(), 2);
-        myVisitRV.setLayoutManager(mGridLayoutManager);
+        RecyclerView.LayoutManager nLayoutManager = new LinearLayoutManager(getActivity());
+        myVisitRV.setLayoutManager(nLayoutManager);
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
 

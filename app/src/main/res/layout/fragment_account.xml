@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#bfdecc"
+    android:background="@color/white"
     android:id="@+id/fragment_acc_constraintLayout"
     tools:context=".fragment.account.AccountFragment">
 
@@ -48,7 +48,7 @@
         android:id="@+id/iv_profile_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_grey"
+        android:background="@color/colorPrimary"
         android:drawableLeft="@drawable/ic_action_edit"
         android:gravity="center"
         android:padding="2dp"
@@ -65,7 +65,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:background="@drawable/bg_grey"
+        android:background="@color/colorPrimary"
         android:drawableLeft="@drawable/ic_photo_white_24dp"
         android:drawablePadding="5dp"
         android:gravity="center"
@@ -106,7 +106,7 @@
             android:textSize="14sp"
             android:layout_marginRight="5dp"
             android:textColor="@drawable/color_black_to_white"
-            android:background="@drawable/bg_white_grey_border"
+            android:background="@drawable/border_green"
             android:text="Details"
             android:textAllCaps="false"/>
 
@@ -117,9 +117,9 @@
             android:layout_weight="1"
             android:text="Images"
             android:textColor="@drawable/color_black_to_white"
+            android:background="@drawable/border_green"
             android:textSize="14sp"
             android:layout_marginLeft="5dp"
-            android:background="@drawable/bg_white_grey_border"
             android:textAllCaps="false"/>
 
     </LinearLayout>
@@ -128,6 +128,7 @@
         android:id="@+id/scroll_details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:fillViewport="true"
         android:animateLayoutChanges="true"
         app:layout_constraintTop_toBottomOf="@+id/ll_oo">

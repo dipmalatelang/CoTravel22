@@ -71,17 +71,17 @@ import static android.content.Context.MODE_PRIVATE;
 public class AccountFragment extends BaseFragment implements View.OnClickListener {
 
 
-    ImageView mTrip;
+    private ImageView mTrip;
     TextView tvName, tvAge, mCity, tvSex, tvNatioanlity, tvLanguage, tvHeight, tvBodyType, tvEyes, tvHairs,
             tvLooking, tvWantToVisit, tvPlannedtrip, tvDate;
     ImageView  iv_fav, iv_profile_visitor, iv_my_fav;
-    TextView iv_profile_edit;
-    FirebaseUser fuser;
-    LinearLayout detail_list, image_list;
-    Button btn_details, btn_images;
-    List<TripList> myFavArray = new ArrayList<>();
-    List<TripList> myVisitArray = new ArrayList<>();
-    ConstraintLayout fragment_acc_constraintLayout;
+    private TextView iv_profile_edit;
+    private FirebaseUser fuser;
+    private LinearLayout detail_list, image_list;
+    private Button btn_details, btn_images;
+    private List<TripList> myFavArray = new ArrayList<>();
+    private List<TripList> myVisitArray = new ArrayList<>();
+    private ConstraintLayout fragment_acc_constraintLayout;
 
     private static final int PICK_IMAGE_REQUEST = 234;
 
@@ -218,7 +218,7 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
                     uploads.add(upload);
                 }
 //creating adapter
-                adapter = new MyAdapter(getActivity().getApplicationContext(),fuser.getUid(), uploads);
+                adapter = new MyAdapter(getActivity(),fuser.getUid(), uploads);
 
 //adding adapter to recyclerview
                 recyclerView.setAdapter(adapter);
@@ -436,24 +436,19 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
                 image_list.setVisibility(View.VISIBLE);
                 break;
 
-//            case R.id.iv_send_msg:
-////              startActivity(new Intent(this,ChatActivity.class));
-//                Intent chatIntent = new Intent(this, LoginActivity.class);
-//                chatIntent.putExtra("nextActivityUser", tripL.getId());
-//                chatIntent.putExtra("nextActivity", "TripsMsg");
-//                startActivity(chatIntent);
-//                break;
+
+
 
             case R.id.iv_profile_edit:
                 Intent msgIntent = new Intent(getActivity(), EditProfileActivity.class);
-//                msgIntent.putExtra("nextActivity", "profileEdit");
+//              msgIntent.putExtra("nextActivity", "profileEdit");
                 startActivity(msgIntent);
                 break;
 
 //            case R.id.iv_profile_visitor:
 //                getMyVisit();
 //                break;
-//
+
 //            case R.id.iv_my_fav:
 //                getMyFav();
 //                break;
@@ -575,21 +570,15 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
     }
 
+
     @Override
-    public void startActivityForResult(Intent data, int requestCode) {
-        super.startActivityForResult(data, requestCode);
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
             filePath = data.getData();
             uploadFile(filePath);
-//            try {
-//                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-//                imageView.setImageBitmap(bitmap);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
         }
     }
-
 
     public String getFileExtension(Uri uri) {
         ContentResolver cR = getActivity().getContentResolver();
@@ -650,20 +639,15 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
                         public void onFailure(@NonNull Exception exception) {
                             progressDialog.dismiss();
                             Log.i("Failure",exception.getMessage());
-//
                         }
                     })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-//displaying the upload progress
-                            double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                            progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
-                        }
+                    .addOnProgressListener(taskSnapshot -> {
+                        //displaying the upload progress
+                        double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                        progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
                     });
         } else {
             snackBar(fragment_acc_constraintLayout,"Please Select a Image");
-
         }
     }
 

@@ -45,7 +45,8 @@
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".fragment.trip.EditProfileActivity"
-            android:parentActivityName=".trips.TripActivity" />
+            android:parentActivityName=".trips.TripActivity"
+            android:label="Profile Information"/>
         <activity android:name=".login.RegisterActivity" />
         <activity android:name=".login.ResetPasswordActivity" />
 

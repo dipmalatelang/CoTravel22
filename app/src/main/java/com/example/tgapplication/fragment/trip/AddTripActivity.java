@@ -80,8 +80,8 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
         Date today = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String dateTostr = simpleDateFormat.format(today);
-        tv_from_date.setText(dateTostr);
-        tv_to_date.setText(dateTostr);
+        //tv_from_date.setText(dateTostr);
+        //tv_to_date.setText(dateTostr);
 
         recyclerView = findViewById(R.id.recyclerview_trips);
 
