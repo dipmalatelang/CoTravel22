@@ -51,11 +51,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
         final User user = mUsers.get(position);
         holder.username.setText(user.getUsername());
-        if (user.getImageURL().equals("default")){
+    /*    if (user.getImageURL().equals("default")){
             holder.profile_image.setImageResource(R.mipmap.ic_launcher);
-        } else {
-            Glide.with(mContext).load(user.getImageURL()).into(holder.profile_image);
-        }
+        } else {*/
+            Glide.with(mContext).load(user.getImageURL()).placeholder(R.mipmap.ic_launcher).into(holder.profile_image);
+//        }
 
         if (ischat){
             lastMessage(user.getId(), holder.last_msg);

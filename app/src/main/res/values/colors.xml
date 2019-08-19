@@ -151,6 +151,8 @@
     <color name="dark_blue">#00008B</color>
     <color name="navy">#000080</color>
     <color name="black">#000000</color>
+    <color name="greenTrans">#A9008000</color>
+
     <color name="background">#4D4A274F</color>
     <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">@color/colorPrimary</color>
 </resources>

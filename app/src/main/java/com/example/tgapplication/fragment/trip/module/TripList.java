@@ -23,7 +23,8 @@ public class TripList implements Serializable {
 
     }
 
-    public TripList(String id, String name, String imageUrl, String age, String gender, String userLocation, String nationality, String lang, String height, String body_type, String eyes, String hair, ArrayList<String> look, String visit, String planLocation, String trip_note, String from_to_date, int favid, int visit_id) {        this.id=id;
+    public TripList(String id, String name, String imageUrl, String age, String gender, String userLocation, String nationality, String lang, String height, String body_type, String eyes, String hair, ArrayList<String> look, String visit, String planLocation, String trip_note, String from_to_date, int favid, int visit_id) {
+        this.id=id;
         this.name=name;
         this.imageUrl=imageUrl;
         this.planLocation = planLocation;
@@ -41,6 +42,26 @@ public class TripList implements Serializable {
         this.look=look;
         this.visit= visit;
         this.favid=favid;
+        this.visit_id=visit_id;
+    }
+
+    public TripList(String id, String username, String imageURL, String age, String gender, String location, String nationality, String lang, String height, String body_type, String eyes, String hair, ArrayList<String> look, String visit, String tripNote, int fav_id, int visit_id) {
+        this.id=id;
+        this.name=username;
+        this.imageUrl=imageURL;
+        this.trip_note = tripNote;
+        this.age=age;
+        this.gender=gender;
+        this.userLocation=location;
+        this.nationality=nationality;
+        this.lang= lang;
+        this.height=height;
+        this.body_type= body_type;
+        this.eyes=eyes;
+        this.hair=hair;
+        this.look=look;
+        this.visit= visit;
+        this.favid=fav_id;
         this.visit_id=visit_id;
     }
 
