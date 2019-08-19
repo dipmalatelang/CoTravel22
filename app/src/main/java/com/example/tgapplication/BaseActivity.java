@@ -1,9 +1,11 @@
 package com.example.tgapplication;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -11,15 +13,33 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.tgapplication.fragment.trip.module.PlanTrip;
+import com.example.tgapplication.fragment.trip.module.TripList;
+import com.example.tgapplication.fragment.trip.module.User;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
     public String TAG="Activity";
+    public List<String> visitArray = new ArrayList<>();
+    public List<TripList> tripList = new ArrayList<>();
+    public List<PlanTrip> from_to_dates = new ArrayList<>();
+    public List<Date> dates = new ArrayList<>();
+    private Date closest;
+    String tripNote = "";
+    public int fav_int;
+    public long now = System.currentTimeMillis();
     //Global Method and Variable
 //    String fUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -43,7 +63,28 @@ public abstract class BaseActivity extends AppCompatActivity {
         return myFavArray;
     }*/
 
+    public List<TripList> findAllMembers(User user, int fav_id) {
+                 int visit_id=getVisit(visitArray,user.getId());
+                TripList tripListClass = new TripList(user.getId(), user.getUsername(), user.getImageURL(), user.getAge(), user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), tripNote, fav_id,visit_id);
+                tripList.add(tripListClass);
 
+        return tripList;
+    }
+
+    private int getVisit(List<String> favArray, String id) {
+        for(int i=0;i<favArray.size();i++)
+        {
+            if(favArray.get(i).equalsIgnoreCase(id))
+            {
+                fav_int=1;
+                return fav_int;
+            }
+            else {
+                fav_int=0;
+            }
+        }
+        return fav_int;
+    }
 
    /* private void filterTripList(final String str_city, final String str_lang, final String str_eyes, final String str_hairs, final String str_height, final String str_bodytype, final String str_look,
                                 final String str_from, final String str_to, final String str_visit) {

@@ -152,5 +152,6 @@
     <color name="navy">#000080</color>
     <color name="black">#000000</color>
     <color name="background">#4DBFDECC</color>
+    <color name="greenTrans">#A9008000</color>
 
 </resources>

@@ -59,12 +59,12 @@ public class ChatActivity extends AppCompatActivity {
                      profile_image.setImageResource(R.drawable.image1);
                      Log.i("ImageUser",""+user);
 
-                    if (user.getImageURL().equalsIgnoreCase("default")||user.getImageURL().equalsIgnoreCase("")) {
+           /*         if (user.getImageURL().equalsIgnoreCase("default")||user.getImageURL().equalsIgnoreCase("")) {
                         profile_image.setImageResource(R.drawable.ic_services_ratings_user_pic);
-                    } else {
+                    } else {*/
                         //change this
-                        Glide.with(getApplicationContext()).load(user.getImageURL()).into(profile_image);
-                    }
+                        Glide.with(getApplicationContext()).load(user.getImageURL()).placeholder(R.drawable.ic_services_ratings_user_pic).into(profile_image);
+//                    }
                 }
 
             @Override
