@@ -20,7 +20,7 @@ import com.example.tgapplication.fragment.favourite.adapter.FavouriteAdapter;
 import com.example.tgapplication.fragment.trip.DetailActivity;
 import com.example.tgapplication.fragment.trip.module.PlanTrip;
 import com.example.tgapplication.fragment.trip.module.TripData;
-import com.example.tgapplication.fragment.trip.module.TripList;
+
 import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.fragment.visitor.adapter.VisitorAdapter;
 import com.google.firebase.auth.FirebaseAuth;

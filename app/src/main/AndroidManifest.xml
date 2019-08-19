@@ -19,7 +19,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity android:name=".MainActivity"
+            android:theme="@style/noToolbar"/>
         <activity android:name=".fragment.member.MembersActivity" />
         <activity
             android:name=".fragment.trip.DetailActivity"
@@ -37,8 +38,7 @@
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".fragment.trip.AddTripActivity"
-            android:parentActivityName=".trips.TripActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+            android:parentActivityName=".trips.TripActivity" />
         <activity android:name=".trips.ProfileVisitorActivity" />
         <activity
             android:name=".chat.MessageActivity"
@@ -54,6 +54,9 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
 
         <activity
             android:name="com.facebook.FacebookActivity"

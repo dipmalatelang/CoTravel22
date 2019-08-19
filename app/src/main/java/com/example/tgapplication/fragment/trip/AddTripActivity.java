@@ -19,6 +19,7 @@ import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.adapter.TripListAdapter;
 import com.example.tgapplication.fragment.trip.module.TripData;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -42,7 +43,8 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
     DatabaseReference reference;
     FirebaseUser fuser;
     Button btn_add_trip;
-    TextView tv_from_date, tv_to_date;
+    TextView tv_from_date1, tv_to_date1;
+    EditText tv_to_date,tv_from_date;
     EditText et_location, et_note;
     Calendar mcalendar = Calendar.getInstance();
     int day, month, year;
@@ -63,10 +65,11 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
         fuser = FirebaseAuth.getInstance().getCurrentUser();
         btn_add_trip = findViewById(R.id.btn_add_trip);
         et_location = findViewById(R.id.et_location);
-        tv_from_date = findViewById(R.id.tv_from_date);
-        tv_to_date = findViewById(R.id.tv_to_date);
+        tv_from_date = findViewById(R.id.tv_from_date1);
+        tv_to_date = findViewById(R.id.tv_to_date1);
         et_note = findViewById(R.id.et_note);
-        toolbar = findViewById(R.id.toolbar);
+//        toolbar = findViewById(R.id.toolbar);
+
 
         tv_from_date.setOnClickListener(this);
         tv_to_date.setOnClickListener(this);
@@ -91,7 +94,7 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
 //        assert getSupportActionBar() != null; //null check
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        setSupportActionBar(toolbar);
+//        setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         displayTripList(fuser.getUid());
