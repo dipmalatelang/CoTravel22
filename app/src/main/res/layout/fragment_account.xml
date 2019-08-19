@@ -9,19 +9,19 @@
     tools:context=".fragment.account.AccountFragment">
 
 
-
     <TextView
         android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:text="Name"
+        android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:textColor="@color/black"
-        app:layout_constraintStart_toEndOf="@+id/ivImage"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_fav"
+        app:layout_constraintTop_toBottomOf="@+id/ivImage" />
 
     <TextView
         android:id="@+id/tvAge"
@@ -39,8 +39,9 @@
         android:layout_height="100dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
         android:src="@drawable/ic_services_ratings_user_pic"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -48,16 +49,17 @@
         android:id="@+id/iv_profile_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
         android:background="@color/colorPrimary"
         android:drawableLeft="@drawable/ic_action_edit"
+        android:drawablePadding="5dp"
         android:gravity="center"
         android:padding="2dp"
-        android:textSize="14sp"
         android:text="Edit Profile"
-        android:drawablePadding="5dp"
-        android:layout_marginTop="4dp"
         android:textColor="@drawable/color_white_to_black"
-        app:layout_constraintStart_toStartOf="@+id/tvName"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvAge" />
 
     <TextView
@@ -65,6 +67,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
+        android:layout_marginEnd="8dp"
         android:background="@color/colorPrimary"
         android:drawableLeft="@drawable/ic_photo_white_24dp"
         android:drawablePadding="5dp"
@@ -74,6 +77,7 @@
         android:textColor="@drawable/color_white_to_black"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/iv_profile_edit"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv_profile_edit"
         app:layout_constraintTop_toTopOf="@+id/iv_profile_edit" />
 
@@ -84,6 +88,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginStart="8dp"
         android:adjustViewBounds="true"
+        android:visibility="gone"
         android:background="@drawable/ic_action_fav"
         android:tag="ic_action_fav_add"
         app:layout_constraintStart_toStartOf="parent"
@@ -96,7 +101,7 @@
         android:layout_margin="5dp"
         android:orientation="horizontal"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/iv_fav">
+        app:layout_constraintTop_toBottomOf="@+id/tv_my_pic">
 
         <Button
             android:id="@+id/btn_details"

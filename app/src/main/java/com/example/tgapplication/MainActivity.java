@@ -67,7 +67,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
 
         switch (item.getItemId()) {
             case R.id.nav_account:
-                fragment = new AccountFragment();
+                fragment = new MyProfileFragment();
                 break;
             case R.id.nav_chat:
                 fragment = new ChatFragment();
