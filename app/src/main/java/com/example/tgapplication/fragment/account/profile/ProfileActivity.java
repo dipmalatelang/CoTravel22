@@ -72,7 +72,7 @@ public class ProfileActivity extends BaseActivity {
             case R.id.iv_info:
                 Log.i(TAG, "onViewClicked: "+ constraintLayout.getHeight());
                 if (constraintLayout.getTranslationY()!=0) {
-                    constraintLayout.animate().translationY(0).alpha(0);
+                    constraintLayout.animate().translationY(0);
                 } else {
                     constraintLayout.animate().translationY(100-constraintLayout.getHeight()).alpha(0.5f);
                 }
