@@ -30,8 +30,8 @@ public class ProfileActivity extends BaseActivity {
     TextView textView;
     @BindView(R.id.constraintLayout)
     ConstraintLayout constraintLayout;
-    @BindView(R.id.bottomNav)
-    ConstraintLayout bottomNav;
+//    @BindView(R.id.bottomNav)
+//    ConstraintLayout bottomNav;
     private int[] images = {R.drawable.image1, R.drawable.login_bg, R.drawable.image1, R.drawable.login_bg, R.drawable.image1};
 
 
@@ -72,9 +72,12 @@ public class ProfileActivity extends BaseActivity {
             case R.id.iv_info:
                 Log.i(TAG, "onViewClicked: "+ constraintLayout.getHeight());
                 if (constraintLayout.getTranslationY()!=0) {
-                    constraintLayout.animate().translationY(0);
+                    constraintLayout.animate().translationY(0).alpha(1);
+//                    bottomNav.animate().translationY(0);
+
                 } else {
-                    constraintLayout.animate().translationY(100-constraintLayout.getHeight()).alpha(0.5f);
+                    constraintLayout.animate().translationY(180-constraintLayout.getHeight()).alpha(0.5f);
+//                    bottomNav.animate().translationY(100-constraintLayout.getHeight());
                 }
 
               /*  Animation animSlideUp = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.slide_up);
