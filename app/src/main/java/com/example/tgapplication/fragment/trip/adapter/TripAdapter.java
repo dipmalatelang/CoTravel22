@@ -44,13 +44,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
     public void onBindViewHolder(final TripViewHolder holder, int position) {
 
         final TripList tList = mTrip.get(position);
-        if(tList.getImageUrl().equalsIgnoreCase("default")||tList.getImageUrl().equalsIgnoreCase(""))
-        {
-            Glide.with(mContext).load(R.drawable.ic_services_ratings_user_pic).into(holder.mImage);
-        }
-        else {
-            Glide.with(mContext).load(tList.getImageUrl()).into(holder.mImage);
-        }
+            Glide.with(mContext).load(tList.getImageUrl()).placeholder(R.drawable.ic_services_ratings_user_pic).into(holder.mImage);
 
         holder.mTitle.setText(tList.getName());
 
