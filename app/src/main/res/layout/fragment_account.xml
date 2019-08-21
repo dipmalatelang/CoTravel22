@@ -111,7 +111,7 @@
             android:textSize="14sp"
             android:layout_marginRight="5dp"
             android:textColor="@drawable/color_black_to_white"
-            android:background="@drawable/border_green"
+            android:background="@drawable/border_primary"
             android:text="Details"
             android:textAllCaps="false"/>
 
@@ -122,7 +122,7 @@
             android:layout_weight="1"
             android:text="Images"
             android:textColor="@drawable/color_black_to_white"
-            android:background="@drawable/border_green"
+            android:background="@drawable/border_primary"
             android:textSize="14sp"
             android:layout_marginLeft="5dp"
             android:textAllCaps="false"/>

@@ -1,19 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:id="@+id/activity_profile_relativelayout"
+    android:id="@+id/activity_profile_coordinatelayout"
     android:focusable="true"
+    android:fitsSystemWindows="true"
     android:focusableInTouchMode="true"
     tools:context=".fragment.trip.EditProfileActivity">
 
-    <ScrollView
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:elevation="4dp">
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="Profile Information"
+            app:titleTextColor="@color/white"
+            app:layout_scrollFlags="scroll|enterAlways|snap"
+            android:theme="@style/AppTheme"/>
 
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -231,6 +252,7 @@
                 android:layout_height="wrap_content"
                 android:textColorHint="@color/background"
                 android:singleLine="true"
+                android:inputType="text"
                 android:hint="City, Region, Country"
                 style="@style/edit_text_profile_edit_style"/>
 
@@ -308,15 +330,19 @@
             <Button
                 android:id="@+id/btn_regi"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center"
-                android:background="@color/colorPrimary"
+                android:background="@drawable/ripple_primary_color"
+                android:textColor="@color/white"
+                android:fontFamily="@font/montserrat"
+                android:textSize="16sp"
                 android:text="Submit"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:textColor="@drawable/color_white_to_black" />
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp" />
 
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
-</RelativeLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

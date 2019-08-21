@@ -12,15 +12,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".login.LoginActivity">
+        <activity android:name=".fragment.trip.MyTripsActivity"></activity>
+        <activity android:name=".login.LoginActivity"
+            android:theme="@style/noToolbar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"
-            android:theme="@style/noToolbar"/>
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/noToolbar" />
         <activity android:name=".fragment.member.MembersActivity" />
         <activity
             android:name=".fragment.trip.DetailActivity"
@@ -28,7 +31,8 @@
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".fragment.trip.FilterTripActivity"
-            android:parentActivityName=".trips.TripActivity" />
+            android:parentActivityName=".trips.TripActivity"
+            android:theme="@style/noToolbar" />
         <activity
             android:name=".trips.TripActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
@@ -38,7 +42,9 @@
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".fragment.trip.AddTripActivity"
-            android:parentActivityName=".trips.TripActivity" />
+            android:parentActivityName=".trips.TripActivity"
+            android:theme="@style/noToolbar"/>
+
         <activity android:name=".trips.ProfileVisitorActivity" />
         <activity
             android:name=".chat.MessageActivity"
@@ -46,9 +52,11 @@
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".fragment.trip.EditProfileActivity"
+            android:label="Profile Information"
             android:parentActivityName=".trips.TripActivity"
-            android:label="Profile Information"/>
-        <activity android:name=".login.RegisterActivity" />
+            android:theme="@style/noToolbar" />
+        <activity android:name=".login.RegisterActivity"
+            android:theme="@style/noToolbar"/>
         <activity android:name=".login.ResetPasswordActivity" />
 
         <meta-data

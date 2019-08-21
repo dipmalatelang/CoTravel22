@@ -237,12 +237,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 if (!input_password.getTransformationMethod().toString().contains("Password")) {
                     input_password.setTransformationMethod(new PasswordTransformationMethod());
                     input_password.setSelection(input_password.getText().length());
-                    input_password.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_eye_off, 0);
+                    input_password.setCompoundDrawablesWithIntrinsicBounds( R.drawable.ic_lock_white_24dp, 0, R.drawable.ic_action_eye_off, 0);
 
                 } else {
                     input_password.setTransformationMethod(new HideReturnsTransformationMethod());
                     input_password.setSelection(input_password.getText().length());
-                    input_password.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_eye, 0);
+                    input_password.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock_white_24dp, 0, R.drawable.ic_action_eye, 0);
                 }
                 return true;
             }

@@ -1,10 +1,16 @@
 package com.example.tgapplication.fragment.trip;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -12,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +26,7 @@ import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.adapter.TripListAdapter;
 import com.example.tgapplication.fragment.trip.module.TripData;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -53,8 +61,10 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
     Toolbar toolbar;
     ArrayList<TripData> trips = new ArrayList<>();
     @BindView(R.id.trip_relativelayout)
-    RelativeLayout tripRelativelayout;
+    CoordinatorLayout tripRelativelayout;
     String edit_id="";
+    LinearLayoutManager ll_manager;
+    AppBarLayout appbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +79,8 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
         tv_to_date = findViewById(R.id.tv_to_date1);
         et_note = findViewById(R.id.et_note);
 //        toolbar = findViewById(R.id.toolbar);
+
+        appbar = findViewById(R.id.appbar);
 
 
         tv_from_date.setOnClickListener(this);
@@ -88,16 +100,54 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
 
         recyclerView = findViewById(R.id.recyclerview_trips);
 
-        LinearLayoutManager ll_manager = new LinearLayoutManager(AddTripActivity.this);
+        ll_manager = new LinearLayoutManager(AddTripActivity.this);
         recyclerView.setLayoutManager(ll_manager);
 
 //        assert getSupportActionBar() != null; //null check
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 //        setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+//        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         displayTripList(fuser.getUid());
+
+        /*tv_from_date.setOnTouchListener((v, event) -> {
+            v.onTouchEvent(event);   // handle the event first
+            InputMethodManager imm = (InputMethodManager)v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);  // hide the soft keyboard
+                DatePickerDialog.OnDateSetListener fromlistener = new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        String sMonth, sDay;
+                        month = monthOfYear + 1;
+                        day = dayOfMonth;
+
+                        if (month < 10) {
+                            sMonth = "0" + month;
+                        } else {
+                            sMonth = String.valueOf(month);
+                        }
+
+                        if (day < 10) {
+                            sDay = "0" + day;
+                        } else {
+                            sDay = String.valueOf(day);
+                        }
+
+                        tv_from_date.setText(new StringBuilder().append(sDay)
+                                .append("/").append(sMonth).append("/").append(year)
+                                .append(" "));
+
+                    }
+                };
+
+                DatePickerDialog fromdpDialog = new DatePickerDialog(AddTripActivity.this, fromlistener, year, month, day);
+                fromdpDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+                fromdpDialog.show();
+            }
+            return true;
+        });*/
 
     }
 
@@ -127,22 +177,20 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
                                         TripData tripData = snapshot1.getValue(TripData.class);
                                         //Log.i("VishalD",""+fuser.getUsername()+" , "+tripData.getLocation());
 
-                                        trips.add(tripData);
+                                        trips.add(0,tripData);
                                     }
                                 }
                                 for (int j = 0; j < trips.size(); j++) {
                                     Log.i("List now", "" + trips.get(j).getLocation());
                                 }
                                 // add code here of adapter
-                                mtripAdapter = new TripListAdapter(AddTripActivity.this, uid, trips, new TripListAdapter.TripListInterface() {
-                                    @Override
-                                    public void sendTripLiist(List<TripData> tripDataList, int position) {
-                                        et_location.setText(tripDataList.get(position).getLocation());
-                                        et_note.setText(tripDataList.get(position).getTrip_note());
-                                        tv_from_date.setText(tripDataList.get(position).getFrom_date());
-                                        tv_to_date.setText(tripDataList.get(position).getTo_date());
-                                        edit_id=tripDataList.get(position).getId();
-                                    }
+                                mtripAdapter = new TripListAdapter(AddTripActivity.this, uid, trips, (tripDataList, position) -> {
+                                    et_location.setText(tripDataList.get(position).getLocation());
+                                    et_note.setText(tripDataList.get(position).getTrip_note());
+                                    tv_from_date.setText(tripDataList.get(position).getFrom_date());
+                                    tv_to_date.setText(tripDataList.get(position).getTo_date());
+                                    edit_id=tripDataList.get(position).getId();
+                                    appbar.setExpanded(true);
                                 });
                                 recyclerView.setAdapter(mtripAdapter);
                             }
@@ -157,8 +205,7 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
     private void Trips(String edit_id) {
         reference = FirebaseDatabase.getInstance().getReference("Trips").child(fuser.getUid());
         String userId;
-        if(!edit_id.equalsIgnoreCase(""))
-        {
+        if(!edit_id.equalsIgnoreCase("")) {
             userId=edit_id;
             snackBar(tripRelativelayout, "Trip edited Successfully..!");
             dismissProgressDialog();
@@ -214,7 +261,7 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
                 }
                 break;
 
-            case R.id.tv_from_date:
+            case R.id.tv_from_date1:
                 DatePickerDialog.OnDateSetListener fromlistener = new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -246,7 +293,7 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
                 fromdpDialog.show();
                 break;
 
-            case R.id.tv_to_date:
+            case R.id.tv_to_date1:
                 DatePickerDialog.OnDateSetListener tolistener = new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
