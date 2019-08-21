@@ -64,8 +64,10 @@ public class TripListAdapter extends RecyclerView.Adapter<TripListAdapter.TripHo
     @Override
     public void onBindViewHolder(final TripHolder holder, int position) {
         final TripData tripDetails=tripDataList.get(position);
+        String myString = tripDetails.getLocation();
 
-        holder.tv_city.setText(tripDetails.getLocation());
+        String City = myString.substring(0,1).toUpperCase() + myString.substring(1);
+        holder.tv_city.setText(City);
         holder.tv_date.setText(tripDetails.getFrom_date()+" - "+tripDetails.getTo_date());
 
         holder.btn_delete.setOnClickListener(new View.OnClickListener() {
@@ -110,4 +112,5 @@ public class TripListAdapter extends RecyclerView.Adapter<TripListAdapter.TripHo
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_trips, parent, false);
         return new TripHolder(v);
     }
+
 }

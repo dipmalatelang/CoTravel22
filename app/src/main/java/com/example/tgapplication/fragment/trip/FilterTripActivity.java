@@ -10,8 +10,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
+
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.MainActivity;
@@ -33,13 +34,13 @@ public class FilterTripActivity extends BaseActivity implements View.OnClickList
     RadioGroup rg_trip;
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
-    RelativeLayout activity_filter_trip_relativelayout;
+    CoordinatorLayout activity_filter_trip_coodinatelayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter_trip);
-        activity_filter_trip_relativelayout =findViewById(R.id.activity_filter_trip_relativelayout);
+        activity_filter_trip_coodinatelayout = findViewById(R.id.activity_filter_trip_coodinatelayout);
 
         initComponent();
 
@@ -79,7 +80,7 @@ public class FilterTripActivity extends BaseActivity implements View.OnClickList
         }
 
         assert getSupportActionBar() != null; //null check
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    //    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -146,47 +147,38 @@ public class FilterTripActivity extends BaseActivity implements View.OnClickList
 //        rb_visit=findViewById(R.id.rb_visit);
         et_city=findViewById(R.id.et_city);
 
-        adapter_lang = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, array_lang);
+        adapter_lang = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, array_lang);
         adapter_lang.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-
         spinner_lang.setAdapter(adapter_lang);
 
-        adapter_look = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, array_look);
+        adapter_look = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, array_look);
         adapter_look.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         spinner_look.setAdapter(adapter_look);
 
-
         adapter_eyes = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, array_eyes);
-        adapter_eyes.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        adapter_eyes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_eyes.setAdapter(adapter_eyes);
 
         adapter_hairs = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, array_hairs);
-        adapter_hairs.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        adapter_hairs.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_hairs.setAdapter(adapter_hairs);
 
         adapter_height = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, array_height);
-        adapter_height.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        adapter_height.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_height.setAdapter(adapter_height);
 
         adapter_bodytype = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, array_bodytype);
-        adapter_bodytype.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        adapter_bodytype.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_bodytype.setAdapter(adapter_bodytype);
 
-        adapter_from = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, array_from);
+        adapter_from = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, array_from);
         adapter_from.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         spinner_from.setAdapter(adapter_from);
 
-        adapter_to = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, array_to);
+        adapter_to = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, array_to);
         adapter_to.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         spinner_to.setAdapter(adapter_to);
+
         spinner_to.setSelection(adapter_to.getPosition("99"));
 
         btn_add_trip.setOnClickListener(this);
@@ -229,7 +221,7 @@ public class FilterTripActivity extends BaseActivity implements View.OnClickList
             case R.id.btn_add_trip:
 
                 if (et_city.getText().toString().length()<=0){
-                    snackBar(activity_filter_trip_relativelayout,"Please enter city name");
+                    snackBar(activity_filter_trip_coodinatelayout,"Please enter city name");
                 }
                 else
                 {

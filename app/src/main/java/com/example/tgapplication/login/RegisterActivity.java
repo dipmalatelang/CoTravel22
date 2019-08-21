@@ -2,6 +2,7 @@ package com.example.tgapplication.login;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
@@ -113,6 +114,10 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
         relativelayout = findViewById(R.id.relativelayout);
 
+        TextView cl_register_form = findViewById(R.id.tv_title_text);
+        cl_register_form.setPaintFlags(cl_register_form.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        cl_register_form.setText(getResources().getString(R.string.register));
+
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 //        value = getIntent().getExtras().getString("nextActivity");
@@ -149,7 +154,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         setPopup();
 
         assert getSupportActionBar() != null; //null check
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void initAge() {
@@ -467,14 +472,14 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 {
                     regi_et_pass.setTransformationMethod(new PasswordTransformationMethod());
                     regi_et_pass.setSelection(regi_et_pass.getText().length());
-                    regi_et_pass.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_eye_off, 0);
+                    regi_et_pass.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock_white_24dp, 0, R.drawable.ic_action_eye_off, 0);
 
                 }
                 else
                 {
                     regi_et_pass.setTransformationMethod(new HideReturnsTransformationMethod());
                     regi_et_pass.setSelection(regi_et_pass.getText().length());
-                    regi_et_pass.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_eye, 0);
+                    regi_et_pass.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock_white_24dp, 0, R.drawable.ic_action_eye, 0);
                 }
                 return true;
             }

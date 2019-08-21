@@ -269,6 +269,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    public String firstletterCap(String myString){
+        return myString.substring(0,1).toUpperCase() + myString.substring(1);
+    }
+
+
 
 
 /*    private void getDataToFilter() {

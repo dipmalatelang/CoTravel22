@@ -15,9 +15,10 @@ import android.widget.ListPopupWindow;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
@@ -49,7 +50,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     TextView TV_dob;
     int day, month, year;
     CheckBox cb_girl, cb_men;
-    RelativeLayout activity_profile_relativelayout;
+    CoordinatorLayout activity_profile_coordinatelayout;
     FirebaseUser fuser;
     String value;
     User prevUser;
@@ -84,7 +85,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         et_visit = findViewById(R.id.et_visit);
         rg_gender = findViewById(R.id.rg_gender);
         TV_dob = findViewById(R.id.tv_dob);
-        activity_profile_relativelayout = findViewById(R.id.activity_profile_relativelayout);
+        activity_profile_coordinatelayout = findViewById(R.id.activity_profile_coordinatelayout);
 
         Sp_bodytype = findViewById(R.id.sp_body_type);
         Sp_hairs = findViewById(R.id.sp_hair);
@@ -335,7 +336,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
 
         databaseReference.setValue(userClass);
 
-        snackBar(activity_profile_relativelayout, "Your profile has been successfully updated");
+        snackBar(activity_profile_coordinatelayout, "Your profile has been successfully updated");
         finish();
 //        updateUI(user);
 
@@ -415,11 +416,11 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
 
                 if (et_name.getText().toString().length() <= 0) {
 
-                    snackBar(activity_profile_relativelayout, "Please enter your name");
+                    snackBar(activity_profile_coordinatelayout, "Please enter your name");
                 } else if (et_location.getText().toString().length() <= 0) {
-                    snackBar(activity_profile_relativelayout, "Enter a city you want to visit");
+                    snackBar(activity_profile_coordinatelayout, "Enter a city you want to visit");
                 } else if (et_visit.getText().toString().length() <= 0) {
-                    snackBar(activity_profile_relativelayout, "Please enter your location");
+                    snackBar(activity_profile_coordinatelayout, "Please enter your location");
 
                 } else {
                     int selectedGender = rg_gender.getCheckedRadioButtonId();

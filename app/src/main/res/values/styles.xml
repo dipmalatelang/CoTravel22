@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
     </style>
 
     <style name="MenuStyle" parent="Theme.AppCompat.Light">
@@ -22,15 +23,18 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+
+
     <style name="TextInputLayoutAppearance" parent="Widget.Design.TextInputLayout">
         <!-- reference our hint & error styles -->
         <item name="hintTextAppearance">@style/HintText</item>
         <item name="errorTextAppearance">@style/ErrorText</item>
         <item name="android:textColor">@color/white</item>
-        <item name="android:textColorHint">@color/colorPrimary</item>
+        <item name="android:textColorHint">@color/white</item>
         <item name="colorControlNormal">@color/white</item>
-        <item name="colorControlActivated">@color/colorPrimary</item>
-        <item name="colorControlHighlight">@color/green</item>
+        <item name="colorControlActivated">@color/white</item>
+        <item name="colorControlHighlight">@color/white</item>
+        <item name="android:fontFamily">@font/montserrat</item>
     </style>
 
     <style name="Larger_Drawable">
@@ -43,7 +47,7 @@
         <item name="android:background">@color/background</item>
         <item name="android:fontFamily">@font/montserrat</item>
         <item name="android:gravity">start</item>
-        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingTop">6dp</item>
         <item name="android:paddingStart">12dp</item>
         <item name="android:paddingBottom">4dp</item>
         <item name="android:textColor">@color/black</item>
@@ -62,15 +66,16 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <!--EditProfile-->
     <style name="edit_text_profile_edit_style">
         <item name="android:fontFamily">@font/montserrat</item>
         <item name="android:gravity">start|center_vertical</item>
         <item name="android:textColor">@color/ebony</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textColorHint">@color/background</item>
-        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingTop">6dp</item>
         <item name="android:paddingStart">12dp</item>
-        <item name="android:paddingBottom">4dp</item>
+        <item name="android:paddingBottom">6dp</item>
         <item name="android:background">@drawable/ripple_white</item>
     </style>
 
@@ -96,7 +101,7 @@
         <item name="boxStrokeColor">@color/colorPrimary</item>
         <item name="android:textColorHint">@color/background</item>
         <item name="hintTextAppearance">@style/AppTheme.TextFloatLabelAppearance</item>
-        <item name="android:textCursorDrawable">@drawable/green_cursor</item>
+        <item name="android:textCursorDrawable">@drawable/cursor_primary</item>
     </style>
 
     <style name="AppTheme.TextFloatLabelAppearance" parent="TextAppearance.Design.Hint">
@@ -105,4 +110,13 @@
         <item name="android:textSize">16sp</item>
         <item name="android:backgroundTint">@color/pink</item>
     </style>
+
+    <style name="NoActionBarFullScreen" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+
 </resources>
