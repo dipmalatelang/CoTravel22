@@ -79,7 +79,7 @@ public class ProfileActivity extends BaseActivity {
 
               /*  Animation animSlideUp = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.slide_up);
                 constraintLayout.startAnimation(animSlideUp);*/
-
+//                Need to change
 
                 break;
             case R.id.iv_msg:
