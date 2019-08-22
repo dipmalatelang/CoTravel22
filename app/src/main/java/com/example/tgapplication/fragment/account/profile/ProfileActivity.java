@@ -3,12 +3,8 @@ package com.example.tgapplication.fragment.account.profile;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
-import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -30,7 +26,9 @@ public class ProfileActivity extends BaseActivity {
     TextView textView;
     @BindView(R.id.constraintLayout)
     ConstraintLayout constraintLayout;
-//    @BindView(R.id.bottomNav)
+    @BindView(R.id.profile_details)
+    ConstraintLayout profileDetails;
+    //    @BindView(R.id.bottomNav)
 //    ConstraintLayout bottomNav;
     private int[] images = {R.drawable.image1, R.drawable.login_bg, R.drawable.image1, R.drawable.login_bg, R.drawable.image1};
 
@@ -70,13 +68,27 @@ public class ProfileActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_info:
-                Log.i(TAG, "onViewClicked: "+ constraintLayout.getHeight());
-                if (constraintLayout.getTranslationY()!=0) {
-                    constraintLayout.animate().translationY(0).alpha(1);
+                Log.i(TAG, "onViewClicked: " + constraintLayout.getHeight());
+                if (constraintLayout.getTranslationY() != 0) {
+                    constraintLayout.animate().translationY(0).alpha(1).setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationStart(Animator animation) {
+                            super.onAnimationStart(animation);
+                            profileDetails.setVisibility(View.GONE);
+                        }
+                    });
 //                    bottomNav.animate().translationY(0);
 
+
                 } else {
-                    constraintLayout.animate().translationY(180-constraintLayout.getHeight()).alpha(0.5f);
+                    constraintLayout.animate().translationY(180 - constraintLayout.getHeight()).alpha(0.5f).setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            profileDetails.setVisibility(View.VISIBLE);
+                        }
+                    });
+
 //                    bottomNav.animate().translationY(100-constraintLayout.getHeight());
                 }
 
