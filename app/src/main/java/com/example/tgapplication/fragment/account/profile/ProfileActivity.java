@@ -13,6 +13,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
+import com.google.android.material.chip.Chip;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,12 +23,12 @@ public class ProfileActivity extends BaseActivity {
 
     ViewPager viewPager;
     CustomAdapter adapter;
-    @BindView(R.id.textView)
-    TextView textView;
     @BindView(R.id.constraintLayout)
     ConstraintLayout constraintLayout;
     @BindView(R.id.profile_details)
     ConstraintLayout profileDetails;
+    @BindView(R.id.textView)
+    Chip textView;
     //    @BindView(R.id.bottomNav)
 //    ConstraintLayout bottomNav;
     private int[] images = {R.drawable.image1, R.drawable.login_bg, R.drawable.image1, R.drawable.login_bg, R.drawable.image1};
