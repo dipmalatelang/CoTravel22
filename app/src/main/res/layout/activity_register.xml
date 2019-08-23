@@ -112,6 +112,30 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInput_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:theme="@style/TextInputLayoutAppearance"
+            app:layout_constraintTop_toBottomOf="@+id/textInput_password">
+
+            <EditText
+                android:id="@+id/regi_et_location"
+                android:padding="10dp"
+                android:inputType="textCapCharacters"
+                android:textColor="@color/white"
+                android:textCursorDrawable="@drawable/cursor_white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Where are you from"
+                android:focusable="false"
+                android:drawableStart="@drawable/ic_trip_white_24dp"
+                android:drawablePadding="5dp"
+                android:textSize="16sp"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
         <TextView
             android:id="@+id/tv_age_text"
             android:layout_width="wrap_content"
@@ -124,7 +148,7 @@
             android:layout_marginStart="5dp"
             android:fontFamily="@font/montserrat"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInput_password"/>
+            app:layout_constraintTop_toBottomOf="@+id/textInput_location"/>
 
         <Spinner
             android:id="@+id/sp_age"
