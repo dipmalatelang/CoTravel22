@@ -2,10 +2,10 @@ package com.example.tgapplication.fragment.account.profile;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -13,6 +13,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
+import com.google.android.material.chip.Chip;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,12 +23,14 @@ public class ProfileActivity extends BaseActivity {
 
     ViewPager viewPager;
     CustomAdapter adapter;
-    @BindView(R.id.textView)
-    TextView textView;
     @BindView(R.id.constraintLayout)
     ConstraintLayout constraintLayout;
     @BindView(R.id.profile_details)
     ConstraintLayout profileDetails;
+    @BindView(R.id.textView)
+    Chip textView;
+    @BindView(R.id.textProfile)
+    Chip textProfile;
     //    @BindView(R.id.bottomNav)
 //    ConstraintLayout bottomNav;
     private int[] images = {R.drawable.image1, R.drawable.login_bg, R.drawable.image1, R.drawable.login_bg, R.drawable.image1};
@@ -64,7 +67,7 @@ public class ProfileActivity extends BaseActivity {
 
     }
 
-    @OnClick({R.id.iv_info, R.id.iv_msg, R.id.iv_trip})
+    @OnClick({R.id.iv_info, R.id.iv_msg, R.id.iv_trip, R.id.textProfile})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_info:
@@ -105,6 +108,9 @@ public class ProfileActivity extends BaseActivity {
                 }
 
                 break;
+            case R.id.textProfile:
+                startActivity(new Intent(this,EditPhotoActivity.class));
+                break;
             case R.id.iv_trip:
                 if (constraintLayout.getVisibility() == View.GONE) {
                     constraintLayout.setVisibility(View.VISIBLE);
@@ -115,4 +121,5 @@ public class ProfileActivity extends BaseActivity {
                 break;
         }
     }
+
 }
