@@ -1,15 +1,23 @@
 package com.example.tgapplication.fragment.trip;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
 import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListPopupWindow;
 import android.widget.MultiAutoCompleteTextView;
@@ -17,12 +25,24 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.example.tgapplication.BaseActivity;
+import com.example.tgapplication.BuildConfig;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.User;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -35,11 +55,14 @@ import com.pnikosis.materialishprogress.ProgressWheel;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class EditProfileActivity extends BaseActivity implements View.OnClickListener {
 
@@ -54,7 +77,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     FirebaseUser fuser;
     String value;
     User prevUser;
-    ArrayList<String> str_look=new ArrayList<>();
+    ArrayList<String> str_look = new ArrayList<>();
 
     DatabaseReference databaseReference;
 
@@ -74,11 +97,22 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     private ArrayList<User> prevUserList = new ArrayList<>();
     ArrayAdapter<String> Nationalityadapter, Languageadapter, Heightadapter, Bodyadapter, Hairadapter, Eyesadapter;
 
+    @BindView(R.id.imgv_location)
+    ImageView imgv_location;
+    @BindView(R.id.imgv_dream_location)
+    ImageView imgv_dream_location;
+
+
+    int AUTOCOMPLETE_REQUEST_CODE = 108;
+    int AUTOCOMPLETE_REQUEST_CODE_DREAM = 109;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
+        Places.initialize(getApplicationContext(), BuildConfig.map_api_key);
+
         btn_regi = findViewById(R.id.btn_regi);
         et_name = findViewById(R.id.et_name);
         et_location = findViewById(R.id.et_location);
@@ -119,9 +153,6 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         btn_regi.setOnClickListener(this);
 
 
-
-
-
         String[] nationalitySpinner = new String[]{
                 "Afghan", "Albanian", "Algerian", "American", "Andorran", "Angolan", "Antiguans", "Argentinean", "Armenian", "Australian", "Austrian", "Azerbaijani", "Bahamian", "Bahraini", "Bangladeshi", "Barbadian", "Barbudans", "Batswana", "Belarusian", "Belgian", "Belizean", "Beninese", "Bhutanese", "Bolivian", "Bosnian", "Brazilian", "British", "Bruneian", "Bulgarian", "Burkinabe", "Burmese", "Burundian", "Cambodian", "Cameroonian", "Canadian", "Cape Verdean", "Central African", "Chadian", "Chilean", "Chinese", "Colombian", "Comoran", "Congolese", "Costa Rican", "Croatian", "Cuban", "Cypriot", "Czech", "Danish", "Djibouti", "Dominican", "Dutch", "East Timorese", "Ecuadorean", "Egyptian", "Emirian", "Equatorial Guinean", "Eritrean", "Estonian", "Ethiopian", "Fijian", "Filipino", "Finnish", "French", "Gabonese", "Gambian", "Georgian", "German", "Ghanaian", "Greek", "Grenadian", "Guatemalan", "Guinea-Bissauan", "Guinean", "Guyanese", "Haitian", "Herzegovinian", "Honduran", "Hungarian", "Icelander", "Indian", "Indonesian", "Iranian", "Iraqi", "Irish", "Israeli", "Italian", "Ivorian", "Jamaican", "Japanese", "Jordanian", "Kazakhstani", "Kenyan", "Kittian and Nevisian", "Kuwaiti", "Kyrgyz", "Laotian", "Latvian", "Lebanese", "Liberian", "Libyan", "Liechtensteiner", "Lithuanian", "Luxembourger", "Macedonian", "Malagasy", "Malawian", "Malaysian", "Maldivan", "Malian", "Maltese", "Marshallese", "Mauritanian", "Mauritian", "Mexican", "Micronesian", "Moldovan", "Monacan", "Mongolian", "Moroccan", "Mosotho", "Motswana", "Mozambican", "Namibian", "Nauruan", "Nepalese", "New Zealander", "Ni-Vanuatu", "Nicaraguan", "Nigerien", "North Korean", "Northern Irish", "Norwegian", "Omani", "Pakistani", "Palauan", "Panamanian", "Papua New Guinean", "Paraguayan", "Peruvian", "Polish", "Portuguese", "Qatari", "Romanian", "Russian", "Rwandan", "Saint Lucian", "Salvadoran", "Samoan", "San Marinese", "Sao Tomean", "Saudi", "Scottish", "Senegalese", "Serbian", "Seychellois", "Sierra Leonean", "Singaporean", "Slovakian", "Slovenian", "Solomon Islander", "Somali", "South African", "South Korean", "Spanish", "Sri Lankan", "Sudanese", "Surinamer", "Swazi", "Swedish", "Swiss", "Syrian", "Taiwanese", "Tajik", "Tanzanian", "Thai", "Togolese", "Tongan", "Trinidadian or Tobagonian", "Tunisian", "Turkish", "Tuvaluan", "Ugandan", "Ukrainian", "Uruguayan", "Uzbekistani", "Venezuelan", "Vietnamese", "Welsh", "Yemenite", "Zambian", "Zimbabwean"
         };
@@ -135,15 +166,15 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         };
 
         String[] BodyTypeSpinner = new String[]{
-                "Slim", "Athletic", "Average", "Curvy", "Heavy"
+                "Select", "Slim", "Athletic", "Average", "Curvy", "Heavy"
         };
 
         String[] HairSpinner = new String[]{
-                "Blond", "Brown", "Black", "Red", "Auburn", "Grey", "Other"
+                "Select", "Blond", "Brown", "Black", "Red", "Auburn", "Grey", "Other"
         };
 
         String[] EyeSpinner = new String[]{
-                "Brown", "Blue", "Green", "Hazel", "Gray", "Amber", "Other"
+                "Select", "Brown", "Blue", "Green", "Hazel", "Gray", "Amber", "Other"
         };
 
         Nationalityadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, nationalitySpinner);
@@ -203,7 +234,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
                 dobDialog.show();
             }
         });
-
+        manageBlinkEffect();
         setPopup();
 
         setPopup1();
@@ -229,7 +260,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
                         }
                         if (prevUserList.size() > 0) {
                             for (int i = 0; i < prevUserList.size(); i++)
-                                setDefaultVal(prevUserList.get(i).getName(), prevUserList.get(i).getDob(),prevUserList.get(i).getGender(), prevUserList.get(i).getAge(), prevUserList.get(i).getLook(), prevUserList.get(i).getLocation(), prevUserList.get(i).getNationality(), prevUserList.get(i).getLang(), prevUserList.get(i).getHeight(), prevUserList.get(i).getBody_type(), prevUserList.get(i).getEyes(), prevUserList.get(i).getHair(), prevUserList.get(i).getVisit(), "", "", prevUserList.get(i).getImageURL());
+                                setDefaultVal(prevUserList.get(i).getName(), prevUserList.get(i).getDob(), prevUserList.get(i).getGender(), prevUserList.get(i).getAge(), prevUserList.get(i).getLook(), prevUserList.get(i).getLocation(), prevUserList.get(i).getNationality(), prevUserList.get(i).getLang(), prevUserList.get(i).getHeight(), prevUserList.get(i).getBody_type(), prevUserList.get(i).getEyes(), prevUserList.get(i).getHair(), prevUserList.get(i).getVisit(), "", "", prevUserList.get(i).getImageURL());
                         }
                     }
 
@@ -241,42 +272,35 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         );
     }
 
-    private void setDefaultVal(String name, String dob,String gender, String age, ArrayList<String> look, String location, String nationality, String lang, String height, String body_type, String eyes, String hair, String visit, String s, String s1, String imageURL) {
+    private void setDefaultVal(String name, String dob, String gender, String age, ArrayList<String> look, String location, String nationality, String lang, String height, String body_type, String eyes, String hair, String visit, String s, String s1, String imageURL) {
         et_name.setText(name);
         et_location.setText(location);
         et_visit.setText(visit);
         suggestion_nationality.setText(nationality);
-        if(lang!=null && !lang.equalsIgnoreCase(""))
-        {
-            suggestion_lang.setText(lang+", ");
-        }
-        else {
+        if (lang != null && !lang.equalsIgnoreCase("")) {
+            suggestion_lang.setText(lang + ", ");
+        } else {
             suggestion_lang.setText(lang);
         }
         suggestion_height.setText(height);
         TV_dob.setText(dob);
-        str_look=look;
+        str_look = look;
         Sp_hairs.setSelection(Hairadapter.getPosition(hair));
         Sp_eyes.setSelection(Eyesadapter.getPosition(eyes));
         Sp_bodytype.setSelection(Bodyadapter.getPosition(body_type));
 
         if (gender.equalsIgnoreCase("female")) {
             rbFemale.setChecked(true);
-        }
-        else if (gender.equalsIgnoreCase("male")) {
+        } else if (gender.equalsIgnoreCase("male")) {
             rbMale.setChecked(true);
         }
 
 
-        for(int i=0;i<look.size();i++)
-        {
-        Log.i("TAG", "setDefaultVal: "+look.get(i));
-            if(look.get(i).equalsIgnoreCase("female"))
-            {
+        for (int i = 0; i < look.size(); i++) {
+            Log.i("TAG", "setDefaultVal: " + look.get(i));
+            if (look.get(i).equalsIgnoreCase("female")) {
                 cb_girl.setChecked(true);
-            }
-            else if(look.get(i).equalsIgnoreCase("male"))
-            {
+            } else if (look.get(i).equalsIgnoreCase("male")) {
                 cb_men.setChecked(true);
             }
         }
@@ -400,7 +424,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
                 } else {
                     str_look.remove("female");
                 }
-                Log.i("TAG", "onClick: 1"+str_look.size());
+                Log.i("TAG", "onClick: 1" + str_look.size());
                 break;
             case R.id.cb_men:
                 boolean checkedmen = ((CheckBox) v).isChecked();
@@ -409,7 +433,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
                 } else {
                     str_look.remove("male");
                 }
-                Log.i("TAG", "onClick: 2"+str_look.size());
+                Log.i("TAG", "onClick: 2" + str_look.size());
                 break;
 
             case R.id.btn_regi:
@@ -449,4 +473,66 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
                 break;
         }
     }
+
+
+    @OnClick({R.id.imgv_location,R.id.imgv_dream_location})
+    public void onClickBind(View v) {
+
+        List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS);
+        Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields).build(this);
+
+        switch (v.getId()) {
+            case R.id.imgv_location:
+
+                startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+                break;
+
+            case R.id.imgv_dream_location:
+                startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE_DREAM);
+                break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                Log.i(TAG, "Placeq: " + place.getName() + ", " + place.getId() + ", " + place.getAddress());
+                et_location.setText(place.getName());
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                // TODO: Handle the error.
+                Status status = Autocomplete.getStatusFromIntent(data);
+                Log.i(TAG, status.getStatusMessage());
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+        }else if (requestCode == AUTOCOMPLETE_REQUEST_CODE_DREAM) {
+            if (resultCode == RESULT_OK) {
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                Log.i(TAG, "Placeq: " + place.getName() + ", " + place.getId() + ", " + place.getAddress());
+                et_visit.setText(place.getName());
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                // TODO: Handle the error.
+                Status status = Autocomplete.getStatusFromIntent(data);
+                Log.i(TAG, status.getStatusMessage());
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+        }
+    }
+
+    private void manageBlinkEffect() {
+        Animation animation = new AlphaAnimation((float) 1.0, (float) 0.1); // Change alpha from fully visible to invisible
+        animation.setDuration(500); // duration - half a second
+        animation.setInterpolator(new LinearInterpolator()); // do not alter
+        // animation
+        // rate
+        animation.setRepeatCount(Animation.INFINITE); // Repeat animation
+        // infinitely
+        animation.setRepeatMode(Animation.REVERSE);
+        imgv_location.startAnimation(animation);
+        imgv_dream_location.startAnimation(animation);
+    }
+
 }

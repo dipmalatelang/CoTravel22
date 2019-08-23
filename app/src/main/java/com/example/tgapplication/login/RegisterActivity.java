@@ -21,11 +21,13 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.tgapplication.BaseActivity;
+import com.example.tgapplication.BuildConfig;
 import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.User;
@@ -36,8 +38,15 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
@@ -52,6 +61,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 public class RegisterActivity extends BaseActivity implements View.OnClickListener, View.OnTouchListener {
@@ -64,7 +74,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     Button btn_register, btn_save_register;
     ArrayList<String> look = new ArrayList<>();
     ArrayList<String> range_age=new ArrayList<>();
-    EditText regi_et_name, regi_et_email, regi_et_pass;
+    EditText regi_et_name, regi_et_email, regi_et_pass,regi_et_location;
+    TextInputLayout textInput_location;
     DatabaseReference databaseReference;
 
     LinearLayout travelprefer_form;
@@ -83,6 +94,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_register);
+        Places.initialize(getApplicationContext(), BuildConfig.map_api_key);
 
         // Initialize Facebook Login button
         mCallbackManager = CallbackManager.Factory.create();
@@ -93,6 +105,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         regi_et_name=findViewById(R.id.regi_et_name);
         regi_et_email=findViewById(R.id.regi_et_email);
         regi_et_pass=findViewById(R.id.regi_et_pass);
+        regi_et_location=findViewById(R.id.regi_et_location);
+        textInput_location=findViewById(R.id.textInput_location);
         regi_rg=findViewById(R.id.regi_rg);
 
         cb_regi_girl=findViewById(R.id.cb_regi_girl);
@@ -128,6 +142,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         initAge();
 
         regi_et_pass.setOnTouchListener(this);
+        regi_et_location.setOnClickListener(this);
+        textInput_location.setOnClickListener(this);
 
         loginButton.setReadPermissions("email", "public_profile");
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
@@ -244,18 +260,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         finish();
         return true;
     }
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // Pass the activity result back to the Facebook SDK
-        mCallbackManager.onActivityResult(requestCode, resultCode, data);
-    }
-
-
-
 
     private void updateUI(FirebaseUser account) {
         if (account != null) {
@@ -415,6 +419,13 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
                 break;
 
+            case R.id.textInput_location: case R.id.regi_et_location:
+                Toast.makeText(this, "ffffffffff", Toast.LENGTH_SHORT).show();
+                List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS);
+                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields).build(this);
+                startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+                break;
+
         }
     }
 
@@ -485,6 +496,27 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             }
         }
         return false;
+    }
+
+    int AUTOCOMPLETE_REQUEST_CODE = 110;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                Log.i(TAG, "Placeq: " + place.getName() + ", " + place.getId() + ", " + place.getAddress());
+                regi_et_location.setText(place.getName());
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                // TODO: Handle the error.
+                Status status = Autocomplete.getStatusFromIntent(data);
+                Log.i(TAG, status.getStatusMessage());
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+        }else {
+            // Pass the activity result back to the Facebook SDK
+            mCallbackManager.onActivityResult(requestCode, resultCode, data);
+        }
     }
 }
 
