@@ -12,6 +12,8 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.google.firebase.database.DatabaseReference;
@@ -44,7 +46,9 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
     public void onBindViewHolder(final TripViewHolder holder, int position) {
 
         final TripList tList = mTrip.get(position);
-            Glide.with(mContext).load(tList.getImageUrl()).placeholder(R.drawable.ic_services_ratings_user_pic).into(holder.mImage);
+            Glide.with(mContext).load(tList.getImageUrl())
+                    .placeholder(R.drawable.ic_services_ratings_user_pic)
+                    .into(holder.mImage);
 
         holder.mTitle.setText(tList.getName());
 

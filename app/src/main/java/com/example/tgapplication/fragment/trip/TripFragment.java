@@ -58,8 +58,7 @@ public class TripFragment extends BaseFragment {
     SharedPreferences.Editor editor;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_trip, container, false);
         fuser=FirebaseAuth.getInstance().getCurrentUser();
@@ -381,7 +380,7 @@ public class TripFragment extends BaseFragment {
                 visitArray.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-//                            for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+//                  for (DataSnapshot snapshot1 : snapshot.getChildren()) {
 
                     FavList favData = snapshot.getValue(FavList.class);
                     visitArray.add(favData.getId());
