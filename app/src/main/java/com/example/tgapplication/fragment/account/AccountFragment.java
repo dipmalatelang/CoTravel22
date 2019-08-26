@@ -417,9 +417,7 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
 
         if(getActivity()!=null)
         {
-            if (imageUrl != null && !imageUrl.equalsIgnoreCase("") && !imageUrl.equalsIgnoreCase("default")) {
-                Glide.with(getActivity()).load(imageUrl).into(mTrip);
-            }
+                Glide.with(getActivity()).load(imageUrl).placeholder(R.drawable.ic_services_ratings_user_pic).into(mTrip);
         }
     }
 

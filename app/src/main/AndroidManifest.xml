@@ -84,7 +84,7 @@
         </activity>
 
         <activity android:name=".fragment.account.profile.ProfileActivity"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/noToolbar" />
         <activity android:name=".fragment.account.profile.EditPhotoActivity"/>
     </application>
 
