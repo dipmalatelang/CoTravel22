@@ -111,11 +111,11 @@ public class FilterTripActivity extends BaseActivity implements View.OnClickList
                 "71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90",
                 "91","92","93","94","95","96","97","98","99"));
 
-        array_eyes = new ArrayList<>(Arrays.asList("Brown", "Blue", "Green", "Hazel", "Gray", "Amber", "Other"));
+        array_eyes = new ArrayList<>(Arrays.asList("All","Brown", "Blue", "Green", "Hazel", "Gray", "Amber", "Other"));
 
-        array_hairs = new ArrayList<>(Arrays.asList("Blond", "Brown", "Black", "Red", "Auburn", "Grey", "Other"));
+        array_hairs = new ArrayList<>(Arrays.asList("All","Blond", "Brown", "Black", "Red", "Auburn", "Grey", "Other"));
 
-        array_height = new ArrayList<>(Arrays.asList("150 cm (4'11\")", "151 cm (4'11\")", "152 cm (5'00\")",
+        array_height = new ArrayList<>(Arrays.asList("All","150 cm (4'11\")", "151 cm (4'11\")", "152 cm (5'00\")",
                 "153 cm (5'00\")", "154 cm (5'00\")", "155 cm (5'01\")", "156 cm (5'01\")", "157 cm (5'02\")",
                 "158 cm (5'02\")", "159 cm (5'02\")", "160 cm (5'03\")", "161 cm (5'03\")", "162 cm (5'03\")",
                 "163 cm (5'04\")", "164 cm (5'04\")", "165 cm (5'05\")", "166 cm (5'05\")", "167 cm (5'05\")",
@@ -131,7 +131,7 @@ public class FilterTripActivity extends BaseActivity implements View.OnClickList
                 "213 cm (7'00\")", "214 cm (7'00\")", "215 cm (7'00\")", "216 cm (7'01\")", "217 cm (7'01\")",
                 "218 cm (7'02\")", "219 cm (7'02\")", "220 cm (7'02\")"));
 
-        array_bodytype = new ArrayList<>(Arrays.asList("Slim", "Athletic", "Average", "Curvy", "Heavy"));
+        array_bodytype = new ArrayList<>(Arrays.asList("All","Slim", "Athletic", "Average", "Curvy", "Heavy"));
 
         spinner_lang=findViewById(R.id.spinner_lang);
         spinner_look=findViewById(R.id.spinner_look);

@@ -420,7 +420,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 break;
 
             case R.id.textInput_location: case R.id.regi_et_location:
-                Toast.makeText(this, "ffffffffff", Toast.LENGTH_SHORT).show();
                 List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS);
                 Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields).build(this);
                 startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);

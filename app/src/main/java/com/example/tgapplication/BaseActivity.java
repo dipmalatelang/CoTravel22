@@ -19,7 +19,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.tgapplication.fragment.trip.module.PlanTrip;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
+import com.example.tgapplication.photo.MyAdapter;
+import com.example.tgapplication.photo.Upload;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -62,6 +68,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 //        startActivity(mIntent);
         return myFavArray;
     }*/
+
+
 
     public List<TripList> findAllMembers(User user, int fav_id) {
                  int visit_id=getVisit(visitArray,user.getId());

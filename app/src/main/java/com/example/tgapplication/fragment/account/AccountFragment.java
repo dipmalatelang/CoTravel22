@@ -25,11 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.tgapplication.BaseFragment;
 import com.example.tgapplication.R;
-import com.example.tgapplication.fragment.trip.DetailActivity;
 import com.example.tgapplication.fragment.trip.EditProfileActivity;
-import com.example.tgapplication.fragment.trip.adapter.TripAdapter;
-import com.example.tgapplication.fragment.trip.module.PlanTrip;
-import com.example.tgapplication.fragment.trip.module.TripData;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.photo.MyAdapter;
@@ -417,9 +413,7 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
 
         if(getActivity()!=null)
         {
-            if (imageUrl != null && !imageUrl.equalsIgnoreCase("") && !imageUrl.equalsIgnoreCase("default")) {
-                Glide.with(getActivity()).load(imageUrl).into(mTrip);
-            }
+                Glide.with(getActivity()).load(imageUrl).placeholder(R.drawable.ic_broken_image_primary_24dp).into(mTrip);
         }
     }
 

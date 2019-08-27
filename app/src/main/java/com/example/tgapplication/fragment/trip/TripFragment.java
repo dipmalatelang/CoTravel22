@@ -503,4 +503,20 @@ public class TripFragment extends BaseFragment {
                 }
         );
     }
+
+    public String dateformateConverter(String myDate){
+
+        Date date = null;
+        try {
+            DateFormat originalFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+            DateFormat targetFormat = new SimpleDateFormat("dd MM yyyy",Locale.ENGLISH);
+
+            date = originalFormat.parse(myDate);
+            return targetFormat.format(date);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return myDate;
+    }
 }

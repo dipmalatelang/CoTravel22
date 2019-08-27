@@ -11,21 +11,29 @@ import android.widget.TextView;
 
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.bumptech.glide.Glide;
 import com.example.tgapplication.R;
+import com.example.tgapplication.photo.Upload;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class CustomAdapter extends PagerAdapter {
     private Context ctx;
     private LayoutInflater inflater;
-    private int[] images;
+    private ArrayList<Upload> mUploads;
+    String uid;
 
-    public CustomAdapter(Context ctx, int[] images){
+    public CustomAdapter(Context ctx, String uid, ArrayList<Upload> uploads) {
         this.ctx = ctx;
-        this.images= images;
+        this.mUploads= uploads;
+        this.uid=uid;
+
     }
 
     @Override
     public int getCount() {
-        return images.length;
+        return mUploads.size();
     }
 
     @Override
@@ -38,7 +46,14 @@ public class CustomAdapter extends PagerAdapter {
         inflater = (LayoutInflater)ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(R.layout.swipe,container,false);
         ImageView img =(ImageView)v.findViewById(R.id.imageView);
-        img.setImageResource(images[position]);
+//        img.setImageResource(mUploads.get(position).url);
+        Glide
+                .with(ctx)
+                .load(mUploads.get(position).getUrl())
+                .centerCrop()
+                .placeholder(R.drawable.ic_broken_image_primary_24dp)
+                .into(img);
+
         container.addView(v);
         return v;
     }
