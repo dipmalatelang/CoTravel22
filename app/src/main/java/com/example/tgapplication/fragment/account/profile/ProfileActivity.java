@@ -6,16 +6,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.EditProfileActivity;
+import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.photo.Upload;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -32,7 +37,6 @@ import butterknife.OnClick;
 
 public class ProfileActivity extends BaseActivity {
 
-    ViewPager viewPager;
     CustomAdapter adapter;
     @BindView(R.id.constraintLayout)
     ConstraintLayout constraintLayout;
@@ -42,12 +46,56 @@ public class ProfileActivity extends BaseActivity {
     Chip textView;
     @BindView(R.id.textProfile)
     Chip textProfile;
+    @BindView(R.id.imageView2)
+    FloatingActionButton imageView2;
+    @BindView(R.id.view_pager)
+    ViewPager viewPager;
+    @BindView(R.id.textView2)
+    TextView textView2;
+    @BindView(R.id.textView3)
+    TextView textView3;
+    @BindView(R.id.iv_edit_profile)
+    ImageView ivEditProfile;
+    @BindView(R.id.iv_info)
+    ImageView ivInfo;
+    @BindView(R.id.iv_msg)
+    ImageView ivMsg;
+    @BindView(R.id.iv_trip)
+    ImageView ivTrip;
+    @BindView(R.id.tv_about_me)
+    TextView tvAboutMe;
+    @BindView(R.id.tv_about_me_value)
+    TextView tvAboutMeValue;
+    @BindView(R.id.tv_dream_place)
+    TextView tvDreamPlace;
+    @BindView(R.id.tv_tv_dream_place_value)
+    TextView tvTvDreamPlaceValue;
+    @BindView(R.id.card_summary)
+    CardView cardSummary;
+    @BindView(R.id.tv_height)
+    TextView tvHeight;
+    @BindView(R.id.tv_height_value)
+    TextView tvHeightValue;
+    @BindView(R.id.tv_body_type)
+    TextView tvBodyType;
+    @BindView(R.id.tv_body_type_value)
+    TextView tvBodyTypeValue;
+    @BindView(R.id.tv_eye)
+    TextView tvEye;
+    @BindView(R.id.tv_eye_value)
+    TextView tvEyeValue;
+    @BindView(R.id.tv_hair)
+    TextView tvHair;
+    @BindView(R.id.tv_hair_value)
+    TextView tvHairValue;
+    @BindView(R.id.card_personal)
+    CardView cardPersonal;
     private DatabaseReference mDatabase;
-    private ArrayList<Upload> uploads =new ArrayList<>();
+    private ArrayList<Upload> uploads = new ArrayList<>();
+    ArrayList<User> userList = new ArrayList<>();
     private FirebaseUser fuser;
     //    @BindView(R.id.bottomNav)
 //    ConstraintLayout bottomNav;
-    private int[] images = {R.drawable.image1, R.drawable.login_bg, R.drawable.image1, R.drawable.login_bg, R.drawable.image1};
 
 
     @Override
@@ -55,16 +103,120 @@ public class ProfileActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_view);
         ButterKnife.bind(this);
-        viewPager = (ViewPager) findViewById(R.id.view_pager);
         fuser = FirebaseAuth.getInstance().getCurrentUser();
         getAllImages();
 
-//        getProfileData();
+        getProfileData(fuser);
 
     }
 
-    public void getAllImages()
-    {
+    private void setDetails(String name, String gender, String age, ArrayList<String> look, String userLocation, String nationality, String lang, String height, String body_type, String eyes, String hair, String visit, String planLocation, String from_to_date, String imageUrl) {
+
+        String str_look = null;
+
+        if (name != null && !name.equalsIgnoreCase("") && age != null && !age.equalsIgnoreCase("")) {
+            textView2.setText(name+" , "+age);
+        }
+
+   /*     if (gender != null && !gender.equalsIgnoreCase("")) {
+            tvSex.setText(gender);
+        }*/
+
+        if(look!=null)
+        {
+            for (int j = 0; j < look.size(); j++) {
+                if (str_look != null) {
+                    str_look += ", " + look.get(j);
+                } else {
+                    str_look = look.get(j);
+                }
+
+            }
+
+           /* if (str_look != null && !str_look.equalsIgnoreCase("")) {
+                tvLooking.setText(str_look);
+            }*/
+        }
+
+        if (height != null && !height.equalsIgnoreCase("")) {
+            tvHeightValue.setText(height);
+            tvAboutMeValue.setText(height);
+        }
+
+        if (body_type != null && !body_type.equalsIgnoreCase("")) {
+            tvBodyTypeValue.setText(body_type);
+        }
+
+        if (eyes != null && !eyes.equalsIgnoreCase("")) {
+            tvEyeValue.setText(eyes);
+        }
+
+        if (hair != null && !hair.equalsIgnoreCase("")) {
+            tvHairValue.setText(hair);
+        }
+
+        if (userLocation != null && !userLocation.equalsIgnoreCase("")) {
+            tvTvDreamPlaceValue.setText(userLocation);
+        }
+
+
+        /*
+        if (nationality != null && !nationality.equalsIgnoreCase("")) {
+            tvNatioanlity.setText(nationality);
+        }
+
+        if (lang != null && !lang.equalsIgnoreCase("")) {
+            tvLanguage.setText(lang);
+        }
+
+        if (visit != null && !visit.equalsIgnoreCase("")) {
+            tvWantToVisit.setText(visit);
+        }
+
+        if (planLocation != null && !planLocation.equalsIgnoreCase("")) {
+            tvPlannedtrip.setText(planLocation);
+            tvDate.setText(from_to_date);
+        }*/
+
+    /*    if(getActivity()!=null)
+        {
+            Glide.with(getActivity()).load(imageUrl).placeholder(R.drawable.ic_services_ratings_user_pic).into(mTrip);
+        }*/
+    }
+
+
+    public void getProfileData(FirebaseUser fuser) {
+        // any way you managed to go the node that has the 'grp_key'
+        DatabaseReference MembersRef = FirebaseDatabase.getInstance()
+                .getReference()
+                .child("Users");
+        MembersRef.addValueEventListener(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        userList.clear();
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+
+                            User user = snapshot.getValue(User.class);
+                            if (user != null && user.getId().equalsIgnoreCase(fuser.getUid())) {
+                                userList.add(user);
+                            }
+                        }
+                        if (userList.size() > 0) {
+                            for (int i = 0; i < userList.size(); i++)
+                                setDetails(userList.get(i).getName(), userList.get(i).getGender(), userList.get(i).getAge(), userList.get(i).getLook(), userList.get(i).getLocation(), userList.get(i).getNationality(), userList.get(i).getLang(), userList.get(i).getHeight(), userList.get(i).getBody_type(), userList.get(i).getEyes(), userList.get(i).getHair(), userList.get(i).getVisit(), "", "", userList.get(i).getImageURL());
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                }
+        );
+    }
+
+    public void getAllImages() {
         mDatabase = FirebaseDatabase.getInstance().getReference("Pictures").child(fuser.getUid());
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
@@ -75,7 +227,7 @@ public class ProfileActivity extends BaseActivity {
                     Upload upload = postSnapshot.getValue(Upload.class);
                     uploads.add(upload);
                 }
-                Log.i(TAG, "onCreate: size"+uploads.size());
+                Log.i(TAG, "onCreate: size" + uploads.size());
                 adapter = new CustomAdapter(ProfileActivity.this, fuser.getUid(), uploads);
                 viewPager.setAdapter(adapter);
 
