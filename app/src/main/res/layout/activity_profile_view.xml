@@ -75,7 +75,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="200dp"
-                android:visibility="invisible"
+                android:visibility="visible"
                 app:layout_constraintEnd_toStartOf="@+id/iv_msg"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -85,7 +85,7 @@
             <ImageView
                 android:id="@+id/iv_msg"
                 android:layout_width="0dp"
-                android:visibility="invisible"
+                android:visibility="visible"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_info"
                 app:layout_constraintEnd_toStartOf="@+id/iv_trip"
@@ -96,7 +96,7 @@
             <ImageView
                 android:id="@+id/iv_trip"
                 android:layout_width="0dp"
-                android:visibility="invisible"
+                android:visibility="visible"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_msg"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -111,11 +111,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:text="1 / 5"
                 android:textColor="@color/black"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iv_msg" />
+                app:layout_constraintBottom_toBottomOf="@+id/view_pager"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/textProfile"
