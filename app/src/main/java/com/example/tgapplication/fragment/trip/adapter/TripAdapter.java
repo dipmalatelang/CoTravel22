@@ -12,6 +12,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.google.firebase.database.DatabaseReference;
@@ -36,7 +37,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
     @Override
     public TripViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View mView = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item_row, parent, false);
+        View mView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_users_trip, parent, false);
         return new TripViewHolder(mView);
     }
 
@@ -44,7 +45,10 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
     public void onBindViewHolder(final TripViewHolder holder, int position) {
 
         final TripList tList = mTrip.get(position);
-            Glide.with(mContext).load(tList.getImageUrl()).placeholder(R.drawable.ic_services_ratings_user_pic).into(holder.mImage);
+        Log.i("TAGrecyclerview", "onBindViewHolder: "+tList.getImageUrl());
+            Glide.with(mContext).load(tList.getImageUrl())
+                    .placeholder(R.drawable.ic_broken_image_primary_24dp)
+                    .into(holder.mImage);
 
         holder.mTitle.setText(tList.getName());
 

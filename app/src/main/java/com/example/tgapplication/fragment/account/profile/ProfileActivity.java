@@ -227,7 +227,7 @@ public class ProfileActivity extends BaseActivity {
                     Upload upload = postSnapshot.getValue(Upload.class);
                     uploads.add(upload);
                 }
-                Log.i(TAG, "onCreate: size" + uploads.size());
+              
                 adapter = new CustomAdapter(ProfileActivity.this, fuser.getUid(), uploads);
                 viewPager.setAdapter(adapter);
 
@@ -235,7 +235,6 @@ public class ProfileActivity extends BaseActivity {
                     @Override
                     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                         int i = position + 1;
-                        Log.i(TAG, "onCreate: " + i);
                         textView.setText(i + " / " + uploads.size());
                     }
 

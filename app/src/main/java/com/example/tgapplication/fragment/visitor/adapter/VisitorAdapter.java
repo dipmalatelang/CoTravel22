@@ -67,7 +67,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
         final User tList = mTrip.get(position);
         if(tList.getImageURL().equalsIgnoreCase("default"))
         {
-            Glide.with(mContext).load(R.drawable.ic_services_ratings_user_pic).apply(new RequestOptions().override(200, 300)).into(holder.mImage);
+            Glide.with(mContext).load(R.drawable.ic_broken_image_primary_24dp).apply(new RequestOptions().override(200, 300)).into(holder.mImage);
         }
         else
         {

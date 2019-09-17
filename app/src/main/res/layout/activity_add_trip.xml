@@ -89,6 +89,7 @@
             </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="City"
@@ -100,6 +101,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="text"
+                    android:focusable="false"
                     android:textColor="@color/black"
                     android:maxLines="1"/>
 

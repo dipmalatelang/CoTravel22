@@ -60,10 +60,10 @@ public class ChatActivity extends AppCompatActivity {
                      Log.i("ImageUser",""+user);
 
            /*         if (user.getImageURL().equalsIgnoreCase("default")||user.getImageURL().equalsIgnoreCase("")) {
-                        profile_image.setImageResource(R.drawable.ic_services_ratings_user_pic);
+                        profile_image.setImageResource(R.drawable.ic_broken_image_primary_24dp);
                     } else {*/
                         //change this
-                        Glide.with(getApplicationContext()).load(user.getImageURL()).placeholder(R.drawable.ic_services_ratings_user_pic).into(profile_image);
+                        Glide.with(getApplicationContext()).load(user.getImageURL()).placeholder(R.drawable.ic_broken_image_primary_24dp).into(profile_image);
 //                    }
                 }
 

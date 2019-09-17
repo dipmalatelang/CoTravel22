@@ -51,7 +51,7 @@ public class CustomAdapter extends PagerAdapter {
                 .with(ctx)
                 .load(mUploads.get(position).getUrl())
                 .centerCrop()
-                .placeholder(R.drawable.ic_services_ratings_user_pic)
+                .placeholder(R.drawable.ic_broken_image_primary_24dp)
                 .into(img);
 
         container.addView(v);

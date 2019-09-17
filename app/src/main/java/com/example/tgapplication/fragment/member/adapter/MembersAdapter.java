@@ -46,10 +46,10 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.TripView
         final TripList tList = mTrip.get(position);
      /*   if(tList.getImageUrl().equalsIgnoreCase("default")||tList.getImageUrl().equalsIgnoreCase(""))
         {
-            Glide.with(mContext).load(R.drawable.ic_services_ratings_user_pic).into(holder.mImage);
+            Glide.with(mContext).load(R.drawable.ic_broken_image_primary_24dp).into(holder.mImage);
         }
         else {*/
-            Glide.with(mContext).load(tList.getImageUrl()).placeholder(R.drawable.ic_services_ratings_user_pic).into(holder.mImage);
+            Glide.with(mContext).load(tList.getImageUrl()).placeholder(R.drawable.ic_broken_image_primary_24dp).into(holder.mImage);
 //        }
 
         holder.mTitle.setText(tList.getName()+" "+tList.getAge());

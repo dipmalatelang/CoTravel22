@@ -50,11 +50,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
         Upload uploadCurrent = mUploads.get(position);
 //        holder.textViewName.setText(uploadCurrent.getName());
 
-        Glide
-                .with(mcontext)
+        Glide.with(mcontext)
                 .load(uploadCurrent.getUrl())
                 .centerCrop()
-                .placeholder(R.drawable.ic_services_ratings_user_pic)
+                .placeholder(R.drawable.ic_broken_image_primary_24dp)
                 .into(holder.imageView);
 
 

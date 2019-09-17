@@ -14,6 +14,7 @@ import android.util.Log;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.example.tgapplication.R;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,7 +56,7 @@ public class BitmapAsync extends AsyncTask<String, Void, Bitmap>
     @Override
     protected void onPostExecute(Bitmap bitmap) {
         super.onPostExecute(bitmap);
-        Glide.with(context).load(getRoundedCornerBitmap(bitmap)).into(imageView);
+        Glide.with(context).load(getRoundedCornerBitmap(bitmap)).placeholder(R.drawable.ic_broken_image_primary_24dp).into(imageView);
     }
 
     public static Bitmap getRoundedCornerBitmap(Bitmap bitmap) {

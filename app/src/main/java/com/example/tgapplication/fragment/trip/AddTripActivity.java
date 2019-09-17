@@ -1,20 +1,14 @@
 package com.example.tgapplication.fragment.trip;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
@@ -23,10 +17,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tgapplication.BaseActivity;
+import com.example.tgapplication.BuildConfig;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.adapter.TripListAdapter;
 import com.example.tgapplication.fragment.trip.module.TripData;
+import com.google.android.gms.common.api.Status;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -38,10 +40,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,8 +54,8 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
     FirebaseUser fuser;
     Button btn_add_trip;
     TextView tv_from_date1, tv_to_date1;
-    EditText tv_to_date,tv_from_date;
-    EditText et_location, et_note;
+    EditText tv_to_date, tv_from_date;
+    EditText et_note;
     Calendar mcalendar = Calendar.getInstance();
     int day, month, year;
     RecyclerView recyclerView;
@@ -62,19 +64,23 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
     ArrayList<TripData> trips = new ArrayList<>();
     @BindView(R.id.trip_relativelayout)
     CoordinatorLayout tripRelativelayout;
-    String edit_id="";
+    String edit_id = "";
     LinearLayoutManager ll_manager;
     AppBarLayout appbar;
+    @BindView(R.id.et_location)
+    TextInputEditText et_location;
+    @BindView(R.id.til_location)
+    TextInputLayout til_location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_trip);
         ButterKnife.bind(this);
+        Places.initialize(getApplicationContext(), BuildConfig.map_api_key);
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
         btn_add_trip = findViewById(R.id.btn_add_trip);
-        et_location = findViewById(R.id.et_location);
         tv_from_date = findViewById(R.id.tv_from_date1);
         tv_to_date = findViewById(R.id.tv_to_date1);
         et_note = findViewById(R.id.et_note);
@@ -87,6 +93,8 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
         tv_to_date.setOnClickListener(this);
 
         btn_add_trip.setOnClickListener(this);
+        til_location.setOnClickListener(this);
+        et_location.setOnClickListener(this);
 
         day = mcalendar.get(Calendar.DAY_OF_MONTH);
         month = mcalendar.get(Calendar.MONTH);
@@ -177,7 +185,7 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
                                         TripData tripData = snapshot1.getValue(TripData.class);
                                         //Log.i("VishalD",""+fuser.getUsername()+" , "+tripData.getLocation());
 
-                                        trips.add(0,tripData);
+                                        trips.add(0, tripData);
                                     }
                                 }
                                 for (int j = 0; j < trips.size(); j++) {
@@ -189,7 +197,7 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
                                     et_note.setText(tripDataList.get(position).getTrip_note());
                                     tv_from_date.setText(tripDataList.get(position).getFrom_date());
                                     tv_to_date.setText(tripDataList.get(position).getTo_date());
-                                    edit_id=tripDataList.get(position).getId();
+                                    edit_id = tripDataList.get(position).getId();
                                     appbar.setExpanded(true);
                                 });
                                 recyclerView.setAdapter(mtripAdapter);
@@ -205,12 +213,11 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
     private void Trips(String edit_id) {
         reference = FirebaseDatabase.getInstance().getReference("Trips").child(fuser.getUid());
         String userId;
-        if(!edit_id.equalsIgnoreCase("")) {
-            userId=edit_id;
+        if (!edit_id.equalsIgnoreCase("")) {
+            userId = edit_id;
             snackBar(tripRelativelayout, "Trip edited Successfully..!");
             dismissProgressDialog();
-        }
-        else {
+        } else {
             userId = reference.push().getKey();
             snackBar(tripRelativelayout, "Trip added Successfully..!");
             dismissProgressDialog();
@@ -238,7 +245,7 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
         et_location.setText("");
         et_location.clearFocus();
         et_note.clearFocus();
-        edit_id="";
+        edit_id = "";
     }
 
 
@@ -323,6 +330,31 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
                 todpDialog.getDatePicker().setMinDate(System.currentTimeMillis());
                 todpDialog.show();
                 break;
+
+            case R.id.et_location: case R.id.til_location:
+                List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS);
+                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields).build(this);
+                startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+                break;
+        }
+    }
+
+    int AUTOCOMPLETE_REQUEST_CODE = 111;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                Log.i(TAG, "Placeq: " + place.getName() + ", " + place.getId() + ", " + place.getAddress());
+                et_location.setText(place.getName());
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                // TODO: Handle the error.
+                Status status = Autocomplete.getStatusFromIntent(data);
+                Log.i(TAG, status.getStatusMessage());
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
         }
     }
 }
