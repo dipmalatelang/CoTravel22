@@ -1,18 +1,21 @@
 package com.example.tgapplication.photo;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tgapplication.R;
+import com.example.tgapplication.fragment.account.profile.EditPhotoActivity;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.StorageReference;
@@ -50,23 +53,53 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
         Upload uploadCurrent = mUploads.get(position);
 //        holder.textViewName.setText(uploadCurrent.getName());
 
-        Glide.with(mcontext)
-                .load(uploadCurrent.getUrl())
-                .centerCrop()
-                .placeholder(R.drawable.ic_broken_image_primary_24dp)
-                .into(holder.imageView);
+        if(position==0)
+        {
+            Glide.with(mcontext)
+                    .load(R.drawable.ic_gallery)
+                    .placeholder(R.drawable.ic_broken_image_primary_24dp)
+                    .into(holder.imageView);
+        }
+       else if(position==1)
+        {
+            Glide.with(mcontext)
+                    .load(R.drawable.ic_fb)
+                    .placeholder(R.drawable.ic_broken_image_primary_24dp)
+                    .into(holder.imageView);
+        }
+else {
 
+            Glide.with(mcontext)
+                    .load(uploadCurrent.getUrl())
+                    .override(100,150)
+                    .placeholder(R.drawable.ic_broken_image_primary_24dp)
+                    .into(holder.imageView);
 
+        }
 //        Log.i(TAG, "onBindViewHolder: " + uploadCurrent.getUrl());
 
         holder.imageView.setOnClickListener(view -> {
 
-            reference = FirebaseDatabase.getInstance().getReference("Users").child(uid);
+           switch (position)
+           {
+               case 0:
+                   Toast.makeText(mcontext, "Gallery", Toast.LENGTH_SHORT).show();
+                   ((EditPhotoActivity)mcontext).showFileChooser();
+                   break;
+               case 1:
+                   Toast.makeText(mcontext, "Facebook", Toast.LENGTH_SHORT).show();
+                   break;
+                   default:
+                       Toast.makeText(mcontext, "Uploaded Photo", Toast.LENGTH_SHORT).show();
+                       break;
+           }
+
+           /* reference = FirebaseDatabase.getInstance().getReference("Users").child(uid);
             HashMap<String, Object> map = new HashMap<>();
             map.put("imageURL", ""+uploadCurrent.getUrl());
             reference.updateChildren(map);
 
-            holder.ivTitle.setImageDrawable(mcontext.getResources().getDrawable(R.drawable.ic_action_fav_remove));
+            holder.ivTitle.setImageDrawable(mcontext.getResources().getDrawable(R.drawable.ic_action_fav_remove));*/
         });
     }
 
