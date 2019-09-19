@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".fragment.trip.MyTripsActivity"></activity>
+        <activity android:name=".fragment.trip.MyTripsActivity"/>
         <activity android:name=".login.LoginActivity"
             android:theme="@style/noToolbar">
             <intent-filter>
@@ -31,21 +31,19 @@
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".fragment.trip.FilterTripActivity"
-            android:parentActivityName=".trips.TripActivity"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/noToolbar" />
-        <activity
-            android:name=".trips.TripActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
+
         <activity
             android:name=".chat.ChatActivity"
             android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
             android:name=".fragment.trip.AddTripActivity"
-            android:parentActivityName=".trips.TripActivity"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/noToolbar"/>
 
-        <activity android:name=".trips.ProfileVisitorActivity" />
+<!--        <activity android:name=".trips.ProfileVisitorActivity" />-->
         <activity
             android:name=".chat.MessageActivity"
             android:parentActivityName=".MainActivity"
@@ -53,7 +51,7 @@
         <activity
             android:name=".fragment.trip.EditProfileActivity"
             android:label="Profile Information"
-            android:parentActivityName=".trips.TripActivity"
+            android:parentActivityName=".MainActivity"
             android:theme="@style/noToolbar" />
         <activity android:name=".login.RegisterActivity"
             android:theme="@style/noToolbar"/>
