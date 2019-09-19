@@ -33,6 +33,7 @@ public class MyProfileFragment extends Fragment {
     @OnClick({R.id.tv_my_profile, R.id.tv_Logout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            //
             case R.id.tv_my_profile:
                 startActivity(new Intent(getActivity(), ProfileActivity.class));
                 break;
