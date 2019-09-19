@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -69,9 +70,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
         }
 else {
 
+            holder.imageView.setAdjustViewBounds(true);
+            holder.imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+            holder.imageView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
+
             Glide.with(mcontext)
                     .load(uploadCurrent.getUrl())
-                    .override(100,150)
                     .placeholder(R.drawable.ic_broken_image_primary_24dp)
                     .into(holder.imageView);
 

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tgapplication.BaseFragment;
 import com.example.tgapplication.R;
+import com.example.tgapplication.fragment.account.profile.ProfileActivity;
 import com.example.tgapplication.fragment.favourite.adapter.FavouriteAdapter;
 import com.example.tgapplication.fragment.trip.DetailActivity;
 import com.example.tgapplication.fragment.trip.module.PlanTrip;
@@ -275,7 +276,7 @@ String TAG="Favourite";
 //                                                tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), favArray, tripList);
 //                                                recyclerview.setAdapter(tripAdapter);
 
-                                                            Intent mIntent = new Intent(getActivity(), DetailActivity.class);
+                                                            Intent mIntent = new Intent(getActivity(), ProfileActivity.class);
                                                             mIntent.putExtra("MyObj", (Serializable) tripList.get(0));
                                                             startActivity(mIntent);
                                                         }
