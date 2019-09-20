@@ -376,7 +376,8 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
         if (visit != null && !visit.equalsIgnoreCase("")) {
             tvWantToVisit.setText(visit);
             labelWantToVisit.setVisibility(View.VISIBLE);
-        } else {
+        }
+        else {
             labelWantToVisit.setVisibility(View.GONE);
         }
 
@@ -388,7 +389,8 @@ public class DetailActivity extends BaseActivity implements View.OnClickListener
             labelPlannedtrip.setVisibility(View.GONE);
         }
 
-        if (imageUrl != null && !imageUrl.equalsIgnoreCase("") && !imageUrl.equalsIgnoreCase("default")) {
+        if (imageUrl != null && !imageUrl.equalsIgnoreCase("") && !imageUrl.equalsIgnoreCase("default"))
+        {
             Glide.with(DetailActivity.this).load(imageUrl).into(mTrip);
         }
 
