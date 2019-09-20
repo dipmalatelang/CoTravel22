@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tgapplication.BaseFragment;
 import com.example.tgapplication.R;
+import com.example.tgapplication.fragment.account.profile.ProfileActivity;
 import com.example.tgapplication.fragment.trip.adapter.TripAdapter;
 import com.example.tgapplication.fragment.trip.module.FavList;
 import com.example.tgapplication.fragment.trip.module.PlanTrip;
@@ -251,7 +252,7 @@ public class TripFragment extends BaseFragment {
                                                             tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), tripList, new TripAdapter.ProfileData() {
                                                                 @Override
                                                                 public void setData(TripList tList, int position) {
-                                                                    Intent mIntent = new Intent(getActivity(), DetailActivity.class);
+                                                                    Intent mIntent = new Intent(getActivity(), ProfileActivity.class);
                                                                     mIntent.putExtra("MyObj", (Serializable) tripList.get(position));
                                                                     startActivity(mIntent);
                                                                 }
@@ -470,7 +471,7 @@ public class TripFragment extends BaseFragment {
                                                         tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), tripList, new TripAdapter.ProfileData() {
                                                             @Override
                                                             public void setData(TripList tList, int position) {
-                                                                Intent mIntent = new Intent(getActivity(), DetailActivity.class);
+                                                                Intent mIntent = new Intent(getActivity(), ProfileActivity.class);
                                                                 mIntent.putExtra("MyObj", (Serializable) tripList.get(position));
                                                                 startActivity(mIntent);
                                                             }

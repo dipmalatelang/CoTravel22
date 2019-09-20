@@ -37,7 +37,7 @@ import butterknife.ButterKnife;
 
 //import com.example.tgapplication.trips.TripActivity;
 
-public class LoginActivity extends BaseActivity implements View.OnClickListener, View.OnTouchListener, View.OnKeyListener {
+public class LoginActivity extends BaseActivity implements View.OnClickListener, View.OnKeyListener {
 
     LoginButton loginButton;
     Button btn_login;
@@ -80,7 +80,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         input_email = findViewById(R.id.input_email);
         input_password = findViewById(R.id.input_password);
 
-        input_password.setOnTouchListener(this);
+        input_password.setOnTouchListener((view, motionEvent) -> showOrHidePwd(motionEvent,input_password));
         input_password.setOnKeyListener(this);
 
         tv_register.setOnClickListener(this);
@@ -221,33 +221,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 break;
         }
 
-    }
-
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        final int DRAWABLE_LEFT = 0;
-        final int DRAWABLE_TOP = 1;
-        final int DRAWABLE_RIGHT = 2;
-        final int DRAWABLE_BOTTOM = 3;
-
-        if (event.getAction() == MotionEvent.ACTION_UP) {
-            if (event.getRawX() >= (input_password.getRight() - input_password.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                // your action here
-
-                if (!input_password.getTransformationMethod().toString().contains("Password")) {
-                    input_password.setTransformationMethod(new PasswordTransformationMethod());
-                    input_password.setSelection(input_password.getText().length());
-                    input_password.setCompoundDrawablesWithIntrinsicBounds( R.drawable.ic_lock_white_24dp, 0, R.drawable.ic_action_eye_off, 0);
-
-                } else {
-                    input_password.setTransformationMethod(new HideReturnsTransformationMethod());
-                    input_password.setSelection(input_password.getText().length());
-                    input_password.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock_white_24dp, 0, R.drawable.ic_action_eye, 0);
-                }
-                return true;
-            }
-        }
-        return false;
     }
 
     @Override

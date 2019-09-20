@@ -17,6 +17,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.EditProfileActivity;
+import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.photo.Upload;
 import com.google.android.material.chip.Chip;
@@ -94,6 +95,7 @@ public class ProfileActivity extends BaseActivity {
     private ArrayList<Upload> uploads = new ArrayList<>();
     ArrayList<User> userList = new ArrayList<>();
     private FirebaseUser fuser;
+    TripList tripL;
     //    @BindView(R.id.bottomNav)
 //    ConstraintLayout bottomNav;
 
@@ -104,9 +106,25 @@ public class ProfileActivity extends BaseActivity {
         setContentView(R.layout.activity_profile_view);
         ButterKnife.bind(this);
         fuser = FirebaseAuth.getInstance().getCurrentUser();
-        getAllImages();
 
-        getProfileData(fuser);
+        if (getIntent().getSerializableExtra("MyObj") == null)
+        {
+            getAllImages(fuser.getUid());
+
+            getProfileData(fuser);
+        }
+        else{
+
+            tripL = (TripList) getIntent().getSerializableExtra("MyObj");
+            getAllImages(tripL.getId());
+            setDetails(tripL.getName(), tripL.getGender(), tripL.getAge(), tripL.getLook(), tripL.getUserLocation(), tripL.getNationality(),
+                    tripL.getLang(), tripL.getHeight(), tripL.getBody_type(), tripL.getEyes(), tripL.getHair(), tripL.getVisit(), tripL.getPlanLocation(), tripL.getFrom_to_date(), tripL.getImageUrl());
+//            if(tripL==null)
+//            setDetails(userList.get(i).getName(), userList.get(i).getGender(), userList.get(i).getAge(), userList.get(i).getLook(), userList.get(i).getLocation(), userList.get(i).getNationality(), userList.get(i).getLang(), userList.get(i).getHeight(), userList.get(i).getBody_type(), userList.get(i).getEyes(), userList.get(i).getHair(), userList.get(i).getVisit(), "", "", userList.get(i).getImageURL());
+
+
+        }
+
 
     }
 
@@ -216,8 +234,8 @@ public class ProfileActivity extends BaseActivity {
         );
     }
 
-    public void getAllImages() {
-        mDatabase = FirebaseDatabase.getInstance().getReference("Pictures").child(fuser.getUid());
+    public void getAllImages(String uid) {
+        mDatabase = FirebaseDatabase.getInstance().getReference("Pictures").child(uid);
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -228,7 +246,7 @@ public class ProfileActivity extends BaseActivity {
                     uploads.add(upload);
                 }
               
-                adapter = new CustomAdapter(ProfileActivity.this, fuser.getUid(), uploads);
+                adapter = new CustomAdapter(ProfileActivity.this, uid, uploads);
                 viewPager.setAdapter(adapter);
 
                 viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

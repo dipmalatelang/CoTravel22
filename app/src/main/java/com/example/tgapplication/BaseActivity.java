@@ -6,11 +6,14 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
@@ -223,6 +226,29 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (!isFinishing()) {
             ProgressActivity.dismissDialog();
         }
+    }
+
+    public boolean showOrHidePwd(MotionEvent event, EditText input_password){
+        final int DRAWABLE_RIGHT = 2;
+
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            if (event.getRawX() >= (input_password.getRight() - input_password.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                // your action here
+
+                if (!input_password.getTransformationMethod().toString().contains("Password")) {
+                    input_password.setTransformationMethod(new PasswordTransformationMethod());
+                    input_password.setSelection(input_password.getText().length());
+                    input_password.setCompoundDrawablesWithIntrinsicBounds( R.drawable.ic_lock_white_24dp, 0, R.drawable.ic_action_eye_off, 0);
+
+                } else {
+                    input_password.setTransformationMethod(new HideReturnsTransformationMethod());
+                    input_password.setSelection(input_password.getText().length());
+                    input_password.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock_white_24dp, 0, R.drawable.ic_action_eye, 0);
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
 

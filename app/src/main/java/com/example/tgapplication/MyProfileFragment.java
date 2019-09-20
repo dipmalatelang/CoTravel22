@@ -30,11 +30,11 @@ public class MyProfileFragment extends Fragment {
     }
 
 
-    @OnClick({R.id.tv_my_profile, R.id.tv_Logout})
+    @OnClick({R.id.tv_my_profile, R.id.tv_Logout, R.id.iv_Image})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             //
-            case R.id.tv_my_profile:
+            case R.id.tv_my_profile: case R.id.iv_Image:
                 startActivity(new Intent(getActivity(), ProfileActivity.class));
                 break;
             case R.id.tv_Logout:
@@ -44,6 +44,7 @@ public class MyProfileFragment extends Fragment {
                 startActivity(new Intent(getActivity(), LoginActivity.class));
 //                snackBar(container,"Logout");
                 break;
+
         }
     }
 }
