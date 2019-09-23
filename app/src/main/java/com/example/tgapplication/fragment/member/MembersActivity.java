@@ -2,27 +2,18 @@ package com.example.tgapplication.fragment.member;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 
-import androidx.annotation.ContentView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
+import com.example.tgapplication.fragment.account.profile.ProfileActivity;
 import com.example.tgapplication.fragment.member.adapter.MembersAdapter;
-import com.example.tgapplication.fragment.trip.DetailActivity;
-import com.example.tgapplication.fragment.trip.module.PlanTrip;
-import com.example.tgapplication.fragment.trip.module.TripData;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,17 +22,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class MembersActivity extends BaseActivity {
     private RecyclerView recyclerView;
@@ -101,7 +85,7 @@ public class MembersActivity extends BaseActivity {
                                                         membersAdapter = new MembersAdapter(MembersActivity.this, fuser.getUid(), tripList, new MembersAdapter.ProfileData() {
                                                             @Override
                                                             public void setData(TripList tList, int position) {
-                                                                Intent mIntent = new Intent(MembersActivity.this, DetailActivity.class);
+                                                                Intent mIntent = new Intent(MembersActivity.this, ProfileActivity.class);
                                                                 mIntent.putExtra("MyObj", (Serializable) tripList.get(position));
                                                                 startActivity(mIntent);
                                                             }

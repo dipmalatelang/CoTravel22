@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,6 +57,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
 
         if(position==0)
         {
+            holder.below_opt.setVisibility(View.GONE);
+
+            holder.imageView.setAdjustViewBounds(false);
+            holder.imageView.setScaleType(ImageView.ScaleType.CENTER);
+            holder.imageView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
+
             Glide.with(mcontext)
                     .load(R.drawable.ic_gallery)
                     .placeholder(R.drawable.ic_broken_image_primary_24dp)
@@ -63,17 +70,19 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
         }
        else if(position==1)
         {
+            holder.below_opt.setVisibility(View.GONE);
+
+            holder.imageView.setAdjustViewBounds(false);
+            holder.imageView.setScaleType(ImageView.ScaleType.CENTER);
+            holder.imageView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
+
             Glide.with(mcontext)
                     .load(R.drawable.ic_fb)
                     .placeholder(R.drawable.ic_broken_image_primary_24dp)
                     .into(holder.imageView);
         }
 else {
-
-            holder.imageView.setAdjustViewBounds(true);
-            holder.imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-            holder.imageView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
-
+            holder.below_opt.setVisibility(View.VISIBLE);
             Glide.with(mcontext)
                     .load(uploadCurrent.getUrl())
                     .placeholder(R.drawable.ic_broken_image_primary_24dp)
@@ -114,9 +123,12 @@ else {
 
     public class ImageViewHolder extends RecyclerView.ViewHolder{
     public ImageView imageView,ivTitle;
+    public LinearLayout below_opt;
 
     public ImageViewHolder(@NonNull View itemView) {
         super(itemView);
+
+        below_opt=itemView.findViewById(R.id.below_opt);
          imageView = itemView.findViewById(R.id.imageView);
         ivTitle=itemView.findViewById(R.id.ivTitle);
     }
