@@ -1,6 +1,8 @@
 package com.example.tgapplication.login;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -47,8 +49,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     TextView tv_register, link_signup;
     EditText input_email, input_password;
     ConstraintLayout constrainlayout;
-
-
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -157,6 +160,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
+    public void saveLoginDetails(String email, String password){
+        sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString("Email", email);
+        editor.putString("Password", password);
+
+        editor.commit();
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -188,6 +199,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                                     if (task.isSuccessful()) {
                                         dismissProgressDialog();
                                         updateUI(mAuth.getCurrentUser());
+
+                                        saveLoginDetails(txt_email,txt_password);
+
+
+
 //                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 //                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 //                                        startActivity(intent);

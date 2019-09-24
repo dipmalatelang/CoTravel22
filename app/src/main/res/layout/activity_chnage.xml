@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:backgroundTintMode="src_over"
+    android:id="@+id/cl_changepwd"
+    tools:context=".fragment.account.profile.ChangePasswordActivity">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_register_form"
+        android:layout_width="match_parent"
+        android:layout_height="500sp"
+        android:padding="8dp"
+        android:scrollbars="vertical"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.307">
+
+        <!--B3693D70-->
+
+        <TextView
+            android:id="@+id/tv_title_text"
+            android:layout_width="300dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="48dp"
+            android:fontFamily="sans-serif-smallcaps"
+            android:gravity="center"
+            android:text="@string/changepassword"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.494"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInput_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/textInput_email"
+            app:theme="@style/TextInputLayoutAppearance"
+            tools:layout_editor_absoluteX="8dp">
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <Button
+            android:id="@+id/btnSaveNow"
+            style="@style/Larger_Drawable"
+            android:layout_width="290dp"
+            android:layout_height="36dp"
+            android:background="@color/quantum_grey"
+            android:elevation="4dp"
+            android:fontFamily="@font/montserrat"
+            android:outlineAmbientShadowColor="@color/white"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:text="Save"
+
+            android:textAllCaps="false"
+            android:textColor="@drawable/color_white_to_black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/etConfirmpassword"
+            app:layout_constraintStart_toStartOf="@+id/etConfirmpassword"
+            app:layout_constraintTop_toBottomOf="@+id/etConfirmpassword"
+            app:layout_constraintVertical_bias="0.214" />
+
+.        <EditText
+            android:id="@+id/etNewpassword"
+            style="@style/text_profile_edit_style"
+            android:layout_width="320dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="28dp"
+            android:drawableStart="@drawable/ic_shield"
+            android:drawableEnd="@drawable/ic_action_eye_off"
+            android:drawablePadding="10dp"
+            android:hint="New Password"
+            android:padding="10dp"
+            android:inputType="textPassword"
+        android:background="@color/thistle"
+            android:textColor="@color/white"
+            android:textCursorDrawable="@drawable/cursor_white"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/etCurrentPassword"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/etCurrentPassword"
+            app:layout_constraintTop_toBottomOf="@+id/etCurrentPassword" />
+
+        <EditText
+            android:id="@+id/etCurrentPassword"
+            style="@style/text_profile_edit_style"
+            android:layout_width="320dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="52dp"
+            android:background="@color/thistle"
+            android:drawableStart="@drawable/ic_lock_white_24dp"
+            android:drawableEnd="@drawable/ic_action_eye_off"
+            android:drawablePadding="10dp"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:padding="10dp"
+            android:textColor="@color/white"
+            android:textCursorDrawable="@drawable/cursor_white"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/tv_title_text"
+            app:layout_constraintStart_toStartOf="@+id/tv_title_text"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title_text" />
+
+        <EditText
+            android:id="@+id/etConfirmpassword"
+            style="@style/text_profile_edit_style"
+            android:layout_width="320dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="28dp"
+            android:drawableStart="@drawable/ic_shield"
+            android:drawableEnd="@drawable/ic_action_eye_off"
+            android:drawablePadding="10dp"
+            android:hint=" Confirm Password"
+            android:inputType="textPassword"
+            android:padding="10dp"
+            android:textColor="@color/white"
+            android:textCursorDrawable="@drawable/cursor_white"
+            android:textSize="16sp"
+            android:background="@color/thistle"
+            app:layout_constraintEnd_toEndOf="@+id/etNewpassword"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/etNewpassword"
+            app:layout_constraintTop_toBottomOf="@+id/etNewpassword" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
