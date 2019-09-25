@@ -37,14 +37,16 @@
                 android:layout_alignParentBottom="true"
                 android:layout_below="@id/imageView"
                 android:background="@color/black"
+                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="30dp">
 
                 <ImageView
+                    android:id="@+id/set_main"
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_action_eye_off"/>
+                    android:src="@drawable/ic_tick"/>
 
 
                 <ImageView
@@ -57,10 +59,11 @@
 
 
                 <ImageView
+                    android:id="@+id/delete"
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_action_eye_off"/>
+                    android:src="@drawable/ic_delete"/>
 
             </LinearLayout>
 

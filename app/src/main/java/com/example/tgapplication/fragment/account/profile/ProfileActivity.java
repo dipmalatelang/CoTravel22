@@ -57,12 +57,12 @@ public class ProfileActivity extends BaseActivity {
     TextView textView3;
     @BindView(R.id.iv_edit_profile)
     ImageView ivEditProfile;
-    @BindView(R.id.iv_info)
+  /*  @BindView(R.id.iv_info)
     ImageView ivInfo;
     @BindView(R.id.iv_msg)
     ImageView ivMsg;
     @BindView(R.id.iv_trip)
-    ImageView ivTrip;
+    ImageView ivTrip;*/
     @BindView(R.id.tv_about_me)
     TextView tvAboutMe;
     @BindView(R.id.tv_about_me_value)
@@ -109,14 +109,15 @@ public class ProfileActivity extends BaseActivity {
 
         if (getIntent().getSerializableExtra("MyObj") == null)
         {
+            textProfile.setVisibility(View.VISIBLE);
             getAllImages(fuser.getUid());
-
             getProfileData(fuser);
         }
         else{
-
+            textProfile.setVisibility(View.GONE);
             tripL = (TripList) getIntent().getSerializableExtra("MyObj");
             getAllImages(tripL.getId());
+
             setDetails(tripL.getName(), tripL.getGender(), tripL.getAge(), tripL.getLook(), tripL.getUserLocation(), tripL.getNationality(),
                     tripL.getLang(), tripL.getHeight(), tripL.getBody_type(), tripL.getEyes(), tripL.getHair(), tripL.getVisit(), tripL.getPlanLocation(), tripL.getFrom_to_date(), tripL.getImageUrl());
 //            if(tripL==null)
@@ -275,47 +276,10 @@ public class ProfileActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.iv_info, R.id.iv_msg, R.id.iv_trip, R.id.textProfile, R.id.iv_edit_profile})
+    @OnClick({R.id.textProfile, R.id.iv_edit_profile})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.iv_info:
-                Log.i(TAG, "onViewClicked: " + constraintLayout.getHeight());
-                if (constraintLayout.getTranslationY() != 0) {
-                    constraintLayout.animate().translationY(0).alpha(1).setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationStart(Animator animation) {
-                            super.onAnimationStart(animation);
-                            profileDetails.setVisibility(View.GONE);
-                        }
-                    });
-//                    bottomNav.animate().translationY(0);
 
-
-                } else {
-                    constraintLayout.animate().translationY(180 - constraintLayout.getHeight()).alpha(0.5f).setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            profileDetails.setVisibility(View.VISIBLE);
-                        }
-                    });
-
-//                    bottomNav.animate().translationY(100-constraintLayout.getHeight());
-                }
-
-              /*  Animation animSlideUp = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.slide_up);
-                constraintLayout.startAnimation(animSlideUp);*/
-//                Need to change
-
-                break;
-            case R.id.iv_msg:
-                if (constraintLayout.getVisibility() == View.GONE) {
-                    constraintLayout.setVisibility(View.VISIBLE);
-                } else {
-                    constraintLayout.setVisibility(View.GONE);
-                }
-
-                break;
             case R.id.textProfile:
                 startActivity(new Intent(this, EditPhotoActivity.class));
                 break;
@@ -324,9 +288,7 @@ public class ProfileActivity extends BaseActivity {
                 startActivity(new Intent(this, EditProfileActivity.class));
                 break;
 
-            case R.id.iv_trip:
 
-                break;
         }
     }
 
