@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,8 +44,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
     @NonNull
     @Override
     public ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-      View v = LayoutInflater.from(mcontext).inflate(R.layout.layout_images, parent,false);
-      return new ImageViewHolder(v);
+        View v = LayoutInflater.from(mcontext).inflate(R.layout.layout_images, parent,false);
+        return new ImageViewHolder(v);
 
     }
 
@@ -56,24 +57,32 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
 
         if(position==0)
         {
+            holder.below_opt.setVisibility(View.GONE);
+
+            holder.imageView.setAdjustViewBounds(false);
+            holder.imageView.setScaleType(ImageView.ScaleType.CENTER);
+            holder.imageView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
+
             Glide.with(mcontext)
                     .load(R.drawable.ic_gallery)
                     .placeholder(R.drawable.ic_broken_image_primary_24dp)
                     .into(holder.imageView);
         }
-       else if(position==1)
+        else if(position==1)
         {
+            holder.below_opt.setVisibility(View.GONE);
+
+            holder.imageView.setAdjustViewBounds(false);
+            holder.imageView.setScaleType(ImageView.ScaleType.CENTER);
+            holder.imageView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
+
             Glide.with(mcontext)
                     .load(R.drawable.ic_fb)
                     .placeholder(R.drawable.ic_broken_image_primary_24dp)
                     .into(holder.imageView);
         }
-else {
-
-            holder.imageView.setAdjustViewBounds(true);
-            holder.imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-            holder.imageView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
-
+        else {
+            holder.below_opt.setVisibility(View.VISIBLE);
             Glide.with(mcontext)
                     .load(uploadCurrent.getUrl())
                     .placeholder(R.drawable.ic_broken_image_primary_24dp)
@@ -84,19 +93,19 @@ else {
 
         holder.imageView.setOnClickListener(view -> {
 
-           switch (position)
-           {
-               case 0:
-                   Toast.makeText(mcontext, "Gallery", Toast.LENGTH_SHORT).show();
-                   ((EditPhotoActivity)mcontext).showFileChooser();
-                   break;
-               case 1:
-                   Toast.makeText(mcontext, "Facebook", Toast.LENGTH_SHORT).show();
-                   break;
-                   default:
-                       Toast.makeText(mcontext, "Uploaded Photo", Toast.LENGTH_SHORT).show();
-                       break;
-           }
+            switch (position)
+            {
+                case 0:
+                    Toast.makeText(mcontext, "Gallery", Toast.LENGTH_SHORT).show();
+                    ((EditPhotoActivity)mcontext).showFileChooser();
+                    break;
+                case 1:
+                    Toast.makeText(mcontext, "Facebook", Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    Toast.makeText(mcontext, "Uploaded Photo", Toast.LENGTH_SHORT).show();
+                    break;
+            }
 
            /* reference = FirebaseDatabase.getInstance().getReference("Users").child(uid);
             HashMap<String, Object> map = new HashMap<>();
@@ -104,6 +113,27 @@ else {
             reference.updateChildren(map);
 
             holder.ivTitle.setImageDrawable(mcontext.getResources().getDrawable(R.drawable.ic_action_fav_remove));*/
+        });
+
+        holder.set_main.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(mcontext, "Set Main", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        holder.pp_eye.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(mcontext, "Public Private", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        holder.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(mcontext, "Delete", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
@@ -113,13 +143,21 @@ else {
     }
 
     public class ImageViewHolder extends RecyclerView.ViewHolder{
-    public ImageView imageView,ivTitle;
+        public ImageView imageView,ivTitle, set_main, pp_eye, delete;
+        public LinearLayout below_opt;
 
-    public ImageViewHolder(@NonNull View itemView) {
-        super(itemView);
-         imageView = itemView.findViewById(R.id.imageView);
-        ivTitle=itemView.findViewById(R.id.ivTitle);
+        public ImageViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            below_opt=itemView.findViewById(R.id.below_opt);
+            imageView = itemView.findViewById(R.id.imageView);
+            ivTitle=itemView.findViewById(R.id.ivTitle);
+
+            set_main=itemView.findViewById(R.id.set_main);
+            pp_eye=itemView.findViewById(R.id.pp_eye);
+            delete=itemView.findViewById(R.id.delete);
+
+        }
     }
-}
 
 }

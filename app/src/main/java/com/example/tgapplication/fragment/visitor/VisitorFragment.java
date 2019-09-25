@@ -6,21 +6,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tgapplication.BaseFragment;
 import com.example.tgapplication.R;
-import com.example.tgapplication.fragment.favourite.adapter.FavouriteAdapter;
-import com.example.tgapplication.fragment.trip.DetailActivity;
+import com.example.tgapplication.fragment.account.profile.ProfileActivity;
 import com.example.tgapplication.fragment.trip.module.PlanTrip;
 import com.example.tgapplication.fragment.trip.module.TripData;
-
 import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.fragment.visitor.adapter.VisitorAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -266,7 +262,7 @@ public class VisitorFragment extends BaseFragment {
 //                                                tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), favArray, tripList);
 //                                                recyclerview.setAdapter(tripAdapter);
 
-                                                        Intent mIntent = new Intent(getActivity(), DetailActivity.class);
+                                                        Intent mIntent = new Intent(getActivity(), ProfileActivity.class);
                                                         mIntent.putExtra("MyObj", (Serializable) tripList.get(0));
                                                         startActivity(mIntent);
                                                     }

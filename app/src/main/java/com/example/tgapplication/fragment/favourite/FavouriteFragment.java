@@ -17,7 +17,6 @@ import com.example.tgapplication.BaseFragment;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.account.profile.ProfileActivity;
 import com.example.tgapplication.fragment.favourite.adapter.FavouriteAdapter;
-import com.example.tgapplication.fragment.trip.DetailActivity;
 import com.example.tgapplication.fragment.trip.module.PlanTrip;
 import com.example.tgapplication.fragment.trip.module.TripData;
 import com.example.tgapplication.fragment.trip.module.User;

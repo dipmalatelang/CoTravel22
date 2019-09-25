@@ -27,6 +27,7 @@ import com.example.tgapplication.photo.Upload;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
@@ -226,6 +227,20 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (!isFinishing()) {
             ProgressActivity.dismissDialog();
         }
+    }
+
+    public void removeVisit(String uid, String id)
+    {
+        final DatabaseReference visitorRef = FirebaseDatabase.getInstance().getReference("ProfileVisitor")
+                .child(uid);
+        visitorRef.child(id).removeValue();
+    }
+
+    public void removeFav(String uid, String id) {
+
+        final DatabaseReference visitorRef = FirebaseDatabase.getInstance().getReference("Favorites")
+                .child(uid);
+        visitorRef.child(id).removeValue();
     }
 
     public boolean showOrHidePwd(MotionEvent event, EditText input_password){
