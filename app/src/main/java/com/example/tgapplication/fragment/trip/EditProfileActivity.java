@@ -1,10 +1,7 @@
 package com.example.tgapplication.fragment.trip;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ObjectAnimator;
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,7 +22,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
@@ -34,21 +30,15 @@ import com.example.tgapplication.BuildConfig;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
-import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.pnikosis.materialishprogress.ProgressWheel;
 
@@ -78,8 +68,6 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     String value;
     User prevUser;
     ArrayList<String> str_look = new ArrayList<>();
-
-    DatabaseReference databaseReference;
 
 
     AutoCompleteTextView suggestion_nationality, suggestion_height;
@@ -177,28 +165,28 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
                 "Select", "Brown", "Blue", "Green", "Hazel", "Gray", "Amber", "Other"
         };
 
-        Nationalityadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, nationalitySpinner);
+        Nationalityadapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, nationalitySpinner);
         Nationalityadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         suggestion_nationality.setAdapter(Nationalityadapter);
 
-        Languageadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, langSpinner);
+        Languageadapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, langSpinner);
         Languageadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         suggestion_lang.setAdapter(Languageadapter);
         suggestion_lang.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
 
-        Heightadapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, heightSpinner);
+        Heightadapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, heightSpinner);
         Heightadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         suggestion_height.setAdapter(Heightadapter);
 
-        Bodyadapter = new ArrayAdapter<String>(this, R.layout.spinner_text, BodyTypeSpinner);
+        Bodyadapter = new ArrayAdapter<>(this, R.layout.spinner_text, BodyTypeSpinner);
         Bodyadapter.setDropDownViewResource(R.layout.spinner_text);
         Sp_bodytype.setAdapter(Bodyadapter);
 
-        Hairadapter = new ArrayAdapter<String>(this, R.layout.spinner_text, HairSpinner);
+        Hairadapter = new ArrayAdapter<>(this, R.layout.spinner_text, HairSpinner);
         Hairadapter.setDropDownViewResource(R.layout.spinner_text);
         Sp_hairs.setAdapter(Hairadapter);
 
-        Eyesadapter = new ArrayAdapter<String>(this, R.layout.spinner_text, EyeSpinner);
+        Eyesadapter = new ArrayAdapter<>(this, R.layout.spinner_text, EyeSpinner);
         Eyesadapter.setDropDownViewResource(R.layout.spinner_text);
         Sp_eyes.setAdapter(Eyesadapter);
 
@@ -243,10 +231,8 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
 
     public void myList(FirebaseUser fuser) {
         // any way you managed to go the node that has the 'grp_key'
-        DatabaseReference MembersRef = FirebaseDatabase.getInstance()
-                .getReference()
-                .child("Users");
-        MembersRef.addValueEventListener(
+
+        UsersInstance.addValueEventListener(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -350,7 +336,6 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
 
 
     private void register(FirebaseUser fuser, String str_name, String str_dob, String str_gender, String age, String str_location, String str_nationality, String str_lang, ArrayList<String> str_look, String str_height, String str_body_type, String str_eyes, String str_hair, String str_visit) {
-        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(fuser.getUid());
 
         //uncomment this below lines later don't forget
 
@@ -358,7 +343,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
                 fuser.getProviderId(), str_body_type, str_dob, str_eyes, str_hair, str_height, str_lang,
                 str_look, prevUserList.get(0).getRange_age(), str_location, str_name, fuser.getPhoneNumber(), str_nationality, str_visit);
 
-        databaseReference.setValue(userClass);
+        UsersInstance.child(fuser.getUid()).setValue(userClass);
 
         snackBar(activity_profile_coordinatelayout, "Your profile has been successfully updated");
         finish();

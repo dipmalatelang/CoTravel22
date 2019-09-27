@@ -1,7 +1,6 @@
 package com.example.tgapplication.fragment.favourite.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +14,6 @@ import com.bumptech.glide.Glide;
 import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.User;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -76,7 +73,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
         holder.mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setProfileVisit(uid,tList.getId());
+                listener.setProfileVisit(uid,tList.getId());
 //                int fav_id= getFav(favArray,tList.getId());
 //                Log.i("Got Needed Value"," "+fav_id);
                 listener.sendFavourite(tList.getId());
@@ -97,16 +94,6 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
                 notifyDataSetChanged();
             }
         });
-    }
-
-    private void setProfileVisit(String uid, String id)
-    {
-
-        final DatabaseReference visitedRef = FirebaseDatabase.getInstance().getReference("ProfileVisitor")
-                .child(id)
-                .child(uid);
-        visitedRef.child("id").setValue(uid);
-
     }
 
     @Override
@@ -137,5 +124,6 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
     FavouriteInterface listener;
     public interface FavouriteInterface{
         void sendFavourite(String id);
+        void setProfileVisit(String uid, String id);
     }
 }

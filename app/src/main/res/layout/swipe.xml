@@ -14,5 +14,5 @@
         android:adjustViewBounds="true"
         android:id="@+id/imageView"
         android:src="@drawable/ic_launcher_background"
-        />
+        android:contentDescription="TODO" />
 </LinearLayout>

@@ -16,7 +16,8 @@
         app:fabSize="mini"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_chevron_left_black_24dp" />
+        app:srcCompat="@drawable/ic_chevron_left_black_24dp"
+        android:focusable="true" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -71,7 +72,8 @@
                 android:layout_marginTop="2dp"
                 android:src="@drawable/edit"
                 app:layout_constraintStart_toEndOf="@+id/textView3"
-                app:layout_constraintTop_toBottomOf="@+id/textView2" />
+                app:layout_constraintTop_toBottomOf="@+id/textView2"
+                android:contentDescription="@string/todo" />
 
             <!--<ImageView
                 android:id="@+id/iv_info"
@@ -150,34 +152,29 @@
                     style="@style/Theme.MaterialComponents.Light"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="40dp"
-                    android:text="Fav"
-                    android:textColor="@color/black"
-                    app:chipIcon="@drawable/ic_camera_enhance"
+                    android:text="Favourites"
+                    android:textColor="@color/colorPrimary"
+                    app:chipIcon="@drawable/ic_star"
                     app:iconStartPadding="5dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/textChat"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/textChat"
                     style="@style/Theme.MaterialComponents.Light"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="36dp"
                     android:text="Chat"
-                    android:textColor="@color/black"
-                    app:chipIcon="@drawable/ic_camera_enhance"
+                    android:textColor="@color/colorPrimary"
+                    app:chipIcon="@drawable/ic_bubble_chat"
                     app:iconStartPadding="5dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/textFav"
                     app:layout_constraintEnd_toStartOf="@+id/textTrips"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/textFav"
-                    app:layout_constraintTop_toTopOf="@+id/textFav"
-                    app:layout_constraintVertical_bias="0.0" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/textTrips"
@@ -185,14 +182,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Trips"
-                    android:textColor="@color/black"
-                    app:chipIcon="@drawable/ic_camera_enhance"
+                    android:textColor="@color/colorPrimary"
+                    app:chipIcon="@drawable/ic_trip"
                     app:iconStartPadding="5dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/textChat"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/textChat"
-                    app:layout_constraintTop_toTopOf="@+id/textChat" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -201,7 +197,7 @@
                     android:id="@+id/profile_details"
                     android:layout_width="match_parent"
                     android:layout_height="263dp"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:orientation="vertical"
                     app:layout_constraintTop_toBottomOf="@+id/chip_details"
                     tools:layout_editor_absoluteX="-16dp">

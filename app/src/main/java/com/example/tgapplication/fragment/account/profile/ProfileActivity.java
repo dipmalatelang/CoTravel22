@@ -1,10 +1,7 @@
 package com.example.tgapplication.fragment.account.profile;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,8 +23,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -91,7 +86,6 @@ public class ProfileActivity extends BaseActivity {
     TextView tvHairValue;
     @BindView(R.id.card_personal)
     CardView cardPersonal;
-    private DatabaseReference mDatabase;
     private ArrayList<Upload> uploads = new ArrayList<>();
     ArrayList<User> userList = new ArrayList<>();
     private FirebaseUser fuser;
@@ -206,10 +200,8 @@ public class ProfileActivity extends BaseActivity {
 
     public void getProfileData(FirebaseUser fuser) {
         // any way you managed to go the node that has the 'grp_key'
-        DatabaseReference MembersRef = FirebaseDatabase.getInstance()
-                .getReference()
-                .child("Users");
-        MembersRef.addValueEventListener(
+
+        UsersInstance.addValueEventListener(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -236,8 +228,7 @@ public class ProfileActivity extends BaseActivity {
     }
 
     public void getAllImages(String uid) {
-        mDatabase = FirebaseDatabase.getInstance().getReference("Pictures").child(uid);
-        mDatabase.addValueEventListener(new ValueEventListener() {
+        PicturesInstance.child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
 

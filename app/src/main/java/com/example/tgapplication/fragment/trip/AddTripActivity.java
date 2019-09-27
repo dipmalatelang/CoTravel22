@@ -34,8 +34,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
@@ -50,7 +48,6 @@ import butterknife.ButterKnife;
 
 public class AddTripActivity extends BaseActivity implements View.OnClickListener {
 
-    DatabaseReference reference;
     FirebaseUser fuser;
     Button btn_add_trip;
     TextView tv_from_date1, tv_to_date1;
@@ -167,10 +164,7 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
 
     public void displayTripList(String uid) {
 
-        DatabaseReference reference1 = FirebaseDatabase.getInstance()
-                .getReference()
-                .child("Trips");
-        reference1.orderByKey().equalTo(uid)
+        TripsInstance.orderByKey().equalTo(uid)
                 .addValueEventListener(
                         new ValueEventListener() {
                             @Override
@@ -192,13 +186,21 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
                                     Log.i("List now", "" + trips.get(j).getLocation());
                                 }
                                 // add code here of adapter
-                                mtripAdapter = new TripListAdapter(AddTripActivity.this, uid, trips, (tripDataList, position) -> {
-                                    et_location.setText(tripDataList.get(position).getLocation());
-                                    et_note.setText(tripDataList.get(position).getTrip_note());
-                                    tv_from_date.setText(tripDataList.get(position).getFrom_date());
-                                    tv_to_date.setText(tripDataList.get(position).getTo_date());
-                                    edit_id = tripDataList.get(position).getId();
-                                    appbar.setExpanded(true);
+                                mtripAdapter = new TripListAdapter(AddTripActivity.this, uid, trips, new TripListAdapter.TripListInterface() {
+                                    @Override
+                                    public void sendTripLiist(List<TripData> tripDataList, int position) {
+                                        et_location.setText(tripDataList.get(position).getLocation());
+                                        et_note.setText(tripDataList.get(position).getTrip_note());
+                                        tv_from_date.setText(tripDataList.get(position).getFrom_date());
+                                        tv_to_date.setText(tripDataList.get(position).getTo_date());
+                                        edit_id = tripDataList.get(position).getId();
+                                        appbar.setExpanded(true);
+                                    }
+
+                                    @Override
+                                    public void removeTrip(String uid, String id) {
+                                        TripsInstance.child(uid).child(id).removeValue();
+                                    }
                                 });
                                 recyclerView.setAdapter(mtripAdapter);
                             }
@@ -211,21 +213,20 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void Trips(String edit_id) {
-        reference = FirebaseDatabase.getInstance().getReference("Trips").child(fuser.getUid());
         String userId;
         if (!edit_id.equalsIgnoreCase("")) {
             userId = edit_id;
             snackBar(tripRelativelayout, "Trip edited Successfully..!");
             dismissProgressDialog();
         } else {
-            userId = reference.push().getKey();
+            userId = TripsInstance.child(fuser.getUid()).push().getKey();
             snackBar(tripRelativelayout, "Trip added Successfully..!");
             dismissProgressDialog();
         }
         TripData tripData = new TripData(userId, et_location.getText().toString(), et_note.getText().toString(),
                 tv_from_date.getText().toString(), tv_to_date.getText().toString());
 
-        reference.child(userId).setValue(tripData);
+        TripsInstance.child(fuser.getUid()).child(userId).setValue(tripData);
 
 
         displayTripList(fuser.getUid());

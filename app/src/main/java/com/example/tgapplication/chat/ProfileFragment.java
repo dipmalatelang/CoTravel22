@@ -13,7 +13,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.tgapplication.BaseFragment;
@@ -27,8 +26,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -49,7 +46,6 @@ public class ProfileFragment extends BaseFragment {
     CircleImageView image_profile;
     TextView username;
 
-    DatabaseReference reference;
     FirebaseUser fuser;
 
     StorageReference storageReference;
@@ -72,9 +68,7 @@ public class ProfileFragment extends BaseFragment {
         storageReference = FirebaseStorage.getInstance().getReference("uploads");
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
-        reference = FirebaseDatabase.getInstance().getReference("Users").child(fuser.getUid());
-
-        reference.addValueEventListener(new ValueEventListener() {
+        UsersInstance.child(fuser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
@@ -147,10 +141,9 @@ public class ProfileFragment extends BaseFragment {
                         Uri downloadUri = task.getResult();
                         String mUri = downloadUri.toString();
 
-                        reference = FirebaseDatabase.getInstance().getReference("Users").child(fuser.getUid());
                         HashMap<String, Object> map = new HashMap<>();
                         map.put("imageURL", ""+mUri);
-                        reference.updateChildren(map);
+                        UsersInstance.child(fuser.getUid()).updateChildren(map);
 
                         pd.dismiss();
                     } else {

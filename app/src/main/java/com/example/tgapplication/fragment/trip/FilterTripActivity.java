@@ -91,7 +91,7 @@ public class FilterTripActivity extends BaseActivity implements View.OnClickList
 
     private void initComponent() {
 
-        array_lang = new ArrayList<String>(
+        array_lang = new ArrayList<>(
                 Arrays.asList("All","Arabic","Danish","German","Belorussian","Dutch","Greek","Japanese","Portuguese","Italian","Polish","Spanish","Swedish","Bulgarian","English","Hebrew","Korean","Romanian","Thai","Catalan",
                         "Estonian","Hindi","Latvian","Russian","Turkish","Chinese","Filipino","Hungarian","Lithuanian","Serbian","Ukrainian","Croatian","Finnish","Icelandic","Norwegian","Slovak","Urdu","Czech","French",
                         "Indonesian","Persian","Slovenian","Vietnamese","Nepali","Armenian","Kurdish"));

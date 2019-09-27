@@ -21,7 +21,8 @@
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
                 android:layout_height="150dp"
-                android:src="@drawable/d8" />
+                android:src="@drawable/d8"
+                android:contentDescription="TODO" />
 
             <ImageView
                 android:id="@+id/ivTitle"
@@ -29,7 +30,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@id/imageView"
                 android:padding="10dp"
-                android:layout_alignRight="@id/imageView" />
+                android:layout_alignRight="@id/imageView"
+                android:contentDescription="TODO" />
 
             <LinearLayout
                 android:id="@+id/below_opt"
@@ -46,7 +48,8 @@
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_tick"/>
+                    android:src="@drawable/ic_tick"
+                    android:contentDescription="TODO" />
 
 
                 <ImageView
@@ -54,7 +57,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:src="@drawable/ic_action_eye"
-                    android:id="@+id/pp_eye"/>
+                    android:id="@+id/pp_eye"
+                    android:contentDescription="TODO" />
 
 
 
@@ -63,7 +67,8 @@
                     android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_delete"/>
+                    android:src="@drawable/ic_delete"
+                    android:contentDescription="TODO" />
 
             </LinearLayout>
 

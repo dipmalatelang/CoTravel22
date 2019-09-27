@@ -35,14 +35,14 @@ public class CustomAdapter extends PagerAdapter {
 
     @Override
     public boolean isViewFromObject(View view, Object object) {
-        return (view ==(LinearLayout)object);
+        return (view == object);
     }
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         inflater = (LayoutInflater)ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(R.layout.swipe,container,false);
-        ImageView img =(ImageView)v.findViewById(R.id.imageView);
+        ImageView img = v.findViewById(R.id.imageView);
 //        img.setImageResource(mUploads.get(position).url);
         Glide
                 .with(ctx)

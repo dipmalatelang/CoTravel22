@@ -16,9 +16,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.User;
-import com.example.tgapplication.fragment.visitor.BitmapAsync;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -31,11 +28,12 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
     private int fav_int;
     private List<String> favArray;
 
-    public VisitorAdapter(Context mContext, String uid, List<User> mTrip)
+    public VisitorAdapter(Context mContext, String uid, List<User> mTrip, VisitorInterface listener)
     {
         this.uid=uid;
         this.mContext = mContext;
         this.mTrip = mTrip;
+        this.listener=listener;
 //        this.favArray=favArray;
     }
 
@@ -52,16 +50,22 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
     {
 
         final User tList = mTrip.get(position);
-        if(tList.getImageURL().equalsIgnoreCase("default"))
+  /*      if(tList.getImageURL().equalsIgnoreCase("default"))
         {
-            Glide.with(mContext).load(R.drawable.ic_broken_image_primary_24dp).apply(new RequestOptions().override(200, 300)).into(holder.mImage);
+            Glide.with(mContext).load(R.drawable.ic_broken_image_primary_24dp).placeholder(R.drawable.ic_broken_image_primary_24dp).apply(new RequestOptions().override(200, 300)).into(holder.mImage);
         }
         else
-        {
-            Log.i("TAGnnnn", "onBindViewHolder: "+tList.getImageURL());
-            new BitmapAsync(holder.mImage,mContext).execute(tList.getImageURL());
+        {*/
+            for(int i=0;i<mTrip.size();i++)
+            {
+                Log.i("TAG", "onBindViewHolder: "+mTrip.get(i).getId()+" "+mTrip.get(i).getName()+" "+mTrip.get(i).getImageURL());
+            }
+            Glide.with(mContext).load(tList.getImageURL()).placeholder(R.drawable.ic_broken_image_primary_24dp).apply(new RequestOptions().override(200, 300)).into(holder.mImage);
+
+         /*   Log.i("TAGnnnn", "onBindViewHolder: "+tList.getImageURL());
+            new BitmapAsync(holder.mImage,mContext).execute(tList.getImageURL());*/
 //            Glide.with(mContext).load(getBitmapFromURL(tList.getImageURL())).into(holder.mImage);
-        }
+//        }
 
         holder.mTitle.setText(tList.getName());
 
@@ -74,7 +78,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
         holder.mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setProfileVisit(uid,tList.getId());
+                listener.setProfileVisit(uid,tList.getId());
 //                int fav_id= getFav(favArray,tList.getId());
 //                Log.i("Got Needed Value"," "+fav_id);
                 /*Intent mIntent = new Intent(mContext, DetailActivity.class);
@@ -98,15 +102,9 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
         });
     }
 
-    private void setProfileVisit(String uid, String id)
-    {
 
-        final DatabaseReference visitedRef = FirebaseDatabase.getInstance().getReference("ProfileVisitor")
-                .child(id)
-                .child(uid);
-        visitedRef.child("id").setValue(uid);
 
-    }
+
 
     @Override
     public int getItemCount() {
@@ -192,4 +190,8 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
         return output;
     }*/
 
+    VisitorInterface listener;
+    public interface VisitorInterface{
+        void setProfileVisit(String uid, String id);
+    }
 }

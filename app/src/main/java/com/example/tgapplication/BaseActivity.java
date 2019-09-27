@@ -1,43 +1,29 @@
 package com.example.tgapplication;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.TextView;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tgapplication.fragment.trip.module.PlanTrip;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
-import com.example.tgapplication.photo.MyAdapter;
-import com.example.tgapplication.photo.Upload;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -49,10 +35,19 @@ public abstract class BaseActivity extends AppCompatActivity {
     private Date closest;
     String tripNote = "";
     public int fav_int;
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
     public long now = System.currentTimeMillis();
     //Global Method and Variable
 //    String fUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
+    public DatabaseReference PicturesInstance = FirebaseDatabase.getInstance().getReference("Pictures");
+    public DatabaseReference ChatlistInstance = FirebaseDatabase.getInstance().getReference("Chatlist");
+    public DatabaseReference ChatsInstance = FirebaseDatabase.getInstance().getReference("Chats");
+    public DatabaseReference FavoritesInstance = FirebaseDatabase.getInstance().getReference("Favorites");
+    public DatabaseReference ProfileVisitorInstance = FirebaseDatabase.getInstance().getReference("ProfileVisitor");
+    public DatabaseReference TokensInstance = FirebaseDatabase.getInstance().getReference("Tokens");
+    public DatabaseReference TripsInstance = FirebaseDatabase.getInstance().getReference("Trips");
+    public DatabaseReference UsersInstance = FirebaseDatabase.getInstance().getReference("Users");
 /*
     public List<TripList> getMyFav() {
         for (int i = 0; i < tripList.size(); i++) {
@@ -209,8 +204,8 @@ public abstract class BaseActivity extends AppCompatActivity {
                 Log.i("Action Button", "onClick triggered");
             }
         });
-        View snackbarLayout = snackbar.getView();
-        TextView textView = (TextView)snackbarLayout.findViewById(R.id.snackbar_text);
+//        View snackbarLayout = snackbar.getView();
+//        TextView textView = (TextView)snackbarLayout.findViewById(R.id.snackbar_text);
 //        textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_android_green_24dp, 0, 0, 0);
 //        textView.setCompoundDrawablePadding(20);
         snackbar.show();
@@ -231,16 +226,13 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public void removeVisit(String uid, String id)
     {
-        final DatabaseReference visitorRef = FirebaseDatabase.getInstance().getReference("ProfileVisitor")
-                .child(uid);
-        visitorRef.child(id).removeValue();
+        ProfileVisitorInstance
+                .child(uid).child(id).removeValue();
     }
 
     public void removeFav(String uid, String id) {
 
-        final DatabaseReference visitorRef = FirebaseDatabase.getInstance().getReference("Favorites")
-                .child(uid);
-        visitorRef.child(id).removeValue();
+        FavoritesInstance.child(uid).child(id).removeValue();
     }
 
     public boolean showOrHidePwd(MotionEvent event, EditText input_password){
@@ -299,6 +291,11 @@ public abstract class BaseActivity extends AppCompatActivity {
 
             }
         }
+    }
+
+    private void updateProfilePic(String picUrl) {
+
+        UsersInstance.child(mAuth.getCurrentUser().getUid()).child("imageURL").setValue(picUrl);
     }
 
 /*    public void hideKeyboard(View view) {

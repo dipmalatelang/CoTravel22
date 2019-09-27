@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.tgapplication.fragment.account.profile.ChangePasswordActivity;
 import com.example.tgapplication.fragment.account.profile.ProfileActivity;
+import com.example.tgapplication.fragment.account.profile.verify.EditPhoneActivity;
 import com.example.tgapplication.login.LoginActivity;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,8 +40,6 @@ public class MyProfileFragment extends Fragment {
     TextView tvPrivatePhoto;
     @BindView(R.id.view2)
     View view2;
-    @BindView(R.id.tv_Phone_email)
-    TextView tvPhoneEmail;
     @BindView(R.id.view3)
     View view3;
     @BindView(R.id.tv_Change_Password)
@@ -63,10 +62,14 @@ public class MyProfileFragment extends Fragment {
     }
 
 
-    @OnClick({R.id.tv_my_profile, R.id.tv_Logout, R.id.iv_Image,R.id.tv_Change_Password})
+    @OnClick({R.id.tv_my_profile, R.id.tv_Logout, R.id.iv_Image,R.id.tv_Change_Password, R.id.tv_verify_acc})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             //
+
+            case R.id.tv_verify_acc:
+                startActivity(new Intent(getActivity(), EditPhoneActivity.class));
+                break;
             case R.id.tv_my_profile:
             case R.id.iv_Image:
                 startActivity(new Intent(getActivity(), ProfileActivity.class));

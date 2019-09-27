@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -30,8 +29,6 @@ import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.photo.MyAdapter;
 import com.example.tgapplication.photo.Upload;
-
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -40,22 +37,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -116,7 +104,6 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
     TextView ivMyPic;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    private DatabaseReference mDatabase;
     private ProgressDialog progressDialog;
     private ArrayList<Upload> uploads;
     private MyAdapter adapter;
@@ -201,8 +188,7 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
         progressDialog.setMessage("Please wait...");
         progressDialog.show();
         storageReference = FirebaseStorage.getInstance().getReference();
-        mDatabase = FirebaseDatabase.getInstance().getReference("Pictures").child(fuser.getUid());
-        mDatabase.addValueEventListener(new ValueEventListener() {
+        PicturesInstance.child(fuser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
 //dismissing the progress dialog
@@ -504,28 +490,24 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
 
     private void setFav(String uid, String id) {
 
-        final DatabaseReference visitorRef = FirebaseDatabase.getInstance().getReference("Favorites")
+        FavoritesInstance
                 .child(uid)
-                .child(id);
-        visitorRef.child("id").setValue(id);
+                .child(id).child("id").setValue(id);
 
     }
 
 
     public void removeFav(String uid, String id) {
 
-        final DatabaseReference visitorRef = FirebaseDatabase.getInstance().getReference("Favorites")
-                .child(uid);
-        visitorRef.child(id).removeValue();
+        FavoritesInstance
+                .child(uid).child(id).removeValue();
 
     }
 
     public void myList(FirebaseUser fuser) {
         // any way you managed to go the node that has the 'grp_key'
-        DatabaseReference MembersRef = FirebaseDatabase.getInstance()
-                .getReference()
-                .child("Users");
-        MembersRef.addValueEventListener(
+
+        UsersInstance.addValueEventListener(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -616,8 +598,8 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
                                         Upload upload = new Upload("Image", getDownloadImageUrl);
 
 //adding an upload to firebase database
-                                        String uploadId = mDatabase.push().getKey();
-                                        mDatabase.child(uploadId).setValue(upload);
+                                        String uploadId = PicturesInstance.child(fuser.getUid()).push().getKey();
+                                        PicturesInstance.child(fuser.getUid()).child(uploadId).setValue(upload);
                                     }
                                else {
                                    snackBar(fragment_acc_constraintLayout,task.getException().getMessage());
