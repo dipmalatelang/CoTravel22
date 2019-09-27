@@ -6,11 +6,8 @@ import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -51,7 +48,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     ConstraintLayout constrainlayout;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
-;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

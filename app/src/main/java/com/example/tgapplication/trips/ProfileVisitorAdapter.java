@@ -16,7 +16,6 @@
 //import com.example.tgapplication.R;
 //import com.example.tgapplication.fragment.trip.DetailActivity;
 //import com.example.tgapplication.fragment.trip.module.TripList;
-//import com.google.firebase.database.DatabaseReference;
 //import com.google.firebase.database.FirebaseDatabase;
 //
 //import java.util.List;
@@ -115,10 +114,8 @@
 //    private void setProfileVisit(String uid, String id)
 //    {
 //
-//        final DatabaseReference visitedRef = FirebaseDatabase.getInstance().getReference("ProfileVisitor")
-//                .child(id)
-//                .child(uid);
-//        visitedRef.child("id").setValue(uid);
+//       ProfileVisitorInstance.child(id)
+//                .child(uid).child("id").setValue(uid);
 //
 //    }
 //

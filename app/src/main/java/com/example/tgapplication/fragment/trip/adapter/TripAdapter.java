@@ -12,11 +12,8 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.TripList;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -59,7 +56,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
             @Override
             public void onClick(View view) {
                 listener.setData(tList,position);
-                setProfileVisit(uid,tList.getId());
+                listener.setProfileVisit(uid,tList.getId());
 
                Log.i("Got Needed Value"," "+tList.getFavid());
             }
@@ -70,16 +67,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
     ProfileData listener ;
     public interface ProfileData{
         void setData(TripList tList, int position);
-    }
-
-
-    private void setProfileVisit(String uid, String id) {
-
-        final DatabaseReference visitedRef = FirebaseDatabase.getInstance().getReference("ProfileVisitor")
-                .child(id)
-                .child(uid);
-        visitedRef.child("id").setValue(uid);
-
+        void setProfileVisit(String uid, String id);
     }
 
     @Override

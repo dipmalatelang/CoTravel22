@@ -2,7 +2,6 @@ package com.example.tgapplication.fragment.account.profile;
 
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,8 +26,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -42,7 +39,6 @@ import butterknife.ButterKnife;
 public class EditPhotoActivity extends BaseActivity {
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    private DatabaseReference mDatabase;
     private FirebaseUser fuser;
     private ArrayList<Upload> uploads;
     private MyAdapter adapter;
@@ -65,8 +61,7 @@ public class EditPhotoActivity extends BaseActivity {
 
         storageReference = FirebaseStorage.getInstance().getReference();
 
-        mDatabase = FirebaseDatabase.getInstance().getReference("Pictures").child(fuser.getUid());
-        mDatabase.addValueEventListener(new ValueEventListener() {
+        PicturesInstance.child(fuser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
 //dismissing the progress dialog
@@ -157,8 +152,8 @@ public class EditPhotoActivity extends BaseActivity {
                                         Upload upload = new Upload("Image", getDownloadImageUrl);
 
 //adding an upload to firebase database
-                                        String uploadId = mDatabase.push().getKey();
-                                        mDatabase.child(uploadId).setValue(upload);
+                                        String uploadId = PicturesInstance.child(fuser.getUid()).push().getKey();
+                                        PicturesInstance.child(fuser.getUid()).child(uploadId).setValue(upload);
                                     }
                                     else {
                                         Toast.makeText(EditPhotoActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();

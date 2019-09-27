@@ -21,7 +21,6 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -31,7 +30,6 @@ import com.example.tgapplication.BuildConfig;
 import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.User;
-//import com.example.tgapplication.trips.TripActivity;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -52,8 +50,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.lang.reflect.Field;
 import java.text.ParseException;
@@ -63,6 +59,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+
 
 public class RegisterActivity extends BaseActivity implements View.OnClickListener, View.OnTouchListener {
 
@@ -76,7 +73,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     ArrayList<String> range_age=new ArrayList<>();
     EditText regi_et_name, regi_et_email, regi_et_pass,regi_et_location;
     TextInputLayout textInput_location;
-    DatabaseReference databaseReference;
 
     LinearLayout travelprefer_form;
     ConstraintLayout regi_form;
@@ -308,11 +304,10 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                             assert firebaseUser != null;
                             String userid = firebaseUser.getUid();
 
-                            databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userid);
                             Log.i("Done","gothere");
                             User userClass=new User(userid, username, "default", "offline",username.toLowerCase(),str_gender,str_age,email, firebaseUser.getProviderId(),"","","",
                                     "","","", look, range_age,"",username,"","","");
-                            databaseReference.setValue(userClass);
+                            UsersInstance.child(userid).setValue(userClass);
                             Log.i("Done","gotin");
 //                            startActivity(new Intent(RegisterActivity.this,LoginActivity.class));
                             regi_form.setVisibility(View.GONE);
@@ -433,12 +428,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
     private void updateRegister(final ArrayList<String> look, ArrayList<String> age) {
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(mAuth.getCurrentUser().getUid());
-
 //        User userClass=new User(look,age);
-        databaseReference.child("look").setValue(look);
-        databaseReference.child("range_age").setValue(age);
-
+        UsersInstance.child(mAuth.getCurrentUser().getUid()).child("look").setValue(look);
+        UsersInstance.child(mAuth.getCurrentUser().getUid()).child("range_age").setValue(age);
 //        User userClass=new User(user.getUid(), user.getDisplayName(), user.getPhotoUrl().toString()+"?type=large", "offline",user.getDisplayName().toLowerCase(), str_gender, age, user.getEmail(),
 //                user.getProviderId(),str_body_type, str_dob, str_eyes, str_hair, str_height, str_lang,
 //                str_look, str_location, str_name, user.getPhoneNumber(), str_nationality, str_visit);

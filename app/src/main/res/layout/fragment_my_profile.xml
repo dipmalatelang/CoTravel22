@@ -17,7 +17,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteY="8dp" />
+        tools:layout_editor_absoluteY="8dp"
+        android:contentDescription="TODO" />
 
     <TextView
         android:id="@+id/tv_Profile_Name"
@@ -104,12 +105,12 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_Private_Photo" />
 
     <TextView
-        android:id="@+id/tv_Phone_email"
+        android:id="@+id/tv_verify_acc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="Phone / Email Id"
+        android:text="Verify Account"
         android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
         style="@style/text_view_style"
         app:layout_constraintStart_toStartOf="parent"
@@ -123,7 +124,7 @@
         android:layout_marginEnd="2dp"
         android:layout_marginStart="2dp"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/tv_Phone_email" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_verify_acc" />
 
     <TextView
         android:id="@+id/tv_Change_Password"

@@ -13,8 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.TripData;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -74,7 +72,7 @@ public class TripListAdapter extends RecyclerView.Adapter<TripListAdapter.TripHo
             public void onClick(View v) {
                 // remove your item from data base
 //                Log.i("CheckId",tripDataList.get(position).getId());
-                removeTrip(uid,tripDataList.get(position).getId());
+                listener.removeTrip(uid,tripDataList.get(position).getId());
                 tripDataList.remove(position);  // remove the item from list
 //                notifyDataSetChanged(); // notify the adapter about the removed item
                 notifyItemRemoved(position);
@@ -98,13 +96,10 @@ public class TripListAdapter extends RecyclerView.Adapter<TripListAdapter.TripHo
     TripListInterface listener;
     public interface TripListInterface{
         void sendTripLiist(List<TripData> tripDataList, int position);
+        void removeTrip(String uid, String id);
     }
 
-    private void removeTrip(String uid, String id) {
-        final DatabaseReference visitorRef = FirebaseDatabase.getInstance().getReference("Trips")
-                .child(uid);
-        visitorRef.child(id).removeValue();
-    }
+
 
 
     @Override

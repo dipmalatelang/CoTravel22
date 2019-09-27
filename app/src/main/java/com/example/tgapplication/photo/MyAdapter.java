@@ -1,15 +1,12 @@
 package com.example.tgapplication.photo;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.ViewGroup;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,11 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.account.profile.EditPhotoActivity;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.StorageReference;
 
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -32,7 +26,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
     String TAG = "AdapterClass";
     String uid;
     private StorageReference storageReference;
-    private DatabaseReference reference;
+
 
     public MyAdapter(Context context, String uid, List<Upload> uploads) {
         this.uid=uid;
@@ -107,10 +101,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
                     break;
             }
 
-           /* reference = FirebaseDatabase.getInstance().getReference("Users").child(uid);
-            HashMap<String, Object> map = new HashMap<>();
+           /* HashMap<String, Object> map = new HashMap<>();
             map.put("imageURL", ""+uploadCurrent.getUrl());
-            reference.updateChildren(map);
+            UsersInstance.child(uid).updateChildren(map);
 
             holder.ivTitle.setImageDrawable(mcontext.getResources().getDrawable(R.drawable.ic_action_fav_remove));*/
         });

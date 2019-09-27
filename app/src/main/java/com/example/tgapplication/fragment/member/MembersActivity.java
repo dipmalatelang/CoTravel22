@@ -20,8 +20,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
@@ -51,9 +49,8 @@ public class MembersActivity extends BaseActivity {
 
     public void tripList(FirebaseUser fuser) {
         // any way you managed to go the node that has the 'grp_key'
-        DatabaseReference MembersRef = FirebaseDatabase.getInstance()
-                .getReference().child("Users");
-        MembersRef.addValueEventListener(
+
+        UsersInstance.addValueEventListener(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -64,10 +61,7 @@ public class MembersActivity extends BaseActivity {
                             if (!user.getId().equalsIgnoreCase(fuser.getUid())) {
 //                                getFav(fuser.getUid(),user.getId());
                                 // HERE WHAT CORRESPONDS TO JOIN
-                                DatabaseReference visitorRef = FirebaseDatabase.getInstance().getReference("Favorites")
-                                        .child(fuser.getUid());
-
-                                visitorRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot snapshot) {
 
@@ -86,8 +80,15 @@ public class MembersActivity extends BaseActivity {
                                                             @Override
                                                             public void setData(TripList tList, int position) {
                                                                 Intent mIntent = new Intent(MembersActivity.this, ProfileActivity.class);
-                                                                mIntent.putExtra("MyObj", (Serializable) tripList.get(position));
+                                                                mIntent.putExtra("MyObj", tripList.get(position));
                                                                 startActivity(mIntent);
+                                                            }
+
+                                                            @Override
+                                                            public void setProfileVisit(String uid, String id) {
+                                                                ProfileVisitorInstance.child(id)
+                                                                            .child(uid).child("id").setValue(uid);
+
                                                             }
                                                         });
                                                         recyclerView.setAdapter(membersAdapter);

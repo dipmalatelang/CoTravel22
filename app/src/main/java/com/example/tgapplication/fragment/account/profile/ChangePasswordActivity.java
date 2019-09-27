@@ -57,15 +57,9 @@ public class ChangePasswordActivity extends BaseActivity {
         etConfirmpassword.setOnTouchListener((view, motionEvent) -> showOrHidePwd(motionEvent, etConfirmpassword));
     }
 
-    @OnClick({R.id.etCurrentPassword, R.id.etNewpassword, R.id.etConfirmpassword, R.id.btnSaveNow})
+    @OnClick({R.id.btnSaveNow})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.etCurrentPassword:
-                break;
-            case R.id.etNewpassword:
-                break;
-            case R.id.etConfirmpassword:
-                break;
             case R.id.btnSaveNow:
 
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();

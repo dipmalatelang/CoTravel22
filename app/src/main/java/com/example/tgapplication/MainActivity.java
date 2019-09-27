@@ -6,13 +6,11 @@ import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
-import com.example.tgapplication.fragment.account.AccountFragment;
 import com.example.tgapplication.fragment.chat.ChatFragment;
 import com.example.tgapplication.fragment.favourite.FavouriteFragment;
 import com.example.tgapplication.fragment.trip.TripFragment;

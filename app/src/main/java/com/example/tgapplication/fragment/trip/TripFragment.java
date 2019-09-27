@@ -28,17 +28,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -161,9 +157,8 @@ public class TripFragment extends BaseFragment {
 
 
             // any way you managed to go the node that has the 'grp_key'
-            DatabaseReference MembersRef = FirebaseDatabase.getInstance()
-                    .getReference().child("Users");
-            MembersRef.addValueEventListener(
+
+        UsersInstance.addValueEventListener(
                     new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -174,10 +169,8 @@ public class TripFragment extends BaseFragment {
                                 if (!user.getId().equalsIgnoreCase(fuser.getUid())) {
 //                                getFav(fuser.getUid(),user.getId());
                                     // HERE WHAT CORRESPONDS TO JOIN
-                                    DatabaseReference visitorRef = FirebaseDatabase.getInstance().getReference("Favorites")
-                                            .child(fuser.getUid());
-
-                                    visitorRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    FavoritesInstance
+                                            .child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot snapshot) {
 
@@ -188,10 +181,8 @@ public class TripFragment extends BaseFragment {
                                                 fav = 0;
                                             }
 
-                                            DatabaseReference reference1 = FirebaseDatabase.getInstance()
-                                                    .getReference()
-                                                    .child("Trips");
-                                            reference1.orderByKey().equalTo(user.getId())
+
+                                            TripsInstance.orderByKey().equalTo(user.getId())
                                                     .addValueEventListener(new ValueEventListener() {
 
                                                         @Override
@@ -253,8 +244,16 @@ public class TripFragment extends BaseFragment {
                                                                 @Override
                                                                 public void setData(TripList tList, int position) {
                                                                     Intent mIntent = new Intent(getActivity(), ProfileActivity.class);
-                                                                    mIntent.putExtra("MyObj", (Serializable) tripList.get(position));
+                                                                    mIntent.putExtra("MyObj", tripList.get(position));
                                                                     startActivity(mIntent);
+                                                                }
+
+                                                                @Override
+                                                                public void setProfileVisit(String uid, String id) {
+
+                                                                    ProfileVisitorInstance
+                                                                                .child(id)
+                                                                                .child(uid).child("id").setValue(uid);
                                                                 }
                                                             });
                                                             recyclerview.setAdapter(tripAdapter);
@@ -289,10 +288,8 @@ public class TripFragment extends BaseFragment {
     int fav;
     private void getFav(String uid,String id) {
 
-        final DatabaseReference visitorRef = FirebaseDatabase.getInstance().getReference("Favorites")
-                .child(uid);
-
-        visitorRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        FavoritesInstance
+                .child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
 
@@ -331,11 +328,8 @@ public class TripFragment extends BaseFragment {
 //    }
     public void getAllFav(FirebaseUser fuser, String id) {
 
-        DatabaseReference favRef = FirebaseDatabase.getInstance().getReference("Favorites")
-                .child(fuser.getUid());
-//        Log.i("Fav",visitorRef.getKey());
-
-        favRef.addValueEventListener(new ValueEventListener() {
+        FavoritesInstance
+                .child(fuser.getUid()).addValueEventListener(new ValueEventListener() {
 
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -370,11 +364,8 @@ public class TripFragment extends BaseFragment {
 
     public void getAllVisit(FirebaseUser fuser) {
 
-        DatabaseReference visitRef = FirebaseDatabase.getInstance().getReference("ProfileVisitor")
-                .child(fuser.getUid());
-//        Log.i("Fav",visitorRef.getKey());
-
-        visitRef.addValueEventListener(new ValueEventListener() {
+        ProfileVisitorInstance
+                .child(fuser.getUid()).addValueEventListener(new ValueEventListener() {
 
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -397,9 +388,8 @@ public class TripFragment extends BaseFragment {
 
     public void tripList(FirebaseUser fuser) {
         // any way you managed to go the node that has the 'grp_key'
-        DatabaseReference MembersRef = FirebaseDatabase.getInstance()
-                .getReference().child("Users");
-        MembersRef.addValueEventListener(
+
+        UsersInstance.addValueEventListener(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -410,10 +400,8 @@ public class TripFragment extends BaseFragment {
                             if (!user.getId().equalsIgnoreCase(fuser.getUid())) {
 //                                getFav(fuser.getUid(),user.getId());
                                 // HERE WHAT CORRESPONDS TO JOIN
-                                DatabaseReference visitorRef = FirebaseDatabase.getInstance().getReference("Favorites")
-                                        .child(fuser.getUid());
-
-                                visitorRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                FavoritesInstance
+                                        .child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot snapshot) {
 
@@ -424,10 +412,7 @@ public class TripFragment extends BaseFragment {
                                             fav = 0;
                                         }
 
-                                        DatabaseReference reference1 = FirebaseDatabase.getInstance()
-                                                .getReference()
-                                                .child("Trips");
-                                        reference1.orderByKey().equalTo(user.getId())
+                                        TripsInstance.orderByKey().equalTo(user.getId())
                                                 .addValueEventListener(new ValueEventListener() {
 
                                                     @Override
@@ -472,8 +457,14 @@ public class TripFragment extends BaseFragment {
                                                             @Override
                                                             public void setData(TripList tList, int position) {
                                                                 Intent mIntent = new Intent(getActivity(), ProfileActivity.class);
-                                                                mIntent.putExtra("MyObj", (Serializable) tripList.get(position));
+                                                                mIntent.putExtra("MyObj", tripList.get(position));
                                                                 startActivity(mIntent);
+                                                            }
+
+                                                            @Override
+                                                            public void setProfileVisit(String uid, String id) {
+                                                                ProfileVisitorInstance.child(id)
+                                                                        .child(uid).child("id").setValue(uid);
                                                             }
                                                         });
                                                         recyclerview.setAdapter(tripAdapter);

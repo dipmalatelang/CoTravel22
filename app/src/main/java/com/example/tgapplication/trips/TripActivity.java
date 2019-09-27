@@ -29,7 +29,6 @@
 //import com.google.firebase.auth.FirebaseUser;
 //import com.google.firebase.database.DataSnapshot;
 //import com.google.firebase.database.DatabaseError;
-//import com.google.firebase.database.DatabaseReference;
 //import com.google.firebase.database.FirebaseDatabase;
 //import com.google.firebase.database.ValueEventListener;
 //
@@ -138,11 +137,7 @@
 //
 //    private void getAllVisit() {
 //
-//        DatabaseReference visitRef = FirebaseDatabase.getInstance().getReference("ProfileVisitor")
-//                .child(fuser.getUid());
-////        Log.i("Fav",visitorRef.getKey());
-//
-//        visitRef.addValueEventListener(new ValueEventListener() {
+//      ProfileVisitorInstance.child(fuser.getUid()).addValueEventListener(new ValueEventListener() {
 //
 //            @Override
 //            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -166,11 +161,8 @@
 //
 //    private void getAllFav() {
 //
-//        DatabaseReference favRef = FirebaseDatabase.getInstance().getReference("Favorites")
-//                .child(fuser.getUid());
-////        Log.i("Fav",visitorRef.getKey());
-//
-//        favRef.addValueEventListener(new ValueEventListener() {
+//        FavoritesInstance
+//                .child(fuser.getUid()).addValueEventListener(new ValueEventListener() {
 //
 //            @Override
 //            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

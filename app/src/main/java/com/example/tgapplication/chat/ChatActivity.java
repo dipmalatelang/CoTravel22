@@ -7,13 +7,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
+import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.google.android.material.tabs.TabLayout;
@@ -21,8 +21,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -30,13 +28,12 @@ import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends BaseActivity {
 
     CircleImageView profile_image;
     TextView username;
 
     FirebaseUser firebaseUser;
-    DatabaseReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +46,7 @@ public class ChatActivity extends AppCompatActivity {
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         Log.i("FirebaseUser",firebaseUser.getUid());
-        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
-
-        reference.addValueEventListener(new ValueEventListener() {
+        UsersInstance.child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
@@ -77,8 +72,7 @@ public class ChatActivity extends AppCompatActivity {
         final ViewPager viewPager = findViewById(R.id.view_pager);
 
 
-        reference = FirebaseDatabase.getInstance().getReference("Chats");
-        reference.addValueEventListener(new ValueEventListener() {
+        ChatsInstance.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -170,12 +164,11 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void status(String status){
-        reference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid());
 
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("status", status);
 
-        reference.updateChildren(hashMap);
+        UsersInstance.child(firebaseUser.getUid()).updateChildren(hashMap);
     }
 
     @Override

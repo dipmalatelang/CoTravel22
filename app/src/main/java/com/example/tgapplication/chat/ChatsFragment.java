@@ -5,28 +5,26 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tgapplication.BaseFragment;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class ChatsFragment extends Fragment {
+public class ChatsFragment extends BaseFragment {
 
     private RecyclerView recyclerView;
 
@@ -34,7 +32,6 @@ public class ChatsFragment extends Fragment {
     private List<User> mUsers;
 
     FirebaseUser fuser;
-    DatabaseReference reference;
 
     private List<Chatlist> usersList;
 
@@ -51,8 +48,7 @@ public class ChatsFragment extends Fragment {
 
         usersList = new ArrayList<>();
 
-        reference = FirebaseDatabase.getInstance().getReference("Chatlist").child(fuser.getUid());
-        reference.addValueEventListener(new ValueEventListener() {
+        ChatlistInstance.child(fuser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 usersList.clear();
@@ -78,15 +74,13 @@ public class ChatsFragment extends Fragment {
     }
 
     private void updateToken(String token){
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Tokens");
         Token token1 = new Token(token);
-        reference.child(fuser.getUid()).setValue(token1);
+        TokensInstance.child(fuser.getUid()).setValue(token1);
     }
 
     private void chatList() {
         mUsers = new ArrayList<>();
-        reference = FirebaseDatabase.getInstance().getReference("Users");
-        reference.addValueEventListener(new ValueEventListener() {
+        UsersInstance.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mUsers.clear();
@@ -98,7 +92,12 @@ public class ChatsFragment extends Fragment {
                         }
                     }
                 }
-                userAdapter = new UserAdapter(getContext(), mUsers, true);
+                userAdapter = new UserAdapter(getContext(), mUsers, true, new UserAdapter.UserInterface() {
+                    @Override
+                    public void lastMessage(String userid, TextView last_msg) {
+                        checkForLastMsg(userid,last_msg);
+                    }
+                });
                 recyclerView.setAdapter(userAdapter);
             }
 

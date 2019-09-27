@@ -7,13 +7,23 @@ import android.view.View;
 import android.widget.TextView;
 
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import com.example.tgapplication.chat.Chat;
 import com.example.tgapplication.fragment.trip.module.PlanTrip;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,6 +45,17 @@ public abstract class BaseFragment extends Fragment {
     String str_city, str_lang, str_eyes, str_hairs, str_height, str_bodytype, str_look, str_from, str_to, str_visit;
     String tripNote = "";
     public List<TripList> myFavArray = new ArrayList<>();
+    String theLastMessage;
+
+    public DatabaseReference PicturesInstance = FirebaseDatabase.getInstance().getReference("Pictures");
+    public DatabaseReference ChatlistInstance = FirebaseDatabase.getInstance().getReference("Chatlist");
+    public DatabaseReference ChatsInstance = FirebaseDatabase.getInstance().getReference("Chats");
+    public DatabaseReference FavoritesInstance = FirebaseDatabase.getInstance().getReference("Favorites");
+    public DatabaseReference ProfileVisitorInstance = FirebaseDatabase.getInstance().getReference("ProfileVisitor");
+    public DatabaseReference TokensInstance = FirebaseDatabase.getInstance().getReference("Tokens");
+    public DatabaseReference TripsInstance = FirebaseDatabase.getInstance().getReference("Trips");
+    public DatabaseReference UsersInstance = FirebaseDatabase.getInstance().getReference("Users");
+
 
     public List<TripList> findClosestDate(List<Date> dates, User user, int fav_id) {
 
@@ -108,6 +129,45 @@ public abstract class BaseFragment extends Fragment {
         if (!getActivity().isFinishing()) {
             ProgressActivity.dismissDialog();
         }
+    }
+
+    //check for last message
+    public void checkForLastMsg(final String userid, final TextView last_msg){
+        theLastMessage = "default";
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        ChatsInstance.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Chat chat = snapshot.getValue(Chat.class);
+                    Log.i("Snap"," "+snapshot);
+                    if (firebaseUser != null && chat != null) {
+                        if (chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userid) ||
+                                chat.getReceiver().equals(userid) && chat.getSender().equals(firebaseUser.getUid())) {
+                            theLastMessage = chat.getMessage();
+                        }
+                    }
+                }
+
+                switch (theLastMessage){
+                    case  "default":
+                        last_msg.setText("No Message");
+                        break;
+
+                    default:
+                        last_msg.setText(theLastMessage);
+                        break;
+                }
+
+                theLastMessage = "default";
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }

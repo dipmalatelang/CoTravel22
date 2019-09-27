@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -25,8 +24,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
@@ -45,7 +42,6 @@ public class MessageActivity extends BaseActivity {
     TextView username;
 
     FirebaseUser fuser;
-    DatabaseReference reference;
 
     ImageButton btn_send;
     EditText text_send;
@@ -118,9 +114,7 @@ public class MessageActivity extends BaseActivity {
         });
 
 
-        reference = FirebaseDatabase.getInstance().getReference("Users").child(userid);
-
-        reference.addValueEventListener(new ValueEventListener() {
+        UsersInstance.child(userid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
@@ -145,8 +139,8 @@ public class MessageActivity extends BaseActivity {
     }
 
     private void seenMessage(final String userid){
-        reference = FirebaseDatabase.getInstance().getReference("Chats");
-        seenListener = reference.addValueEventListener(new ValueEventListener() {
+
+        seenListener = ChatsInstance.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
@@ -168,27 +162,22 @@ public class MessageActivity extends BaseActivity {
 
     private void sendMessage(String sender, final String receiver, String message){
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("sender", sender);
         hashMap.put("receiver", receiver);
         hashMap.put("message", message);
         hashMap.put("isseen", false);
 
-        reference.child("Chats").push().setValue(hashMap);
+        ChatsInstance.push().setValue(hashMap);
 
 
         // add user to chat fragment
-        final DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference("Chatlist")
-                .child(fuser.getUid())
-                .child(userid);
 
-        chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        ChatlistInstance.child(fuser.getUid()).child(userid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.exists()){
-                    chatRef.child("id").setValue(userid);
+                    ChatlistInstance.child(fuser.getUid()).child(userid).child("id").setValue(userid);
                 }
             }
 
@@ -197,16 +186,12 @@ public class MessageActivity extends BaseActivity {
 
             }
         });
-        
-        final DatabaseReference chatRefReceiver = FirebaseDatabase.getInstance().getReference("Chatlist")
-                .child(userid)
-                .child(fuser.getUid());
-        chatRefReceiver.child("id").setValue(fuser.getUid());
+
+        ChatlistInstance.child(userid).child(fuser.getUid()).child("id").setValue(fuser.getUid());
 
         final String msg = message;
 
-        reference = FirebaseDatabase.getInstance().getReference("Users").child(fuser.getUid());
-        reference.addValueEventListener(new ValueEventListener() {
+        UsersInstance.child(fuser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
@@ -224,8 +209,7 @@ public class MessageActivity extends BaseActivity {
     }
 
     private void sendNotifiaction(String receiver, final String username, final String message){
-        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
-        Query query = tokens.orderByKey().equalTo(receiver);
+        Query query = TokensInstance.orderByKey().equalTo(receiver);
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -265,8 +249,7 @@ public class MessageActivity extends BaseActivity {
     private void readMesagges(final String myid, final String userid, final String imageurl){
         mchat = new ArrayList<>();
 
-        reference = FirebaseDatabase.getInstance().getReference("Chats");
-        reference.addValueEventListener(new ValueEventListener() {
+        ChatsInstance.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mchat.clear();
@@ -296,12 +279,11 @@ public class MessageActivity extends BaseActivity {
     }
 
     private void status(String status){
-        reference = FirebaseDatabase.getInstance().getReference("Users").child(fuser.getUid());
 
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("status", status);
 
-        reference.updateChildren(hashMap);
+        UsersInstance.child(fuser.getUid()).updateChildren(hashMap);
     }
 
     @Override
@@ -314,7 +296,7 @@ public class MessageActivity extends BaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        reference.removeEventListener(seenListener);
+        ChatsInstance.removeEventListener(seenListener);
         status("offline");
         currentUser("none");
     }
