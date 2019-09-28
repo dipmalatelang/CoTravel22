@@ -1,6 +1,6 @@
 package com.example.tgapplication.chat;
 
-public class Sender {
+public class  Sender {
     public Data data;
     public String to;
 

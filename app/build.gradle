@@ -46,6 +46,8 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.google.firebase:firebase-storage:18.1.0'
 
+    implementation 'com.google.firebase:firebase-messaging:17.3.1'
+
     implementation 'com.rengwuxian.materialedittext:library:2.1.4'
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
@@ -53,6 +55,7 @@ dependencies {
 
     //Google Map Place
     implementation 'com.google.android.libraries.places:places:2.0.0'
+    implementation 'com.google.firebase:firebase-messaging:20.0.0'
 
 }
 apply plugin: 'com.google.gms.google-services'
