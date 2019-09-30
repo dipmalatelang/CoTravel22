@@ -51,12 +51,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
 
         if(position==0)
         {
-            holder.below_opt.setVisibility(View.GONE);
+//            holder.below_opt.setVisibility(View.GONE);
 
-            holder.imageView.setAdjustViewBounds(false);
+       /*     holder.imageView.setAdjustViewBounds(false);
             holder.imageView.setScaleType(ImageView.ScaleType.CENTER);
             holder.imageView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
-
+*/
             Glide.with(mcontext)
                     .load(R.drawable.ic_gallery)
                     .placeholder(R.drawable.ic_broken_image_primary_24dp)
@@ -64,19 +64,21 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
         }
         else if(position==1)
         {
-            holder.below_opt.setVisibility(View.GONE);
+//            holder.below_opt.setVisibility(View.GONE);
+/*
 
             holder.imageView.setAdjustViewBounds(false);
             holder.imageView.setScaleType(ImageView.ScaleType.CENTER);
             holder.imageView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
+*/
 
             Glide.with(mcontext)
-                    .load(R.drawable.ic_fb)
+                    .load(R.drawable.ic_facebook)
                     .placeholder(R.drawable.ic_broken_image_primary_24dp)
                     .into(holder.imageView);
         }
         else {
-            holder.below_opt.setVisibility(View.VISIBLE);
+//            holder.below_opt.setVisibility(View.VISIBLE);
             Glide.with(mcontext)
                     .load(uploadCurrent.getUrl())
                     .placeholder(R.drawable.ic_broken_image_primary_24dp)
@@ -108,7 +110,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
             holder.ivTitle.setImageDrawable(mcontext.getResources().getDrawable(R.drawable.ic_action_fav_remove));*/
         });
 
-        holder.set_main.setOnClickListener(new View.OnClickListener() {
+     /*   holder.set_main.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(mcontext, "Set Main", Toast.LENGTH_SHORT).show();
@@ -127,7 +129,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
             public void onClick(View view) {
                 Toast.makeText(mcontext, "Delete", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
     }
 
     @Override
@@ -136,19 +138,20 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
     }
 
     public class ImageViewHolder extends RecyclerView.ViewHolder{
-        public ImageView imageView,ivTitle, set_main, pp_eye, delete;
-        public LinearLayout below_opt;
+        public ImageView imageView,ivTitle;
+//        set_main, pp_eye, delete;
+//        public LinearLayout below_opt;
 
         public ImageViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            below_opt=itemView.findViewById(R.id.below_opt);
+//            below_opt=itemView.findViewById(R.id.below_opt);
             imageView = itemView.findViewById(R.id.imageView);
             ivTitle=itemView.findViewById(R.id.ivTitle);
 
-            set_main=itemView.findViewById(R.id.set_main);
+          /*  set_main=itemView.findViewById(R.id.set_main);
             pp_eye=itemView.findViewById(R.id.pp_eye);
-            delete=itemView.findViewById(R.id.delete);
+            delete=itemView.findViewById(R.id.delete);*/
 
         }
     }
