@@ -2,6 +2,7 @@ package com.example.tgapplication.fragment.account.profile;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,6 +14,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
+import com.example.tgapplication.chat.MessageActivity;
 import com.example.tgapplication.fragment.trip.EditProfileActivity;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
@@ -52,12 +54,12 @@ public class ProfileActivity extends BaseActivity {
     TextView textView3;
     @BindView(R.id.iv_edit_profile)
     ImageView ivEditProfile;
-  /*  @BindView(R.id.iv_info)
-    ImageView ivInfo;
-    @BindView(R.id.iv_msg)
-    ImageView ivMsg;
-    @BindView(R.id.iv_trip)
-    ImageView ivTrip;*/
+    /*  @BindView(R.id.iv_info)
+      ImageView ivInfo;
+      @BindView(R.id.iv_msg)
+      ImageView ivMsg;
+      @BindView(R.id.iv_trip)
+      ImageView ivTrip;*/
     @BindView(R.id.tv_about_me)
     TextView tvAboutMe;
     @BindView(R.id.tv_about_me_value)
@@ -86,6 +88,16 @@ public class ProfileActivity extends BaseActivity {
     TextView tvHairValue;
     @BindView(R.id.card_personal)
     CardView cardPersonal;
+    @BindView(R.id.tv_trip)
+    TextView tvTrip;
+    @BindView(R.id.tv_trip_value)
+    TextView tvTripValue;
+    @BindView(R.id.card_trip)
+    CardView cardTrip;
+    @BindView(R.id.floatingActionButton2)
+    FloatingActionButton floatingActionButton2;
+    @BindView(R.id.iv_fav_user)
+    ImageView ivFavUser;
     private ArrayList<Upload> uploads = new ArrayList<>();
     ArrayList<User> userList = new ArrayList<>();
     private FirebaseUser fuser;
@@ -101,17 +113,28 @@ public class ProfileActivity extends BaseActivity {
         ButterKnife.bind(this);
         fuser = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (getIntent().getSerializableExtra("MyObj") == null)
-        {
+        if (getIntent().getSerializableExtra("MyObj") == null) {
             textProfile.setVisibility(View.VISIBLE);
+            ivFavUser.setVisibility(View.GONE);
+            floatingActionButton2.hide();
             getAllImages(fuser.getUid());
             getProfileData(fuser);
-        }
-        else{
+        } else {
             textProfile.setVisibility(View.GONE);
+            ivFavUser.setVisibility(View.VISIBLE);
+            floatingActionButton2.show();
             tripL = (TripList) getIntent().getSerializableExtra("MyObj");
             getAllImages(tripL.getId());
 
+            if(tripL.getFavid()==1)
+            {
+                ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
+            }
+            else {
+                ivFavUser.setImageResource(R.drawable.ic_action_fav_add);
+            }
+
+            Log.i(TAG, "onCreate: "+tripL.getName()+" "+tripL.getFavid());
             setDetails(tripL.getName(), tripL.getGender(), tripL.getAge(), tripL.getLook(), tripL.getUserLocation(), tripL.getNationality(),
                     tripL.getLang(), tripL.getHeight(), tripL.getBody_type(), tripL.getEyes(), tripL.getHair(), tripL.getVisit(), tripL.getPlanLocation(), tripL.getFrom_to_date(), tripL.getImageUrl());
 //            if(tripL==null)
@@ -128,15 +151,14 @@ public class ProfileActivity extends BaseActivity {
         String str_look = null;
 
         if (name != null && !name.equalsIgnoreCase("") && age != null && !age.equalsIgnoreCase("")) {
-            textView2.setText(name+" , "+age);
+            textView2.setText(name + " , " + age);
         }
 
    /*     if (gender != null && !gender.equalsIgnoreCase("")) {
             tvSex.setText(gender);
         }*/
 
-        if(look!=null)
-        {
+        if (look != null) {
             for (int j = 0; j < look.size(); j++) {
                 if (str_look != null) {
                     str_look += ", " + look.get(j);
@@ -237,7 +259,7 @@ public class ProfileActivity extends BaseActivity {
                     Upload upload = postSnapshot.getValue(Upload.class);
                     uploads.add(upload);
                 }
-              
+
                 adapter = new CustomAdapter(ProfileActivity.this, uid, uploads);
                 viewPager.setAdapter(adapter);
 
@@ -267,7 +289,7 @@ public class ProfileActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.textProfile, R.id.iv_edit_profile})
+    @OnClick({R.id.textProfile, R.id.iv_edit_profile, R.id.floatingActionButton2})
     public void onViewClicked(View view) {
         switch (view.getId()) {
 
@@ -279,8 +301,15 @@ public class ProfileActivity extends BaseActivity {
                 startActivity(new Intent(this, EditProfileActivity.class));
                 break;
 
+            case R.id.floatingActionButton2:
+                Intent intent = new Intent(this, MessageActivity.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("userid", tripL.getId());
+                startActivity(intent);
+
+                break;
+
 
         }
     }
-
 }
