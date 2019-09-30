@@ -4,73 +4,69 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_margin="2dp"
         app:cardCornerRadius="10dp"
         android:padding="8dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:layout_gravity="center"
+            android:layout_height="135dp"
             android:id="@+id/rl_image"
             android:background="@color/colorPrimary" >
 
             <ImageView
+                android:layout_centerInParent="true"
                 android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:adjustViewBounds="true"
-                android:scaleType="fitXY"
-                android:layout_height="150dp"
-                android:src="@drawable/d8"
-                android:contentDescription="TODO" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="TODO"
+                android:src="@drawable/ic_gallery" />
 
             <ImageView
                 android:id="@+id/ivTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@id/imageView"
+                android:layout_alignParentEnd="true"
+                android:contentDescription="TODO"
                 android:padding="10dp"
-                android:layout_alignRight="@id/imageView"
-                android:contentDescription="TODO" />
+                android:src="@drawable/ic_action_fav_remove" />
 
-            <LinearLayout
+          <!--  <LinearLayout
                 android:id="@+id/below_opt"
-                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
                 android:layout_alignParentBottom="true"
-                android:layout_below="@id/imageView"
                 android:background="@color/black"
                 android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="30dp">
+                android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/set_main"
-                    android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_tick"
-                    android:contentDescription="TODO" />
+                    android:layout_weight="1"
+                    android:contentDescription="TODO"
+                    android:src="@drawable/ic_tick" />
 
 
                 <ImageView
+                    android:id="@+id/pp_eye"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_action_eye"
-                    android:id="@+id/pp_eye"
-                    android:contentDescription="TODO" />
-
+                    android:contentDescription="TODO"
+                    android:src="@drawable/ic_action_eye" />
 
 
                 <ImageView
                     android:id="@+id/delete"
-                    android:layout_weight="1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_delete"
-                    android:contentDescription="TODO" />
+                    android:layout_weight="1"
+                    android:contentDescription="TODO"
+                    android:src="@drawable/ic_delete" />
 
-            </LinearLayout>
+            </LinearLayout>-->
 
         </RelativeLayout>
 
