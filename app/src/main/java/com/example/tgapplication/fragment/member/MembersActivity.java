@@ -16,6 +16,7 @@ import com.example.tgapplication.fragment.account.profile.ProfileActivity;
 import com.example.tgapplication.fragment.member.adapter.MembersAdapter;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
+import com.example.tgapplication.photo.Upload;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -24,6 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 public class MembersActivity extends BaseActivity {
     private RecyclerView recyclerView;
@@ -31,6 +33,7 @@ public class MembersActivity extends BaseActivity {
     private MembersAdapter membersAdapter;
     private List<User> mUsers;
     int fav;
+    String pictureUrl;
     EditText search_users;
     final FirebaseUser fuser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -64,7 +67,6 @@ public class MembersActivity extends BaseActivity {
                                 FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot snapshot) {
-
                                         if (snapshot.hasChild(user.getId())) {
                                             // run some code
                                             fav = 1;
@@ -72,7 +74,23 @@ public class MembersActivity extends BaseActivity {
                                             fav = 0;
                                         }
 
-                                        tripList=findAllMembers(user,fav);
+
+                                            PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                    pictureUrl="";
+                                                    for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
+
+                                                        Upload mainPhoto = snapshot1.getValue(Upload.class);
+                                                        if (Objects.requireNonNull(mainPhoto).type == 1)
+                                                            pictureUrl = mainPhoto.getUrl();
+
+                                                    }
+                                                    Log.i(TAG, "onDataChangeMy: "+pictureUrl);
+                                                    tripList=findAllMembers(user,fav,pictureUrl);
+
+
 
 //                                                tripAdapter = new MembersAdapter(this, fuser.getUid(), favArray, tripList);
 //                                                recyclerview.setAdapter(tripAdapter);
@@ -90,10 +108,19 @@ public class MembersActivity extends BaseActivity {
                                                                             .child(uid).child("id").setValue(uid);
 
                                                             }
+
                                                         });
                                                         recyclerView.setAdapter(membersAdapter);
                                                         membersAdapter.notifyDataSetChanged();
 
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                }
+
+                                            });
 
                                     }
                                     @Override

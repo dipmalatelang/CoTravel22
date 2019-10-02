@@ -522,7 +522,7 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
                         if(userList.size()>0)
                         {
                             for(int i=0;i<userList.size();i++)
-                            setDetails(userList.get(i).getName(), userList.get(i).getGender(), userList.get(i).getAge(), userList.get(i).getLook(), userList.get(i).getLocation(), userList.get(i).getNationality(), userList.get(i).getLang(), userList.get(i).getHeight(), userList.get(i).getBody_type(), userList.get(i).getEyes(), userList.get(i).getHair(), userList.get(i).getVisit(), "", "", userList.get(i).getImageURL());
+                            setDetails(userList.get(i).getName(), userList.get(i).getGender(), userList.get(i).getAge(), userList.get(i).getLook(), userList.get(i).getLocation(), userList.get(i).getNationality(), userList.get(i).getLang(), userList.get(i).getHeight(), userList.get(i).getBody_type(), userList.get(i).getEyes(), userList.get(i).getHair(), userList.get(i).getVisit(), "", "", "default");
                         }
                     }
 
@@ -595,7 +595,7 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
                                         Log.i("FirebaseImages",getDownloadImageUrl);
 
 //creating the upload object to store uploaded image details
-                                        Upload upload = new Upload("Image", getDownloadImageUrl);
+                                        Upload upload = new Upload("Image", getDownloadImageUrl,2);
 
 //adding an upload to firebase database
                                         String uploadId = PicturesInstance.child(fuser.getUid()).push().getKey();

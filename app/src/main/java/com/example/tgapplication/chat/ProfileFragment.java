@@ -73,17 +73,13 @@ public class ProfileFragment extends BaseFragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 username.setText(user.getUsername());
-                String imageUrl=user.getImageURL();
+                String imageUrl="default";
 
-                if (imageUrl.equals("default")){
-                    image_profile.setImageResource(R.mipmap.ic_launcher);
-                } else {
                     // need to check this getting terminated
 //                    java.lang.NullPointerException: Attempt to invoke virtual method 'android.content.Context android.support.v4.app.FragmentActivity.getApplicationContext()' on a null object reference
 //                    at com.free.travelguide.fragment.ProfileFragment$1.onDataChange(ProfileFragment.java:82)
 
-                    Glide.with(getActivity().getApplicationContext()).load(imageUrl).into(image_profile);
-                }
+                    Glide.with(getActivity().getApplicationContext()).load(imageUrl).placeholder(R.mipmap.ic_launcher).into(image_profile);
             }
 
             @Override

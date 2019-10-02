@@ -126,6 +126,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("Tiger", "signInWithCredential:success");
                             dismissProgressDialog();
+
                             updateUI(mAuth.getCurrentUser());
 
                         }

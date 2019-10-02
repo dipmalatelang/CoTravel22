@@ -246,7 +246,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
                         }
                         if (prevUserList.size() > 0) {
                             for (int i = 0; i < prevUserList.size(); i++)
-                                setDefaultVal(prevUserList.get(i).getName(), prevUserList.get(i).getDob(), prevUserList.get(i).getGender(), prevUserList.get(i).getAge(), prevUserList.get(i).getLook(), prevUserList.get(i).getLocation(), prevUserList.get(i).getNationality(), prevUserList.get(i).getLang(), prevUserList.get(i).getHeight(), prevUserList.get(i).getBody_type(), prevUserList.get(i).getEyes(), prevUserList.get(i).getHair(), prevUserList.get(i).getVisit(), "", "", prevUserList.get(i).getImageURL());
+                                setDefaultVal(prevUserList.get(i).getName(), prevUserList.get(i).getDob(), prevUserList.get(i).getGender(), prevUserList.get(i).getAge(), prevUserList.get(i).getLook(), prevUserList.get(i).getLocation(), prevUserList.get(i).getNationality(), prevUserList.get(i).getLang(), prevUserList.get(i).getHeight(), prevUserList.get(i).getBody_type(), prevUserList.get(i).getEyes(), prevUserList.get(i).getHair(), prevUserList.get(i).getVisit());
                         }
                     }
 
@@ -258,7 +258,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         );
     }
 
-    private void setDefaultVal(String name, String dob, String gender, String age, ArrayList<String> look, String location, String nationality, String lang, String height, String body_type, String eyes, String hair, String visit, String s, String s1, String imageURL) {
+    private void setDefaultVal(String name, String dob, String gender, String age, ArrayList<String> look, String location, String nationality, String lang, String height, String body_type, String eyes, String hair, String visit) {
         et_name.setText(name);
         et_location.setText(location);
         et_visit.setText(visit);
@@ -339,7 +339,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
 
         //uncomment this below lines later don't forget
 
-        User userClass = new User(fuser.getUid(), prevUserList.get(0).getUsername(), prevUserList.get(0).getImageURL(), "offline", prevUserList.get(0).getSearch(), str_gender, age, prevUserList.get(0).getEmail(),
+        User userClass = new User(fuser.getUid(), prevUserList.get(0).getUsername(), "offline", prevUserList.get(0).getSearch(), str_gender, age, prevUserList.get(0).getEmail(),
                 fuser.getProviderId(), str_body_type, str_dob, str_eyes, str_hair, str_height, str_lang,
                 str_look, prevUserList.get(0).getRange_age(), str_location, str_name, fuser.getPhoneNumber(), str_nationality, str_visit);
 
