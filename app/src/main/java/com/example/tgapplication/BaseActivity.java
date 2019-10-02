@@ -12,19 +12,25 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tgapplication.fragment.trip.module.PlanTrip;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
+import com.example.tgapplication.photo.Upload;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -73,9 +79,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 
 
-    public List<TripList> findAllMembers(User user, int fav_id) {
+    public List<TripList> findAllMembers(User user, int fav_id, String profilePhoto) {
                  int visit_id=getVisit(visitArray,user.getId());
-                TripList tripListClass = new TripList(user.getId(), user.getUsername(), user.getImageURL(), user.getAge(), user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), tripNote, fav_id,visit_id);
+                TripList tripListClass = new TripList(user.getId(), user.getUsername(), profilePhoto, user.getAge(), user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), tripNote, fav_id,visit_id);
                 tripList.add(tripListClass);
 
         return tripList;
@@ -95,6 +101,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         return fav_int;
     }
+
 
    /* private void filterTripList(final String str_city, final String str_lang, final String str_eyes, final String str_hairs, final String str_height, final String str_bodytype, final String str_look,
                                 final String str_from, final String str_to, final String str_visit) {
@@ -245,6 +252,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         FavoritesInstance.child(uid).child(id).removeValue();
     }
 
+        public void setFav(String uid, String id) {
+
+        FavoritesInstance
+                .child(uid)
+                .child(id).child("id").setValue(id);
+    }
+
     public boolean showOrHidePwd(MotionEvent event, EditText input_password){
         final int DRAWABLE_RIGHT = 2;
 
@@ -302,6 +316,9 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
         }
     }
+
+
+
 
     private void updateProfilePic(String picUrl) {
 

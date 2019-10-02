@@ -58,9 +58,9 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
         {*/
             for(int i=0;i<mTrip.size();i++)
             {
-                Log.i("TAG", "onBindViewHolder: "+mTrip.get(i).getId()+" "+mTrip.get(i).getName()+" "+mTrip.get(i).getImageURL());
+                Log.i("TAG", "onBindViewHolder: "+mTrip.get(i).getId()+" "+mTrip.get(i).getName()+" "+"default");
             }
-            Glide.with(mContext).load(tList.getImageURL()).placeholder(R.drawable.ic_broken_image_primary_24dp).apply(new RequestOptions().override(200, 300)).into(holder.mImage);
+            Glide.with(mContext).load("default").placeholder(R.drawable.ic_broken_image_primary_24dp).apply(new RequestOptions().override(200, 300)).into(holder.mImage);
 
          /*   Log.i("TAGnnnn", "onBindViewHolder: "+tList.getImageURL());
             new BitmapAsync(holder.mImage,mContext).execute(tList.getImageURL());*/
