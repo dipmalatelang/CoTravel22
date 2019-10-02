@@ -86,9 +86,16 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+        <activity android:name=".fragment.account.profile.cropphoto.Main2Activity">
+
+
+        </activity>
+        <activity android:name=".fragment.account.profile.cropphoto.CropImageActivity"/>
 
         <activity android:name=".fragment.account.profile.ProfileActivity"
-            android:theme="@style/noToolbar" />
+            android:theme="@style/noToolbar" >
+
+        </activity>
         <activity android:name=".fragment.account.profile.EditPhotoActivity"/>
         <activity android:name=".fragment.account.profile.ChangePasswordActivity"/>
 

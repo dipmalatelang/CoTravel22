@@ -100,7 +100,7 @@ public class ChangePasswordActivity extends BaseActivity {
                             });
                         } else {
                             Log.d(TAG, "Error auth failed");
-                            snackBar(clChangepwd, "Error auth failed");
+                            snackBar(clChangepwd, "Enter valid Password");
                         }
 
                     }
