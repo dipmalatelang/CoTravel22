@@ -119,14 +119,11 @@ public class MessageActivity extends BaseActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 username.setText(user.getUsername());
-                if (user.getImageURL().equals("default")){
-                    profile_image.setImageResource(R.mipmap.ic_launcher);
-                } else {
-                    //and this
-                    Glide.with(getApplicationContext()).load(user.getImageURL()).into(profile_image);
-                }
 
-                readMesagges(fuser.getUid(), userid, user.getImageURL());
+                    //and this
+                    Glide.with(getApplicationContext()).load("default").placeholder(R.mipmap.ic_launcher).into(profile_image);
+
+                readMesagges(fuser.getUid(), userid, "default");
             }
 
             @Override

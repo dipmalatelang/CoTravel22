@@ -30,6 +30,7 @@ import com.example.tgapplication.BuildConfig;
 import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.User;
+import com.example.tgapplication.photo.Upload;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -275,6 +276,14 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("Tiger", "signInWithCredential:success");
                             dismissProgressDialog();
+                            FirebaseUser user = mAuth.getCurrentUser();
+
+                            User userClass=new User(user.getUid(), user.getDisplayName(), "offline", user.getDisplayName().toLowerCase(), "", "",  user.getEmail(), user.getProviderId(), "", "", "", "", "", "", look, range_age, "",  user.getDisplayName().toLowerCase(), user.getPhoneNumber(), "", "");
+                            UsersInstance.child(mAuth.getCurrentUser().getUid()).setValue(userClass);
+
+                            String uploadId = PicturesInstance.child(user.getUid()).push().getKey();
+                            PicturesInstance.child(user.getUid()).child(uploadId).setValue(new Upload("Image", user.getPhotoUrl().toString()+"?type=large",1));
+
                             updateUI(mAuth.getCurrentUser());
 
                         }
@@ -305,7 +314,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                             String userid = firebaseUser.getUid();
 
                             Log.i("Done","gothere");
-                            User userClass=new User(userid, username, "default", "offline",username.toLowerCase(),str_gender,str_age,email, firebaseUser.getProviderId(),"","","",
+                            User userClass=new User(userid, username,"offline",username.toLowerCase(),str_gender,str_age,email, firebaseUser.getProviderId(),"","","",
                                     "","","", look, range_age,"",username,"","","");
                             UsersInstance.child(userid).setValue(userClass);
                             Log.i("Done","gotin");
@@ -431,10 +440,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 //        User userClass=new User(look,age);
         UsersInstance.child(mAuth.getCurrentUser().getUid()).child("look").setValue(look);
         UsersInstance.child(mAuth.getCurrentUser().getUid()).child("range_age").setValue(age);
-//        User userClass=new User(user.getUid(), user.getDisplayName(), user.getPhotoUrl().toString()+"?type=large", "offline",user.getDisplayName().toLowerCase(), str_gender, age, user.getEmail(),
-//                user.getProviderId(),str_body_type, str_dob, str_eyes, str_hair, str_height, str_lang,
-//                str_look, str_location, str_name, user.getPhoneNumber(), str_nationality, str_visit);
-//        databaseReference.setValue(userClass);
+
     }
 
 

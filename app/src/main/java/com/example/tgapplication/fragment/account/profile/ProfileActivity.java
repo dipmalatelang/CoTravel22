@@ -237,7 +237,7 @@ public class ProfileActivity extends BaseActivity {
                         }
                         if (userList.size() > 0) {
                             for (int i = 0; i < userList.size(); i++)
-                                setDetails(userList.get(i).getName(), userList.get(i).getGender(), userList.get(i).getAge(), userList.get(i).getLook(), userList.get(i).getLocation(), userList.get(i).getNationality(), userList.get(i).getLang(), userList.get(i).getHeight(), userList.get(i).getBody_type(), userList.get(i).getEyes(), userList.get(i).getHair(), userList.get(i).getVisit(), "", "", userList.get(i).getImageURL());
+                                setDetails(userList.get(i).getName(), userList.get(i).getGender(), userList.get(i).getAge(), userList.get(i).getLook(), userList.get(i).getLocation(), userList.get(i).getNationality(), userList.get(i).getLang(), userList.get(i).getHeight(), userList.get(i).getBody_type(), userList.get(i).getEyes(), userList.get(i).getHair(), userList.get(i).getVisit(), "", "", "default");
                         }
                     }
 
@@ -289,7 +289,7 @@ public class ProfileActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.textProfile, R.id.iv_edit_profile, R.id.floatingActionButton2})
+    @OnClick({R.id.textProfile, R.id.iv_edit_profile, R.id.floatingActionButton2, R.id.iv_fav_user})
     public void onViewClicked(View view) {
         switch (view.getId()) {
 
@@ -307,6 +307,29 @@ public class ProfileActivity extends BaseActivity {
                 intent.putExtra("userid", tripL.getId());
                 startActivity(intent);
 
+                break;
+
+            case R.id.iv_fav_user:
+                Log.i(TAG, "onViewClicked: "+fav_int);
+                if(tripL.getFavid()==1)
+                {
+                    removeFav(fuser.getUid(),tripL.getId());
+                    ivFavUser.setImageResource(R.drawable.ic_action_fav_add);
+                }
+                else {
+                    setFav(fuser.getUid(),tripL.getId());
+                    ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
+                }
+
+               /* if (iv_fav.getTag().toString().equalsIgnoreCase("ic_action_fav_add")) {
+                    setFav(fuser.getUid(), tripL.getId());
+                    iv_fav.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_fav_remove));
+                    iv_fav.setTag("ic_action_fav_remove");
+                } else if (iv_fav.getTag().toString().equalsIgnoreCase("ic_action_fav_remove")) {
+                    removeFav(fuser.getUid(), tripL.getId());
+                    iv_fav.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_fav_add));
+                    iv_fav.setTag("ic_action_fav_add");
+                }*/
                 break;
 
 

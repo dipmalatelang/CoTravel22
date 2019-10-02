@@ -7,7 +7,6 @@ public class User implements Serializable{
 
     private String id;
     private String username;
-    private String imageURL;
     private String status;
     private String search;
     private String email;
@@ -41,7 +40,7 @@ public class User implements Serializable{
 
     public User() { }
 
-    public User(String id, String username, String imageURL, String status, String search, String gender, String age, String email, String social_media, String body_type, String dob, String eyes, String hair, String height, String lang, ArrayList<String> look, ArrayList<String> range_age, String location, String name, String phone, String nationality, String visit) {
+    public User(String id, String username, String status, String search, String gender, String age, String email, String social_media, String body_type, String dob, String eyes, String hair, String height, String lang, ArrayList<String> look, ArrayList<String> range_age, String location, String name, String phone, String nationality, String visit) {
         this.id = id;
         this.username = username;
         this.name = name;
@@ -61,7 +60,6 @@ public class User implements Serializable{
         this.email = email;
         this.social_media = social_media;
         this.phone=phone;
-        this.imageURL = imageURL;
         this.status = status;
         this.search = search;
     }
@@ -218,14 +216,6 @@ public class User implements Serializable{
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getImageURL() {
-        return imageURL;
-    }
-
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
     }
 
     public String getStatus() {

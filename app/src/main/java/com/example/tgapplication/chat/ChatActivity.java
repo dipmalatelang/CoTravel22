@@ -58,7 +58,8 @@ public class ChatActivity extends BaseActivity {
                         profile_image.setImageResource(R.drawable.ic_broken_image_primary_24dp);
                     } else {*/
                         //change this
-                        Glide.with(getApplicationContext()).load(user.getImageURL()).placeholder(R.drawable.ic_broken_image_primary_24dp).into(profile_image);
+
+//                        Glide.with(getApplicationContext()).load("default").placeholder(R.drawable.ic_broken_image_primary_24dp).into(profile_image);
 //                    }
                 }
 

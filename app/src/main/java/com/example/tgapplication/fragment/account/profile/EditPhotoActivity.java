@@ -68,8 +68,8 @@ public class EditPhotoActivity extends BaseActivity {
                 dismissProgressDialog();
                 uploads = new ArrayList<>();
 
-                uploads.add(new Upload("Gallery","R.drawable.avatar_boy_32"));
-                uploads.add(new Upload("Fb","R.drawable.avatar_girl_32"));
+                uploads.add(new Upload("Gallery","R.drawable.avatar_boy_32",2));
+                uploads.add(new Upload("Fb","R.drawable.avatar_girl_32",2));
 //iterating through all the values in database
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                     Upload upload = postSnapshot.getValue(Upload.class);
@@ -149,7 +149,7 @@ public class EditPhotoActivity extends BaseActivity {
                                         Log.i("FirebaseImages",getDownloadImageUrl);
 
 //creating the upload object to store uploaded image details
-                                        Upload upload = new Upload("Image", getDownloadImageUrl);
+                                        Upload upload = new Upload("Image", getDownloadImageUrl,2);
 
 //adding an upload to firebase database
                                         String uploadId = PicturesInstance.child(fuser.getUid()).push().getKey();

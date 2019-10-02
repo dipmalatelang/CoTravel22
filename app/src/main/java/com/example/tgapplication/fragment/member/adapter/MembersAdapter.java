@@ -47,6 +47,7 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.TripView
             Glide.with(mContext).load(R.drawable.ic_broken_image_primary_24dp).into(holder.mImage);
         }
         else {*/
+        Log.i("TAG", "onBindViewHolder: "+tList.getImageUrl());
             Glide.with(mContext).load(tList.getImageUrl()).placeholder(R.drawable.ic_broken_image_primary_24dp).into(holder.mImage);
 //        }
 
