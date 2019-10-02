@@ -1,6 +1,7 @@
 package com.example.tgapplication;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.text.method.HideReturnsTransformationMethod;
@@ -37,6 +38,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     public int fav_int;
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     public long now = System.currentTimeMillis();
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
     //Global Method and Variable
 //    String fUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -217,7 +220,14 @@ public abstract class BaseActivity extends AppCompatActivity {
             ProgressActivity.showDialog(this);
         }
     }
+    public void saveLoginDetails(String email, String password){
+        sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString("Email", email);
+        editor.putString("Password", password);
 
+        editor.commit();
+    }
     public void dismissProgressDialog(){
         if (!isFinishing()) {
             ProgressActivity.dismissDialog();

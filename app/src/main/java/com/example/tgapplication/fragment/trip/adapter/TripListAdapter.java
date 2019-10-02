@@ -16,6 +16,8 @@ import com.example.tgapplication.fragment.trip.module.TripData;
 
 import java.util.List;
 
+import static com.facebook.login.widget.ProfilePictureView.TAG;
+
 /**
  * Created by user on 3/28/2018.
  */
@@ -74,6 +76,7 @@ public class TripListAdapter extends RecyclerView.Adapter<TripListAdapter.TripHo
 //                Log.i("CheckId",tripDataList.get(position).getId());
                 listener.removeTrip(uid,tripDataList.get(position).getId());
                 tripDataList.remove(position);  // remove the item from list
+                Log.d(TAG, "onClick: "+tripDataList);
 //                notifyDataSetChanged(); // notify the adapter about the removed item
                 notifyItemRemoved(position);
                 notifyDataSetChanged();
