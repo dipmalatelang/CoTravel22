@@ -37,6 +37,8 @@
     <string name="crop_image_menu_flip_horizontally">Flip horizontally</string>
     <string name="crop_image_menu_flip_vertically">Flip vertically</string>
 
+    <string name="Favorites">Add To Favorites</string>
+    <string name="Delete">Add To Trash</string>
 
 
 
