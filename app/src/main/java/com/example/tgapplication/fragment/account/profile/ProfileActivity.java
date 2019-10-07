@@ -290,11 +290,13 @@ public class ProfileActivity extends BaseActivity {
         PicturesInstance.child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-
+                uploads = new ArrayList<>();
 
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                     Upload upload = postSnapshot.getValue(Upload.class);
-                    uploads.add(upload);
+                    if (upload.getType() != 3) {
+                        uploads.add(upload);
+                    }
                 }
 
                 adapter = new CustomAdapter(ProfileActivity.this, uid, uploads);
