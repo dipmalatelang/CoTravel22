@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tgapplication.BaseFragment;
 import com.example.tgapplication.R;
+import com.example.tgapplication.UserProfileData;
 import com.example.tgapplication.fragment.account.profile.ProfileActivity;
 import com.example.tgapplication.fragment.favourite.adapter.FavouriteAdapter;
 import com.example.tgapplication.fragment.trip.module.PlanTrip;
@@ -26,7 +27,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -154,6 +154,7 @@ public class FavouriteFragment extends BaseFragment {
                                     User user = dataSnapshot.getValue(User.class);
                                     // HERE WHAT CORRESPONDS TO JOIN
 
+                                    UserProfileData upd=new UserProfileData(user,"");
                                     // run some code
                                     myFavArray.add(user);
                                     Log.i(TAG, "onDataChange: Rev "+myFavArray.size());
@@ -169,12 +170,18 @@ public class FavouriteFragment extends BaseFragment {
                                         @Override
                                         public void setProfileVisit(String uid, String id) {
 
-
                                             ProfileVisitorInstance.child(id)
                                                     .child(uid).child("id").setValue(uid);
 
-
                                         }
+
+                                        @Override
+                                        public void setData(User tList, int position) {
+                                            Intent mIntent = new Intent(getActivity(), ProfileActivity.class);
+                                            mIntent.putExtra("MyUserObj", myFavArray.get(position));
+                                            startActivityForResult(mIntent,1);
+                                        }
+
                                     });
                                     myFavRV.setAdapter(tripAdapter);
 //                                                            }
@@ -268,9 +275,9 @@ public class FavouriteFragment extends BaseFragment {
 //                                                tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), favArray, tripList);
 //                                                recyclerview.setAdapter(tripAdapter);
 
-                                                        Intent mIntent = new Intent(getActivity(), ProfileActivity.class);
-                                                        mIntent.putExtra("MyObj", tripList.get(0));
-                                                        startActivity(mIntent);
+//                                                        Intent mIntent = new Intent(getActivity(), ProfileActivity.class);
+//                                                        mIntent.putExtra("MyObj", tripList.get(0));
+//                                                        startActivity(mIntent);
                                                     }
 
                                                     @Override

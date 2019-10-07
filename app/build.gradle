@@ -51,6 +51,7 @@ dependencies {
     implementation 'com.pnikosis:materialish-progress:1.7'
     implementation 'com.google.firebase:firebase-messaging:20.0.0'
 
+    implementation 'com.wajahatkarim3.EasyFlipView:EasyFlipView:2.1.2'
 
     //Google Map Place
     implementation 'com.google.android.libraries.places:places:2.0.0'

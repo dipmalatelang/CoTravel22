@@ -5,8 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tgapplication.R;
-import com.example.tgapplication.fragment.account.profile.EditPhotoActivity;
 import com.google.firebase.storage.StorageReference;
+import com.wajahatkarim3.easyflipview.EasyFlipView;
 
 import java.util.List;
 
@@ -28,10 +28,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
     private StorageReference storageReference;
 
 
-    public MyAdapter(Context context, String uid, List<Upload> uploads) {
+    public MyAdapter(Context context, String uid, List<Upload> uploads, PhotoInterface listener) {
         this.uid=uid;
         mcontext =context;
         mUploads =uploads;
+        this.listener=listener;
     }
 
 
@@ -49,87 +50,64 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
         Upload uploadCurrent = mUploads.get(position);
 //        holder.textViewName.setText(uploadCurrent.getName());
 
-        if(position==0)
-        {
-//            holder.below_opt.setVisibility(View.GONE);
+            holder.ivTitle.setVisibility(View.VISIBLE);
+//          holder.below_opt.setVisibility(View.VISIBLE);
 
-       /*     holder.imageView.setAdjustViewBounds(false);
-            holder.imageView.setScaleType(ImageView.ScaleType.CENTER);
-            holder.imageView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
-*/
-            Glide.with(mcontext)
-                    .load(R.drawable.ic_gallery)
-                    .placeholder(R.drawable.ic_broken_image_primary_24dp)
-                    .into(holder.imageView);
-        }
-        else if(position==1)
-        {
-//            holder.below_opt.setVisibility(View.GONE);
-/*
+            holder.imageView.setAdjustViewBounds(true);
+//          holder.imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+            holder.imageView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
 
-            holder.imageView.setAdjustViewBounds(false);
-            holder.imageView.setScaleType(ImageView.ScaleType.CENTER);
-            holder.imageView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
-*/
-
-            Glide.with(mcontext)
-                    .load(R.drawable.ic_facebook)
-                    .placeholder(R.drawable.ic_broken_image_primary_24dp)
-                    .into(holder.imageView);
-        }
-        else {
-//            holder.below_opt.setVisibility(View.VISIBLE);
             Glide.with(mcontext)
                     .load(uploadCurrent.getUrl())
                     .placeholder(R.drawable.ic_broken_image_primary_24dp)
                     .into(holder.imageView);
 
+        if(uploadCurrent.getType()==3)
+        {
+            holder.pp_eye.setText("Make Public");
         }
+        else
+        {
+            holder.pp_eye.setText("Make Private");
+        }
+
 //        Log.i(TAG, "onBindViewHolder: " + uploadCurrent.getUrl());
-
-        holder.imageView.setOnClickListener(view -> {
-
-            switch (position)
-            {
-                case 0:
-                    Toast.makeText(mcontext, "Gallery", Toast.LENGTH_SHORT).show();
-                    ((EditPhotoActivity)mcontext).showFileChooser();
-                    break;
-                case 1:
-                    Toast.makeText(mcontext, "Facebook", Toast.LENGTH_SHORT).show();
-                    break;
-                default:
-                    Toast.makeText(mcontext, "Uploaded Photo", Toast.LENGTH_SHORT).show();
-                    break;
-            }
 
            /* HashMap<String, Object> map = new HashMap<>();
             map.put("imageURL", ""+uploadCurrent.getUrl());
             UsersInstance.child(uid).updateChildren(map);
 
             holder.ivTitle.setImageDrawable(mcontext.getResources().getDrawable(R.drawable.ic_action_fav_remove));*/
-        });
 
-     /*   holder.set_main.setOnClickListener(new View.OnClickListener() {
+        holder.flipView.setOnFlipListener(new EasyFlipView.OnFlipAnimationListener() {
             @Override
-            public void onClick(View view) {
-                Toast.makeText(mcontext, "Set Main", Toast.LENGTH_SHORT).show();
+            public void onViewFlipCompleted(EasyFlipView flipView, EasyFlipView.FlipState newCurrentSide)
+            {
+                holder.set_main.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        listener.setProfilePhoto(mUploads.get(position).getId());
+                        Toast.makeText(mcontext, "Set Main "+position, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                holder.pp_eye.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(mcontext, "Make Private "+position, Toast.LENGTH_SHORT).show();
+                        listener.setPhotoAsPrivate(mUploads.get(position).getId());
+                    }
+                });
+
+                holder.delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        listener.removePhoto(mUploads.get(position).getId());
+                        Toast.makeText(mcontext, "Remove Photo "+position, Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
-
-        holder.pp_eye.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(mcontext, "Public Private", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        holder.delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(mcontext, "Delete", Toast.LENGTH_SHORT).show();
-            }
-        });*/
     }
 
     @Override
@@ -139,7 +117,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
 
     public class ImageViewHolder extends RecyclerView.ViewHolder{
         public ImageView imageView,ivTitle;
-//        set_main, pp_eye, delete;
+        TextView set_main, pp_eye, delete;
+        EasyFlipView flipView;
 //        public LinearLayout below_opt;
 
         public ImageViewHolder(@NonNull View itemView) {
@@ -149,11 +128,19 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
             imageView = itemView.findViewById(R.id.imageView);
             ivTitle=itemView.findViewById(R.id.ivTitle);
 
-          /*  set_main=itemView.findViewById(R.id.set_main);
+            flipView=itemView.findViewById(R.id.flipView);
+            set_main=itemView.findViewById(R.id.set_main);
             pp_eye=itemView.findViewById(R.id.pp_eye);
-            delete=itemView.findViewById(R.id.delete);*/
+            delete=itemView.findViewById(R.id.delete);
 
         }
+    }
+
+    PhotoInterface listener;
+    public interface PhotoInterface{
+        void setProfilePhoto(String id);
+        void removePhoto(String id);
+        void setPhotoAsPrivate(String id);
     }
 
 }

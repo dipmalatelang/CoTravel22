@@ -73,17 +73,24 @@ public abstract class BaseFragment extends Fragment {
         SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("dd/MM/yyyy");
         String dateOutput = simpleDateFormat.format(closest);
         String dateOutput1 = simpleDateFormat1.format(closest);
+        int visit_id=getVisit(visitArray,user.getId());
         Log.i("closest Date", " " + closest + " " + dateOutput + " " + dateOutput1);
         for (int i = 0; i < from_to_dates.size(); i++) {
             Log.i("This data", from_to_dates.get(i).getDate_from() + " " + dateOutput1);
 //            int fav_id= getFav(favArray,user.getId());
-            int visit_id=getVisit(visitArray,user.getId());
+
             if (from_to_dates.get(i).getDate_from().contains(dateOutput1)) {
 //                String ageValue= getBirthday(user.getDob());
                 String dateFromTo = from_to_dates.get(i).getDate_from() + " - " + from_to_dates.get(i).getDate_to();
                 TripList tripListClass = new TripList(user.getId(), user.getUsername(), "default", user.getAge(), user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), from_to_dates.get(i).getLocation(), tripNote, dateFromTo,fav_id,visit_id);
                 tripList.add(tripListClass);
             }
+        }
+
+        if(tripList.size()<1)
+        {
+            TripList tripListClass = new TripList(user.getId(), user.getUsername(), "default", user.getAge(), user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), "", tripNote, "",fav_id,visit_id);
+            tripList.add(tripListClass);
         }
 
         return tripList;

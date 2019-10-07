@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -200,7 +201,22 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
                     uploads.add(upload);
                 }
 //creating adapter
-                adapter = new MyAdapter(getActivity(),fuser.getUid(), uploads);
+                adapter = new MyAdapter(getActivity(), fuser.getUid(), uploads, new MyAdapter.PhotoInterface() {
+                    @Override
+                    public void setProfilePhoto(String id) {
+                        Toast.makeText(getActivity(), ""+id, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void removePhoto(String id) {
+                        Toast.makeText(getActivity(), ""+id, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void setPhotoAsPrivate(String id) {
+                        Toast.makeText(getActivity(), ""+id, Toast.LENGTH_SHORT).show();
+                    }
+                });
 
 //adding adapter to recyclerview
                 recyclerView.setAdapter(adapter);
@@ -586,6 +602,7 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
 //displaying success toast
                             snackBar(fragment_acc_constraintLayout,"File Uploaded ");
 
+                            String uploadId = PicturesInstance.child(fuser.getUid()).push().getKey();
                             sRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Uri> task) {
@@ -595,10 +612,10 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
                                         Log.i("FirebaseImages",getDownloadImageUrl);
 
 //creating the upload object to store uploaded image details
-                                        Upload upload = new Upload("Image", getDownloadImageUrl,2);
+                                        Upload upload = new Upload(uploadId,"Image", getDownloadImageUrl,2);
 
 //adding an upload to firebase database
-                                        String uploadId = PicturesInstance.child(fuser.getUid()).push().getKey();
+
                                         PicturesInstance.child(fuser.getUid()).child(uploadId).setValue(upload);
                                     }
                                else {

@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -44,8 +45,6 @@ public class ProfileActivity extends BaseActivity {
     Chip textView;
     @BindView(R.id.textProfile)
     Chip textProfile;
-    @BindView(R.id.imageView2)
-    FloatingActionButton imageView2;
     @BindView(R.id.view_pager)
     ViewPager viewPager;
     @BindView(R.id.textView2)
@@ -102,6 +101,7 @@ public class ProfileActivity extends BaseActivity {
     ArrayList<User> userList = new ArrayList<>();
     private FirebaseUser fuser;
     TripList tripL;
+    User userL;
     //    @BindView(R.id.bottomNav)
 //    ConstraintLayout bottomNav;
 
@@ -113,28 +113,27 @@ public class ProfileActivity extends BaseActivity {
         ButterKnife.bind(this);
         fuser = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (getIntent().getSerializableExtra("MyObj") == null) {
+        if (getIntent().getSerializableExtra("MyObj") == null && getIntent().getSerializableExtra("MyUserObj") ==null) {
             textProfile.setVisibility(View.VISIBLE);
             ivFavUser.setVisibility(View.GONE);
             floatingActionButton2.hide();
             getAllImages(fuser.getUid());
+            getAllTrips(fuser.getUid());
             getProfileData(fuser);
-        } else {
+        } else if(getIntent().getSerializableExtra("MyObj") != null){
             textProfile.setVisibility(View.GONE);
             ivFavUser.setVisibility(View.VISIBLE);
             floatingActionButton2.show();
             tripL = (TripList) getIntent().getSerializableExtra("MyObj");
             getAllImages(tripL.getId());
-
-            if(tripL.getFavid()==1)
-            {
+            getAllTrips(tripL.getId());
+            if (tripL.getFavid() == 1) {
                 ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
-            }
-            else {
+            } else {
                 ivFavUser.setImageResource(R.drawable.ic_action_fav_add);
             }
 
-            Log.i(TAG, "onCreate: "+tripL.getName()+" "+tripL.getFavid());
+            Log.i(TAG, "onCreate: " + tripL.getName() + " " + tripL.getFavid());
             setDetails(tripL.getName(), tripL.getGender(), tripL.getAge(), tripL.getLook(), tripL.getUserLocation(), tripL.getNationality(),
                     tripL.getLang(), tripL.getHeight(), tripL.getBody_type(), tripL.getEyes(), tripL.getHair(), tripL.getVisit(), tripL.getPlanLocation(), tripL.getFrom_to_date(), tripL.getImageUrl());
 //            if(tripL==null)
@@ -142,15 +141,36 @@ public class ProfileActivity extends BaseActivity {
 
 
         }
+        else if(getIntent().getSerializableExtra("MyUserObj") !=null)
+        {
+            textProfile.setVisibility(View.GONE);
+            ivFavUser.setVisibility(View.VISIBLE);
+            floatingActionButton2.show();
+            userL = (User) getIntent().getSerializableExtra("MyUserObj");
+            getAllImages(userL.getId());
+            getAllTrips(userL.getId());
+         /*   if (userL.getFavid() == 1) {
+                ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
+            } else {
+                ivFavUser.setImageResource(R.drawable.ic_action_fav_add);
+            }*/
+
+            Log.i(TAG, "MyUserObj : " + userL.getName() + " " );
+            setDetails(userL.getName(), userL.getGender(), userL.getAge(), userL.getLook(), "", userL.getNationality(),
+                    userL.getLang(), userL.getHeight(), userL.getBody_type(), userL.getEyes(), userL.getHair(), userL.getVisit(), "", "", "");
+
+        }
 
 
     }
+
+
 
     private void setDetails(String name, String gender, String age, ArrayList<String> look, String userLocation, String nationality, String lang, String height, String body_type, String eyes, String hair, String visit, String planLocation, String from_to_date, String imageUrl) {
 
         String str_look = null;
 
-        if (name != null && !name.equalsIgnoreCase("") && age != null && !age.equalsIgnoreCase("")) {
+        if (name != null && !name.equalsIgnoreCase("") || age != null && !age.equalsIgnoreCase("")) {
             textView2.setText(name + " , " + age);
         }
 
@@ -249,6 +269,23 @@ public class ProfileActivity extends BaseActivity {
         );
     }
 
+    private void getAllTrips(String id) {
+        TripsInstance.child(id).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren())
+                {
+                    dataSnapshot1.getValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     public void getAllImages(String uid) {
         PicturesInstance.child(uid).addValueEventListener(new ValueEventListener() {
             @Override
@@ -289,7 +326,7 @@ public class ProfileActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.textProfile, R.id.iv_edit_profile, R.id.floatingActionButton2, R.id.iv_fav_user})
+    @OnClick({R.id.textProfile, R.id.iv_edit_profile, R.id.floatingActionButton2, R.id.iv_fav_user, R.id.fab_backFromProfile})
     public void onViewClicked(View view) {
         switch (view.getId()) {
 
@@ -309,15 +346,23 @@ public class ProfileActivity extends BaseActivity {
 
                 break;
 
+            case R.id.fab_backFromProfile:
+                finish();
+               /* Intent intent = new Intent();
+                intent.putExtra("editTextValue", "value_here")
+                setResult(RESULT_OK, intent);
+                finish();*/
+                break;
+
             case R.id.iv_fav_user:
-                Log.i(TAG, "onViewClicked: "+fav_int);
-                if(tripL.getFavid()==1)
-                {
-                    removeFav(fuser.getUid(),tripL.getId());
+                Log.i(TAG, "onViewClicked: " + fav_int);
+                if (tripL.getFavid() == 1) {
+                    removeFav(fuser.getUid(), tripL.getId());
+                    tripL.setFavid(0);
                     ivFavUser.setImageResource(R.drawable.ic_action_fav_add);
-                }
-                else {
-                    setFav(fuser.getUid(),tripL.getId());
+                } else {
+                    setFav(fuser.getUid(), tripL.getId());
+                    tripL.setFavid(1);
                     ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
                 }
 

@@ -409,7 +409,8 @@ public class TripFragment extends BaseFragment {
                                         if (snapshot.hasChild(user.getId())) {
                                             // run some code
                                             fav = 1;
-                                        } else {
+                                        }
+                                        else {
                                             fav = 0;
                                         }
 

@@ -79,6 +79,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
             @Override
             public void onClick(View view) {
                 listener.setProfileVisit(uid,tList.getId());
+                listener.setData(tList,position);
 //                int fav_id= getFav(favArray,tList.getId());
 //                Log.i("Got Needed Value"," "+fav_id);
                 /*Intent mIntent = new Intent(mContext, DetailActivity.class);
@@ -193,5 +194,6 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
     VisitorInterface listener;
     public interface VisitorInterface{
         void setProfileVisit(String uid, String id);
+        void setData(User mTrip,int position);
     }
 }

@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
+<com.wajahatkarim3.easyflipview.EasyFlipView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:flipOnTouch="true"
+    app:flipDuration="500"
+    app:autoFlipBack="true"
+    app:flipType="horizontal"
+    app:autoFlipBackTime="1500"
+    android:id="@+id/flipView"
+    app:flipEnabled="true">
+
     <androidx.cardview.widget.CardView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
@@ -11,8 +22,64 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="135dp"
-            android:id="@+id/rl_image"
-            android:background="@color/colorPrimary" >
+            android:background="@color/dark_cyan"
+            android:layout_gravity="center"
+            android:id="@+id/r2_image">
+
+            <TextView
+                android:id="@+id/set_main"
+                android:layout_width="match_parent"
+                android:padding="10dp"
+                android:layout_height="wrap_content"
+                android:text="Make Profile Photo"
+                android:textColor="@color/white" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:id="@+id/view1"
+                android:layout_below="@+id/set_main"
+                android:background="@color/white" />
+            <TextView
+                android:id="@+id/pp_eye"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Make Private"
+                android:padding="10dp"
+                android:layout_below="@+id/view1"
+                android:textColor="@color/white" />
+
+            <View
+                android:id="@+id/view2"
+                android:layout_below="@+id/pp_eye"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/white" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Remove Photo"
+                android:padding="10dp"
+                android:layout_below="@id/view2"
+                android:id="@+id/delete"
+                android:textColor="@color/white" />
+
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        app:cardCornerRadius="10dp"
+        android:padding="8dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="135dp"
+            android:background="@color/dark_cyan"
+            android:id="@+id/rl_image">
 
             <ImageView
                 android:layout_centerInParent="true"
@@ -69,7 +136,8 @@
             </LinearLayout>-->
 
         </RelativeLayout>
-
-
-
     </androidx.cardview.widget.CardView>
+
+
+
+</com.wajahatkarim3.easyflipview.EasyFlipView>

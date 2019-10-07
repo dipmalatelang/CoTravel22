@@ -98,6 +98,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
         ButterKnife.bind(this);
         Places.initialize(getApplicationContext(), BuildConfig.map_api_key);
 
@@ -205,10 +206,10 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
                             sMonth = String.valueOf(monthOfYear);
                         }
 
-                        if (day < 10) {
-                            sDay = "0" + day;
+                        if (dayOfMonth < 10) {
+                            sDay = "0" + dayOfMonth;
                         } else {
-                            sDay = String.valueOf(day);
+                            sDay = String.valueOf(dayOfMonth);
                         }
 
 //                        view.setMinDate(System.currentTimeMillis());
@@ -480,6 +481,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
@@ -492,7 +494,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
             } else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.
             }
-        }else if (requestCode == AUTOCOMPLETE_REQUEST_CODE_DREAM) {
+        } else if (requestCode == AUTOCOMPLETE_REQUEST_CODE_DREAM) {
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
                 Log.i(TAG, "Placeq: " + place.getName() + ", " + place.getId() + ", " + place.getAddress());

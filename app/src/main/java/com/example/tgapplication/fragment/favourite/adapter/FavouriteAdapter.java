@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
+import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
 
 import java.util.List;
@@ -77,6 +78,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
 //                int fav_id= getFav(favArray,tList.getId());
 //                Log.i("Got Needed Value"," "+fav_id);
                 listener.sendFavourite(tList.getId());
+                listener.setData(tList,position);
 //                Intent mIntent = new Intent(mContext, DetailActivity.class);
 //                mIntent.putExtra("MyObj", tList);
 ////                mIntent.putExtra("FavId",fav_id);
@@ -125,5 +127,6 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
     public interface FavouriteInterface{
         void sendFavourite(String id);
         void setProfileVisit(String uid, String id);
+        void setData(User mTrip,int position);
     }
 }
