@@ -1,6 +1,7 @@
 package com.example.tgapplication;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.text.method.HideReturnsTransformationMethod;
@@ -97,6 +98,23 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
         }
         return fav_int;
+    }
+
+    public void appDetails(String key, String value) {
+        SharedPreferences sharedPreferences = getSharedPreferences("AppDetails", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(key, value);
+        editor.apply();
+    }
+
+    public String getAppDetails(String key)
+    {
+        String name="";
+        SharedPreferences sharedPreferences = getSharedPreferences("AppDetails", Context.MODE_PRIVATE);
+        if (sharedPreferences.contains(key)) {
+            name= sharedPreferences.getString(key, "");
+        }
+        return name;
     }
 
 

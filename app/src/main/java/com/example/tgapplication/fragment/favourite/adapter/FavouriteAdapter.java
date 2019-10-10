@@ -50,7 +50,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
     {
 
         final User tList = mTrip.get(position);
-            Glide.with(mContext).load("default").placeholder(R.drawable.ic_broken_image_primary_24dp).into(holder.mImage);
+            Glide.with(mContext).load(R.drawable.ic_broken_image_primary_24dp).placeholder(R.drawable.ic_broken_image_primary_24dp).into(holder.mImage);
 
         holder.mTitle.setText(tList.getName());
 //        holder.mCity.setVisibility(View.GONE);

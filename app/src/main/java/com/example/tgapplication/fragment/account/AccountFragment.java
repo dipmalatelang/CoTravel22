@@ -203,7 +203,7 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
 //creating adapter
                 adapter = new MyAdapter(getActivity(), fuser.getUid(), uploads, new MyAdapter.PhotoInterface() {
                     @Override
-                    public void setProfilePhoto(String id) {
+                    public void setProfilePhoto(String id, String previousValue) {
                         Toast.makeText(getActivity(), ""+id, Toast.LENGTH_SHORT).show();
                     }
 

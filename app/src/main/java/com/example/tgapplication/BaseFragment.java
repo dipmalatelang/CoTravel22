@@ -1,6 +1,8 @@
 package com.example.tgapplication;
 
 import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
@@ -175,6 +177,23 @@ public abstract class BaseFragment extends Fragment {
 
             }
         });
+    }
+
+    public void appDetails(String key, String value) {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("AppDetails", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(key, value);
+        editor.apply();
+    }
+
+    public String getAppDetails(String key)
+    {
+        String name="";
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("AppDetails", Context.MODE_PRIVATE);
+        if (sharedPreferences.contains(key)) {
+            name= sharedPreferences.getString(key, "");
+        }
+        return name;
     }
 
 }

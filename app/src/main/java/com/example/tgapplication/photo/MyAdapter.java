@@ -1,19 +1,21 @@
 package com.example.tgapplication.photo;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tgapplication.R;
+import com.example.tgapplication.fragment.account.profile.EditPhotoActivity;
 import com.google.firebase.storage.StorageReference;
 import com.wajahatkarim3.easyflipview.EasyFlipView;
 
@@ -26,6 +28,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
     String TAG = "AdapterClass";
     String uid;
     private StorageReference storageReference;
+    String previousValue="";
 
 
     public MyAdapter(Context context, String uid, List<Upload> uploads, PhotoInterface listener) {
@@ -50,7 +53,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
         Upload uploadCurrent = mUploads.get(position);
 //        holder.textViewName.setText(uploadCurrent.getName());
 
-            holder.ivTitle.setVisibility(View.VISIBLE);
+
 //          holder.below_opt.setVisibility(View.VISIBLE);
 
             holder.imageView.setAdjustViewBounds(true);
@@ -66,9 +69,15 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
         {
             holder.pp_eye.setText("Make Public");
         }
-        else
+        else if(uploadCurrent.getType()==2)
         {
             holder.pp_eye.setText("Make Private");
+        }
+        else if(uploadCurrent.getType()==1){
+            holder.ivTitle.setVisibility(View.VISIBLE);
+            holder.pp_eye.setText("Make Private");
+//            previousValue=uploadCurrent.getId();
+            ((EditPhotoActivity)mcontext).appDetails("CurProfilePhoto",uploadCurrent.getId());
         }
 
 //        Log.i(TAG, "onBindViewHolder: " + uploadCurrent.getUrl());
@@ -86,15 +95,18 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
                 holder.set_main.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        listener.setProfilePhoto(mUploads.get(position).getId());
-                        Toast.makeText(mcontext, "Set Main "+position, Toast.LENGTH_SHORT).show();
+
+                        Log.i(TAG, "onClick: Set Main "+mUploads.get(position).getId()+" previous "+((EditPhotoActivity)mcontext).getAppDetails("CurProfilePhoto"));
+                        listener.setProfilePhoto(mUploads.get(position).getId(),((EditPhotoActivity)mcontext).getAppDetails("CurProfilePhoto"));
+                        holder.ivTitle.setVisibility(View.VISIBLE);
+
                     }
                 });
 
                 holder.pp_eye.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(mcontext, "Make Private "+position, Toast.LENGTH_SHORT).show();
+                        Log.i(TAG, "onClick: Make Private "+position+" previous "+previousValue);
                         listener.setPhotoAsPrivate(mUploads.get(position).getId());
                     }
                 });
@@ -103,12 +115,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
                     @Override
                     public void onClick(View view) {
                         listener.removePhoto(mUploads.get(position).getId());
-                        Toast.makeText(mcontext, "Remove Photo "+position, Toast.LENGTH_SHORT).show();
+                        Log.i(TAG, "onClick: Remove Photo "+position+" previous "+previousValue);
                     }
                 });
             }
         });
     }
+
+
 
     @Override
     public int getItemCount() {
@@ -138,7 +152,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
 
     PhotoInterface listener;
     public interface PhotoInterface{
-        void setProfilePhoto(String id);
+        void setProfilePhoto(String id, String previousValue);
         void removePhoto(String id);
         void setPhotoAsPrivate(String id);
     }
