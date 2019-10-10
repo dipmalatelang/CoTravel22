@@ -1,8 +1,10 @@
 package com.example.tgapplication.chat;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -47,6 +49,8 @@ public class ChatsFragment extends BaseFragment {
         fuser = FirebaseAuth.getInstance().getCurrentUser();
 
         usersList = new ArrayList<>();
+
+
 
         ChatlistInstance.child(fuser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override

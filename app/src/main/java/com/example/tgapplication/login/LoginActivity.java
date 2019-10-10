@@ -46,8 +46,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     TextView tv_register, link_signup;
     EditText input_email, input_password;
     ConstraintLayout constrainlayout;
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,14 +157,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void saveLoginDetails(String email, String password){
-        sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.putString("Email", email);
-        editor.putString("Password", password);
 
-        editor.commit();
-    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -189,6 +181,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                     snackBar(constrainlayout, "please enter valid email address");
                 }
                else {
+                    Log.d(TAG, "onComplete1: "+txt_email+" "+txt_password);
 //                    hideKeyboard(this);
                     mAuth.signInWithEmailAndPassword(txt_email, txt_password)
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -198,6 +191,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                                         dismissProgressDialog();
                                         updateUI(mAuth.getCurrentUser());
 
+                                        Log.d(TAG, "onComplete: "+txt_email+" "+txt_password);
                                         saveLoginDetails(txt_email,txt_password);
 
 
