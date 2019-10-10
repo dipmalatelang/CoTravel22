@@ -1,6 +1,7 @@
 package com.example.tgapplication.photo;
 
 public class Upload {
+    public String id;
     public String name;
     public String url;
 
@@ -12,10 +13,19 @@ public class Upload {
     public Upload() {
     }
 
-    public Upload(String name, String url, int type) {
+    public Upload(String id,String name, String url, int type) {
+        this.id=id;
         this.name = name;
         this.url= url;
         this.type=type;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public int getType() {

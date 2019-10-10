@@ -161,6 +161,13 @@ public class VisitorFragment extends BaseFragment {
 
 
                                                                     }
+
+                                                                    @Override
+                                                                    public void setData(User mTrip, int position) {
+                                                                        Intent mIntent = new Intent(getActivity(), ProfileActivity.class);
+                                                                        mIntent.putExtra("MyUserObj", myFavArray.get(position));
+                                                                        startActivityForResult(mIntent,1);
+                                                                    }
                                                                 });
                                                                 myVisitRV.setAdapter(tripAdapter);
 

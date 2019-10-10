@@ -99,7 +99,7 @@ public class MembersActivity extends BaseActivity {
                                                             public void setData(TripList tList, int position) {
                                                                 Intent mIntent = new Intent(MembersActivity.this, ProfileActivity.class);
                                                                 mIntent.putExtra("MyObj", tripList.get(position));
-                                                                startActivity(mIntent);
+                                                                startActivityForResult(mIntent,1);
                                                             }
 
                                                             @Override
@@ -139,5 +139,16 @@ public class MembersActivity extends BaseActivity {
                     }
                 }
         );
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK) {
+                TripList strEditText = (TripList) data.getExtras().getSerializable("MyObj");
+
+            }
+        }
     }
 }
