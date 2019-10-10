@@ -282,7 +282,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                             UsersInstance.child(mAuth.getCurrentUser().getUid()).setValue(userClass);
 
                             String uploadId = PicturesInstance.child(user.getUid()).push().getKey();
-                            PicturesInstance.child(user.getUid()).child(uploadId).setValue(new Upload("Image", user.getPhotoUrl().toString()+"?type=large",1));
+                            PicturesInstance.child(user.getUid()).child(uploadId).setValue(new Upload(uploadId,"Image", user.getPhotoUrl().toString()+"?type=large",1));
 
                             updateUI(mAuth.getCurrentUser());
 
@@ -498,6 +498,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     int AUTOCOMPLETE_REQUEST_CODE = 110;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
@@ -510,7 +511,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             } else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.
             }
-        }else {
+        } else {
             // Pass the activity result back to the Facebook SDK
             mCallbackManager.onActivityResult(requestCode, resultCode, data);
         }

@@ -102,6 +102,23 @@ public abstract class BaseActivity extends AppCompatActivity {
         return fav_int;
     }
 
+    public void appDetails(String key, String value) {
+        SharedPreferences sharedPreferences = getSharedPreferences("AppDetails", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(key, value);
+        editor.apply();
+    }
+
+    public String getAppDetails(String key)
+    {
+        String name="";
+        SharedPreferences sharedPreferences = getSharedPreferences("AppDetails", Context.MODE_PRIVATE);
+        if (sharedPreferences.contains(key)) {
+            name= sharedPreferences.getString(key, "");
+        }
+        return name;
+    }
+
 
    /* private void filterTripList(final String str_city, final String str_lang, final String str_eyes, final String str_hairs, final String str_height, final String str_bodytype, final String str_look,
                                 final String str_from, final String str_to, final String str_visit) {
