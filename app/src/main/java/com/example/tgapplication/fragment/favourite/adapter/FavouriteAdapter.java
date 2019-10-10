@@ -26,8 +26,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
     private int fav_int;
     private List<String> favArray;
 
-    public FavouriteAdapter(Context mContext, String uid, List<User> mTrip,FavouriteInterface listener)
-    {
+    public FavouriteAdapter(Context mContext, String uid, List<User> mTrip,FavouriteInterface listener) {
         this.uid=uid;
         this.mContext = mContext;
         this.mTrip = mTrip;

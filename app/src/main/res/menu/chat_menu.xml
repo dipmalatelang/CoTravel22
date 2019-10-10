@@ -2,7 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/one"
-        android:title="Add To Favorites" />
+        android:title="Add To Favorites"
+        />
+
     <item
         android:id="@+id/two"
         android:title="Add To Trash"/>
