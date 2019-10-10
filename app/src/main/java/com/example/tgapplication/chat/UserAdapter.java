@@ -72,7 +72,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                         if (id == R.id.one) {
                             Toast.makeText(mContext, "Add to fav", Toast.LENGTH_SHORT).show();
                             holder.ic_action_fav_remove.setVisibility(View.VISIBLE);
-                            listener.chatFavorite(user.getId());
+//                            listener.chatFavorite(user.getId());
                             return true;
                         }
                         if (id == R.id.two) {
@@ -157,7 +157,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     public interface UserInterface
     {
         void lastMessage(String userid, TextView last_msg);
-        void chatFavorite(String id );
+//        void chatFavorite(String id );
     }
 
 
