@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
+import com.example.tgapplication.fragment.account.profile.facebookimagepic.FacebookImage;
+import com.example.tgapplication.fragment.account.profile.facebookimagepic.ImagePicker;
 import com.example.tgapplication.photo.MyAdapter;
 import com.example.tgapplication.photo.Upload;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -166,7 +168,8 @@ public class EditPhotoActivity extends BaseActivity {
                 break;
 
             case R.id.facebook:
-                Toast.makeText(this, "Facebook", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(EditPhotoActivity.this, FacebookImage.class));
+//                Toast.makeText(this, "Facebook", Toast.LENGTH_SHORT).show();
                 break;
         }
         return super.onOptionsItemSelected(item);

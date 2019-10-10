@@ -70,6 +70,17 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
+        <activity android:name=".fragment.account.profile.facebookimagepic.FacebookImage"/>
+        <activity android:name=".fragment.account.profile.facebookimagepic.ImagePicker"/>
+
+        <activity
+            android:name="com.mbieniek.facebookimagepicker.facebook.FacebookAlbumPickerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.mbieniek.facebookimagepicker.facebook.FacebookImagePickerActivity"
+            android:parentActivityName="com.mbieniek.facebookimagepicker.facebook.FacebookAlbumPickerActivity"
+            android:screenOrientation="portrait" />
+
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
