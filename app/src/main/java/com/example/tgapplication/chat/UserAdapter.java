@@ -2,22 +2,15 @@ package com.example.tgapplication.chat;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.User;
 
@@ -28,10 +21,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private Context mContext;
     private List<User> mUsers;
     private boolean ischat;
-
-
-
-
 
     public UserAdapter(Context mContext, List<User> mUsers, boolean ischat, UserInterface listener){
         this.mUsers = mUsers;
@@ -58,7 +47,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 //            Glide.with(mContext).load("default").placeholder(R.drawable.ic_broken_image_primary_24dp).into(holder.profile_image);
 //        }
 
-        holder.chat.setOnLongClickListener(new View.OnLongClickListener() {
+      /*  holder.chat.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 PopupMenu popup = new PopupMenu(mContext, v);
@@ -89,7 +78,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                 return false;
             }
 
-        });
+        });*/
 
         if (ischat){
             listener.lastMessage(user.getId(), holder.last_msg);
@@ -115,7 +104,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, MessageActivity.class);
                 intent.putExtra("userid", user.getId());
-                Toast.makeText(mContext, "u click one", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(mContext, "u click one", Toast.LENGTH_SHORT).show();
                 mContext.startActivity(intent);
             }
         });
@@ -136,8 +125,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
         private ImageView img_off;
         private TextView last_msg;
-        private RelativeLayout chat;
-          ImageView ic_action_fav_remove;
+        //        private RelativeLayout chat;
+        ImageView ic_action_fav_remove;
 
 
         public ViewHolder(View itemView) {
@@ -148,7 +137,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             img_on = itemView.findViewById(R.id.img_on);
             img_off = itemView.findViewById(R.id.img_off);
             last_msg = itemView.findViewById(R.id.last_msg);
-            chat =itemView.findViewById(R.id.chat);
+//            chat =itemView.findViewById(R.id.chat);
             ic_action_fav_remove =itemView.findViewById(R.id.fev);
         }
     }
@@ -159,6 +148,5 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         void lastMessage(String userid, TextView last_msg);
 //        void chatFavorite(String id );
     }
-
 
 }

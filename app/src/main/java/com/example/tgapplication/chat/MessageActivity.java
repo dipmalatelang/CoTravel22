@@ -20,6 +20,7 @@ import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.User;
+import com.example.tgapplication.photo.Upload;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -30,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
@@ -56,7 +58,7 @@ public class MessageActivity extends BaseActivity {
     ValueEventListener seenListener;
 
     String userid;
-
+String pictureUrl;
     APIService apiService;
 
     boolean notify = false;
@@ -120,10 +122,31 @@ public class MessageActivity extends BaseActivity {
                 User user = dataSnapshot.getValue(User.class);
                 username.setText(user.getUsername());
 
-                    //and this
-                    Glide.with(getApplicationContext()).load("default").placeholder(R.mipmap.ic_launcher).into(profile_image);
+                PicturesInstance.child(userid).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                readMesagges(fuser.getUid(), userid, "default");
+                        pictureUrl="";
+                        for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
+
+                            Upload mainPhoto = snapshot1.getValue(Upload.class);
+                            if (Objects.requireNonNull(mainPhoto).type == 1)
+                                pictureUrl = mainPhoto.getUrl();
+
+                        }
+//                        Log.i("TAG", "onDataChangeMy: "+pictureUrl);
+                    //and this
+                    Glide.with(getApplicationContext()).load(pictureUrl).placeholder(R.mipmap.ic_launcher).into(profile_image);
+
+                readMesagges(fuser.getUid(), userid, pictureUrl);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+
+                });
             }
 
             @Override
