@@ -19,6 +19,7 @@ import com.example.tgapplication.chat.MessageActivity;
 import com.example.tgapplication.fragment.trip.EditProfileActivity;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
+import com.example.tgapplication.fragment.visitor.UserImg;
 import com.example.tgapplication.photo.Upload;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -101,7 +102,8 @@ public class ProfileActivity extends BaseActivity {
     ArrayList<User> userList = new ArrayList<>();
     private FirebaseUser fuser;
     TripList tripL;
-    User userL;
+    UserImg userL;
+    String profileId;
     //    @BindView(R.id.bottomNav)
 //    ConstraintLayout bottomNav;
 
@@ -119,6 +121,7 @@ public class ProfileActivity extends BaseActivity {
             floatingActionButton2.hide();
             getAllImages(fuser.getUid());
             getAllTrips(fuser.getUid());
+            profileId=fuser.getUid();
             getProfileData(fuser);
         } else if(getIntent().getSerializableExtra("MyObj") != null){
             textProfile.setVisibility(View.GONE);
@@ -133,6 +136,7 @@ public class ProfileActivity extends BaseActivity {
                 ivFavUser.setImageResource(R.drawable.ic_action_fav_add);
             }
 
+            profileId=tripL.getId();
             Log.i(TAG, "onCreate: " + tripL.getName() + " " + tripL.getFavid());
             setDetails(tripL.getName(), tripL.getGender(), tripL.getAge(), tripL.getLook(), tripL.getUserLocation(), tripL.getNationality(),
                     tripL.getLang(), tripL.getHeight(), tripL.getBody_type(), tripL.getEyes(), tripL.getHair(), tripL.getVisit(), tripL.getPlanLocation(), tripL.getFrom_to_date(), tripL.getImageUrl());
@@ -146,18 +150,19 @@ public class ProfileActivity extends BaseActivity {
             textProfile.setVisibility(View.GONE);
             ivFavUser.setVisibility(View.VISIBLE);
             floatingActionButton2.show();
-            userL = (User) getIntent().getSerializableExtra("MyUserObj");
-            getAllImages(userL.getId());
-            getAllTrips(userL.getId());
-         /*   if (userL.getFavid() == 1) {
+            userL = (UserImg) getIntent().getSerializableExtra("MyUserObj");
+            getAllImages(userL.getUser().getId());
+            getAllTrips(userL.getUser().getId());
+            profileId=userL.getUser().getId();
+         /*   if (userL.getUser().getFavid() == 1) {
                 ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
             } else {
                 ivFavUser.setImageResource(R.drawable.ic_action_fav_add);
             }*/
 
-            Log.i(TAG, "MyUserObj : " + userL.getName() + " " );
-            setDetails(userL.getName(), userL.getGender(), userL.getAge(), userL.getLook(), "", userL.getNationality(),
-                    userL.getLang(), userL.getHeight(), userL.getBody_type(), userL.getEyes(), userL.getHair(), userL.getVisit(), "", "", "");
+            Log.i(TAG, "MyUserObj : " + userL.getUser().getName() + " " );
+            setDetails(userL.getUser().getName(), userL.getUser().getGender(), userL.getUser().getAge(), userL.getUser().getLook(), "", userL.getUser().getNationality(),
+                    userL.getUser().getLang(), userL.getUser().getHeight(), userL.getUser().getBody_type(), userL.getUser().getEyes(), userL.getUser().getHair(), userL.getUser().getVisit(), "", "", "");
 
         }
 
@@ -343,7 +348,7 @@ public class ProfileActivity extends BaseActivity {
             case R.id.floatingActionButton2:
                 Intent intent = new Intent(this, MessageActivity.class);
 //                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("userid", tripL.getId());
+                intent.putExtra("userid", profileId);
                 startActivity(intent);
 
                 break;
@@ -359,11 +364,11 @@ public class ProfileActivity extends BaseActivity {
             case R.id.iv_fav_user:
                 Log.i(TAG, "onViewClicked: " + fav_int);
                 if (tripL.getFavid() == 1) {
-                    removeFav(fuser.getUid(), tripL.getId());
+                    removeFav(fuser.getUid(), profileId);
                     tripL.setFavid(0);
                     ivFavUser.setImageResource(R.drawable.ic_action_fav_add);
                 } else {
-                    setFav(fuser.getUid(), tripL.getId());
+                    setFav(fuser.getUid(), profileId);
                     tripL.setFavid(1);
                     ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
                 }
