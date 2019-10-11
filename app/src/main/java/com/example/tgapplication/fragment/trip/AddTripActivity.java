@@ -244,8 +244,13 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
     private void clearText() {
         et_note.setText("");
         et_location.setText("");
+        tv_to_date.setText("");
+        tv_from_date.setText("");
         et_location.clearFocus();
         et_note.clearFocus();
+        tv_to_date.clearFocus();
+        tv_from_date.clearFocus();
+
         edit_id = "";
     }
 
