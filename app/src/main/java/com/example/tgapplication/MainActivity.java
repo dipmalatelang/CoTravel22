@@ -106,10 +106,13 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     private boolean loadFragment(Fragment fragment) {
         //switching fragment
         if (fragment != null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_main_screen, fragment)
-                    .commit();
+            Log.i(TAG, "loadFragment: "+fragment);
+
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                        .replace(R.id.fragment_main_screen, fragment)
+                        .commit();
             return true;
         }
         return false;
