@@ -76,12 +76,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                             return true;
                         }
                         if (id == R.id.two) {
-                            Toast.makeText(mContext, "add to delete", Toast.LENGTH_LONG).show();
+//                            Toast.makeText(mContext, "add to delete", Toast.LENGTH_LONG).show();
                             return true;
                         }
 
 
-                        Toast.makeText(mContext,"You Clicked : " + item.getTitle(), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(mContext,"You Clicked : " + item.getTitle(), Toast.LENGTH_SHORT).show();
                         return true;
                     }
                 });
