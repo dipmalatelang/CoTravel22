@@ -214,7 +214,7 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
 
                     @Override
                     public void setPhotoAsPrivate(String id) {
-                        Toast.makeText(getActivity(), ""+id, Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(), ""+id, Toast.LENGTH_SHORT).show();
                     }
                 });
 
