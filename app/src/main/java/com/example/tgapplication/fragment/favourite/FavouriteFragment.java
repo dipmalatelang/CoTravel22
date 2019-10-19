@@ -15,12 +15,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tgapplication.BaseFragment;
 import com.example.tgapplication.R;
-import com.example.tgapplication.UserProfileData;
 import com.example.tgapplication.fragment.account.profile.ProfileActivity;
 import com.example.tgapplication.fragment.favourite.adapter.FavouriteAdapter;
 import com.example.tgapplication.fragment.trip.module.PlanTrip;
 import com.example.tgapplication.fragment.trip.module.TripData;
 import com.example.tgapplication.fragment.trip.module.User;
+import com.example.tgapplication.fragment.visitor.UserImg;
+import com.example.tgapplication.photo.Upload;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -45,7 +46,8 @@ public class FavouriteFragment extends BaseFragment {
     private RecyclerView myFavRV;
     private FirebaseUser fuser;
     View view;
-    private List<User> myFavArray=new ArrayList<>();
+    String pictureUrl;
+    private List<UserImg> myFavArray=new ArrayList<>();
 
 
     @Override
@@ -147,6 +149,18 @@ public class FavouriteFragment extends BaseFragment {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
                     String userKey = dataSnapshot.getKey();
+
+                    PicturesInstance.child(userKey).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for(DataSnapshot ds: dataSnapshot.getChildren())
+                            {
+                                Upload upload=ds.getValue(Upload.class);
+                                if(upload.getType()==1)
+                                {
+                                    pictureUrl=upload.getUrl();
+                                }
+                            }
                     UsersInstance.child(userKey).addValueEventListener(
                             new ValueEventListener() {
                                 @Override
@@ -154,9 +168,8 @@ public class FavouriteFragment extends BaseFragment {
                                     User user = dataSnapshot.getValue(User.class);
                                     // HERE WHAT CORRESPONDS TO JOIN
 
-                                    UserProfileData upd=new UserProfileData(user,"");
                                     // run some code
-                                    myFavArray.add(user);
+                                    myFavArray.add(new UserImg(user,pictureUrl));
                                     Log.i(TAG, "onDataChange: Rev "+myFavArray.size());
 
 
@@ -192,6 +205,13 @@ public class FavouriteFragment extends BaseFragment {
 
                                 }
                             });
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
 
                 }}
             @Override
@@ -232,6 +252,17 @@ public class FavouriteFragment extends BaseFragment {
                                             fav = 0;
                                         }
 
+                                        PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                for(DataSnapshot ds: dataSnapshot.getChildren())
+                                                {
+                                                    Upload upload=ds.getValue(Upload.class);
+                                                    if(upload.getType()==1)
+                                                    {
+                                                        pictureUrl=upload.getUrl();
+                                                    }
+                                                }
 
                                         TripsInstance.orderByKey().equalTo(user.getId())
                                                 .addValueEventListener(new ValueEventListener() {
@@ -269,7 +300,7 @@ public class FavouriteFragment extends BaseFragment {
                                                             }
                                                             Log.i("TripFromTo", "" + from_to_dates.size());
                                                             Log.i("Tag", "onDataChange: " + fav);
-                                                            tripList = findClosestDate(dates, user, fav);
+                                                            tripList = findClosestDate(dates, user, fav,pictureUrl);
 
                                                         }
 //                                                tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), favArray, tripList);
@@ -286,6 +317,13 @@ public class FavouriteFragment extends BaseFragment {
                                                     }
                                                 });
 
+                                            }
+
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+
+                                            }
+                                        });
                                     }
 
                                     @Override

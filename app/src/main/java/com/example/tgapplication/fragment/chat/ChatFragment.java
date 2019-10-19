@@ -22,6 +22,8 @@ import com.example.tgapplication.chat.Token;
 import com.example.tgapplication.chat.UserAdapter;
 import com.example.tgapplication.fragment.member.MembersActivity;
 import com.example.tgapplication.fragment.trip.module.User;
+import com.example.tgapplication.fragment.visitor.UserImg;
+import com.example.tgapplication.photo.Upload;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -42,7 +44,8 @@ public class ChatFragment extends BaseFragment {
     private RecyclerView recyclerView;
 
     private UserAdapter userAdapter;
-    private List<User> mUsers;
+    private List<UserImg> mUsers;
+    String pictureUrl="";
 
     FirebaseUser fuser;
     FloatingActionButton floatingActionButton;
@@ -113,7 +116,29 @@ public class ChatFragment extends BaseFragment {
                     User user = snapshot.getValue(User.class);
                     for (Chatlist chatlist : usersList){
                         if (user.getId().equals(chatlist.getId())){
-                            mUsers.add(user);
+
+                            PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    for(DataSnapshot ds: dataSnapshot.getChildren())
+                                    {
+
+                                        Upload upload=ds.getValue(Upload.class);
+                                        if(upload.getType()==1)
+                                        {
+                                            pictureUrl=upload.getUrl();
+                                        }
+                                    }
+
+                            mUsers.add(new UserImg(user,pictureUrl));
+
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
                         }
                     }
                 }
