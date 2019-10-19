@@ -255,6 +255,7 @@ public class FavouriteFragment extends BaseFragment {
                                         PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                pictureUrl="";
                                                 for(DataSnapshot ds: dataSnapshot.getChildren())
                                                 {
                                                     Upload upload=ds.getValue(Upload.class);
@@ -300,7 +301,7 @@ public class FavouriteFragment extends BaseFragment {
                                                             }
                                                             Log.i("TripFromTo", "" + from_to_dates.size());
                                                             Log.i("Tag", "onDataChange: " + fav);
-                                                            tripList = findClosestDate(dates, user, fav,pictureUrl);
+                                                            tripList = findClosestDate(dates, new UserImg(user,pictureUrl), fav);
 
                                                         }
 //                                                tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), favArray, tripList);

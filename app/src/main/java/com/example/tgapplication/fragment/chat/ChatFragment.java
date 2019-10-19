@@ -1,6 +1,7 @@
 package com.example.tgapplication.fragment.chat;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -84,7 +85,7 @@ public class ChatFragment extends BaseFragment {
                     Chatlist chatlist = snapshot.getValue(Chatlist.class);
                     usersList.add(chatlist);
                 }
-                Log.i("ChatFrag",""+dataSnapshot.getChildren());
+//                Log.i("ChatFrag",""+dataSnapshot.getChildren());
                 chatList();
             }
 
@@ -96,7 +97,6 @@ public class ChatFragment extends BaseFragment {
 
         updateToken(FirebaseInstanceId.getInstance().getToken());
 
-
         return view;
     }
 
@@ -107,11 +107,11 @@ public class ChatFragment extends BaseFragment {
     }
 
     private void chatList() {
-        mUsers = new ArrayList<>();
+
         UsersInstance.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mUsers.clear();
+                mUsers = new ArrayList<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     User user = snapshot.getValue(User.class);
                     for (Chatlist chatlist : usersList){
@@ -130,7 +130,16 @@ public class ChatFragment extends BaseFragment {
                                         }
                                     }
 
-                            mUsers.add(new UserImg(user,pictureUrl));
+                                    mUsers.add(new UserImg(user,pictureUrl));
+
+                                    userAdapter = new UserAdapter(getContext(), mUsers, true, new UserAdapter.UserInterface() {
+                                        @Override
+                                        public void lastMessage(Context mContext, String userid, TextView last_msg) {
+                                            checkForLastMsg(mContext,userid,last_msg);
+                                        }
+
+                                    });
+                                    recyclerView.setAdapter(userAdapter);
 
                                 }
 
@@ -142,13 +151,8 @@ public class ChatFragment extends BaseFragment {
                         }
                     }
                 }
-                userAdapter = new UserAdapter(getContext(), mUsers, true, new UserAdapter.UserInterface() {
-                    @Override
-                    public void lastMessage(String userid, TextView last_msg) {
-                        checkForLastMsg(userid,last_msg);
-                    }
-                });
-                recyclerView.setAdapter(userAdapter);
+
+
             }
 
             @Override

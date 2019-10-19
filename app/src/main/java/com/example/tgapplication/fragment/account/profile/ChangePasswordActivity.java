@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -114,10 +115,19 @@ public class ChangePasswordActivity extends BaseActivity {
                                         if (task.isSuccessful()) {
                                             Log.d(TAG, "Password updated");
                                             snackBar(clChangepwd, "Password updated");
-                                            FirebaseAuth.getInstance().signOut();
-                                            LoginManager.getInstance().logOut();
-                                            finish();
-                                            startActivity(new Intent(ChangePasswordActivity.this, LoginActivity.class));
+                                            new Handler().postDelayed(new Runnable() {
+
+                                                @Override
+                                                public void run() {
+                                                    // change image
+                                                    FirebaseAuth.getInstance().signOut();
+                                                    LoginManager.getInstance().logOut();
+                                                    finish();
+                                                    startActivity(new Intent(ChangePasswordActivity.this, LoginActivity.class));
+                                                }
+
+                                            }, 900);
+
                                         } else {
                                             Log.d(TAG, "Error password not updated");
                                             snackBar(clChangepwd, "Error password not updated");

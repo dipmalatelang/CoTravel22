@@ -23,6 +23,7 @@ import com.example.tgapplication.fragment.trip.module.PlanTrip;
 import com.example.tgapplication.fragment.trip.module.TripData;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
+import com.example.tgapplication.fragment.visitor.UserImg;
 import com.example.tgapplication.photo.Upload;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -50,12 +51,14 @@ public class TripFragment extends BaseFragment {
     SharedPreferences prefs;
     private TripAdapter tripAdapter;
     String TAG="TripFragment";
-    String pictureUrl;
+
 
     private FirebaseUser fuser;
     String str_city, str_lang, str_eyes, str_hairs, str_height, str_bodytype, str_look, str_from, str_to, str_visit;
     FloatingActionButton floatingActionButton;
     SharedPreferences.Editor editor;
+    int fav;
+    String pictureUrl;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -244,7 +247,8 @@ public class TripFragment extends BaseFragment {
                                                                             {
                                                                                 if(str_look.contains(user.getLook().get(i)))
                                                                                 {
-                                                                                    tripList = findClosestDate(dates, user, fav, pictureUrl);
+                                                                                    Log.i(TAG, "onDataChange: PictureUrl "+pictureUrl);
+                                                                                    tripList = findClosestDate(dates, new UserImg(user,pictureUrl), fav);
                                                                                 }
 
                                                                     }
@@ -307,7 +311,7 @@ public class TripFragment extends BaseFragment {
             );
     }
 
-    int fav;
+
     private void getFav(String uid,String id) {
 
         FavoritesInstance
@@ -435,9 +439,11 @@ public class TripFragment extends BaseFragment {
                                             fav = 0;
                                         }
 
+                                        Log.i(TAG, "onDataChange: UserId"+user.getId());
                                         PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                pictureUrl="";
                                                 for(DataSnapshot ds: dataSnapshot.getChildren())
                                                 {
                                                     Upload upload=ds.getValue(Upload.class);
@@ -447,6 +453,8 @@ public class TripFragment extends BaseFragment {
                                                     }
                                                 }
 
+                                                Log.i(TAG, "onDataChange: PictureUrl "+user.getId()+" => "+pictureUrl);
+                                                UserImg userImg=new UserImg(user,pictureUrl);
 
                                                 TripsInstance.orderByKey().equalTo(user.getId())
                                                 .addValueEventListener(new ValueEventListener() {
@@ -484,7 +492,7 @@ public class TripFragment extends BaseFragment {
                                                             }
                                                             Log.i("TripFromTo", "" + from_to_dates.size());
                                                             Log.i("Tag", "onDataChange: "+fav);
-                                                            tripList = findClosestDate(dates, user,fav,pictureUrl);
+                                                            tripList = findClosestDate(dates, userImg ,fav);
                                                             Log.i(TAG, "onDataChange: "+tripList);
                                                         }
 //                                                tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), favArray, tripList);
