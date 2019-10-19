@@ -252,7 +252,6 @@ public class EditPhotoActivity extends BaseActivity {
                         }
                     })
 
-
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception exception) {
