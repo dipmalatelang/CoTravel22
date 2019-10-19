@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.account.profile.facebookimagepic.FacebookImage;
-import com.example.tgapplication.fragment.account.profile.facebookimagepic.ImagePicker;
 import com.example.tgapplication.photo.MyAdapter;
 import com.example.tgapplication.photo.Upload;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -36,7 +35,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,7 +50,7 @@ public class EditPhotoActivity extends BaseActivity {
     @BindView(R.id.private_recyclerView)
     RecyclerView privateRecyclerView;
     private FirebaseUser fuser;
-    private ArrayList<Upload> public_uploads, private_uploads;
+    private ArrayList<Upload> public_uploads, private_uploads, upload1, upload2;
     private MyAdapter public_adapter, private_adapter;
     private Uri filePath;
     private static final int PICK_IMAGE_REQUEST = 234;
@@ -73,9 +75,11 @@ public class EditPhotoActivity extends BaseActivity {
 
         PicturesInstance.child(fuser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
+            public void onDataChange(@NotNull DataSnapshot snapshot) {
 //dismissing the progress dialog
                 dismissProgressDialog();
+                upload1 = new ArrayList<>();
+                upload2 = new ArrayList<>();
                 public_uploads = new ArrayList<>();
                 private_uploads = new ArrayList<>();
 
@@ -84,35 +88,51 @@ public class EditPhotoActivity extends BaseActivity {
                     Upload upload = postSnapshot.getValue(Upload.class);
                     if (upload.getType() == 3) {
                         private_uploads.add(upload);
-                    } else {
-                        public_uploads.add(upload);
+                    }
+                    else if(upload.getType()==1) {
+                        upload1.add(upload);
+                    }
+                    else if(upload.getType()==2) {
+                        upload2.add(upload);
                     }
 
                 }
+
+                if (upload1.size() > 0) {
+                    public_uploads.addAll(upload1);
+                }
+                if (upload2.size() > 0) {
+                    public_uploads.addAll(upload2);
+                }
+
+                if (public_uploads.size() > 0) {
+
+
 //creating adapter
-                public_adapter = new MyAdapter(EditPhotoActivity.this, fuser.getUid(), public_uploads, new MyAdapter.PhotoInterface() {
-                    @Override
-                    public void setProfilePhoto(String id, String previousValue) {
-                        PicturesInstance
-                                .child(fuser.getUid())
-                                .child(id).child("type").setValue(1);
+                    public_adapter = new MyAdapter(EditPhotoActivity.this, fuser.getUid(), public_uploads, new MyAdapter.PhotoInterface() {
+                        @Override
+                        public void setProfilePhoto(String id, String previousValue) {
+                            PicturesInstance
+                                    .child(fuser.getUid())
+                                    .child(id).child("type").setValue(1);
 
-                        if(!previousValue.equals("") && !previousValue.equals(id))
-                        PicturesInstance.child(fuser.getUid()).child(previousValue).child("type").setValue(2);
-                    }
+                            if (!previousValue.equals("") && !previousValue.equals(id))
+                                PicturesInstance.child(fuser.getUid()).child(previousValue).child("type").setValue(2);
+                        }
 
-                    @Override
-                    public void removePhoto(String id) {
-                        PicturesInstance.child(fuser.getUid()).child(id).removeValue();
-                    }
+                        @Override
+                        public void removePhoto(String id) {
+                            PicturesInstance.child(fuser.getUid()).child(id).removeValue();
+                        }
 
-                    @Override
-                    public void setPhotoAsPrivate(String id) {
-                        PicturesInstance
-                                .child(fuser.getUid())
-                                .child(id).child("type").setValue(3);
-                    }
-                });
+                        @Override
+                        public void setPhotoAsPrivate(String id) {
+                            PicturesInstance
+                                    .child(fuser.getUid())
+                                    .child(id).child("type").setValue(3);
+                        }
+                    });
+                }
 
                 private_adapter = new MyAdapter(EditPhotoActivity.this, fuser.getUid(), private_uploads, new MyAdapter.PhotoInterface() {
                     @Override
@@ -145,12 +165,10 @@ public class EditPhotoActivity extends BaseActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NotNull DatabaseError databaseError) {
                 dismissProgressDialog();
             }
         });
-
-
     }
 
     @Override
@@ -211,54 +229,45 @@ public class EditPhotoActivity extends BaseActivity {
 
 //adding the file to reference
             sRef.putFile(filePath)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
+                    .addOnSuccessListener(taskSnapshot -> {
 //dismissing the progress dialog
-                            progressDialog.dismiss();
+                        progressDialog.dismiss();
 
 
 //displaying success toast
 //                            snackBar(fragment_acc_constraintLayout,"File Uploaded ");
-                            Toast.makeText(EditPhotoActivity.this, "File Uploaded", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditPhotoActivity.this, "File Uploaded", Toast.LENGTH_SHORT).show();
 
-                            String uploadId = PicturesInstance.child(fuser.getUid()).push().getKey();
+                        String uploadId = PicturesInstance.child(fuser.getUid()).push().getKey();
 
-                            sRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Uri> task) {
-                                    if (task.isSuccessful()) {
-                                        getDownloadImageUrl = task.getResult().toString();
-                                        Log.i("FirebaseImages", getDownloadImageUrl);
+                        sRef.getDownloadUrl().addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                getDownloadImageUrl = Objects.requireNonNull(task.getResult()).toString();
+                                Log.i("FirebaseImages", getDownloadImageUrl);
 
 //creating the upload object to store uploaded image details
-                                        Upload upload;
-                                        if (public_uploads.size() == 0) {
-                                            upload = new Upload(uploadId, "Image", getDownloadImageUrl, 1);
-                                        } else {
-                                            upload = new Upload(uploadId, "Image", getDownloadImageUrl, 2);
-                                        }
+                                Upload upload;
+                                if (public_uploads.size() == 0) {
+                                    upload = new Upload(uploadId, "Image", getDownloadImageUrl, 1);
+                                } else {
+                                    upload = new Upload(uploadId, "Image", getDownloadImageUrl, 2);
+                                }
 
 //adding an upload to firebase database
-                                        Log.i(TAG, "onComplete: " + PicturesInstance.child(fuser.getUid()).getKey());
+                                Log.i(TAG, "onComplete: " + PicturesInstance.child(fuser.getUid()).getKey());
 
-                                        PicturesInstance.child(fuser.getUid()).child(uploadId).setValue(upload);
-                                    } else {
-                                        Toast.makeText(EditPhotoActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                PicturesInstance.child(fuser.getUid()).child(uploadId).setValue(upload);
+                            } else {
+                                Toast.makeText(EditPhotoActivity.this, Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
 //                                        snackBar(fragment_acc_constraintLayout,task.getException().getMessage());
-                                    }
-                                }
-                            });
-                        }
+                            }
+                        });
                     })
 
 
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-                            progressDialog.dismiss();
-                            Log.i("Failure", exception.getMessage());
-                        }
+                    .addOnFailureListener(exception -> {
+                        progressDialog.dismiss();
+                        Log.i("Failure", Objects.requireNonNull(exception.getMessage()));
                     })
                     .addOnProgressListener(taskSnapshot -> {
                         //displaying the upload progress
