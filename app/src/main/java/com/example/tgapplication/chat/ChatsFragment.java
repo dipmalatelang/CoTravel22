@@ -1,10 +1,9 @@
 package com.example.tgapplication.chat;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -122,9 +121,11 @@ public class ChatsFragment extends BaseFragment {
 
                 userAdapter = new UserAdapter(getContext(), mUsers, true, new UserAdapter.UserInterface() {
                     @Override
-                    public void lastMessage(String userid, TextView last_msg) {
-                        checkForLastMsg(userid,last_msg);
+                    public void lastMessage(Context mContext, String userid, TextView last_msg) {
+                        checkForLastMsg(mContext, userid,last_msg);
                     }
+
+
                 });
                 recyclerView.setAdapter(userAdapter);
                         }

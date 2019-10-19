@@ -1,5 +1,6 @@
 package com.example.tgapplication.chat;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -123,9 +124,10 @@ public class UsersFragment extends BaseFragment {
 
                 userAdapter = new UserAdapter(getContext(), mUsers, false, new UserAdapter.UserInterface() {
                     @Override
-                    public void lastMessage(String userid, TextView last_msg) {
-                        checkForLastMsg(userid,last_msg);
+                    public void lastMessage(Context mContext, String userid, TextView last_msg) {
+                        checkForLastMsg(mContext, userid,last_msg);
                     }
+
                 });
                 recyclerView.setAdapter(userAdapter);
             }
@@ -164,9 +166,10 @@ public class UsersFragment extends BaseFragment {
 
                     userAdapter = new UserAdapter(getContext(), mUsers, false, new UserAdapter.UserInterface() {
                         @Override
-                        public void lastMessage(String userid, TextView last_msg) {
-                            checkForLastMsg(userid,last_msg);
+                        public void lastMessage(Context mContext, String userid, TextView last_msg) {
+                            checkForLastMsg(mContext, userid,last_msg);
                         }
+
                     });
                     recyclerView.setAdapter(userAdapter);
                 }
