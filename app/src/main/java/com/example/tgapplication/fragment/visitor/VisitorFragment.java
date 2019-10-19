@@ -147,28 +147,27 @@ public class VisitorFragment extends BaseFragment {
 
                                             String userKey = dataSnapshot.getKey();
 
-
-                                            PicturesInstance.child(userKey).addListenerForSingleValueEvent(new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                                                    pictureUrl="";
-                                                    for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
-
-                                                        Upload mainPhoto = snapshot1.getValue(Upload.class);
-                                                        if (Objects.requireNonNull(mainPhoto).type == 1)
-                                                            pictureUrl = mainPhoto.getUrl();
-
-                                                    }
-                                                    Log.i("TAG", "onDataChangeMy: "+pictureUrl);
-
-
                                             UsersInstance.child(userKey).addValueEventListener(
                                                 new ValueEventListener() {
                                                     @Override
                                                     public void onDataChange(DataSnapshot dataSnapshot) {
 
                                                         User user = dataSnapshot.getValue(User.class);
+
+                                                        PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                            @Override
+                                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                pictureUrl="";
+                                                                for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
+
+                                                                    Upload mainPhoto = snapshot1.getValue(Upload.class);
+                                                                    if (Objects.requireNonNull(mainPhoto).type == 1)
+                                                                        pictureUrl = mainPhoto.getUrl();
+
+                                                                }
+
+                                                                Log.i("TAG", "onDataChangeMy: "+user.getId()+" == "+pictureUrl);
                                                                 myFavArray.add(new UserImg(user,pictureUrl));
 
                                                                 VisitorAdapter tripAdapter = new VisitorAdapter(getActivity(), fuser.getUid(), myFavArray, new VisitorAdapter.VisitorInterface() {
