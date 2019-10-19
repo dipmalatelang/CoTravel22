@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -150,17 +151,6 @@ public class FavouriteFragment extends BaseFragment {
 
                     String userKey = dataSnapshot.getKey();
 
-                    PicturesInstance.child(userKey).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            for(DataSnapshot ds: dataSnapshot.getChildren())
-                            {
-                                Upload upload=ds.getValue(Upload.class);
-                                if(upload.getType()==1)
-                                {
-                                    pictureUrl=upload.getUrl();
-                                }
-                            }
                     UsersInstance.child(userKey).addValueEventListener(
                             new ValueEventListener() {
                                 @Override
@@ -168,9 +158,21 @@ public class FavouriteFragment extends BaseFragment {
                                     User user = dataSnapshot.getValue(User.class);
                                     // HERE WHAT CORRESPONDS TO JOIN
 
-                                    // run some code
-                                    myFavArray.add(new UserImg(user,pictureUrl));
-                                    Log.i(TAG, "onDataChange: Rev "+myFavArray.size());
+                                    PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                            pictureUrl="";
+                                            for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
+
+                                                Upload mainPhoto = snapshot1.getValue(Upload.class);
+                                                if (Objects.requireNonNull(mainPhoto).type == 1)
+                                                    pictureUrl = mainPhoto.getUrl();
+
+                                            }
+
+                                            Log.i("TAG", "onDataChangeMy: "+user.getId()+" == "+pictureUrl);
+                                            myFavArray.add(new UserImg(user,pictureUrl));
 
 
 //                                                                }
