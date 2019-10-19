@@ -23,6 +23,7 @@ import com.example.tgapplication.fragment.trip.module.PlanTrip;
 import com.example.tgapplication.fragment.trip.module.TripData;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
+import com.example.tgapplication.photo.Upload;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -49,6 +50,7 @@ public class TripFragment extends BaseFragment {
     SharedPreferences prefs;
     private TripAdapter tripAdapter;
     String TAG="TripFragment";
+    String pictureUrl;
 
     private FirebaseUser fuser;
     String str_city, str_lang, str_eyes, str_hairs, str_height, str_bodytype, str_look, str_from, str_to, str_visit;
@@ -182,6 +184,18 @@ public class TripFragment extends BaseFragment {
                                                 fav = 0;
                                             }
 
+                                            PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                    for(DataSnapshot ds: dataSnapshot.getChildren())
+                                                    {
+                                                        Upload upload=ds.getValue(Upload.class);
+                                                        if(upload.getType()==1)
+                                                        {
+                                                            pictureUrl=upload.getUrl();
+                                                        }
+                                                    }
+
 
                                             TripsInstance.orderByKey().equalTo(user.getId())
                                                     .addValueEventListener(new ValueEventListener() {
@@ -230,7 +244,7 @@ public class TripFragment extends BaseFragment {
                                                                             {
                                                                                 if(str_look.contains(user.getLook().get(i)))
                                                                                 {
-                                                                                    tripList = findClosestDate(dates, user, fav);
+                                                                                    tripList = findClosestDate(dates, user, fav, pictureUrl);
                                                                                 }
 
                                                                     }
@@ -259,6 +273,13 @@ public class TripFragment extends BaseFragment {
                                                             });
                                                             recyclerview.setAdapter(tripAdapter);
                                                             tripAdapter.notifyDataSetChanged();
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                        }
+                                                    });
                                                         }
 
                                                         @Override
@@ -414,7 +435,20 @@ public class TripFragment extends BaseFragment {
                                             fav = 0;
                                         }
 
-                                        TripsInstance.orderByKey().equalTo(user.getId())
+                                        PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                for(DataSnapshot ds: dataSnapshot.getChildren())
+                                                {
+                                                    Upload upload=ds.getValue(Upload.class);
+                                                    if(upload.getType()==1)
+                                                    {
+                                                        pictureUrl=upload.getUrl();
+                                                    }
+                                                }
+
+
+                                                TripsInstance.orderByKey().equalTo(user.getId())
                                                 .addValueEventListener(new ValueEventListener() {
 
                                                     @Override
@@ -450,7 +484,7 @@ public class TripFragment extends BaseFragment {
                                                             }
                                                             Log.i("TripFromTo", "" + from_to_dates.size());
                                                             Log.i("Tag", "onDataChange: "+fav);
-                                                            tripList = findClosestDate(dates, user,fav);
+                                                            tripList = findClosestDate(dates, user,fav,pictureUrl);
                                                             Log.i(TAG, "onDataChange: "+tripList);
                                                         }
 //                                                tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), favArray, tripList);
@@ -478,6 +512,13 @@ public class TripFragment extends BaseFragment {
                                                         Log.i(TAG, "DatabaseError1: "+databaseError);
                                                     }
                                                 });
+                                            }
+
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+
+                                            }
+                                        });
 
                                     }
                                     @Override

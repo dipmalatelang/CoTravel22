@@ -59,7 +59,7 @@ public abstract class BaseFragment extends Fragment {
     public DatabaseReference UsersInstance = FirebaseDatabase.getInstance().getReference("Users");
 
 
-    public List<TripList> findClosestDate(List<Date> dates, User user, int fav_id) {
+    public List<TripList> findClosestDate(List<Date> dates, User user, int fav_id, String pictureUrl) {
 
         closest = Collections.min(dates, new Comparator<Date>() {
             @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -84,14 +84,14 @@ public abstract class BaseFragment extends Fragment {
             if (from_to_dates.get(i).getDate_from().contains(dateOutput1)) {
 //                String ageValue= getBirthday(user.getDob());
                 String dateFromTo = from_to_dates.get(i).getDate_from() + " - " + from_to_dates.get(i).getDate_to();
-                TripList tripListClass = new TripList(user.getId(), user.getUsername(), "default", user.getAge(), user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), from_to_dates.get(i).getLocation(), tripNote, dateFromTo,fav_id,visit_id);
+                TripList tripListClass = new TripList(user.getId(), user.getUsername(), pictureUrl, user.getAge(), user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), from_to_dates.get(i).getLocation(), tripNote, dateFromTo,fav_id,visit_id);
                 tripList.add(tripListClass);
             }
         }
 
         if(tripList.size()<1)
         {
-            TripList tripListClass = new TripList(user.getId(), user.getUsername(), "default", user.getAge(), user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), "", tripNote, "",fav_id,visit_id);
+            TripList tripListClass = new TripList(user.getId(), user.getUsername(), pictureUrl, user.getAge(), user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), "", tripNote, "",fav_id,visit_id);
             tripList.add(tripListClass);
         }
 

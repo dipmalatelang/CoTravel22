@@ -6,17 +6,21 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.chat.MessageActivity;
 import com.example.tgapplication.fragment.trip.EditProfileActivity;
+import com.example.tgapplication.fragment.trip.module.TripData;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.fragment.visitor.UserImg;
@@ -90,16 +94,23 @@ public class ProfileActivity extends BaseActivity {
     CardView cardPersonal;
     @BindView(R.id.tv_trip)
     TextView tvTrip;
-    @BindView(R.id.tv_trip_value)
-    TextView tvTripValue;
+    /* @BindView(R.id.tv_trip_value)
+     TextView tvTripValue;*/
     @BindView(R.id.card_trip)
     CardView cardTrip;
     @BindView(R.id.floatingActionButton2)
     FloatingActionButton floatingActionButton2;
     @BindView(R.id.iv_fav_user)
     ImageView ivFavUser;
+    @BindView(R.id.rv_trip_value)
+    RecyclerView rvTripValue;
+    private ArrayList<Upload> upload1 = new ArrayList<>();
+    private ArrayList<Upload> upload2 = new ArrayList<>();
     private ArrayList<Upload> uploads = new ArrayList<>();
     ArrayList<User> userList = new ArrayList<>();
+
+    ArrayList<TripData> planTripsList = new ArrayList<>();
+
     private FirebaseUser fuser;
     TripList tripL;
     UserImg userL;
@@ -115,15 +126,20 @@ public class ProfileActivity extends BaseActivity {
         ButterKnife.bind(this);
         fuser = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (getIntent().getSerializableExtra("MyObj") == null && getIntent().getSerializableExtra("MyUserObj") ==null) {
+        LinearLayoutManager ll_manager = new LinearLayoutManager(ProfileActivity.this);
+        rvTripValue.setLayoutManager(ll_manager);
+
+        if (getIntent().getSerializableExtra("MyObj") == null && getIntent().getSerializableExtra("MyUserObj") == null) {
+            ivEditProfile.setVisibility(View.VISIBLE);
             textProfile.setVisibility(View.VISIBLE);
             ivFavUser.setVisibility(View.GONE);
             floatingActionButton2.hide();
             getAllImages(fuser.getUid());
             getAllTrips(fuser.getUid());
-            profileId=fuser.getUid();
+            profileId = fuser.getUid();
             getProfileData(fuser);
-        } else if(getIntent().getSerializableExtra("MyObj") != null){
+        } else if (getIntent().getSerializableExtra("MyObj") != null) {
+            ivEditProfile.setVisibility(View.GONE);
             textProfile.setVisibility(View.GONE);
             ivFavUser.setVisibility(View.VISIBLE);
             floatingActionButton2.show();
@@ -136,7 +152,7 @@ public class ProfileActivity extends BaseActivity {
                 ivFavUser.setImageResource(R.drawable.ic_action_fav_add);
             }
 
-            profileId=tripL.getId();
+            profileId = tripL.getId();
             Log.i(TAG, "onCreate: " + tripL.getName() + " " + tripL.getFavid());
             setDetails(tripL.getName(), tripL.getGender(), tripL.getAge(), tripL.getLook(), tripL.getUserLocation(), tripL.getNationality(),
                     tripL.getLang(), tripL.getHeight(), tripL.getBody_type(), tripL.getEyes(), tripL.getHair(), tripL.getVisit(), tripL.getPlanLocation(), tripL.getFrom_to_date(), tripL.getImageUrl());
@@ -144,23 +160,22 @@ public class ProfileActivity extends BaseActivity {
 //            setDetails(userList.get(i).getName(), userList.get(i).getGender(), userList.get(i).getAge(), userList.get(i).getLook(), userList.get(i).getLocation(), userList.get(i).getNationality(), userList.get(i).getLang(), userList.get(i).getHeight(), userList.get(i).getBody_type(), userList.get(i).getEyes(), userList.get(i).getHair(), userList.get(i).getVisit(), "", "", userList.get(i).getImageURL());
 
 
-        }
-        else if(getIntent().getSerializableExtra("MyUserObj") !=null)
-        {
+        } else if (getIntent().getSerializableExtra("MyUserObj") != null) {
+            ivEditProfile.setVisibility(View.GONE);
             textProfile.setVisibility(View.GONE);
             ivFavUser.setVisibility(View.VISIBLE);
             floatingActionButton2.show();
             userL = (UserImg) getIntent().getSerializableExtra("MyUserObj");
             getAllImages(userL.getUser().getId());
             getAllTrips(userL.getUser().getId());
-            profileId=userL.getUser().getId();
+            profileId = userL.getUser().getId();
          /*   if (userL.getUser().getFavid() == 1) {
                 ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
             } else {
                 ivFavUser.setImageResource(R.drawable.ic_action_fav_add);
             }*/
 
-            Log.i(TAG, "MyUserObj : " + userL.getUser().getName() + " " );
+            Log.i(TAG, "MyUserObj : " + userL.getUser().getName() + " ");
             setDetails(userL.getUser().getName(), userL.getUser().getGender(), userL.getUser().getAge(), userL.getUser().getLook(), "", userL.getUser().getNationality(),
                     userL.getUser().getLang(), userL.getUser().getHeight(), userL.getUser().getBody_type(), userL.getUser().getEyes(), userL.getUser().getHair(), userL.getUser().getVisit(), "", "", "");
 
@@ -168,7 +183,6 @@ public class ProfileActivity extends BaseActivity {
 
 
     }
-
 
 
     private void setDetails(String name, String gender, String age, ArrayList<String> look, String userLocation, String nationality, String lang, String height, String body_type, String eyes, String hair, String visit, String planLocation, String from_to_date, String imageUrl) {
@@ -278,10 +292,17 @@ public class ProfileActivity extends BaseActivity {
         TripsInstance.child(id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren())
-                {
-                    dataSnapshot1.getValue();
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                    TripData tripData = dataSnapshot1.getValue(TripData.class);
+                    planTripsList.add(tripData);
+                    Log.i(TAG, "onDataChange: Trips " + dataSnapshot1.getValue(TripData.class).getLocation());
                 }
+
+                if (planTripsList.size() <= 0)
+                    cardTrip.setVisibility(View.GONE);
+
+                PlanTripsAdapter planTripsAdapter = new PlanTripsAdapter(ProfileActivity.this, planTripsList);
+                rvTripValue.setAdapter(planTripsAdapter);
             }
 
             @Override
@@ -295,35 +316,48 @@ public class ProfileActivity extends BaseActivity {
         PicturesInstance.child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
+                upload1 = new ArrayList<>();
+                upload2 = new ArrayList<>();
                 uploads = new ArrayList<>();
 
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                     Upload upload = postSnapshot.getValue(Upload.class);
-                    if (upload.getType() != 3) {
-                        uploads.add(upload);
+                    if (upload.getType() == 1) {
+                        upload1.add(upload);
+                    } else if (upload.getType() == 2) {
+                        upload2.add(upload);
                     }
                 }
 
-                adapter = new CustomAdapter(ProfileActivity.this, uid, uploads);
-                viewPager.setAdapter(adapter);
+                if (upload1.size() > 0) {
+                    uploads.addAll(upload1);
+                }
+                if (upload2.size() > 0) {
+                    uploads.addAll(upload2);
+                }
 
-                viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                    @Override
-                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                        int i = position + 1;
-                        textView.setText(i + " / " + uploads.size());
-                    }
+                if (uploads.size() > 0) {
+                    adapter = new CustomAdapter(ProfileActivity.this, uid, uploads);
+                    viewPager.setAdapter(adapter);
 
-                    @Override
-                    public void onPageSelected(int position) {
+                    viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                        @Override
+                        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                            int i = position + 1;
+                            textView.setText(i + " / " + uploads.size());
+                        }
 
-                    }
+                        @Override
+                        public void onPageSelected(int position) {
 
-                    @Override
-                    public void onPageScrollStateChanged(int state) {
+                        }
 
-                    }
-                });
+                        @Override
+                        public void onPageScrollStateChanged(int state) {
+
+                        }
+                    });
+                }
             }
 
             @Override
@@ -331,6 +365,7 @@ public class ProfileActivity extends BaseActivity {
 
             }
         });
+
     }
 
     @OnClick({R.id.textProfile, R.id.iv_edit_profile, R.id.floatingActionButton2, R.id.iv_fav_user, R.id.fab_backFromProfile})

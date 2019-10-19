@@ -243,6 +243,17 @@ public class VisitorFragment extends BaseFragment {
                                             fav = 0;
                                         }
 
+                                        PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                for(DataSnapshot ds: dataSnapshot.getChildren())
+                                                {
+                                                    Upload upload=ds.getValue(Upload.class);
+                                                    if(upload.getType()==1)
+                                                    {
+                                                        pictureUrl=upload.getUrl();
+                                                    }
+                                                }
 
                                         TripsInstance.orderByKey().equalTo(user.getId())
                                                 .addValueEventListener(new ValueEventListener() {
@@ -280,7 +291,7 @@ public class VisitorFragment extends BaseFragment {
                                                             }
                                                             Log.i("TripFromTo", "" + from_to_dates.size());
                                                             Log.i("Tag", "onDataChange: " + fav);
-                                                            tripList = findClosestDate(dates, user, fav);
+                                                            tripList = findClosestDate(dates, user, fav,pictureUrl);
 
                                                         }
 //                                                tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), favArray, tripList);
@@ -296,6 +307,13 @@ public class VisitorFragment extends BaseFragment {
 
                                                     }
                                                 });
+                                            }
+
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+
+                                            }
+                                        });
 
                                     }
 

@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.tgapplication.BaseFragment;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.User;
+import com.example.tgapplication.fragment.visitor.UserImg;
+import com.example.tgapplication.photo.Upload;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class UsersFragment extends BaseFragment {
@@ -33,7 +36,8 @@ public class UsersFragment extends BaseFragment {
     private RecyclerView recyclerView;
 
     private UserAdapter userAdapter;
-    private List<User> mUsers;
+    private List<UserImg> mUsers;
+    String pictureUrl;
 
     EditText search_users;
     final FirebaseUser fuser = FirebaseAuth.getInstance().getCurrentUser();
@@ -90,8 +94,31 @@ public class UsersFragment extends BaseFragment {
                     assert user != null;
                     assert fuser != null;
                     if (!user.getId().equals(fuser.getUid())){
-                        mUsers.add(user);
+
+                        PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                           @Override
+                                                                                           public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                               pictureUrl="";
+                                                                                               for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
+
+                                                                                                   Upload mainPhoto = snapshot1.getValue(Upload.class);
+                                                                                                   if (Objects.requireNonNull(mainPhoto).type == 1)
+                                                                                                       pictureUrl = mainPhoto.getUrl();
+
+                                                                                               }
+                                                                                               Log.i("TAG", "onDataChangeMy: "+pictureUrl);
+                        mUsers.add(new UserImg(user,pictureUrl));
+
+                                                                                           }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+
+                        });
                     }
+
                 }
 
                 userAdapter = new UserAdapter(getContext(), mUsers, false, new UserAdapter.UserInterface() {
@@ -127,7 +154,7 @@ public class UsersFragment extends BaseFragment {
                         Log.i("hghghhgh1",""+firebaseUser.getUid());
                         try {
                             if (!user.getId().equals(firebaseUser.getUid())){
-                                mUsers.add(user);
+                                mUsers.add(new UserImg(user,pictureUrl));
                                 Log.i("hghghhgh2",""+mUsers);
                             }
                         } catch (Exception e) {

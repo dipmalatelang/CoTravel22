@@ -85,7 +85,6 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
 
         appbar = findViewById(R.id.appbar);
 
-
         tv_from_date.setOnClickListener(this);
         tv_to_date.setOnClickListener(this);
 
@@ -349,6 +348,7 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
@@ -360,6 +360,7 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
                 Log.i(TAG, status.getStatusMessage());
             } else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.
+
             }
         }
     }
