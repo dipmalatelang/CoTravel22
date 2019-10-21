@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.example.tgapplication.fragment.account.profile.ChangePasswordActivity;
 import com.example.tgapplication.fragment.account.profile.ProfileActivity;
+import com.example.tgapplication.fragment.account.profile.facebookimagepic.FacebookImage;
 import com.example.tgapplication.fragment.account.profile.verify.EditPhoneActivity;
 import com.example.tgapplication.login.LoginActivity;
 import com.facebook.login.LoginManager;
@@ -92,7 +93,7 @@ public class MyProfileFragment extends Fragment {
     }
 
 
-    @OnClick({R.id.tv_my_profile, R.id.tv_Logout, R.id.iv_Image,R.id.tv_Change_Password, R.id.tv_verify_acc})
+    @OnClick({R.id.tv_my_profile, R.id.tv_Logout, R.id.iv_Image,R.id.tv_Change_Password, R.id.tv_verify_acc, R.id.tv_Private_Photo})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             //
@@ -113,6 +114,9 @@ public class MyProfileFragment extends Fragment {
                 getActivity().finish();
                 startActivity(new Intent(getActivity(), LoginActivity.class));
 //                snackBar(container,"Logout");
+                break;
+            case R.id.tv_Private_Photo:
+                startActivity(new Intent(getActivity(), FacebookImage.class));
                 break;
 
         }

@@ -57,6 +57,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
 
         fragment=new TripFragment();
         loadFragment(fragment);
+//        overridePendingTransition(R.anim.animation_start, R.anim.animation_leave);
+
     }
 
     private void retrieveUserDetail() {
@@ -191,4 +193,5 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
 
         return super.onOptionsItemSelected(item);
     }
+
 }
