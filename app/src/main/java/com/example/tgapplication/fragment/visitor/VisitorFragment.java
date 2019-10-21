@@ -19,6 +19,7 @@ import com.example.tgapplication.fragment.trip.module.PlanTrip;
 import com.example.tgapplication.fragment.trip.module.TripData;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.fragment.visitor.adapter.VisitorAdapter;
+import com.example.tgapplication.photo.Upload;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -33,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 
 public class VisitorFragment extends BaseFragment {
@@ -41,7 +43,8 @@ public class VisitorFragment extends BaseFragment {
     private RecyclerView myVisitRV;
     private FirebaseUser fuser;
     View view;
-    private List<User> myFavArray=new ArrayList<>();
+    String pictureUrl;
+    private List<UserImg> myFavArray=new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -136,72 +139,77 @@ public class VisitorFragment extends BaseFragment {
         // any way you managed to go the node that has the 'grp_key'
 
         ProfileVisitorInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot snapshot) {
+                                                                                        @Override
+                                                                                        public void onDataChange(DataSnapshot snapshot) {
 
-                                        myFavArray.clear();
-                                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                                                                            myFavArray.clear();
+                                                                                            for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
-                                            String userKey = dataSnapshot.getKey();
+                                                                                                String userKey = dataSnapshot.getKey();
 
-                                            UsersInstance.child(userKey).addValueEventListener(
-                                                new ValueEventListener() {
-                                                    @Override
-                                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                                                                                UsersInstance.child(userKey).addValueEventListener(
+                                                                                                        new ValueEventListener() {
+                                                                                                            @Override
+                                                                                                            public void onDataChange(DataSnapshot dataSnapshot) {
 
-                                                        User user = dataSnapshot.getValue(User.class);
+                                                                                                                User user = dataSnapshot.getValue(User.class);
 
+                                                                                                                PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                                    @Override
+                                                                                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                                        PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                                            @Override
-                                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                                                                        pictureUrl="";
+                                                                                                                        for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
 
-                                                                pictureUrl="";
-                                                                for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
+                                                                                                                            Upload mainPhoto = snapshot1.getValue(Upload.class);
+                                                                                                                            if (Objects.requireNonNull(mainPhoto).type == 1)
+                                                                                                                                pictureUrl = mainPhoto.getUrl();
 
-                                                                    Upload mainPhoto = snapshot1.getValue(Upload.class);
-                                                                    if (Objects.requireNonNull(mainPhoto).type == 1)
-                                                                        pictureUrl = mainPhoto.getUrl();
+                                                                                                                        }
 
-                                                                }
+                                                                                                                        Log.i("TAG", "onDataChangeMy: "+user.getId()+" == "+pictureUrl);
+                                                                                                                        myFavArray.add(new UserImg(user,pictureUrl));
 
-                                                                Log.i("TAG", "onDataChangeMy: "+user.getId()+" == "+pictureUrl);
-                                                                myFavArray.add(new UserImg(user,pictureUrl));
+                                                                                                                        VisitorAdapter tripAdapter = new VisitorAdapter(getActivity(), fuser.getUid(), myFavArray, new VisitorAdapter.VisitorInterface() {
+                                                                                                                            @Override
+                                                                                                                            public void setProfileVisit(String uid, String id) {
 
-                                                                VisitorAdapter tripAdapter = new VisitorAdapter(getActivity(), fuser.getUid(), myFavArray, new VisitorAdapter.VisitorInterface() {
-                                                                    @Override
-                                                                    public void setProfileVisit(String uid, String id) {
+                                                                                                                                ProfileVisitorInstance.child(id)
+                                                                                                                                        .child(uid).child("id").setValue(uid);
+                                                                                                                            }
 
-                                                                        ProfileVisitorInstance.child(id)
-                                                                                    .child(uid).child("id").setValue(uid);
+                                                                                                                            @Override
+                                                                                                                            public void setData(UserImg mTrip, int position) {
+                                                                                                                                Intent mIntent = new Intent(getActivity(), ProfileActivity.class);
+                                                                                                                                mIntent.putExtra("MyUserObj", myFavArray.get(position));
+                                                                                                                                startActivityForResult(mIntent,1);
+                                                                                                                            }
+                                                                                                                        });
+                                                                                                                        myVisitRV.setAdapter(tripAdapter);
 
+                                                                                                                    }
 
-                                                                    }
+                                                                                                                    @Override
+                                                                                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                                                    @Override
-                                                                    public void setData(User mTrip, int position) {
-                                                                        Intent mIntent = new Intent(getActivity(), ProfileActivity.class);
-                                                                        mIntent.putExtra("MyUserObj", myFavArray.get(position));
-                                                                        startActivityForResult(mIntent,1);
-                                                                    }
-                                                                });
-                                                                myVisitRV.setAdapter(tripAdapter);
+                                                                                                                    }
 
-                                                            }
-                                                    @Override
-                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                                                                                });
+                                                                                                            }
+                                                                                                            @Override
+                                                                                                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                                    }
-                                                        });
-                                                    }
-                                    }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                                                                                                            }
+                                                                                                        });
+                                                                                            }
+                                                                                        }
+                                                                                        @Override
+                                                                                        public void onCancelled(DatabaseError databaseError) {
 
-                    }
-                }
+                                                                                        }
+                                                                                    }
         );
-                                dismissProgressDialog();
+        dismissProgressDialog();
     }
 
     int fav;
@@ -234,7 +242,6 @@ public class VisitorFragment extends BaseFragment {
                                             fav = 0;
                                         }
 
-
                                         PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -251,56 +258,66 @@ public class VisitorFragment extends BaseFragment {
                                                 Log.i("TAG", "onDataChange: PictureUrl "+user.getId()+" => "+pictureUrl);
                                                 UserImg userImg=new UserImg(user,pictureUrl);
 
-                                        TripsInstance.orderByKey().equalTo(user.getId())
-                                                .addValueEventListener(new ValueEventListener() {
+                                                TripsInstance.orderByKey().equalTo(user.getId())
+                                                        .addValueEventListener(new ValueEventListener() {
 
-                                                    @Override
-                                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                                            @Override
+                                                            public void onDataChange(DataSnapshot dataSnapshot) {
 
-                                                        from_to_dates.clear();
-                                                        dates.clear();
+                                                                from_to_dates.clear();
+                                                                dates.clear();
 
-                                                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                                            String city = "";
-                                                            String tripNote = "";
-                                                            String date = "";
+                                                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                                                    String city = "";
+                                                                    String tripNote = "";
+                                                                    String date = "";
 
-                                                            for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                                                                    for (DataSnapshot snapshot1 : snapshot.getChildren()) {
 
-                                                                TripData tripData = snapshot1.getValue(TripData.class);
-                                                                Log.i("VishalD", "" + user.getUsername() + " , " + tripData.getLocation());
+                                                                        TripData tripData = snapshot1.getValue(TripData.class);
+                                                                        Log.i("VishalD", "" + user.getUsername() + " , " + tripData.getLocation());
 
-                                                                city += tripData.getLocation();
-                                                                tripNote += tripData.getTrip_note();
-                                                                date += tripData.getFrom_date() + " - " + tripData.getTo_date();
+                                                                        city += tripData.getLocation();
+                                                                        tripNote += tripData.getTrip_note();
+                                                                        date += tripData.getFrom_date() + " - " + tripData.getTo_date();
 
-                                                                DateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
-                                                                try {
-                                                                    Date date1 = format.parse(tripData.getFrom_date());
-                                                                    dates.add(date1);
-                                                                    PlanTrip planTrip = new PlanTrip(tripData.getLocation(), tripData.getFrom_date(), tripData.getTo_date());
-                                                                    from_to_dates.add(planTrip);
-                                                                    Log.i("Dates", tripData.getFrom_date() + " " + date1);
-                                                                } catch (ParseException e) {
-                                                                    e.printStackTrace();
+                                                                        DateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+                                                                        try {
+                                                                            Date date1 = format.parse(tripData.getFrom_date());
+                                                                            dates.add(date1);
+                                                                            PlanTrip planTrip = new PlanTrip(tripData.getLocation(), tripData.getFrom_date(), tripData.getTo_date());
+                                                                            from_to_dates.add(planTrip);
+                                                                            Log.i("Dates", tripData.getFrom_date() + " " + date1);
+                                                                        } catch (ParseException e) {
+                                                                            e.printStackTrace();
+                                                                        }
+
+                                                                        Log.i("TripFromTo", "" + from_to_dates.size());
+                                                                        Log.i("Tag", "onDataChange: Visitor Picture" + pictureUrl);
+
+                                                                        tripList = findClosestDate(dates, userImg, fav);
+                                                                    }
                                                                 }
-
-                                                            tripList = findClosestDate(dates, userImg, fav);
-                                                            }
-                                                        }
 //                                                tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), favArray, tripList);
 //                                                recyclerview.setAdapter(tripAdapter);
 
-                                                        Intent mIntent = new Intent(getActivity(), ProfileActivity.class);
-                                                        mIntent.putExtra("MyObj", tripList.get(0));
-                                                        startActivity(mIntent);
-                                                    }
+                                                                Intent mIntent = new Intent(getActivity(), ProfileActivity.class);
+                                                                mIntent.putExtra("MyObj", tripList.get(0));
+                                                                startActivity(mIntent);
+                                                            }
 
-                                                    @Override
-                                                    public void onCancelled(DatabaseError databaseError) {
+                                                            @Override
+                                                            public void onCancelled(DatabaseError databaseError) {
 
-                                                    }
-                                                });
+                                                            }
+                                                        });
+                                            }
+
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+
+                                            }
+                                        });
 
                                     }
 

@@ -99,6 +99,8 @@
         <activity android:name=".fragment.account.profile.EditPhotoActivity"/>
         <activity android:name=".fragment.account.profile.ChangePasswordActivity"/>
 
+        <activity android:name=".fragment.account.profile.FacebookImage"/>
+
         <service android:name=".fragment.chat.notification.MyFirebaseIdService"
             android:enabled="true"
             android:exported="true">
