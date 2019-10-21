@@ -16,7 +16,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.User;
-import com.example.tgapplication.fragment.visitor.UserImg;
 
 import java.util.List;
 
@@ -24,12 +23,12 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
 {
 
     private Context mContext;
-    private List<UserImg> mTrip;
+    private List<User> mTrip;
     private String uid;
     private int fav_int;
     private List<String> favArray;
 
-    public VisitorAdapter(Context mContext, String uid, List<UserImg> mTrip, VisitorInterface listener)
+    public VisitorAdapter(Context mContext, String uid, List<User> mTrip, VisitorInterface listener)
     {
         this.uid=uid;
         this.mContext = mContext;
@@ -50,40 +49,38 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
     public void onBindViewHolder(final VisitorViewHolder holder, int position)
     {
 
-        final UserImg tList = mTrip.get(position);
-  /*      if(tList.getUser().getImageURL().equalsIgnoreCase("default"))
+        final User tList = mTrip.get(position);
+  /*      if(tList.getImageURL().equalsIgnoreCase("default"))
         {
             Glide.with(mContext).load(R.drawable.ic_broken_image_primary_24dp).placeholder(R.drawable.ic_broken_image_primary_24dp).apply(new RequestOptions().override(200, 300)).into(holder.mImage);
         }
         else
         {*/
-          /*  for(int i=0;i<mTrip.size();i++)
+            for(int i=0;i<mTrip.size();i++)
             {
-                Log.i("TAG", "onBindViewHolder: "+mTrip.get(i).getUser().getId()+" "+mTrip.get(i).getUser().getName()+" "+"default");
+                Log.i("TAG", "onBindViewHolder: "+mTrip.get(i).getId()+" "+mTrip.get(i).getName()+" "+"default");
             }
             Glide.with(mContext).load("default").placeholder(R.drawable.ic_broken_image_primary_24dp).apply(new RequestOptions().override(200, 300)).into(holder.mImage);
-*/
-         /*   Log.i("TAGnnnn", "onBindViewHolder: "+tList.getUser().getImageURL());
-            new BitmapAsync(holder.mImage,mContext).execute(tList.getUser().getImageURL());*/
-//            Glide.with(mContext).load(getBitmapFromURL(tList.getUser().getImageURL())).into(holder.mImage);
+
+         /*   Log.i("TAGnnnn", "onBindViewHolder: "+tList.getImageURL());
+            new BitmapAsync(holder.mImage,mContext).execute(tList.getImageURL());*/
+//            Glide.with(mContext).load(getBitmapFromURL(tList.getImageURL())).into(holder.mImage);
 //        }
 
-        Glide.with(mContext).load(tList.getPictureUrl()).placeholder(R.drawable.ic_broken_image_primary_24dp).into(holder.mImage);
-//        holder.mImage.setImageResource(tList.getPictureUrl());
-        holder.mTitle.setText(tList.getUser().getName());
+        holder.mTitle.setText(tList.getName());
 
         holder.mCity.setVisibility(View.GONE);
 //        holder.mDate.setVisibility(View.GONE);
 
-//        holder.mCity.setText(tList.getUser().getPlanLocation());
-//        holder.mDate.setText(tList.getUser().getFrom_to_date());
+//        holder.mCity.setText(tList.getPlanLocation());
+//        holder.mDate.setText(tList.getFrom_to_date());
 
         holder.mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                listener.setProfileVisit(uid,tList.getUser().getId());
+                listener.setProfileVisit(uid,tList.getId());
                 listener.setData(tList,position);
-//                int fav_id= getFav(favArray,tList.getUser().getId());
+//                int fav_id= getFav(favArray,tList.getId());
 //                Log.i("Got Needed Value"," "+fav_id);
                 /*Intent mIntent = new Intent(mContext, DetailActivity.class);
                 mIntent.putExtra("MyObj", tList);
@@ -98,7 +95,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
         holder.ivTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity)mContext).removeVisit(uid, mTrip.get(position).getUser().getId());
+                ((MainActivity)mContext).removeVisit(uid, mTrip.get(position).getId());
 //                mTrip.get(position).setFavid(0);
                 mTrip.remove(position);
                 notifyDataSetChanged();
@@ -197,6 +194,6 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
     VisitorInterface listener;
     public interface VisitorInterface{
         void setProfileVisit(String uid, String id);
-        void setData(UserImg mTrip,int position);
+        void setData(User mTrip,int position);
     }
 }

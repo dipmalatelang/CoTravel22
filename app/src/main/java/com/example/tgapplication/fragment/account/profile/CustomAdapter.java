@@ -13,8 +13,6 @@ import com.bumptech.glide.Glide;
 import com.example.tgapplication.R;
 import com.example.tgapplication.photo.Upload;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 
 public class CustomAdapter extends PagerAdapter {
@@ -36,17 +34,18 @@ public class CustomAdapter extends PagerAdapter {
     }
 
     @Override
-    public boolean isViewFromObject(@NotNull View view, @NotNull Object object) {
+    public boolean isViewFromObject(View view, Object object) {
         return (view == object);
     }
 
     @Override
-    public Object instantiateItem(@NotNull ViewGroup container, int position) {
+    public Object instantiateItem(ViewGroup container, int position) {
         inflater = (LayoutInflater)ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(R.layout.swipe,container,false);
         ImageView img = v.findViewById(R.id.imageView);
 //        img.setImageResource(mUploads.get(position).url);
-        Glide.with(ctx)
+        Glide
+                .with(ctx)
                 .load(mUploads.get(position).getUrl())
                 .centerCrop()
                 .placeholder(R.drawable.ic_broken_image_primary_24dp)
@@ -57,7 +56,7 @@ public class CustomAdapter extends PagerAdapter {
     }
 
     @Override
-    public void destroyItem(View container, int position, @NotNull Object object) {
+    public void destroyItem(View container, int position, Object object) {
         container.refreshDrawableState();
     }
 }

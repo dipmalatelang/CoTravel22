@@ -19,7 +19,6 @@ import com.example.tgapplication.fragment.trip.module.PlanTrip;
 import com.example.tgapplication.fragment.trip.module.TripData;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.fragment.visitor.adapter.VisitorAdapter;
-import com.example.tgapplication.photo.Upload;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -34,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 
 public class VisitorFragment extends BaseFragment {
@@ -43,8 +41,7 @@ public class VisitorFragment extends BaseFragment {
     private RecyclerView myVisitRV;
     private FirebaseUser fuser;
     View view;
-    String pictureUrl;
-    private List<UserImg> myFavArray=new ArrayList<>();
+    private List<User> myFavArray=new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -154,6 +151,7 @@ public class VisitorFragment extends BaseFragment {
 
                                                         User user = dataSnapshot.getValue(User.class);
 
+
                                                         PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                                                             @Override
                                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -176,10 +174,12 @@ public class VisitorFragment extends BaseFragment {
 
                                                                         ProfileVisitorInstance.child(id)
                                                                                     .child(uid).child("id").setValue(uid);
+
+
                                                                     }
 
                                                                     @Override
-                                                                    public void setData(UserImg mTrip, int position) {
+                                                                    public void setData(User mTrip, int position) {
                                                                         Intent mIntent = new Intent(getActivity(), ProfileActivity.class);
                                                                         mIntent.putExtra("MyUserObj", myFavArray.get(position));
                                                                         startActivityForResult(mIntent,1);
@@ -187,14 +187,6 @@ public class VisitorFragment extends BaseFragment {
                                                                 });
                                                                 myVisitRV.setAdapter(tripAdapter);
 
-                                                    }
-
-                                                    @Override
-                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                                    }
-
-                                                });
                                                             }
                                                     @Override
                                                     public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -241,6 +233,7 @@ public class VisitorFragment extends BaseFragment {
                                         } else {
                                             fav = 0;
                                         }
+
 
                                         PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
@@ -292,9 +285,6 @@ public class VisitorFragment extends BaseFragment {
                                                                     e.printStackTrace();
                                                                 }
 
-                                                            Log.i("TripFromTo", "" + from_to_dates.size());
-                                                            Log.i("Tag", "onDataChange: Visitor Picture" + pictureUrl);
-
                                                             tripList = findClosestDate(dates, userImg, fav);
                                                             }
                                                         }
@@ -311,13 +301,6 @@ public class VisitorFragment extends BaseFragment {
 
                                                     }
                                                 });
-                                            }
-
-                                            @Override
-                                            public void onCancelled(DatabaseError databaseError) {
-
-                                            }
-                                        });
 
                                     }
 

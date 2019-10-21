@@ -187,18 +187,6 @@ public class TripFragment extends BaseFragment {
                                                 fav = 0;
                                             }
 
-                                            PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                    for(DataSnapshot ds: dataSnapshot.getChildren())
-                                                    {
-                                                        Upload upload=ds.getValue(Upload.class);
-                                                        if(upload.getType()==1)
-                                                        {
-                                                            pictureUrl=upload.getUrl();
-                                                        }
-                                                    }
-
 
                                             TripsInstance.orderByKey().equalTo(user.getId())
                                                     .addValueEventListener(new ValueEventListener() {
@@ -247,6 +235,7 @@ public class TripFragment extends BaseFragment {
                                                                             {
                                                                                 if(str_look.contains(user.getLook().get(i)))
                                                                                 {
+
                                                                                     Log.i(TAG, "onDataChange: PictureUrl "+pictureUrl);
                                                                                     tripList = findClosestDate(dates, new UserImg(user,pictureUrl), fav);
                                                                                 }
@@ -277,13 +266,6 @@ public class TripFragment extends BaseFragment {
                                                             });
                                                             recyclerview.setAdapter(tripAdapter);
                                                             tripAdapter.notifyDataSetChanged();
-                                                        }
-
-                                                        @Override
-                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                                        }
-                                                    });
                                                         }
 
                                                         @Override
@@ -439,6 +421,7 @@ public class TripFragment extends BaseFragment {
                                             fav = 0;
                                         }
 
+
                                         Log.i(TAG, "onDataChange: UserId"+user.getId());
                                         PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
@@ -492,6 +475,7 @@ public class TripFragment extends BaseFragment {
                                                             }
                                                             Log.i("TripFromTo", "" + from_to_dates.size());
                                                             Log.i("Tag", "onDataChange: "+fav);
+
                                                             tripList = findClosestDate(dates, userImg ,fav);
                                                             Log.i(TAG, "onDataChange: "+tripList);
                                                         }
@@ -520,13 +504,6 @@ public class TripFragment extends BaseFragment {
                                                         Log.i(TAG, "DatabaseError1: "+databaseError);
                                                     }
                                                 });
-                                            }
-
-                                            @Override
-                                            public void onCancelled(DatabaseError databaseError) {
-
-                                            }
-                                        });
 
                                     }
                                     @Override
