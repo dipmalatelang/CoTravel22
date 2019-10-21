@@ -150,7 +150,23 @@ public class VisitorFragment extends BaseFragment {
                                                     public void onDataChange(DataSnapshot dataSnapshot) {
 
                                                         User user = dataSnapshot.getValue(User.class);
-                                                                myFavArray.add(user);
+
+
+                                                        PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                            @Override
+                                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                pictureUrl="";
+                                                                for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
+
+                                                                    Upload mainPhoto = snapshot1.getValue(Upload.class);
+                                                                    if (Objects.requireNonNull(mainPhoto).type == 1)
+                                                                        pictureUrl = mainPhoto.getUrl();
+
+                                                                }
+
+                                                                Log.i("TAG", "onDataChangeMy: "+user.getId()+" == "+pictureUrl);
+                                                                myFavArray.add(new UserImg(user,pictureUrl));
 
                                                                 VisitorAdapter tripAdapter = new VisitorAdapter(getActivity(), fuser.getUid(), myFavArray, new VisitorAdapter.VisitorInterface() {
                                                                     @Override
@@ -219,6 +235,22 @@ public class VisitorFragment extends BaseFragment {
                                         }
 
 
+                                        PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                pictureUrl="";
+                                                for(DataSnapshot ds: dataSnapshot.getChildren())
+                                                {
+                                                    Upload upload=ds.getValue(Upload.class);
+                                                    if(upload.getType()==1)
+                                                    {
+                                                        pictureUrl=upload.getUrl();
+                                                    }
+                                                }
+
+                                                Log.i("TAG", "onDataChange: PictureUrl "+user.getId()+" => "+pictureUrl);
+                                                UserImg userImg=new UserImg(user,pictureUrl);
+
                                         TripsInstance.orderByKey().equalTo(user.getId())
                                                 .addValueEventListener(new ValueEventListener() {
 
@@ -252,11 +284,9 @@ public class VisitorFragment extends BaseFragment {
                                                                 } catch (ParseException e) {
                                                                     e.printStackTrace();
                                                                 }
-                                                            }
-                                                            Log.i("TripFromTo", "" + from_to_dates.size());
-                                                            Log.i("Tag", "onDataChange: " + fav);
-                                                            tripList = findClosestDate(dates, user, fav);
 
+                                                            tripList = findClosestDate(dates, userImg, fav);
+                                                            }
                                                         }
 //                                                tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), favArray, tripList);
 //                                                recyclerview.setAdapter(tripAdapter);

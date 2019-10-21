@@ -3,6 +3,7 @@ package com.example.tgapplication;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.example.tgapplication.chat.Chat;
 import com.example.tgapplication.fragment.trip.module.PlanTrip;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
+import com.example.tgapplication.fragment.visitor.UserImg;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -48,6 +50,7 @@ public abstract class BaseFragment extends Fragment {
     String tripNote = "";
     public List<TripList> myFavArray = new ArrayList<>();
     String theLastMessage;
+    Boolean textType;
 
     public DatabaseReference PicturesInstance = FirebaseDatabase.getInstance().getReference("Pictures");
     public DatabaseReference ChatlistInstance = FirebaseDatabase.getInstance().getReference("Chatlist");
@@ -59,7 +62,9 @@ public abstract class BaseFragment extends Fragment {
     public DatabaseReference UsersInstance = FirebaseDatabase.getInstance().getReference("Users");
 
 
-    public List<TripList> findClosestDate(List<Date> dates, User user, int fav_id) {
+    public List<TripList> findClosestDate(List<Date> dates, UserImg userImg, int fav_id) {
+
+       User user= userImg.getUser();
 
         closest = Collections.min(dates, new Comparator<Date>() {
             @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -80,18 +85,20 @@ public abstract class BaseFragment extends Fragment {
         for (int i = 0; i < from_to_dates.size(); i++) {
             Log.i("This data", from_to_dates.get(i).getDate_from() + " " + dateOutput1);
 //            int fav_id= getFav(favArray,user.getId());
-
+//            Log.i("TAG", "onBindViewHolder: Visitor "+user.getId()+" - "+userImg.getPictureUrl());
             if (from_to_dates.get(i).getDate_from().contains(dateOutput1)) {
 //                String ageValue= getBirthday(user.getDob());
                 String dateFromTo = from_to_dates.get(i).getDate_from() + " - " + from_to_dates.get(i).getDate_to();
-                TripList tripListClass = new TripList(user.getId(), user.getUsername(), "default", user.getAge(), user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), from_to_dates.get(i).getLocation(), tripNote, dateFromTo,fav_id,visit_id);
+
+                TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getAge(), user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), from_to_dates.get(i).getLocation(), tripNote, dateFromTo,fav_id,visit_id);
                 tripList.add(tripListClass);
             }
         }
 
         if(tripList.size()<1)
         {
-            TripList tripListClass = new TripList(user.getId(), user.getUsername(), "default", user.getAge(), user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), "", tripNote, "",fav_id,visit_id);
+
+            TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getAge(), user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), "", tripNote, "",fav_id,visit_id);
             tripList.add(tripListClass);
         }
 
@@ -140,14 +147,42 @@ public abstract class BaseFragment extends Fragment {
         }
     }
 
+ /*   //show new message arrival
+    public void highlightNewMessage(String userid)
+    {
+        ChatsInstance.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds : dataSnapshot.getChildren())
+                {
+                    Chat chat=ds.getValue(Chat.class);
+//                    chat.isIsseen();
+                    if(chat.getSender().equals(userid) && !chat.isIsseen())
+                    {
+                        Log.i("TAG", "onDataChange: HighLight "+userid+" "+chat.isIsseen());
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.i("TAG", "onDataChange: HighLight Not "+userid+" "+databaseError.getMessage());
+            }
+        });
+    }*/
+
     //check for last message
-    public void checkForLastMsg(final String userid, final TextView last_msg){
-        theLastMessage = "default";
+    public void checkForLastMsg(Context mContext, final String userid, final TextView last_msg){
+
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         ChatsInstance.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                theLastMessage = "default";
+                textType=true;
+
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Chat chat = snapshot.getValue(Chat.class);
                     Log.i("Snap"," "+snapshot);
@@ -157,7 +192,18 @@ public abstract class BaseFragment extends Fragment {
                             theLastMessage = chat.getMessage();
                         }
                     }
+
+                    if(chat.getSender().equals(userid) && !chat.isIsseen()) {
+                        Log.i("TAG", "onDataChange: HighLight "+userid+" "+chat.isIsseen());
+                        textType=chat.isIsseen();
+                    }
+
                 }
+
+                if(!textType)
+                last_msg.setTextColor(mContext.getResources().getColor(R.color.black));
+                else
+                    last_msg.setTextColor(mContext.getResources().getColor(R.color.gray));
 
                 switch (theLastMessage){
                     case  "default":
@@ -169,7 +215,7 @@ public abstract class BaseFragment extends Fragment {
                         break;
                 }
 
-                theLastMessage = "default";
+//                theLastMessage = "default";
             }
 
             @Override

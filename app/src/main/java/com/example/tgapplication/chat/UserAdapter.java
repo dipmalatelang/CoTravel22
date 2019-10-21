@@ -2,6 +2,7 @@ package com.example.tgapplication.chat;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -50,12 +51,16 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        final User user = mUsers.get(position);
+        final User user = mUsers.get(position).getUser();
+        Log.i("TAG", "onBindViewHolder: proper"+mUsers.get(position).getUser());
         holder.username.setText(user.getUsername());
     /*    if (user.getImageURL().equals("default")){
             holder.profile_image.setImageResource(R.mipmap.ic_launcher);
         } else {*/
 //            Glide.with(mContext).load("default").placeholder(R.drawable.ic_broken_image_primary_24dp).into(holder.profile_image);
+
+
+            Glide.with(mContext).load(mUsers.get(position).getPictureUrl()).placeholder(R.drawable.ic_broken_image_primary_24dp).into(holder.profile_image);
 //        }
 
         holder.chat.setOnLongClickListener(new View.OnLongClickListener() {
@@ -91,8 +96,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
         });
 
+//      listener.highlightMsg(user.getId(),holder.last_msg);
+
+
         if (ischat){
-            listener.lastMessage(user.getId(), holder.last_msg);
+            listener.lastMessage(mContext,user.getId(), holder.last_msg);
         } else {
             holder.last_msg.setVisibility(View.GONE);
         }
@@ -156,7 +164,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     UserInterface listener;
     public interface UserInterface
     {
-        void lastMessage(String userid, TextView last_msg);
+        void lastMessage(Context mContext, String userid, TextView last_msg);
 //        void chatFavorite(String id );
     }
 

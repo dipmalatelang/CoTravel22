@@ -1,7 +1,9 @@
 package com.example.tgapplication.fragment.chat;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -32,6 +35,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,10 +48,12 @@ public class ChatFragment extends BaseFragment {
     private UserAdapter userAdapter;
     private List<User> mUsers;
 
+    String pictureUrl="";
+
     FirebaseUser fuser;
     FloatingActionButton floatingActionButton;
 
-    private List<Chatlist> usersList;
+
 //    private FloatingActionButton floatingActionButton;
 
     @Override
@@ -62,7 +68,7 @@ public class ChatFragment extends BaseFragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
-        usersList = new ArrayList<>();
+
 
         floatingActionButton=view.findViewById(R.id.floatingActionButton);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -75,14 +81,15 @@ public class ChatFragment extends BaseFragment {
         ChatlistInstance.child(fuser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                usersList.clear();
+                List<Chatlist> usersList = new ArrayList<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
 
                     Chatlist chatlist = snapshot.getValue(Chatlist.class);
                     usersList.add(chatlist);
                 }
-                Log.i("ChatFrag",""+dataSnapshot.getChildren());
-                chatList();
+//                Log.i("ChatFrag",""+dataSnapshot.getChildren());
+                Log.i("Size", "onDataChange: "+usersList.size());
+                chatList(usersList);
             }
 
             @Override
@@ -93,7 +100,6 @@ public class ChatFragment extends BaseFragment {
 
         updateToken(FirebaseInstanceId.getInstance().getToken());
 
-
         return view;
     }
 
@@ -103,27 +109,55 @@ public class ChatFragment extends BaseFragment {
         TokensInstance.child(fuser.getUid()).setValue(token1);
     }
 
-    private void chatList() {
-        mUsers = new ArrayList<>();
+    private void chatList(List<Chatlist> usersList) {
+
         UsersInstance.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                mUsers.clear();
+                List<UserImg> mUsers;  mUsers = new ArrayList<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     User user = snapshot.getValue(User.class);
                     for (Chatlist chatlist : usersList){
                         if (user.getId().equals(chatlist.getId())){
-                            mUsers.add(user);
+
+                            PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    for(DataSnapshot ds: dataSnapshot.getChildren())
+                                    {
+
+                                        Upload upload=ds.getValue(Upload.class);
+
+                                        if(Objects.requireNonNull(upload).getType()==1)
+                                        {
+                                            pictureUrl=upload.getUrl();
+                                        }
+                                    }
+
+                                    mUsers.add(new UserImg(user,pictureUrl));
+
+                                    Log.i("TAG", "onDataChange: chat"+mUsers.size());
+                                    userAdapter = new UserAdapter(getContext(), mUsers, true, new UserAdapter.UserInterface() {
+                                        @Override
+                                        public void lastMessage(Context mContext, String userid, TextView last_msg) {
+                                            checkForLastMsg(mContext,userid,last_msg);
+                                        }
+
+                                    });
+                                    recyclerView.setAdapter(userAdapter);
+
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
                         }
                     }
                 }
-                userAdapter = new UserAdapter(getContext(), mUsers, true, new UserAdapter.UserInterface() {
-                    @Override
-                    public void lastMessage(String userid, TextView last_msg) {
-                        checkForLastMsg(userid,last_msg);
-                    }
-                });
-                recyclerView.setAdapter(userAdapter);
+
+
             }
 
             @Override
