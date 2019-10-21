@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.tgapplication.BaseFragment;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.User;
+import com.example.tgapplication.fragment.visitor.UserImg;
+import com.example.tgapplication.photo.Upload;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -24,15 +26,17 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ChatsFragment extends BaseFragment {
 
     private RecyclerView recyclerView;
 
     private UserAdapter userAdapter;
-    private List<User> mUsers;
+    private List<UserImg> mUsers;
 
     FirebaseUser fuser;
+    String pictureUrl;
 
     private List<Chatlist> usersList;
 
@@ -91,26 +95,48 @@ public class ChatsFragment extends BaseFragment {
                     User user = snapshot.getValue(User.class);
                     for (Chatlist chatlist : usersList){
                         if (user.getId().equals(chatlist.getId())){
-                            mUsers.add(user);
+                            PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                    pictureUrl="";
+                                    for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
+
+                                        Upload mainPhoto = snapshot1.getValue(Upload.class);
+                                        if (Objects.requireNonNull(mainPhoto).type == 1)
+                                            pictureUrl = mainPhoto.getUrl();
+
+                                    }
+                                    Log.i("TAG", "onDataChangeMy: "+pictureUrl);
+                                    mUsers.add(new UserImg(user,pictureUrl));
+
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+
+                            });
+
+                            userAdapter = new UserAdapter(getContext(), mUsers, true, new UserAdapter.UserInterface() {
+                                @Override
+                                public void lastMessage(Context mContext, String userid, TextView last_msg) {
+                                    checkForLastMsg(mContext, userid,last_msg);
+                                }
+
+
+                            });
+                            recyclerView.setAdapter(userAdapter);
                         }
                     }
                 }
-                userAdapter = new UserAdapter(getContext(), mUsers, true, new UserAdapter.UserInterface() {
-                    @Override
-                    public void lastMessage(Context mContext, String userid, TextView last_msg) {
-                        checkForLastMsg(mContext, userid,last_msg);
-                    }
 
-
-                });
-                recyclerView.setAdapter(userAdapter);
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
     }
-
 }

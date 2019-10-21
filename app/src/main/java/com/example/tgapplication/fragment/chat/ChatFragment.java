@@ -25,6 +25,8 @@ import com.example.tgapplication.chat.Token;
 import com.example.tgapplication.chat.UserAdapter;
 import com.example.tgapplication.fragment.member.MembersActivity;
 import com.example.tgapplication.fragment.trip.module.User;
+import com.example.tgapplication.fragment.visitor.UserImg;
+import com.example.tgapplication.photo.Upload;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -46,7 +48,6 @@ public class ChatFragment extends BaseFragment {
     private RecyclerView recyclerView;
 
     private UserAdapter userAdapter;
-    private List<User> mUsers;
 
     String pictureUrl="";
 

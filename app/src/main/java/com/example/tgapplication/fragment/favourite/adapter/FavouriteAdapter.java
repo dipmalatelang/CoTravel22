@@ -15,6 +15,7 @@ import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
+import com.example.tgapplication.fragment.visitor.UserImg;
 
 import java.util.List;
 
@@ -22,12 +23,12 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
 {
 
     private Context mContext;
-    private List<User> mTrip;
+    private List<UserImg> mTrip;
     private String uid;
     private int fav_int;
     private List<String> favArray;
 
-    public FavouriteAdapter(Context mContext, String uid, List<User> mTrip,FavouriteInterface listener) {
+    public FavouriteAdapter(Context mContext, String uid, List<UserImg> mTrip, FavouriteInterface listener) {
         this.uid=uid;
         this.mContext = mContext;
         this.mTrip = mTrip;
@@ -48,8 +49,8 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
     public void onBindViewHolder(final ProfileVisitorViewHolder holder, int position)
     {
 
-        final User tList = mTrip.get(position);
-            Glide.with(mContext).load(R.drawable.ic_broken_image_primary_24dp).placeholder(R.drawable.ic_broken_image_primary_24dp).into(holder.mImage);
+        final User tList = mTrip.get(position).getUser();
+        Glide.with(mContext).load(mTrip.get(position).getPictureUrl()).placeholder(R.drawable.ic_broken_image_primary_24dp).into(holder.mImage);
 
         holder.mTitle.setText(tList.getName());
 //        holder.mCity.setVisibility(View.GONE);
@@ -90,7 +91,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
         holder.ivTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity)mContext).removeFav(uid, mTrip.get(position).getId());
+                ((MainActivity)mContext).removeFav(uid, mTrip.get(position).getUser().getId());
                 mTrip.remove(position);
                 notifyDataSetChanged();
             }
@@ -117,7 +118,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
             ivTitle=itemView.findViewById(R.id.ivTitle);
             mTitle = itemView.findViewById(R.id.tvTitle);
             mCity = itemView.findViewById(R.id.tvCity);
-           // mDate = itemView.findViewById(R.id.tvDate);
+            // mDate = itemView.findViewById(R.id.tvDate);
             mCardView = itemView.findViewById(R.id.cardview);
         }
     }

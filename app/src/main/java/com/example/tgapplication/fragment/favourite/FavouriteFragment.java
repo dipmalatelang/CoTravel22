@@ -15,12 +15,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tgapplication.BaseFragment;
 import com.example.tgapplication.R;
-import com.example.tgapplication.UserProfileData;
 import com.example.tgapplication.fragment.account.profile.ProfileActivity;
 import com.example.tgapplication.fragment.favourite.adapter.FavouriteAdapter;
 import com.example.tgapplication.fragment.trip.module.PlanTrip;
 import com.example.tgapplication.fragment.trip.module.TripData;
 import com.example.tgapplication.fragment.trip.module.User;
+import com.example.tgapplication.fragment.visitor.UserImg;
+import com.example.tgapplication.photo.Upload;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -46,7 +47,8 @@ public class FavouriteFragment extends BaseFragment {
     private RecyclerView myFavRV;
     private FirebaseUser fuser;
     View view;
-    private List<User> myFavArray=new ArrayList<>();
+    String pictureUrl;
+    private List<UserImg> myFavArray=new ArrayList<>();
 
 
     @Override
@@ -174,34 +176,41 @@ public class FavouriteFragment extends BaseFragment {
 
 
 //                                                                }
-                                    FavouriteAdapter tripAdapter = new FavouriteAdapter(getActivity(), fuser.getUid(), myFavArray, new FavouriteAdapter.FavouriteInterface() {
-                                        @Override
-                                        public void sendFavourite(String id) {
-                                            getData(id);
-                                        }
+                                            FavouriteAdapter tripAdapter = new FavouriteAdapter(getActivity(), fuser.getUid(), myFavArray, new FavouriteAdapter.FavouriteInterface() {
+                                                @Override
+                                                public void sendFavourite(String id) {
+                                                    getData(id);
+                                                }
 
-                                        @Override
-                                        public void setProfileVisit(String uid, String id) {
+                                                @Override
+                                                public void setProfileVisit(String uid, String id) {
 
-                                            ProfileVisitorInstance.child(id)
-                                                    .child(uid).child("id").setValue(uid);
+                                                    ProfileVisitorInstance.child(id)
+                                                            .child(uid).child("id").setValue(uid);
 
-                                        }
+                                                }
 
-                                        @Override
-                                        public void setData(User tList, int position) {
-                                            Intent mIntent = new Intent(getActivity(), ProfileActivity.class);
-                                            mIntent.putExtra("MyUserObj", myFavArray.get(position));
-                                            startActivityForResult(mIntent,1);
-                                        }
+                                                @Override
+                                                public void setData(User tList, int position) {
+                                                    Intent mIntent = new Intent(getActivity(), ProfileActivity.class);
+                                                    mIntent.putExtra("MyUserObj", myFavArray.get(position));
+                                                    startActivityForResult(mIntent,1);
+                                                }
 
-                                    });
-                                    myFavRV.setAdapter(tripAdapter);
+                                            });
+                                            myFavRV.setAdapter(tripAdapter);
 //                                                            }
 //                                                        }
+                                        }
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
                                 }
+
                                 @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                public void onCancelled(DatabaseError databaseError) {
 
                                 }
                             });
@@ -245,7 +254,6 @@ public class FavouriteFragment extends BaseFragment {
                                             fav = 0;
                                         }
 
-
                                         PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -259,60 +267,66 @@ public class FavouriteFragment extends BaseFragment {
                                                     }
                                                 }
 
-                                        TripsInstance.orderByKey().equalTo(user.getId())
-                                                .addValueEventListener(new ValueEventListener() {
+                                                TripsInstance.orderByKey().equalTo(user.getId())
+                                                        .addValueEventListener(new ValueEventListener() {
 
-                                                    @Override
-                                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                                            @Override
+                                                            public void onDataChange(DataSnapshot dataSnapshot) {
 
-                                                        from_to_dates.clear();
-                                                        dates.clear();
+                                                                from_to_dates.clear();
+                                                                dates.clear();
 
-                                                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                                            String city = "";
-                                                            String tripNote = "";
-                                                            String date = "";
+                                                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                                                    String city = "";
+                                                                    String tripNote = "";
+                                                                    String date = "";
 
-                                                            for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                                                                    for (DataSnapshot snapshot1 : snapshot.getChildren()) {
 
-                                                                TripData tripData = snapshot1.getValue(TripData.class);
-                                                                Log.i("VishalD", "" + user.getUsername() + " , " + tripData.getLocation());
+                                                                        TripData tripData = snapshot1.getValue(TripData.class);
+                                                                        Log.i("VishalD", "" + user.getUsername() + " , " + tripData.getLocation());
 
-                                                                city += tripData.getLocation();
-                                                                tripNote += tripData.getTrip_note();
-                                                                date += tripData.getFrom_date() + " - " + tripData.getTo_date();
+                                                                        city += tripData.getLocation();
+                                                                        tripNote += tripData.getTrip_note();
+                                                                        date += tripData.getFrom_date() + " - " + tripData.getTo_date();
 
-                                                                DateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
-                                                                try {
-                                                                    Date date1 = format.parse(tripData.getFrom_date());
-                                                                    dates.add(date1);
-                                                                    PlanTrip planTrip = new PlanTrip(tripData.getLocation(), tripData.getFrom_date(), tripData.getTo_date());
-                                                                    from_to_dates.add(planTrip);
-                                                                    Log.i("Dates", tripData.getFrom_date() + " " + date1);
-                                                                } catch (ParseException e) {
-                                                                    e.printStackTrace();
+                                                                        DateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+                                                                        try {
+                                                                            Date date1 = format.parse(tripData.getFrom_date());
+                                                                            dates.add(date1);
+                                                                            PlanTrip planTrip = new PlanTrip(tripData.getLocation(), tripData.getFrom_date(), tripData.getTo_date());
+                                                                            from_to_dates.add(planTrip);
+                                                                            Log.i("Dates", tripData.getFrom_date() + " " + date1);
+                                                                        } catch (ParseException e) {
+                                                                            e.printStackTrace();
+                                                                        }
+                                                                    }
+                                                                    Log.i("TripFromTo", "" + from_to_dates.size());
+                                                                    Log.i("Tag", "onDataChange: " + fav);
+                                                                    tripList = findClosestDate(dates, new UserImg(user,pictureUrl), fav);
+
                                                                 }
-                                                            }
-                                                            Log.i("TripFromTo", "" + from_to_dates.size());
-                                                            Log.i("Tag", "onDataChange: " + fav);
-
-                                                            tripList = findClosestDate(dates, new UserImg(user,pictureUrl), fav);
-
-                                                        }
 //                                                tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), favArray, tripList);
 //                                                recyclerview.setAdapter(tripAdapter);
 
 //                                                        Intent mIntent = new Intent(getActivity(), ProfileActivity.class);
 //                                                        mIntent.putExtra("MyObj", tripList.get(0));
 //                                                        startActivity(mIntent);
-                                                    }
+                                                            }
 
-                                                    @Override
-                                                    public void onCancelled(DatabaseError databaseError) {
+                                                            @Override
+                                                            public void onCancelled(DatabaseError databaseError) {
 
-                                                    }
-                                                });
+                                                            }
+                                                        });
 
+                                            }
+
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+
+                                            }
+                                        });
                                     }
 
                                     @Override
