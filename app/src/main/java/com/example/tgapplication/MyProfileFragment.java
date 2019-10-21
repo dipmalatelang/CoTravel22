@@ -58,7 +58,7 @@ public class MyProfileFragment extends Fragment {
     View view5;
     private SharedPreferences sharedPreferences;
     String name,imageUrl,age;
-
+//
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
