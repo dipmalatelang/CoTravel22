@@ -57,7 +57,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             @Override
             public boolean onLongClick(View v) {
                 PopupMenu popup = new PopupMenu(mContext, v);
-                popup.getMenuInflater().inflate(R.menu.chat_menu, popup.getMenu());
+                popup.getMenuInflater().inflate(R.menu.profile_menu, popup.getMenu());
 
 
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
