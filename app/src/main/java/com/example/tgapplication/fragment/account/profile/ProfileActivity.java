@@ -26,6 +26,7 @@ import com.example.tgapplication.fragment.trip.EditProfileActivity;
 import com.example.tgapplication.fragment.trip.module.TripData;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
+import com.example.tgapplication.fragment.visitor.UserImg;
 import com.example.tgapplication.login.LoginActivity;
 import com.example.tgapplication.photo.Upload;
 import com.facebook.login.LoginManager;
@@ -108,9 +109,13 @@ public class ProfileActivity extends BaseActivity {
     ImageView ivMenu;
     private ArrayList<Upload> uploads = new ArrayList<>();
     ArrayList<User> userList = new ArrayList<>();
+
+
     private FirebaseUser fuser;
     TripList tripL;
-    User userL;
+    UserImg userL;
+    String profileId;
+
     @BindView(R.id.rv_trip_value)
     RecyclerView rvTripValue;
 
@@ -127,18 +132,21 @@ public class ProfileActivity extends BaseActivity {
         ButterKnife.bind(this);
         fuser = FirebaseAuth.getInstance().getCurrentUser();
 
+
+
         if (getIntent().getSerializableExtra("MyObj") == null && getIntent().getSerializableExtra("MyUserObj") == null) {
-            textProfile.setVisibility(View.VISIBLE);
             ivEditProfile.setVisibility(View.VISIBLE);
+            textProfile.setVisibility(View.VISIBLE);
             ivMenu.setVisibility(View.VISIBLE);
             ivFavUser.setVisibility(View.GONE);
             floatingActionButton2.hide();
             getAllImages(fuser.getUid());
             getAllTrips(fuser.getUid());
+            profileId = fuser.getUid();
             getProfileData(fuser);
         } else if (getIntent().getSerializableExtra("MyObj") != null) {
-            textProfile.setVisibility(View.GONE);
             ivEditProfile.setVisibility(View.GONE);
+            textProfile.setVisibility(View.GONE);
             ivMenu.setVisibility(View.GONE);
             ivFavUser.setVisibility(View.VISIBLE);
             floatingActionButton2.show();
@@ -151,6 +159,7 @@ public class ProfileActivity extends BaseActivity {
                 ivFavUser.setImageResource(R.drawable.ic_action_fav_add);
             }
 
+            profileId = tripL.getId();
             Log.i(TAG, "onCreate: " + tripL.getName() + " " + tripL.getFavid());
             setDetails(tripL.getName(), tripL.getGender(), tripL.getAge(), tripL.getLook(), tripL.getUserLocation(), tripL.getNationality(),
                     tripL.getLang(), tripL.getHeight(), tripL.getBody_type(), tripL.getEyes(), tripL.getHair(), tripL.getVisit(), tripL.getPlanLocation(), tripL.getFrom_to_date(), tripL.getImageUrl());
@@ -159,28 +168,30 @@ public class ProfileActivity extends BaseActivity {
 
 
         } else if (getIntent().getSerializableExtra("MyUserObj") != null) {
-            textProfile.setVisibility(View.GONE);
             ivEditProfile.setVisibility(View.GONE);
+            textProfile.setVisibility(View.GONE);
             ivMenu.setVisibility(View.GONE);
             ivFavUser.setVisibility(View.VISIBLE);
             floatingActionButton2.show();
-            userL = (User) getIntent().getSerializableExtra("MyUserObj");
-            getAllImages(userL.getId());
-            getAllTrips(userL.getId());
-         /*   if (userL.getFavid() == 1) {
+            userL = (UserImg) getIntent().getSerializableExtra("MyUserObj");
+            getAllImages(userL.getUser().getId());
+            getAllTrips(userL.getUser().getId());
+            profileId = userL.getUser().getId();
+         /*   if (userL.getUser().getFavid() == 1) {
                 ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
             } else {
                 ivFavUser.setImageResource(R.drawable.ic_action_fav_add);
             }*/
 
-            Log.i(TAG, "MyUserObj : " + userL.getName() + " ");
-            setDetails(userL.getName(), userL.getGender(), userL.getAge(), userL.getLook(), "", userL.getNationality(),
-                    userL.getLang(), userL.getHeight(), userL.getBody_type(), userL.getEyes(), userL.getHair(), userL.getVisit(), "", "", "");
+            Log.i(TAG, "MyUserObj : " + userL.getUser().getName() + " ");
+            setDetails(userL.getUser().getName(), userL.getUser().getGender(), userL.getUser().getAge(), userL.getUser().getLook(), "", userL.getUser().getNationality(),
+                    userL.getUser().getLang(), userL.getUser().getHeight(), userL.getUser().getBody_type(), userL.getUser().getEyes(), userL.getUser().getHair(), userL.getUser().getVisit(), "", "", "");
 
         }
 
 
     }
+
 
 
     private void setDetails(String name, String gender, String age, ArrayList<String> look, String userLocation, String nationality, String lang, String height, String body_type, String eyes, String hair, String visit, String planLocation, String from_to_date, String imageUrl) {
@@ -440,10 +451,13 @@ public class ProfileActivity extends BaseActivity {
                 break;
 
             case R.id.floatingActionButton2:
+
                 Intent intent = new Intent(this, MessageActivity.class);
 //                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("userid", tripL.getId());
+                intent.putExtra("userid", profileId);
                 startActivity(intent);
+
+
 
                 break;
 
