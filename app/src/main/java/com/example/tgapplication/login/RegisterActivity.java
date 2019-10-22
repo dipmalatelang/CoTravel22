@@ -276,9 +276,10 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("Tiger", "signInWithCredential:success");
                             dismissProgressDialog();
+
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            User userClass=new User(user.getUid(), user.getDisplayName(), "offline", user.getDisplayName().toLowerCase(), "", "",  user.getEmail(), user.getProviderId(), "", "", "", "", "", "", look, range_age, "",  user.getDisplayName().toLowerCase(), user.getPhoneNumber(), "", "");
+                            User userClass=new User(user.getUid(), user.getDisplayName(), "offline", user.getDisplayName().toLowerCase(), "", "",  user.getEmail(), user.getProviderId(), "", "", "", "", "", "", look, range_age, "",  user.getDisplayName().toLowerCase(), user.getPhoneNumber(), "", "",1);
                             UsersInstance.child(mAuth.getCurrentUser().getUid()).setValue(userClass);
 
                             String uploadId = PicturesInstance.child(user.getUid()).push().getKey();
@@ -315,7 +316,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
                             Log.i("Done","gothere");
                             User userClass=new User(userid, username,"offline",username.toLowerCase(),str_gender,str_age,email, firebaseUser.getProviderId(),"","","",
-                                    "","","", look, range_age,"",username,"","","");
+                                    "","","", look, range_age,"",username,"","","",1);
                             UsersInstance.child(userid).setValue(userClass);
                             Log.i("Done","gotin");
 //                            startActivity(new Intent(RegisterActivity.this,LoginActivity.class));

@@ -269,6 +269,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         FavoritesInstance.child(uid).child(id).removeValue();
     }
 
+    public void active_hide_delete_Profile(String id, int account_type)
+    {
+        UsersInstance.child(id).child("account_type").setValue(account_type);
+    }
+
         public void setFav(String uid, String id) {
 
         FavoritesInstance

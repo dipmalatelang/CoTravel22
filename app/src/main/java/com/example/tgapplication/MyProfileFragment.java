@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
@@ -19,6 +20,7 @@ import com.example.tgapplication.fragment.account.profile.ChangePasswordActivity
 import com.example.tgapplication.fragment.account.profile.ProfileActivity;
 import com.example.tgapplication.fragment.account.profile.verify.EditPhoneActivity;
 import com.example.tgapplication.login.LoginActivity;
+import com.example.tgapplication.login.RegisterActivity;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -42,8 +44,6 @@ public class MyProfileFragment extends Fragment {
     TextView tvMyProfile;
     @BindView(R.id.view1)
     View view1;
-    @BindView(R.id.tv_Private_Photo)
-    TextView tvPrivatePhoto;
     @BindView(R.id.view2)
     View view2;
     @BindView(R.id.view3)
@@ -92,7 +92,7 @@ public class MyProfileFragment extends Fragment {
     }
 
 
-    @OnClick({R.id.tv_my_profile, R.id.tv_Logout, R.id.iv_Image,R.id.tv_Change_Password, R.id.tv_verify_acc})
+    @OnClick({R.id.tv_my_profile, R.id.tv_Logout, R.id.iv_Image,R.id.tv_Change_Password, R.id.tv_verify_acc, R.id.tv_Change_Preferences})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             //
@@ -113,6 +113,11 @@ public class MyProfileFragment extends Fragment {
                 getActivity().finish();
                 startActivity(new Intent(getActivity(), LoginActivity.class));
 //                snackBar(container,"Logout");
+                break;
+
+            case R.id.tv_Change_Preferences:
+                Toast.makeText(getActivity(), "Preferrences", Toast.LENGTH_SHORT).show();
+
                 break;
 
         }

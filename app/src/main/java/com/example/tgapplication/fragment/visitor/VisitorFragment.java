@@ -154,47 +154,49 @@ public class VisitorFragment extends BaseFragment {
 
                                                                                                                 User user = dataSnapshot.getValue(User.class);
 
-                                                                                                                PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                                                                                                    @Override
-                                                                                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                                                                                                if (Objects.requireNonNull(user).getAccount_type() == 1) {
+                                                                                                                    PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                                        @Override
+                                                                                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                                                                                                        pictureUrl="";
-                                                                                                                        for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
+                                                                                                                            pictureUrl = "";
+                                                                                                                            for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
 
-                                                                                                                            Upload mainPhoto = snapshot1.getValue(Upload.class);
-                                                                                                                            if (Objects.requireNonNull(mainPhoto).type == 1)
-                                                                                                                                pictureUrl = mainPhoto.getUrl();
+                                                                                                                                Upload mainPhoto = snapshot1.getValue(Upload.class);
+                                                                                                                                if (Objects.requireNonNull(mainPhoto).type == 1)
+                                                                                                                                    pictureUrl = mainPhoto.getUrl();
+
+                                                                                                                            }
+
+                                                                                                                            Log.i("TAG", "onDataChangeMy: " + user.getId() + " == " + pictureUrl);
+                                                                                                                            myFavArray.add(new UserImg(user, pictureUrl));
+
+                                                                                                                            VisitorAdapter tripAdapter = new VisitorAdapter(getActivity(), fuser.getUid(), myFavArray, new VisitorAdapter.VisitorInterface() {
+                                                                                                                                @Override
+                                                                                                                                public void setProfileVisit(String uid, String id) {
+
+                                                                                                                                    ProfileVisitorInstance.child(id)
+                                                                                                                                            .child(uid).child("id").setValue(uid);
+                                                                                                                                }
+
+                                                                                                                                @Override
+                                                                                                                                public void setData(UserImg mTrip, int position) {
+                                                                                                                                    Intent mIntent = new Intent(getActivity(), ProfileActivity.class);
+                                                                                                                                    mIntent.putExtra("MyUserObj", myFavArray.get(position));
+                                                                                                                                    startActivityForResult(mIntent, 1);
+                                                                                                                                }
+                                                                                                                            });
+                                                                                                                            myVisitRV.setAdapter(tripAdapter);
 
                                                                                                                         }
 
-                                                                                                                        Log.i("TAG", "onDataChangeMy: "+user.getId()+" == "+pictureUrl);
-                                                                                                                        myFavArray.add(new UserImg(user,pictureUrl));
+                                                                                                                        @Override
+                                                                                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                                                                                                        VisitorAdapter tripAdapter = new VisitorAdapter(getActivity(), fuser.getUid(), myFavArray, new VisitorAdapter.VisitorInterface() {
-                                                                                                                            @Override
-                                                                                                                            public void setProfileVisit(String uid, String id) {
+                                                                                                                        }
 
-                                                                                                                                ProfileVisitorInstance.child(id)
-                                                                                                                                        .child(uid).child("id").setValue(uid);
-                                                                                                                            }
-
-                                                                                                                            @Override
-                                                                                                                            public void setData(UserImg mTrip, int position) {
-                                                                                                                                Intent mIntent = new Intent(getActivity(), ProfileActivity.class);
-                                                                                                                                mIntent.putExtra("MyUserObj", myFavArray.get(position));
-                                                                                                                                startActivityForResult(mIntent,1);
-                                                                                                                            }
-                                                                                                                        });
-                                                                                                                        myVisitRV.setAdapter(tripAdapter);
-
-                                                                                                                    }
-
-                                                                                                                    @Override
-                                                                                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                                                                                                    }
-
-                                                                                                                });
+                                                                                                                    });
+//                                                                                                                }
                                                                                                             }
                                                                                                             @Override
                                                                                                             public void onCancelled(@NonNull DatabaseError databaseError) {
