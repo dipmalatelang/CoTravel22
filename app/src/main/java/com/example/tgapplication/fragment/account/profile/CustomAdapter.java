@@ -44,10 +44,9 @@ public class CustomAdapter extends PagerAdapter {
         View v = inflater.inflate(R.layout.swipe,container,false);
         ImageView img = v.findViewById(R.id.imageView);
 //        img.setImageResource(mUploads.get(position).url);
-        Glide
-                .with(ctx)
+        Glide.with(ctx)
                 .load(mUploads.get(position).getUrl())
-                .centerCrop()
+                .fitCenter()
                 .placeholder(R.drawable.ic_broken_image_primary_24dp)
                 .into(img);
 

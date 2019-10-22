@@ -5,12 +5,18 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tgapplication.R;
+import com.example.tgapplication.photo.FB_Adapter;
+import com.example.tgapplication.photo.MyAdapter;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,17 +24,30 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class FacebookImage extends AppCompatActivity {
 
+    @BindView(R.id.fb_recyclerview)
+    RecyclerView fbRecyclerview;
     private ArrayList<Images> lstFBImages;
+    FB_Adapter fb_adapter;
+    private FirebaseUser fuser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_facebook_image);
+        ButterKnife.bind(this);
 
-        if(AccessToken.getCurrentAccessToken()!=null)
-        {
+        fuser = FirebaseAuth.getInstance().getCurrentUser();
+
+        GridLayoutManager mGridLayoutManager = new GridLayoutManager(this, 3);
+        fbRecyclerview.setLayoutManager(mGridLayoutManager);
+
+        if (AccessToken.getCurrentAccessToken() != null) {
             /*make API call*/
             new GraphRequest(
                     AccessToken.getCurrentAccessToken(),  //your fb AccessToken
@@ -58,12 +77,9 @@ public class FacebookImage extends AppCompatActivity {
                     }
             ).executeAsync();
 
-        }
-        else {
+        } else {
             Toast.makeText(this, "First login with facebook", Toast.LENGTH_SHORT).show();
         }
-
-
 
 
 //        new GraphRequest(
@@ -119,25 +135,29 @@ public class FacebookImage extends AppCompatActivity {
                                 JSONObject joMain = response.getJSONObject();
                                 if (joMain.has("data")) {
                                     JSONArray jaData = joMain.optJSONArray("data");
-                                    Log.i("TAG", "onCompleted: "+jaData.getJSONObject(0).getJSONArray("images").getJSONObject(0).getString("source"));
+                                    Log.i("TAG", "onCompleted: " + jaData.getJSONObject(0).getJSONArray("images").getJSONObject(0).getString("source"));
                                     lstFBImages = new ArrayList<>();
                                     for (int i = 0; i < jaData.length(); i++)//Get no. of images
-                                         {
-                                        JSONObject joAlbum = jaData.getJSONObject(i);
-                                    JSONArray jaImages = joAlbum.getJSONArray("images");
-
-                                    if (jaImages.length() > 0) {
-                                       Images objImages = new Images();//Images is custom class with string url field
-                                        objImages.setImage_Url(jaImages.getJSONObject(0).getString("source"));
-                                        lstFBImages.add(objImages);//lstFBImages is Images object array
-                                    }
-
-                            }
-                                    Log.i("TAG", "onCompleted: "+lstFBImages.size());
-                                    for(int j=0;j<lstFBImages.size();j++)
                                     {
-                                        Log.i("TAG", "onCompleted: "+lstFBImages.get(j).getImage_Url());
+                                        JSONObject joAlbum = jaData.getJSONObject(i);
+                                        JSONArray jaImages = joAlbum.getJSONArray("images");
+
+                                        if (jaImages.length() > 0) {
+                                            Images objImages = new Images();//Images is custom class with string url field
+                                            objImages.setImage_Url(jaImages.getJSONObject(0).getString("source"));
+                                            lstFBImages.add(objImages);//lstFBImages is Images object array
+                                        }
+
                                     }
+                                    Log.i("TAG", "onCompleted: " + lstFBImages.size());
+                                    for (int j = 0; j < lstFBImages.size(); j++) {
+                                        Log.i("TAG", "onCompleted: " + lstFBImages.get(j).getImage_Url());
+                                    }
+
+                                    fb_adapter = new FB_Adapter(FacebookImage.this, fuser.getUid(), lstFBImages);
+
+//adding adapter to recyclerview
+                                    fbRecyclerview.setAdapter(fb_adapter);
 
                                 }
 
@@ -152,7 +172,7 @@ public class FacebookImage extends AppCompatActivity {
 
                     }
                 }).executeAsync();
-}
+    }
 
 
     public class Images {

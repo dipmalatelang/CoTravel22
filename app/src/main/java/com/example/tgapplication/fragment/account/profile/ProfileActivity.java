@@ -1,25 +1,34 @@
 package com.example.tgapplication.fragment.account.profile;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.chat.MessageActivity;
 import com.example.tgapplication.fragment.trip.EditProfileActivity;
+import com.example.tgapplication.fragment.trip.module.TripData;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
+import com.example.tgapplication.login.LoginActivity;
 import com.example.tgapplication.photo.Upload;
+import com.facebook.login.LoginManager;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -89,19 +98,24 @@ public class ProfileActivity extends BaseActivity {
     CardView cardPersonal;
     @BindView(R.id.tv_trip)
     TextView tvTrip;
-    @BindView(R.id.tv_trip_value)
-    TextView tvTripValue;
     @BindView(R.id.card_trip)
     CardView cardTrip;
     @BindView(R.id.floatingActionButton2)
     FloatingActionButton floatingActionButton2;
     @BindView(R.id.iv_fav_user)
     ImageView ivFavUser;
+    @BindView(R.id.iv_menu)
+    ImageView ivMenu;
     private ArrayList<Upload> uploads = new ArrayList<>();
     ArrayList<User> userList = new ArrayList<>();
     private FirebaseUser fuser;
     TripList tripL;
     User userL;
+    @BindView(R.id.rv_trip_value)
+    RecyclerView rvTripValue;
+
+    ArrayList<TripData> planTripsList = new ArrayList<>();
+
     //    @BindView(R.id.bottomNav)
 //    ConstraintLayout bottomNav;
 
@@ -113,15 +127,19 @@ public class ProfileActivity extends BaseActivity {
         ButterKnife.bind(this);
         fuser = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (getIntent().getSerializableExtra("MyObj") == null && getIntent().getSerializableExtra("MyUserObj") ==null) {
+        if (getIntent().getSerializableExtra("MyObj") == null && getIntent().getSerializableExtra("MyUserObj") == null) {
             textProfile.setVisibility(View.VISIBLE);
+            ivEditProfile.setVisibility(View.VISIBLE);
+            ivMenu.setVisibility(View.VISIBLE);
             ivFavUser.setVisibility(View.GONE);
             floatingActionButton2.hide();
             getAllImages(fuser.getUid());
             getAllTrips(fuser.getUid());
             getProfileData(fuser);
-        } else if(getIntent().getSerializableExtra("MyObj") != null){
+        } else if (getIntent().getSerializableExtra("MyObj") != null) {
             textProfile.setVisibility(View.GONE);
+            ivEditProfile.setVisibility(View.GONE);
+            ivMenu.setVisibility(View.GONE);
             ivFavUser.setVisibility(View.VISIBLE);
             floatingActionButton2.show();
             tripL = (TripList) getIntent().getSerializableExtra("MyObj");
@@ -140,10 +158,10 @@ public class ProfileActivity extends BaseActivity {
 //            setDetails(userList.get(i).getName(), userList.get(i).getGender(), userList.get(i).getAge(), userList.get(i).getLook(), userList.get(i).getLocation(), userList.get(i).getNationality(), userList.get(i).getLang(), userList.get(i).getHeight(), userList.get(i).getBody_type(), userList.get(i).getEyes(), userList.get(i).getHair(), userList.get(i).getVisit(), "", "", userList.get(i).getImageURL());
 
 
-        }
-        else if(getIntent().getSerializableExtra("MyUserObj") !=null)
-        {
+        } else if (getIntent().getSerializableExtra("MyUserObj") != null) {
             textProfile.setVisibility(View.GONE);
+            ivEditProfile.setVisibility(View.GONE);
+            ivMenu.setVisibility(View.GONE);
             ivFavUser.setVisibility(View.VISIBLE);
             floatingActionButton2.show();
             userL = (User) getIntent().getSerializableExtra("MyUserObj");
@@ -155,7 +173,7 @@ public class ProfileActivity extends BaseActivity {
                 ivFavUser.setImageResource(R.drawable.ic_action_fav_add);
             }*/
 
-            Log.i(TAG, "MyUserObj : " + userL.getName() + " " );
+            Log.i(TAG, "MyUserObj : " + userL.getName() + " ");
             setDetails(userL.getName(), userL.getGender(), userL.getAge(), userL.getLook(), "", userL.getNationality(),
                     userL.getLang(), userL.getHeight(), userL.getBody_type(), userL.getEyes(), userL.getHair(), userL.getVisit(), "", "", "");
 
@@ -163,7 +181,6 @@ public class ProfileActivity extends BaseActivity {
 
 
     }
-
 
 
     private void setDetails(String name, String gender, String age, ArrayList<String> look, String userLocation, String nationality, String lang, String height, String body_type, String eyes, String hair, String visit, String planLocation, String from_to_date, String imageUrl) {
@@ -273,10 +290,17 @@ public class ProfileActivity extends BaseActivity {
         TripsInstance.child(id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren())
-                {
-                    dataSnapshot1.getValue();
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                    TripData tripData = dataSnapshot1.getValue(TripData.class);
+                    planTripsList.add(tripData);
+                    Log.i(TAG, "onDataChange: Trips " + dataSnapshot1.getValue(TripData.class).getLocation());
                 }
+
+                if (planTripsList.size() <= 0)
+                    cardTrip.setVisibility(View.GONE);
+
+                PlanTripsAdapter planTripsAdapter = new PlanTripsAdapter(ProfileActivity.this, planTripsList);
+                rvTripValue.setAdapter(planTripsAdapter);
             }
 
             @Override
@@ -285,6 +309,7 @@ public class ProfileActivity extends BaseActivity {
             }
         });
     }
+
 
     public void getAllImages(String uid) {
         PicturesInstance.child(uid).addValueEventListener(new ValueEventListener() {
@@ -328,7 +353,81 @@ public class ProfileActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.textProfile, R.id.iv_edit_profile, R.id.floatingActionButton2, R.id.iv_fav_user, R.id.fab_backFromProfile})
+    public void showMenu(View view) {
+        PopupMenu popup = new PopupMenu(ProfileActivity.this, view);
+        popup.getMenuInflater().inflate(R.menu.profile_menu, popup.getMenu());
+
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+
+                if (id == R.id.one) {
+                    alertDialogHideProfile();
+//                    Toast.makeText(ProfileActivity.this, "Add to fav", Toast.LENGTH_SHORT).show();
+                    //  holder.ic_action_fav_remove.setVisibility(View.VISIBLE);
+//                            listener.chatFavorite(user.getId());
+                    return true;
+                }
+                if (id == R.id.two) {
+                    alertDialogAccountRemove();
+//                    Toast.makeText(ProfileActivity.this, "add to delete", Toast.LENGTH_LONG).show();
+                    return true;
+                }
+
+
+//                        Toast.makeText(mContext,"You Clicked : " + item.getTitle(), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
+        popup.show();//showing popup menu
+    }
+
+    private void alertDialogAccountRemove() {
+        AlertDialog.Builder dialog=new AlertDialog.Builder(this);
+        dialog.setMessage("Are you sure you want to remove your account?");
+        dialog.setTitle("Account removal");
+        dialog.setPositiveButton("YES",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,
+                                        int which) {
+                        Toast.makeText(ProfileActivity.this,"Account remove successfully",Toast.LENGTH_LONG).show();
+
+                        FirebaseAuth.getInstance().signOut();
+                        LoginManager.getInstance().logOut();
+                        finish();
+                        startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
+                    }
+                });
+        dialog.setNegativeButton("cancel",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(ProfileActivity.this,"cancel is clicked",Toast.LENGTH_LONG).show();
+            }
+        });
+        AlertDialog alertDialog =dialog.create();
+        alertDialog.show();
+    }
+
+
+
+    private void alertDialogHideProfile() {
+        AlertDialog.Builder dialog=new AlertDialog.Builder(this);
+        dialog.setMessage("Are you sure you want to hide your profile? Users won't be able to find you through the site in any way."
+        );
+        dialog.setTitle("Profile visibility");
+        dialog.setPositiveButton("Hide My Profile",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,
+                                        int which) {
+                        Toast.makeText(ProfileActivity.this,"Hide My Profile is clicked",Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        AlertDialog alertDialog =dialog.create();
+        alertDialog.show();
+    }
+
+    @OnClick({R.id.textProfile, R.id.iv_edit_profile, R.id.floatingActionButton2, R.id.iv_fav_user, R.id.fab_backFromProfile, R.id.iv_menu})
     public void onViewClicked(View view) {
         switch (view.getId()) {
 
@@ -378,6 +477,10 @@ public class ProfileActivity extends BaseActivity {
                     iv_fav.setTag("ic_action_fav_add");
                 }*/
                 break;
+
+             case R.id.iv_menu:
+            showMenu(view);
+            break;
 
 
         }
