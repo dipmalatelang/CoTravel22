@@ -185,7 +185,7 @@ public abstract class BaseFragment extends Fragment {
 
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        ChatsInstance.addValueEventListener(new ValueEventListener() {
+        ChatsInstance.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 theLastMessage = "default";
