@@ -9,7 +9,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-<RelativeLayout
+<com.chauthai.swipereveallayout.SwipeRevealLayout
     android:layout_width="match_parent"
     android:id="@+id/chat"
     android:background="@color/background"
@@ -100,5 +100,5 @@
 
 
 
-</RelativeLayout>
+</com.chauthai.swipereveallayout.SwipeRevealLayout>
   </androidx.cardview.widget.CardView>
