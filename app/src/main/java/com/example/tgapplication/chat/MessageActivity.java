@@ -5,11 +5,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,7 +19,10 @@ import com.bumptech.glide.Glide;
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
+import com.example.tgapplication.fragment.account.profile.ProfileActivity;
 import com.example.tgapplication.fragment.trip.module.User;
+import com.example.tgapplication.fragment.visitor.UserImg;
+import com.example.tgapplication.photo.Upload;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -30,7 +33,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -56,8 +62,10 @@ public class MessageActivity extends BaseActivity {
     ValueEventListener seenListener;
 
     String userid;
-
+    String pictureUrl;
     APIService apiService;
+
+    private List<UserImg> msgArray = new ArrayList<>();
 
     boolean notify = false;
     RelativeLayout message_realtivelayout;
@@ -66,6 +74,7 @@ public class MessageActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
+        ButterKnife.bind(this);
 
 //        Toolbar toolbar = findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
@@ -93,25 +102,16 @@ public class MessageActivity extends BaseActivity {
         username = findViewById(R.id.username);
         btn_send = findViewById(R.id.btn_send);
         text_send = findViewById(R.id.text_send);
-        message_realtivelayout= findViewById(R.id.message_realtivelayout);
+        message_realtivelayout = findViewById(R.id.message_realtivelayout);
 
         intent = getIntent();
         userid = intent.getStringExtra("userid");
-        Log.i("Shaila",""+userid);
+        Log.i("Shaila", "" + userid);
         fuser = FirebaseAuth.getInstance().getCurrentUser();
 
-        btn_send.setOnClickListener(view -> {
-            notify = true;
-            String msg = text_send.getText().toString();
-            Log.i("Message",msg);
-            if (!msg.equals("")){
-                sendMessage(fuser.getUid(), userid, msg);
-            } else {
-                snackBar(message_realtivelayout,"You can't send empty message");
-            }
-//                text_send.setText("");
-            text_send.getText().clear();
-        });
+     /*   btn_send.setOnClickListener(view -> {
+
+        });*/
 
 
         UsersInstance.child(userid).addValueEventListener(new ValueEventListener() {
@@ -120,10 +120,32 @@ public class MessageActivity extends BaseActivity {
                 User user = dataSnapshot.getValue(User.class);
                 username.setText(user.getUsername());
 
-                    //and this
-                    Glide.with(getApplicationContext()).load("default").placeholder(R.mipmap.ic_launcher).into(profile_image);
+                PicturesInstance.child(userid).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        msgArray.clear();
+                        pictureUrl = "";
+                        for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
 
-                readMesagges(fuser.getUid(), userid, "default");
+                            Upload mainPhoto = snapshot1.getValue(Upload.class);
+                            if (Objects.requireNonNull(mainPhoto).type == 1)
+                                pictureUrl = mainPhoto.getUrl();
+
+                        }
+//                        Log.i("TAG", "onDataChangeMy: "+pictureUrl);
+                        //and this
+                        Glide.with(getApplicationContext()).load(pictureUrl).placeholder(R.mipmap.ic_launcher).into(profile_image);
+
+                        msgArray.add(new UserImg(user, pictureUrl));
+                        readMesagges(fuser.getUid(), userid, pictureUrl);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+
+                });
             }
 
             @Override
@@ -135,14 +157,14 @@ public class MessageActivity extends BaseActivity {
         seenMessage(userid);
     }
 
-    private void seenMessage(final String userid){
+    private void seenMessage(final String userid) {
 
         seenListener = ChatsInstance.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Chat chat = snapshot.getValue(Chat.class);
-                    if (chat.getReceiver().equals(fuser.getUid()) && chat.getSender().equals(userid)){
+                    if (chat.getReceiver().equals(fuser.getUid()) && chat.getSender().equals(userid)) {
                         HashMap<String, Object> hashMap = new HashMap<>();
                         hashMap.put("isseen", true);
                         snapshot.getRef().updateChildren(hashMap);
@@ -157,7 +179,7 @@ public class MessageActivity extends BaseActivity {
         });
     }
 
-    private void sendMessage(String sender, final String receiver, String message){
+    private void sendMessage(String sender, final String receiver, String message) {
 
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("sender", sender);
@@ -173,7 +195,7 @@ public class MessageActivity extends BaseActivity {
         ChatlistInstance.child(fuser.getUid()).child(userid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (!dataSnapshot.exists()){
+                if (!dataSnapshot.exists()) {
                     ChatlistInstance.child(fuser.getUid()).child(userid).child("id").setValue(userid);
                 }
             }
@@ -205,14 +227,14 @@ public class MessageActivity extends BaseActivity {
         });
     }
 
-    private void sendNotifiaction(String receiver, final String username, final String message){
+    private void sendNotifiaction(String receiver, final String username, final String message) {
         Query query = TokensInstance.orderByKey().equalTo(receiver);
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Token token = snapshot.getValue(Token.class);
-                    Data data = new Data(fuser.getUid(), R.mipmap.ic_launcher, username+": "+message, "New Message",
+                    Data data = new Data(fuser.getUid(), R.mipmap.ic_launcher, username + ": " + message, "New Message",
                             userid);
 
                     Sender sender = new Sender(data, token.getToken());
@@ -221,9 +243,9 @@ public class MessageActivity extends BaseActivity {
                             .enqueue(new Callback<MyResponse>() {
                                 @Override
                                 public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
-                                    if (response.code() == 200){
-                                        if (response.body().success != 1){
-                                            snackBar(message_realtivelayout,"Failed!");
+                                    if (response.code() == 200) {
+                                        if (response.body().success != 1) {
+                                            snackBar(message_realtivelayout, "Failed!");
                                         }
                                     }
                                 }
@@ -243,17 +265,17 @@ public class MessageActivity extends BaseActivity {
         });
     }
 
-    private void readMesagges(final String myid, final String userid, final String imageurl){
+    private void readMesagges(final String myid, final String userid, final String imageurl) {
         mchat = new ArrayList<>();
 
         ChatsInstance.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mchat.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Chat chat = snapshot.getValue(Chat.class);
                     if (chat.getReceiver().equals(myid) && chat.getSender().equals(userid) ||
-                            chat.getReceiver().equals(userid) && chat.getSender().equals(myid)){
+                            chat.getReceiver().equals(userid) && chat.getSender().equals(myid)) {
                         mchat.add(chat);
                     }
 
@@ -269,13 +291,13 @@ public class MessageActivity extends BaseActivity {
         });
     }
 
-    private void currentUser(String userid){
+    private void currentUser(String userid) {
         SharedPreferences.Editor editor = getSharedPreferences("PREFS", MODE_PRIVATE).edit();
         editor.putString("currentuser", userid);
         editor.apply();
     }
 
-    private void status(String status){
+    private void status(String status) {
 
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("status", status);
@@ -312,6 +334,33 @@ public class MessageActivity extends BaseActivity {
 
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @OnClick({R.id.toolbar, R.id.btn_send})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.toolbar:
+
+                Intent mIntent = new Intent(this, ProfileActivity.class);
+                mIntent.putExtra("MyUserObj", msgArray.get(0));
+                startActivityForResult(mIntent,1);
+
+                break;
+            case R.id.btn_send:
+
+                notify = true;
+                String msg = text_send.getText().toString();
+                Log.i("Message", msg);
+                if (!msg.equals("")) {
+                    sendMessage(fuser.getUid(), userid, msg);
+                } else {
+                    snackBar(message_realtivelayout, "You can't send empty message");
+                }
+//                text_send.setText("");
+                text_send.getText().clear();
+
+                break;
         }
     }
 }
