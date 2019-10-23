@@ -39,6 +39,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -109,7 +110,7 @@ public class ProfileActivity extends BaseActivity {
     ImageView ivMenu;
     private ArrayList<Upload> uploads = new ArrayList<>();
     ArrayList<User> userList = new ArrayList<>();
-
+    int account_type=1;
 
     private FirebaseUser fuser;
     TripList tripL;
@@ -140,10 +141,11 @@ public class ProfileActivity extends BaseActivity {
             ivMenu.setVisibility(View.VISIBLE);
             ivFavUser.setVisibility(View.GONE);
             floatingActionButton2.hide();
-            getAllImages(fuser.getUid());
-            getAllTrips(fuser.getUid());
             profileId = fuser.getUid();
-            getProfileData(fuser);
+            getAllImages(profileId);
+            getAllTrips(profileId);
+            getProfileData(profileId);
+
         } else if (getIntent().getSerializableExtra("MyObj") != null) {
             ivEditProfile.setVisibility(View.GONE);
             textProfile.setVisibility(View.GONE);
@@ -151,15 +153,16 @@ public class ProfileActivity extends BaseActivity {
             ivFavUser.setVisibility(View.VISIBLE);
             floatingActionButton2.show();
             tripL = (TripList) getIntent().getSerializableExtra("MyObj");
-            getAllImages(tripL.getId());
-            getAllTrips(tripL.getId());
+            profileId = tripL.getId();
+            getAllImages(profileId);
+            getAllTrips(profileId);
             if (tripL.getFavid() == 1) {
                 ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
             } else {
                 ivFavUser.setImageResource(R.drawable.ic_action_fav_add);
             }
 
-            profileId = tripL.getId();
+
             Log.i(TAG, "onCreate: " + tripL.getName() + " " + tripL.getFavid());
             setDetails(tripL.getName(), tripL.getGender(), tripL.getAge(), tripL.getLook(), tripL.getUserLocation(), tripL.getNationality(),
                     tripL.getLang(), tripL.getHeight(), tripL.getBody_type(), tripL.getEyes(), tripL.getHair(), tripL.getVisit(), tripL.getPlanLocation(), tripL.getFrom_to_date(), tripL.getImageUrl());
@@ -174,9 +177,10 @@ public class ProfileActivity extends BaseActivity {
             ivFavUser.setVisibility(View.VISIBLE);
             floatingActionButton2.show();
             userL = (UserImg) getIntent().getSerializableExtra("MyUserObj");
-            getAllImages(userL.getUser().getId());
-            getAllTrips(userL.getUser().getId());
             profileId = userL.getUser().getId();
+            getAllImages(profileId);
+            getAllTrips(profileId);
+
          /*   if (userL.getUser().getFavid() == 1) {
                 ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
             } else {
@@ -268,25 +272,28 @@ public class ProfileActivity extends BaseActivity {
     }
 
 
-    public void getProfileData(FirebaseUser fuser) {
+    public void getProfileData(String id) {
         // any way you managed to go the node that has the 'grp_key'
 
-        UsersInstance.addValueEventListener(
+        UsersInstance.child(id).addValueEventListener(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         userList.clear();
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                            User user = snapshot.getValue(User.class);
-                            if (user != null && user.getId().equalsIgnoreCase(fuser.getUid())) {
-                                userList.add(user);
-                            }
+                            User user = dataSnapshot.getValue(User.class);
+//                            if (user != null && user.getId().equalsIgnoreCase(fuser.getUid())) {
+                            account_type=user.getAccount_type();
+                            setDetails(user.getName(), user.getGender(), user.getAge(), user.getLook(),user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(),user.getVisit(), "", "", "default");
+
+                 /*           userList.add(user);
+//                            }
                         }
                         if (userList.size() > 0) {
                             for (int i = 0; i < userList.size(); i++)
-                                setDetails(userList.get(i).getName(), userList.get(i).getGender(), userList.get(i).getAge(), userList.get(i).getLook(), userList.get(i).getLocation(), userList.get(i).getNationality(), userList.get(i).getLang(), userList.get(i).getHeight(), userList.get(i).getBody_type(), userList.get(i).getEyes(), userList.get(i).getHair(), userList.get(i).getVisit(), "", "", "default");
-                        }
+                        }*/
+
                     }
 
                     @Override
@@ -368,12 +375,24 @@ public class ProfileActivity extends BaseActivity {
         PopupMenu popup = new PopupMenu(ProfileActivity.this, view);
         popup.getMenuInflater().inflate(R.menu.profile_menu, popup.getMenu());
 
+        MenuItem bedMenuItem = popup.getMenu().findItem(R.id.one);
+        if(account_type==1)
+        {
+            bedMenuItem.setTitle("Hide profile");
+            account_type=2;
+        }
+        else {
+            bedMenuItem.setTitle("Unhide profile");
+            account_type=1;
+        }
+
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
                 int id = item.getItemId();
 
                 if (id == R.id.one) {
-                    alertDialogHideProfile();
+
+                    alertDialogHideProfile(account_type);
 //                    Toast.makeText(ProfileActivity.this, "Add to fav", Toast.LENGTH_SHORT).show();
                     //  holder.ic_action_fav_remove.setVisibility(View.VISIBLE);
 //                            listener.chatFavorite(user.getId());
@@ -401,6 +420,9 @@ public class ProfileActivity extends BaseActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,
                                         int which) {
+                        active_hide_delete_Profile(fuser.getUid(),3);
+                        fuser.delete();
+
                         Toast.makeText(ProfileActivity.this,"Account remove successfully",Toast.LENGTH_LONG).show();
 
                         FirebaseAuth.getInstance().signOut();
@@ -421,7 +443,7 @@ public class ProfileActivity extends BaseActivity {
 
 
 
-    private void alertDialogHideProfile() {
+    private void alertDialogHideProfile(int account_type) {
         AlertDialog.Builder dialog=new AlertDialog.Builder(this);
         dialog.setMessage("Are you sure you want to hide your profile? Users won't be able to find you through the site in any way."
         );
@@ -430,6 +452,7 @@ public class ProfileActivity extends BaseActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,
                                         int which) {
+                        active_hide_delete_Profile(fuser.getUid(),account_type);
                         Toast.makeText(ProfileActivity.this,"Hide My Profile is clicked",Toast.LENGTH_LONG).show();
                     }
                 });

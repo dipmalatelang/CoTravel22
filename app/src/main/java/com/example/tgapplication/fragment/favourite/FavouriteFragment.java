@@ -154,15 +154,15 @@ public class FavouriteFragment extends BaseFragment {
                     UsersInstance.child(userKey).addValueEventListener(
                             new ValueEventListener() {
                                 @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     User user = dataSnapshot.getValue(User.class);
                                     // HERE WHAT CORRESPONDS TO JOIN
-
+//                                    if(Objects.requireNonNull(user).getAccount_type()==1){
                                     PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                            pictureUrl="";
+                                            pictureUrl = "";
                                             for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
 
                                                 Upload mainPhoto = snapshot1.getValue(Upload.class);
@@ -171,8 +171,8 @@ public class FavouriteFragment extends BaseFragment {
 
                                             }
 
-                                            Log.i("TAG", "onDataChangeMy: "+user.getId()+" == "+pictureUrl);
-                                            myFavArray.add(new UserImg(user,pictureUrl));
+                                            Log.i("TAG", "onDataChangeMy: " + user.getId() + " == " + pictureUrl);
+                                            myFavArray.add(new UserImg(user, pictureUrl));
 
 
 //                                                                }
@@ -194,19 +194,20 @@ public class FavouriteFragment extends BaseFragment {
                                                 public void setData(User tList, int position) {
                                                     Intent mIntent = new Intent(getActivity(), ProfileActivity.class);
                                                     mIntent.putExtra("MyUserObj", myFavArray.get(position));
-                                                    startActivityForResult(mIntent,1);
+                                                    startActivityForResult(mIntent, 1);
                                                 }
 
                                             });
                                             myFavRV.setAdapter(tripAdapter);
-//                                                            }
-//                                                        }
+
                                         }
+
                                         @Override
                                         public void onCancelled(@NonNull DatabaseError databaseError) {
 
                                         }
                                     });
+//                                }
                                 }
 
                                 @Override

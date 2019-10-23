@@ -342,7 +342,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
 
         User userClass = new User(fuser.getUid(), prevUserList.get(0).getUsername(), "offline", prevUserList.get(0).getSearch(), str_gender, age, prevUserList.get(0).getEmail(),
                 fuser.getProviderId(), str_body_type, str_dob, str_eyes, str_hair, str_height, str_lang,
-                str_look, prevUserList.get(0).getRange_age(), str_location, str_name, fuser.getPhoneNumber(), str_nationality, str_visit);
+                str_look, prevUserList.get(0).getRange_age(), str_location, str_name, fuser.getPhoneNumber(), str_nationality, str_visit,prevUserList.get(0).getAccount_type());
 
         UsersInstance.child(fuser.getUid()).setValue(userClass);
 

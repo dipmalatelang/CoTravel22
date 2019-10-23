@@ -90,13 +90,14 @@ public class EditPhotoActivity extends BaseActivity {
 //creating adapter
                 public_adapter = new MyAdapter(EditPhotoActivity.this, fuser.getUid(), public_uploads, new MyAdapter.PhotoInterface() {
                     @Override
-                    public void setProfilePhoto(String id, String previousValue) {
+                    public void setProfilePhoto(String id, String previousValue, int pos) {
                         PicturesInstance
                                 .child(fuser.getUid())
                                 .child(id).child("type").setValue(1);
 
                         if(!previousValue.equals("") && !previousValue.equals(id))
                         PicturesInstance.child(fuser.getUid()).child(previousValue).child("type").setValue(2);
+                        profilePhotoDetails(public_uploads.get(pos).getUrl());
                     }
 
                     @Override
@@ -114,13 +115,14 @@ public class EditPhotoActivity extends BaseActivity {
 
                 private_adapter = new MyAdapter(EditPhotoActivity.this, fuser.getUid(), private_uploads, new MyAdapter.PhotoInterface() {
                     @Override
-                    public void setProfilePhoto(String id, String previousValue) {
+                    public void setProfilePhoto(String id, String previousValue,int pos) {
                         PicturesInstance
                                 .child(fuser.getUid())
                                 .child(id).child("type").setValue(1);
 
                         if(!previousValue.equals("") && !previousValue.equals(id))
                         PicturesInstance.child(fuser.getUid()).child(previousValue).child("type").setValue(2);
+                        profilePhotoDetails(private_uploads.get(pos).getUrl());
                     }
 
                     @Override

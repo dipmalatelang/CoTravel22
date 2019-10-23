@@ -29,6 +29,7 @@ import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.BuildConfig;
 import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
+import com.example.tgapplication.fragment.account.profile.ChangePrefActivity;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.photo.Upload;
 import com.facebook.CallbackManager;
@@ -68,7 +69,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     private CallbackManager mCallbackManager;
     String value;
     LoginButton loginButton;
-    Spinner sp_age, sp_age_from, sp_age_to;
+    Spinner sp_age;
     Button btn_register, btn_save_register;
     ArrayList<String> look = new ArrayList<>();
     ArrayList<String> range_age=new ArrayList<>();
@@ -79,7 +80,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     ConstraintLayout regi_form;
     RadioGroup regi_rg;
     RadioButton rb_gender;
-    CheckBox cb_regi_girl,cb_regi_men;
     RelativeLayout relativelayout;
 
     ArrayList<String> array_age;
@@ -97,8 +97,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         mCallbackManager = CallbackManager.Factory.create();
 
         sp_age=findViewById(R.id.sp_age);
-        sp_age_from=findViewById(R.id.sp_age_from);
-        sp_age_to=findViewById(R.id.sp_age_to);
+       /* sp_age_from=findViewById(R.id.sp_age_from);
+        sp_age_to=findViewById(R.id.sp_age_to);*/
         regi_et_name=findViewById(R.id.regi_et_name);
         regi_et_email=findViewById(R.id.regi_et_email);
         regi_et_pass=findViewById(R.id.regi_et_pass);
@@ -106,20 +106,20 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         textInput_location=findViewById(R.id.textInput_location);
         regi_rg=findViewById(R.id.regi_rg);
 
-        cb_regi_girl=findViewById(R.id.cb_regi_girl);
+       /* cb_regi_girl=findViewById(R.id.cb_regi_girl);
         cb_regi_men=findViewById(R.id.cb_regi_men);
 
         cb_regi_girl.setOnClickListener(this);
-        cb_regi_men.setOnClickListener(this);
+        cb_regi_men.setOnClickListener(this);*/
 
         regi_form=findViewById(R.id.cl_register_form);
-        travelprefer_form=findViewById(R.id.travelprefer_form);
+//        travelprefer_form=findViewById(R.id.travelprefer_form);
 
         btn_register=findViewById(R.id.btn_register);
-        btn_save_register=findViewById(R.id.btn_save_register);
+//        btn_save_register=findViewById(R.id.btn_save_register);
 
         btn_register.setOnClickListener(this);
-        btn_save_register.setOnClickListener(this);
+//        btn_save_register.setOnClickListener(this);
 
         loginButton = findViewById(R.id.login_button);
 
@@ -181,16 +181,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         adapter_age = new ArrayAdapter<>(RegisterActivity.this, android.R.layout.simple_spinner_item, array_age);
         adapter_age.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        adapter_age_from = new ArrayAdapter<>(RegisterActivity.this, android.R.layout.simple_spinner_item, array_age);
-        adapter_age_from.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        adapter_age_to = new ArrayAdapter<>(RegisterActivity.this, android.R.layout.simple_spinner_item, array_age);
-        adapter_age_to.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 
         sp_age.setAdapter(adapter_age);
-        sp_age_from.setAdapter(adapter_age_from);
-        sp_age_to.setAdapter(adapter_age_to);
 
         sp_age.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -205,7 +198,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             }
         });
 
-        sp_age_from.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    /*    sp_age_from.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
@@ -229,7 +222,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
-        });
+        });*/
 
     }
 
@@ -240,12 +233,10 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
             // Get private mPopup member variable and try cast to ListPopupWindow
             android.widget.ListPopupWindow AgepopupWindow = (android.widget.ListPopupWindow) popup.get(sp_age);
-            android.widget.ListPopupWindow AgeFrompopupWindow = (android.widget.ListPopupWindow) popup.get(sp_age_from);
-            android.widget.ListPopupWindow AgeTopopupWindow = (android.widget.ListPopupWindow) popup.get(sp_age_to);
+
             // Set popupWindow height to 500px
             AgepopupWindow.setHeight(500);
-            AgeFrompopupWindow.setHeight(500);
-            AgeTopopupWindow.setHeight(500);
+
 
         }
         catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {
@@ -258,11 +249,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         return true;
     }
 
-    private void updateUI(FirebaseUser account) {
-        if (account != null) {
-            startActivity(new Intent(this, MainActivity.class));
-        }
-    }
+
     private void handleFacebookAccessToken(String token) {
         showProgressDialog();
         AuthCredential credential = FacebookAuthProvider.getCredential(token);
@@ -276,9 +263,10 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("Tiger", "signInWithCredential:success");
                             dismissProgressDialog();
+
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            User userClass=new User(user.getUid(), user.getDisplayName(), "offline", user.getDisplayName().toLowerCase(), "", "",  user.getEmail(), user.getProviderId(), "", "", "", "", "", "", look, range_age, "",  user.getDisplayName().toLowerCase(), user.getPhoneNumber(), "", "");
+                            User userClass=new User(user.getUid(), user.getDisplayName(), "offline", user.getDisplayName().toLowerCase(), "", "",  user.getEmail(), user.getProviderId(), "", "", "", "", "", "", look, range_age, "",  user.getDisplayName().toLowerCase(), user.getPhoneNumber(), "", "",1);
                             UsersInstance.child(mAuth.getCurrentUser().getUid()).setValue(userClass);
 
                             String uploadId = PicturesInstance.child(user.getUid()).push().getKey();
@@ -315,14 +303,16 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
                             Log.i("Done","gothere");
                             User userClass=new User(userid, username,"offline",username.toLowerCase(),str_gender,str_age,email, firebaseUser.getProviderId(),"","","",
-                                    "","","", look, range_age,"",username,"","","");
+                                    "","","", look, range_age,"",username,"","","",1);
                             UsersInstance.child(userid).setValue(userClass);
                             Log.i("Done","gotin");
 //                            startActivity(new Intent(RegisterActivity.this,LoginActivity.class));
                             regi_form.setVisibility(View.GONE);
-                            travelprefer_form.setVisibility(View.VISIBLE);
+
+//                            travelprefer_form.setVisibility(View.VISIBLE);
                             range_age.clear();
                             look.clear();
+                            startActivity(new Intent(RegisterActivity.this, ChangePrefActivity.class));
 
                         }
                         else {
@@ -343,7 +333,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.cb_regi_girl:
+           /* case R.id.cb_regi_girl:
                 boolean checked = ((CheckBox) v).isChecked();
                 if (checked) {
                     look.add("female");
@@ -360,8 +350,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     look.remove("male");
                 }
                 break;
-
-            case R.id.btn_save_register:
+*/
+         /*   case R.id.btn_save_register:
 //                look;
 
                 String str_age_from = sp_age_from.getSelectedItem().toString();
@@ -371,7 +361,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 updateRegister(look, range_age);
                 updateUI(mAuth.getCurrentUser());
                 break;
-
+*/
             case R.id.btn_register:
                 int selectedId = regi_rg.getCheckedRadioButtonId();
                 rb_gender = findViewById(selectedId);
@@ -435,13 +425,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
 
 
-    private void updateRegister(final ArrayList<String> look, ArrayList<String> age) {
 
-//        User userClass=new User(look,age);
-        UsersInstance.child(mAuth.getCurrentUser().getUid()).child("look").setValue(look);
-        UsersInstance.child(mAuth.getCurrentUser().getUid()).child("range_age").setValue(age);
-
-    }
 
 
     private String validateDOB(String str_dob)

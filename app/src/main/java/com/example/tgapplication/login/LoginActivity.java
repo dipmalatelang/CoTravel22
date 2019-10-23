@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -19,6 +20,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
+import com.example.tgapplication.fragment.trip.module.User;
+import com.example.tgapplication.photo.Upload;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -31,6 +34,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.Objects;
 
 import butterknife.ButterKnife;
 
@@ -126,12 +135,46 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                             Log.d("Tiger", "signInWithCredential:success");
                             dismissProgressDialog();
 
-                            updateUI(mAuth.getCurrentUser());
+                            UsersInstance.child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if(!dataSnapshot.exists())
+                                    {
+//                                        Toast.makeText(LoginActivity.this, "First Register", Toast.LENGTH_SHORT).show();
+                                        registerFromLogin();
+                                    }
+                                    else {
+                                        updateUI(mAuth.getCurrentUser());
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+
+
 
                         }
 
                     }
                 });
+    }
+
+    private void registerFromLogin() {
+
+        FirebaseUser user = mAuth.getCurrentUser();
+        ArrayList<String> look = new ArrayList<>();
+        ArrayList<String> range_age=new ArrayList<>();
+
+        User userClass=new User(user.getUid(), user.getDisplayName(), "offline", user.getDisplayName().toLowerCase(), "", "",  user.getEmail(), user.getProviderId(), "", "", "", "", "", "", look, range_age, "",  user.getDisplayName().toLowerCase(), user.getPhoneNumber(), "", "",1);
+        UsersInstance.child(mAuth.getCurrentUser().getUid()).setValue(userClass);
+
+        String uploadId = PicturesInstance.child(user.getUid()).push().getKey();
+        PicturesInstance.child(user.getUid()).child(uploadId).setValue(new Upload(uploadId,"Image", user.getPhotoUrl().toString()+"?type=large",1));
+
+        updateUI(mAuth.getCurrentUser());
     }
 
     @Override
@@ -143,11 +186,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     }
 
 
-    private void updateUI(FirebaseUser account) {
+/*    private void updateUI(FirebaseUser account) {
         if (account != null) {
             startActivity(new Intent(this, MainActivity.class));
         }
-    }
+    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
