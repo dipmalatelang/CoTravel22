@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.tgapplication.fragment.account.profile.ChangePasswordActivity;
+import com.example.tgapplication.fragment.account.profile.ChangePrefActivity;
 import com.example.tgapplication.fragment.account.profile.ProfileActivity;
 import com.example.tgapplication.fragment.account.profile.verify.EditPhoneActivity;
 import com.example.tgapplication.login.LoginActivity;
@@ -30,7 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MyProfileFragment extends Fragment {
+public class MyProfileFragment extends BaseFragment {
 
     @BindView(R.id.iv_Image)
     ImageView ivImage;
@@ -110,13 +111,17 @@ public class MyProfileFragment extends Fragment {
             case R.id.tv_Logout:
                 FirebaseAuth.getInstance().signOut();
                 LoginManager.getInstance().logOut();
-                getActivity().finish();
+                clearSharedPref();
+                Objects.requireNonNull(getActivity()).finish();
+
                 startActivity(new Intent(getActivity(), LoginActivity.class));
 //                snackBar(container,"Logout");
                 break;
 
             case R.id.tv_Change_Preferences:
-                Toast.makeText(getActivity(), "Preferrences", Toast.LENGTH_SHORT).show();
+                Intent mIntent = new Intent(getActivity(), ChangePrefActivity.class);
+                startActivity(mIntent);
+//              Toast.makeText(getActivity(), "Preferrences", Toast.LENGTH_SHORT).show();
 
                 break;
 

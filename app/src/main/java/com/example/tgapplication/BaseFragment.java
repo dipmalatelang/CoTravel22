@@ -105,6 +105,14 @@ public abstract class BaseFragment extends Fragment {
         return tripList;
     }
 
+    public void clearSharedPref()
+    {
+        SharedPreferences preferences =getActivity().getSharedPreferences("LoginDetails",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.apply();
+    }
+
     private int getVisit(List<String> favArray, String id) {
         for(int i=0;i<favArray.size();i++)
         {

@@ -98,6 +98,8 @@
         </activity>
         <activity android:name=".fragment.account.profile.EditPhotoActivity"/>
         <activity android:name=".fragment.account.profile.ChangePasswordActivity"/>
+        <activity android:name=".fragment.account.profile.ChangePrefActivity"
+            android:theme="@style/noToolbar"/>
 
         <activity android:name=".fragment.account.profile.FacebookImage"/>
 

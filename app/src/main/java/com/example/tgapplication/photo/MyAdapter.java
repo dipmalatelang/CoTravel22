@@ -97,7 +97,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
                     public void onClick(View view) {
 
                         Log.i(TAG, "onClick: Set Main "+mUploads.get(position).getId()+" previous "+((EditPhotoActivity)mcontext).getAppDetails("CurProfilePhoto"));
-                        listener.setProfilePhoto(mUploads.get(position).getId(),((EditPhotoActivity)mcontext).getAppDetails("CurProfilePhoto"));
+                        listener.setProfilePhoto(mUploads.get(position).getId(),((EditPhotoActivity)mcontext).getAppDetails("CurProfilePhoto"),position);
                         holder.ivTitle.setVisibility(View.VISIBLE);
 
                     }
@@ -152,7 +152,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
 
     PhotoInterface listener;
     public interface PhotoInterface{
-        void setProfilePhoto(String id, String previousValue);
+        void setProfilePhoto(String id, String previousValue,int position);
         void removePhoto(String id);
         void setPhotoAsPrivate(String id);
     }

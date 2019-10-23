@@ -186,11 +186,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     }
 
 
-    private void updateUI(FirebaseUser account) {
+/*    private void updateUI(FirebaseUser account) {
         if (account != null) {
             startActivity(new Intent(this, MainActivity.class));
         }
-    }
+    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

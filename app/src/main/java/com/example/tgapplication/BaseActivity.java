@@ -1,6 +1,7 @@
 package com.example.tgapplication;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -21,6 +22,7 @@ import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.photo.Upload;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -267,6 +269,38 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void removeFav(String uid, String id) {
 
         FavoritesInstance.child(uid).child(id).removeValue();
+    }
+
+    public void updateUI(FirebaseUser account) {
+        if (account != null) {
+            startActivity(new Intent(this, MainActivity.class));
+        }
+    }
+
+
+    public void updateRegister(final ArrayList<String> look, ArrayList<String> age) {
+
+//        User userClass=new User(look,age);
+        UsersInstance.child(mAuth.getCurrentUser().getUid()).child("look").setValue(look);
+        UsersInstance.child(mAuth.getCurrentUser().getUid()).child("range_age").setValue(age);
+
+    }
+
+    public void saveDetailsLater(String id, String email, String password){
+        sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString("Id",id);
+        editor.putString("Name", email);
+        editor.putString("Age", password);
+
+        editor.apply();
+    }
+
+    public void profilePhotoDetails(String imageUrl){
+        sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString("ImageUrl",imageUrl);
+        editor.apply();
     }
 
     public void active_hide_delete_Profile(String id, int account_type)

@@ -61,7 +61,7 @@ public class MembersActivity extends BaseActivity {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
                             final User user = snapshot.getValue(User.class);
-                            if (!user.getId().equalsIgnoreCase(fuser.getUid())) {
+                            if (!user.getId().equalsIgnoreCase(fuser.getUid()) && user.getAccount_type()==1) {
 //                                getFav(fuser.getUid(),user.getId());
                                 // HERE WHAT CORRESPONDS TO JOIN
                                 FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {

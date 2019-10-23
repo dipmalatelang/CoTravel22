@@ -72,18 +72,21 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
 
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Upload upload = ds.getValue(Upload.class);
-                    if (Objects.requireNonNull(upload).getType() == 1) {
-                        Log.i(TAG, "onDataChange Pictures: " + upload.getUrl());
-                        saveDetailsLater(user.getId(),user.getName(),user.getAge(),upload.getUrl());
-                    }
+//                    if (Objects.requireNonNull(upload).getType() == 1) {
+//                        Log.i(TAG, "onDataChange Pictures: " + upload.getUrl());
+                    profilePhotoDetails(upload.getUrl());
+
+//                    }
                 }
 
             }
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                        Log.i(TAG, "onCancelled: Sarita "+databaseError.getMessage());
                     }
                 });
+
+                saveDetailsLater(user.getId(),user.getName(),user.getAge());
             }
 
             @Override
@@ -93,15 +96,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         });
     }
 
-    public void saveDetailsLater(String id, String email, String password, String imageUrl){
-        sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.putString("Id",id);
-        editor.putString("Name", email);
-        editor.putString("Age", password);
-        editor.putString("ImageUrl",imageUrl);
-        editor.apply();
-    }
 
     private boolean loadFragment(Fragment fragment) {
         //switching fragment

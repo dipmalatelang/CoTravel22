@@ -32,8 +32,11 @@ public class FacebookImage extends AppCompatActivity {
     @BindView(R.id.fb_recyclerview)
     RecyclerView fbRecyclerview;
     private ArrayList<Images> lstFBImages;
+    private ArrayList<PhotoAlbum> photoAlbums;
     FB_Adapter fb_adapter;
     private FirebaseUser fuser;
+
+    String TAG=this.getClass().getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +67,12 @@ public class FacebookImage extends AppCompatActivity {
                                         JSONArray jaData = joMain.optJSONArray("data"); //find JSONArray from JSONObject
                                         for (int i = 0; i < jaData.length(); i++) {//find no. of album using jaData.length()
                                             JSONObject joAlbum = jaData.getJSONObject(i); //convert perticular album into JSONObject
-                                            GetFacebookImages(joAlbum.optString("id")); //find Album ID and get All Images from album
+                                            Log.i(TAG, "onCompleted: "+joAlbum.toString());
+                                            photoAlbums.add(new PhotoAlbum(joAlbum.optString("id"),joAlbum.optString("name")));
+//                                            Log.i(TAG, "onCompleted: "+joAlbum.optString("id"));
+
                                         }
+                                        GetFacebookImages(photoAlbums); //find Album ID and get All Images from album
                                     }
                                 } else {
                                     Log.d("Test", response.getError().toString());
@@ -113,7 +120,7 @@ public class FacebookImage extends AppCompatActivity {
     }
 
 
-    public void GetFacebookImages(final String albumId) {
+    public void GetFacebookImages(final ArrayList<PhotoAlbum> albumId) {
 //        String url = "https://graph.facebook.com/" + "me" + "/"+albumId+"/photos?access_token=" + AccessToken.getCurrentAccessToken() + "&fields=images";
         Bundle parameters = new Bundle();
         parameters.putString("fields", "images");
@@ -184,6 +191,31 @@ public class FacebookImage extends AppCompatActivity {
 
         public void setImage_Url(String image_Url) {
             this.image_Url = image_Url;
+        }
+    }
+
+    private class PhotoAlbum {
+        String id, name;
+
+        public PhotoAlbum(String id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
         }
     }
 }
