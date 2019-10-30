@@ -2,29 +2,35 @@ package com.example.tgapplication.chat;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.fragment.visitor.UserImg;
 
 import java.util.List;
 
+import static android.widget.Toast.*;
+
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     private Context mContext;
     private List<UserImg> mUsers;
     private boolean ischat;
+    private String uid;
+    String TAG ;
 
     public UserAdapter(Context mContext, List<UserImg> mUsers, boolean ischat, UserInterface listener){
         this.mUsers = mUsers;
@@ -117,8 +123,36 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                 mContext.startActivity(intent);
             }
         });
+        holder.tvdelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: "+uid);
+                mUsers.remove(position);
+                notifyDataSetChanged();
+                makeText(mContext, "click on delete", LENGTH_SHORT).show();
+            }
+        });
+        holder.tvfavourite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.fev.setVisibility(View.VISIBLE);
+                makeText(mContext,"click on more",LENGTH_SHORT).show();
+
+            }
+        });
+        holder.chat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.tvfavourite.setVisibility(View.VISIBLE);
+                holder.tvdelete.setVisibility(View.VISIBLE);
+            }
+        });
+
+
+
 
     }
+
 
 
     @Override
@@ -134,8 +168,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
         private ImageView img_off;
         private TextView last_msg;
-        //        private RelativeLayout chat;
+        RelativeLayout chat;
         ImageView ic_action_fav_remove;
+        ImageView fev;
+        TextView tvfavourite,tvdelete;
 
 
         public ViewHolder(View itemView) {
@@ -146,8 +182,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             img_on = itemView.findViewById(R.id.img_on);
             img_off = itemView.findViewById(R.id.img_off);
             last_msg = itemView.findViewById(R.id.last_msg);
-//            chat =itemView.findViewById(R.id.chat);
+            chat =itemView.findViewById(R.id.chat);
             ic_action_fav_remove =itemView.findViewById(R.id.fev);
+            tvdelete = itemView.findViewById(R.id.tvdelete);
+            tvfavourite = itemView.findViewById(R.id.tvfavourite);
+            fev =itemView.findViewById(R.id.fev);
+
         }
     }
 

@@ -268,6 +268,12 @@ public class MessageActivity extends BaseActivity {
     private void readMesagges(final String myid, final String userid, final String imageurl) {
         mchat = new ArrayList<>();
 
+
+
+
+
+
+
         ChatsInstance.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

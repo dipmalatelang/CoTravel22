@@ -9,96 +9,128 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-<com.chauthai.swipereveallayout.SwipeRevealLayout
-    android:layout_width="match_parent"
-    android:id="@+id/chat"
-    android:background="@color/background"
-    android:padding="5dp"
-    android:layout_height="wrap_content">
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:id="@+id/profile_image"
-        android:src="@drawable/ic_broken_image_primary_24dp"/>
 
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        app:civ_border_width="10dp"
-        app:civ_border_color="#05df29"
-        android:id="@+id/img_on"
-        android:visibility="gone"
-        android:src="@mipmap/ic_launcher"
-        android:layout_below="@id/username"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="-15dp"
-        android:layout_toRightOf="@id/profile_image"
-        android:layout_toEndOf="@id/profile_image"/>
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="15dp"
-
-        android:layout_height="15dp"
-        app:civ_border_width="10dp"
-        app:civ_border_color="#bfbfbf"
-        android:id="@+id/img_off"
-        android:visibility="gone"
-        android:src="@mipmap/ic_launcher"
-        android:layout_below="@id/username"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="-15dp"
-        android:layout_toRightOf="@id/profile_image"
-        android:layout_toEndOf="@id/profile_image"/>
-
-    <TextView
-        android:id="@+id/username"
-        android:layout_width="wrap_content"
+        <com.chauthai.swipereveallayout.SwipeRevealLayout
+        android:id="@+id/swipe_layout_1"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/profile_image"
-        android:paddingStart="2dp"
-        android:fontFamily="@font/montserrat"
-        android:layout_marginTop="2dp"
-        android:layout_marginStart="10dp"
-        android:layout_toEndOf="@id/profile_image"
-        android:layout_toRightOf="@id/profile_image"
-        android:textColor="@color/black"
-        android:textSize="16sp" />
+        app:mode="normal"
+        app:dragEdge="right">
 
-    <TextView
-        android:id="@+id/last_msg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/username"
-        android:layout_alignBottom="@+id/profile_image"
-        android:maxLines="1"
-        android:paddingStart="2dp"
-        android:fontFamily="@font/roboto"
-        android:layout_marginBottom="2dp"
-        android:textColor="@color/gray"
-        android:textSize="14sp" />
-
-    <ImageView
-        android:id="@+id/fev"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="10dp"
-        android:visibility="gone"
-        android:layout_centerVertical="true"
-        android:src="@drawable/ic_action_fav_remove" />
-
-    <!--<View
-        android:id="@+id/view_bottom"
-        android:layout_width="wrap_content"
-        android:layout_height="0.5dp"
-        android:layout_below="@id/profile_image"
-        android:layout_alignStart="@+id/username"
-        android:layout_marginTop="5dp"
-        android:background="@color/colorPrimary" />-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/chat"
+        android:background="@color/background"
+        android:padding="5dp"
+        android:onClick="layoutOneOnClick"
+        android:layout_height="wrap_content">
 
 
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_broken_image_primary_24dp" />
 
-</com.chauthai.swipereveallayout.SwipeRevealLayout>
-  </androidx.cardview.widget.CardView>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            app:civ_border_width="10dp"
+            app:civ_border_color="#05df29"
+            android:id="@+id/img_on"
+            android:visibility="gone"
+            android:src="@mipmap/ic_launcher"
+            android:layout_below="@id/username"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="-15dp"
+            android:layout_toRightOf="@id/profile_image"
+            android:layout_toEndOf="@id/profile_image"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="15dp"
+
+            android:layout_height="15dp"
+            app:civ_border_width="10dp"
+            app:civ_border_color="#bfbfbf"
+            android:id="@+id/img_off"
+            android:visibility="gone"
+            android:src="@mipmap/ic_launcher"
+            android:layout_below="@id/username"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="-15dp"
+            android:layout_toRightOf="@id/profile_image"
+            android:layout_toEndOf="@id/profile_image"/>
+
+        <TextView
+            android:id="@+id/username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/profile_image"
+            android:paddingStart="2dp"
+            android:fontFamily="@font/montserrat"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@id/profile_image"
+            android:layout_toRightOf="@id/profile_image"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/last_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/username"
+            android:layout_alignBottom="@+id/profile_image"
+            android:layout_marginBottom="2dp"
+            android:fontFamily="@font/roboto"
+            android:maxLines="1"
+            android:paddingStart="2dp"
+            android:textColor="@color/gray"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/fev"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:visibility="gone"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_action_fav_remove" />
+
+
+
+    </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvfavourite"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:background="@android:color/darker_gray"
+                android:textColor="@android:color/white"
+                android:text="Favorites"
+                android:visibility="gone"
+
+                android:onClick="moreOnClick"/>
+
+            <TextView
+                android:id="@+id/tvdelete"
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:background="@android:color/holo_red_dark"
+                android:textColor="@android:color/white"
+                android:text="Delete"
+                android:visibility="gone"
+
+                android:onClick="deleteOnClick"/>
+        </LinearLayout>
+    </com.chauthai.swipereveallayout.SwipeRevealLayout>
+</androidx.cardview.widget.CardView>

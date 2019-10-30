@@ -263,6 +263,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         ProfileVisitorInstance
                 .child(uid).child(id).removeValue();
     }
+    public  void removeChat(String uid, String id)
+    {
+
+        ChatlistInstance
+                .child(uid).child(id).removeValue();
+
+    }
 
     public void removeFav(String uid, String id) {
 
