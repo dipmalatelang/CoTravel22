@@ -9,7 +9,6 @@ import android.view.WindowManager;
 import java.util.Objects;
 
 
-
 class ProgressActivity extends Dialog {
     private static ProgressActivity progressDialog;
 
@@ -17,7 +16,7 @@ class ProgressActivity extends Dialog {
         super(context);
     }
 
-    static void showDialog(final Context context){
+    static void showDialog(final Context context) {
         progressDialog = new ProgressActivity(context);
         progressDialog.setContentView(R.layout.progress_dialog);
         Objects.requireNonNull(progressDialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
@@ -33,13 +32,12 @@ class ProgressActivity extends Dialog {
         }
     }
 
-    public static void dismissDialog(){
+    public static void dismissDialog() {
         if (progressDialog.isShowing()) {
             Objects.requireNonNull(progressDialog.getWindow()).clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
             progressDialog.dismiss();
         }
     }
-
 
 
 }

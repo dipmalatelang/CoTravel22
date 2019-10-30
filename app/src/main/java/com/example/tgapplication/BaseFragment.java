@@ -64,7 +64,7 @@ public abstract class BaseFragment extends Fragment {
 
     public List<TripList> findClosestDate(List<Date> dates, UserImg userImg, int fav_id) {
 
-       User user= userImg.getUser();
+        User user = userImg.getUser();
 
         closest = Collections.min(dates, new Comparator<Date>() {
             @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -80,7 +80,7 @@ public abstract class BaseFragment extends Fragment {
         SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("dd/MM/yyyy");
         String dateOutput = simpleDateFormat.format(closest);
         String dateOutput1 = simpleDateFormat1.format(closest);
-        int visit_id=getVisit(visitArray,user.getId());
+        int visit_id = getVisit(visitArray, user.getId());
         Log.i("closest Date", " " + closest + " " + dateOutput + " " + dateOutput1);
         for (int i = 0; i < from_to_dates.size(); i++) {
             Log.i("This data", from_to_dates.get(i).getDate_from() + " " + dateOutput1);
@@ -90,45 +90,41 @@ public abstract class BaseFragment extends Fragment {
 //                String ageValue= getBirthday(user.getDob());
                 String dateFromTo = from_to_dates.get(i).getDate_from() + " - " + from_to_dates.get(i).getDate_to();
 
-                TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getAge(), user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), from_to_dates.get(i).getLocation(), tripNote, dateFromTo,fav_id,visit_id);
+                TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getAge(), user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), from_to_dates.get(i).getLocation(), tripNote, dateFromTo, fav_id, visit_id);
                 tripList.add(tripListClass);
             }
         }
 
-        if(tripList.size()<1)
-        {
+        if (tripList.size() < 1) {
 
-            TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getAge(), user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), "", tripNote, "",fav_id,visit_id);
+            TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getAge(), user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), "", tripNote, "", fav_id, visit_id);
             tripList.add(tripListClass);
         }
 
         return tripList;
     }
 
-    public void clearSharedPref()
-    {
-        SharedPreferences preferences =getActivity().getSharedPreferences("LoginDetails",Context.MODE_PRIVATE);
+    public void clearSharedPref() {
+        SharedPreferences preferences = getActivity().getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
         editor.apply();
     }
 
     private int getVisit(List<String> favArray, String id) {
-        for(int i=0;i<favArray.size();i++)
-        {
-            if(favArray.get(i).equalsIgnoreCase(id))
-            {
-                fav_int=1;
+        for (int i = 0; i < favArray.size(); i++) {
+            if (favArray.get(i).equalsIgnoreCase(id)) {
+                fav_int = 1;
                 return fav_int;
-            }
-            else {
-                fav_int=0;
+            } else {
+                fav_int = 0;
             }
         }
         return fav_int;
     }
-    public void snackBar(View constrainlayout, String s){
-        Snackbar snackbar = Snackbar.make(constrainlayout,s, Snackbar.LENGTH_LONG).setAction("Retry", new View.OnClickListener() {
+
+    public void snackBar(View constrainlayout, String s) {
+        Snackbar snackbar = Snackbar.make(constrainlayout, s, Snackbar.LENGTH_LONG).setAction("Retry", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i("Action Button", "onClick triggered");
@@ -143,13 +139,13 @@ public abstract class BaseFragment extends Fragment {
     }
 
     //Progress Bar
-    public void showProgressDialog(){
+    public void showProgressDialog() {
         if (!getActivity().isFinishing()) {
             ProgressActivity.showDialog(getActivity());
         }
     }
 
-    public void dismissProgressDialog(){
+    public void dismissProgressDialog() {
         if (!getActivity().isFinishing()) {
             ProgressActivity.dismissDialog();
         }
@@ -181,19 +177,19 @@ public abstract class BaseFragment extends Fragment {
     }*/
 
     //check for last message
-    public void checkForLastMsg(Context mContext, final String userid, final TextView last_msg){
+    public void checkForLastMsg(Context mContext, final String userid, final TextView last_msg) {
 
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        ChatsInstance.addValueEventListener(new ValueEventListener() {
+        ChatsInstance.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 theLastMessage = "default";
-                textType=true;
+                textType = true;
 
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Chat chat = snapshot.getValue(Chat.class);
-                    Log.i("Snap"," "+snapshot);
+                    Log.i("Snap", " " + snapshot);
                     if (firebaseUser != null && chat != null) {
                         if (chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userid) ||
                                 chat.getReceiver().equals(userid) && chat.getSender().equals(firebaseUser.getUid())) {
@@ -201,20 +197,20 @@ public abstract class BaseFragment extends Fragment {
                         }
                     }
 
-                    if(chat.getSender().equals(userid) && !chat.isIsseen()) {
-                        Log.i("TAG", "onDataChange: HighLight "+userid+" "+chat.isIsseen());
-                        textType=chat.isIsseen();
+                    if (chat.getSender().equals(userid) && !chat.isIsseen()) {
+                        Log.i("TAG", "onDataChange: HighLight " + userid + " " + chat.isIsseen());
+                        textType = chat.isIsseen();
                     }
 
                 }
 
-                if(!textType)
-                last_msg.setTextColor(mContext.getResources().getColor(R.color.black));
+                if (!textType)
+                    last_msg.setTextColor(mContext.getResources().getColor(R.color.black));
                 else
                     last_msg.setTextColor(mContext.getResources().getColor(R.color.gray));
 
-                switch (theLastMessage){
-                    case  "default":
+                switch (theLastMessage) {
+                    case "default":
                         last_msg.setText("No Message");
                         break;
 
@@ -240,12 +236,11 @@ public abstract class BaseFragment extends Fragment {
         editor.apply();
     }
 
-    public String getAppDetails(String key)
-    {
-        String name="";
+    public String getAppDetails(String key) {
+        String name = "";
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("AppDetails", Context.MODE_PRIVATE);
         if (sharedPreferences.contains(key)) {
-            name= sharedPreferences.getString(key, "");
+            name = sharedPreferences.getString(key, "");
         }
         return name;
     }

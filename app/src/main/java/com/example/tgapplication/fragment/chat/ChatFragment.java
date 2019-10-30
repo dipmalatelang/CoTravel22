@@ -4,10 +4,13 @@ package com.example.tgapplication.fragment.chat;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -29,6 +32,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -36,17 +40,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import butterknife.BindView;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ChatFragment extends BaseFragment {
 
 
+
+    EditText search_users;
     private RecyclerView recyclerView;
 
     private UserAdapter userAdapter;
+    List<UserImg> mUsers = new ArrayList<>();
 
-    String pictureUrl="";
+    String pictureUrl = "";
 
     FirebaseUser fuser;
     FloatingActionButton floatingActionButton;
@@ -62,13 +71,13 @@ public class ChatFragment extends BaseFragment {
 
         setHasOptionsMenu(false);
         recyclerView = view.findViewById(R.id.recycler_view);
+        search_users=view.findViewById(R.id.search_users);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
 
-
-        floatingActionButton=view.findViewById(R.id.floatingActionButton);
+        floatingActionButton = view.findViewById(R.id.floatingActionButton);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,13 +89,13 @@ public class ChatFragment extends BaseFragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<Chatlist> usersList = new ArrayList<>();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
                     Chatlist chatlist = snapshot.getValue(Chatlist.class);
                     usersList.add(chatlist);
                 }
 //                Log.i("ChatFrag",""+dataSnapshot.getChildren());
-                Log.i("Size", "onDataChange: "+usersList.size());
+                Log.i("Size", "onDataChange: " + usersList.size());
                 chatList(usersList);
             }
 
@@ -98,47 +107,86 @@ public class ChatFragment extends BaseFragment {
 
         updateToken(FirebaseInstanceId.getInstance().getToken());
 
+
+        search_users.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                searchUsers(charSequence.toString().toLowerCase());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         return view;
     }
 
+    private void searchUsers(String s)
+    {
+        ArrayList<UserImg> mUser=new ArrayList<>();
 
-    private void updateToken(String token){
+        for(UserImg userImg : mUsers){
+            if(userImg.getUser().getSearch() != null && (userImg.getUser().getSearch().contains(s)))
+            {
+                mUser.add(userImg);
+            }
+            //something here
+        }
+                userAdapter = new UserAdapter(getContext(), mUser, true, new UserAdapter.UserInterface() {
+                    @Override
+                    public void lastMessage(Context mContext, String userid, TextView last_msg) {
+                        checkForLastMsg(mContext, userid,last_msg);
+                    }
+
+                });
+                recyclerView.setAdapter(userAdapter);
+
+    }
+
+
+    private void updateToken(String token) {
         Token token1 = new Token(token);
         TokensInstance.child(fuser.getUid()).setValue(token1);
     }
 
     private void chatList(List<Chatlist> usersList) {
 
-        UsersInstance.addValueEventListener(new ValueEventListener() {
+        UsersInstance.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List<UserImg> mUsers;  mUsers = new ArrayList<>();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+
+               mUsers.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     User user = snapshot.getValue(User.class);
-                    for (Chatlist chatlist : usersList){
-                        if (user.getId().equals(chatlist.getId())){
+                    for (Chatlist chatlist : usersList) {
+                        if (user.getId().equals(chatlist.getId())) {
 
                             PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    for(DataSnapshot ds: dataSnapshot.getChildren())
-                                    {
+                                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
-                                        Upload upload=ds.getValue(Upload.class);
+                                        Upload upload = ds.getValue(Upload.class);
 
-                                        if(Objects.requireNonNull(upload).getType()==1)
-                                        {
-                                            pictureUrl=upload.getUrl();
+                                        if (Objects.requireNonNull(upload).getType() == 1) {
+                                            pictureUrl = upload.getUrl();
                                         }
                                     }
 
-                                    mUsers.add(new UserImg(user,pictureUrl));
+                                    mUsers.add(new UserImg(user, pictureUrl));
 
-                                    Log.i("TAG", "onDataChange: chat"+mUsers.size());
+                                    Log.i("TAG", "onDataChange: chat" + mUsers.size());
                                     userAdapter = new UserAdapter(getContext(), mUsers, true, new UserAdapter.UserInterface() {
                                         @Override
                                         public void lastMessage(Context mContext, String userid, TextView last_msg) {
-                                            checkForLastMsg(mContext,userid,last_msg);
+                                            checkForLastMsg(mContext, userid, last_msg);
                                         }
 
                                     });
@@ -164,7 +212,6 @@ public class ChatFragment extends BaseFragment {
             }
         });
     }
-
 
 
 }

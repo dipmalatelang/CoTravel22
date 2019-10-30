@@ -36,7 +36,7 @@ import java.util.Objects;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
-    public String TAG="Activity";
+    public String TAG = "Activity";
     public List<String> visitArray = new ArrayList<>();
     public List<TripList> tripList = new ArrayList<>();
     public List<PlanTrip> from_to_dates = new ArrayList<>();
@@ -80,25 +80,21 @@ public abstract class BaseActivity extends AppCompatActivity {
     }*/
 
 
-
     public List<TripList> findAllMembers(User user, int fav_id, String profilePhoto) {
-                 int visit_id=getVisit(visitArray,user.getId());
-                TripList tripListClass = new TripList(user.getId(), user.getUsername(), profilePhoto, user.getAge(), user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), tripNote, fav_id,visit_id);
-                tripList.add(tripListClass);
+        int visit_id = getVisit(visitArray, user.getId());
+        TripList tripListClass = new TripList(user.getId(), user.getUsername(), profilePhoto, user.getAge(), user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), tripNote, fav_id, visit_id);
+        tripList.add(tripListClass);
 
         return tripList;
     }
 
     private int getVisit(List<String> favArray, String id) {
-        for(int i=0;i<favArray.size();i++)
-        {
-            if(favArray.get(i).equalsIgnoreCase(id))
-            {
-                fav_int=1;
+        for (int i = 0; i < favArray.size(); i++) {
+            if (favArray.get(i).equalsIgnoreCase(id)) {
+                fav_int = 1;
                 return fav_int;
-            }
-            else {
-                fav_int=0;
+            } else {
+                fav_int = 0;
             }
         }
         return fav_int;
@@ -111,12 +107,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         editor.apply();
     }
 
-    public String getAppDetails(String key)
-    {
-        String name="";
+    public String getAppDetails(String key) {
+        String name = "";
         SharedPreferences sharedPreferences = getSharedPreferences("AppDetails", Context.MODE_PRIVATE);
         if (sharedPreferences.contains(key)) {
-            name= sharedPreferences.getString(key, "");
+            name = sharedPreferences.getString(key, "");
         }
         return name;
     }
@@ -226,8 +221,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     }*/
 
 
-    public void snackBar(View constrainlayout, String s){
-        Snackbar snackbar = Snackbar.make(constrainlayout,s, Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
+    public void snackBar(View constrainlayout, String s) {
+        Snackbar snackbar = Snackbar.make(constrainlayout, s, Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i("Action Button", "onClick triggered");
@@ -241,12 +236,13 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     //Progress Bar
-    public void showProgressDialog(){
+    public void showProgressDialog() {
         if (!isFinishing()) {
             ProgressActivity.showDialog(this);
         }
     }
-    public void saveLoginDetails(String email, String password){
+
+    public void saveLoginDetails(String email, String password) {
         sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.putString("Email", email);
@@ -254,14 +250,14 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         editor.commit();
     }
-    public void dismissProgressDialog(){
+
+    public void dismissProgressDialog() {
         if (!isFinishing()) {
             ProgressActivity.dismissDialog();
         }
     }
 
-    public void removeVisit(String uid, String id)
-    {
+    public void removeVisit(String uid, String id) {
         ProfileVisitorInstance
                 .child(uid).child(id).removeValue();
     }
@@ -293,36 +289,35 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     }
 
-    public void saveDetailsLater(String id, String email, String password){
+    public void saveDetailsLater(String id, String email, String password) {
         sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        editor.putString("Id",id);
+        editor.putString("Id", id);
         editor.putString("Name", email);
         editor.putString("Age", password);
 
         editor.apply();
     }
 
-    public void profilePhotoDetails(String imageUrl){
+    public void profilePhotoDetails(String imageUrl) {
         sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        editor.putString("ImageUrl",imageUrl);
+        editor.putString("ImageUrl", imageUrl);
         editor.apply();
     }
 
-    public void active_hide_delete_Profile(String id, int account_type)
-    {
+    public void active_hide_delete_Profile(String id, int account_type) {
         UsersInstance.child(id).child("account_type").setValue(account_type);
     }
 
-        public void setFav(String uid, String id) {
+    public void setFav(String uid, String id) {
 
         FavoritesInstance
                 .child(uid)
                 .child(id).child("id").setValue(id);
     }
 
-    public boolean showOrHidePwd(MotionEvent event, EditText input_password){
+    public boolean showOrHidePwd(MotionEvent event, EditText input_password) {
         final int DRAWABLE_RIGHT = 2;
 
         if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -332,7 +327,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 if (!input_password.getTransformationMethod().toString().contains("Password")) {
                     input_password.setTransformationMethod(new PasswordTransformationMethod());
                     input_password.setSelection(input_password.getText().length());
-                    input_password.setCompoundDrawablesWithIntrinsicBounds( R.drawable.ic_lock_white_24dp, 0, R.drawable.ic_action_eye_off, 0);
+                    input_password.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock_white_24dp, 0, R.drawable.ic_action_eye_off, 0);
 
                 } else {
                     input_password.setTransformationMethod(new HideReturnsTransformationMethod());
@@ -349,38 +344,28 @@ public abstract class BaseActivity extends AppCompatActivity {
     public static class CheckNetwork {
 
 
-        private  final String TAG = CheckNetwork.class.getSimpleName();
+        private final String TAG = CheckNetwork.class.getSimpleName();
 
 
-
-      public static boolean isInternetAvailable(Context context)
-        {
+        public static boolean isInternetAvailable(Context context) {
             NetworkInfo info = (NetworkInfo) ((ConnectivityManager)
                     context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
 
-            if (info == null)
-            {
-                Log.d("","no internet connection");
+            if (info == null) {
+                Log.d("", "no internet connection");
                 return false;
-            }
-            else
-            {
-                if(info.isConnected())
-                {
-                    Log.d(""," internet connection available...");
+            } else {
+                if (info.isConnected()) {
+                    Log.d("", " internet connection available...");
                     return true;
-                }
-                else
-                {
-                    Log.d(""," internet connection");
+                } else {
+                    Log.d("", " internet connection");
                     return true;
                 }
 
             }
         }
     }
-
-
 
 
     private void updateProfilePic(String picUrl) {
@@ -405,8 +390,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-    public String firstletterCap(String myString){
-        return myString.substring(0,1).toUpperCase() + myString.substring(1);
+    public String firstletterCap(String myString) {
+        return myString.substring(0, 1).toUpperCase() + myString.substring(1);
     }
 
 
