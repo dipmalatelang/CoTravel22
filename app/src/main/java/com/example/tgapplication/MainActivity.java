@@ -53,9 +53,9 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         navView.setSelectedItemId(R.id.nav_trip);
         navView.setOnNavigationItemSelectedListener(this);
 
-        container =findViewById(R.id.container);
+        container = findViewById(R.id.container);
 
-        fragment=new TripFragment();
+        fragment = new TripFragment();
         loadFragment(fragment);
     }
 
@@ -63,30 +63,31 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         UsersInstance.child(fUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user=dataSnapshot.getValue(User.class);
-                Log.i(TAG, "onDataChange User: "+ Objects.requireNonNull(user).getName()+" "+user.getAge()+" "+user.getId());
-        PicturesInstance.child(fUser.getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.i(TAG, "onDataChange Pictures: ");
+                User user = dataSnapshot.getValue(User.class);
+                Log.i(TAG, "onDataChange User: " + Objects.requireNonNull(user).getName() + " " + user.getAge() + " " + user.getId());
+                PicturesInstance.child(fUser.getUid()).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Log.i(TAG, "onDataChange Pictures: ");
 
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Upload upload = ds.getValue(Upload.class);
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            Upload upload = ds.getValue(Upload.class);
 //                    if (Objects.requireNonNull(upload).getType() == 1) {
 //                        Log.i(TAG, "onDataChange Pictures: " + upload.getUrl());
-                    profilePhotoDetails(upload.getUrl());
+                            profilePhotoDetails(upload.getUrl());
 
 //                    }
-                }
+                        }
 
-            }
+                    }
+
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Log.i(TAG, "onCancelled: Sarita "+databaseError.getMessage());
+                        Log.i(TAG, "onCancelled: Sarita " + databaseError.getMessage());
                     }
                 });
 
-                saveDetailsLater(user.getId(),user.getName(),user.getAge());
+                saveDetailsLater(user.getId(), user.getName(), user.getAge());
             }
 
             @Override
@@ -100,13 +101,13 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     private boolean loadFragment(Fragment fragment) {
         //switching fragment
         if (fragment != null) {
-            Log.i(TAG, "loadFragment: "+fragment);
+            Log.i(TAG, "loadFragment: " + fragment);
 
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                        .replace(R.id.fragment_main_screen, fragment)
-                        .commit();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                    .replace(R.id.fragment_main_screen, fragment)
+                    .commit();
             return true;
         }
         return false;
@@ -155,24 +156,23 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
 
         this.doubleBackToExitPressedOnce = true;
 //        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
-        snackBar(container,"Please click Back again to exit");
+        snackBar(container, "Please click Back again to exit");
 
         new Handler().postDelayed(new Runnable() {
 
             @Override
             public void run() {
-                doubleBackToExitPressedOnce=false;
+                doubleBackToExitPressedOnce = false;
             }
         }, 2000);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case R.id.home:
                 navView.setSelectedItemId(R.id.nav_trip);
-                fragment=new TripFragment();
+                fragment = new TripFragment();
                 loadFragment(fragment);
                 break;
 
@@ -180,8 +180,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
                 FirebaseAuth.getInstance().signOut();
                 LoginManager.getInstance().logOut();
                 finish();
-                startActivity(new Intent(this,LoginActivity.class));
-                snackBar(container,"Logout");
+                startActivity(new Intent(this, LoginActivity.class));
+                snackBar(container, "Logout");
                 break;
 
         }
