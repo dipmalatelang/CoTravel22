@@ -24,7 +24,8 @@
         <activity
             android:name=".MainActivity"
             android:theme="@style/noToolbar" />
-        <activity android:name=".fragment.member.MembersActivity" />
+        <activity android:name=".fragment.member.MembersActivity"
+            android:label="Members"/>
        <!-- <activity
             android:name=".fragment.trip.DetailActivity"
             android:parentActivityName=".MainActivity"

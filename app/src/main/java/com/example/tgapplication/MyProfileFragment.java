@@ -58,8 +58,9 @@ public class MyProfileFragment extends BaseFragment {
     @BindView(R.id.view5)
     View view5;
     private SharedPreferences sharedPreferences;
-    String name,imageUrl,age;
-//
+    String name, imageUrl, age;
+
+    //
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -69,18 +70,18 @@ public class MyProfileFragment extends BaseFragment {
 
         sharedPreferences = getActivity().getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
         if (sharedPreferences.contains("Name")) {
-            name=(sharedPreferences.getString("Name", ""));
+            name = (sharedPreferences.getString("Name", ""));
         }
         if (sharedPreferences.contains("Age")) {
-            age=(sharedPreferences.getString("Age", ""));
+            age = (sharedPreferences.getString("Age", ""));
 
         }
         if (sharedPreferences.contains("ImageUrl")) {
-            imageUrl=(sharedPreferences.getString("ImageUrl", ""));
+            imageUrl = (sharedPreferences.getString("ImageUrl", ""));
 
         }
 
-        setProfileValue(name,age,imageUrl);
+        setProfileValue(name, age, imageUrl);
 
         return view;
     }
@@ -88,12 +89,12 @@ public class MyProfileFragment extends BaseFragment {
     private void setProfileValue(String name, String age, String imageUrl) {
         tvProfileName.setText(name);
         tvProfileAge.setText(age);
-        Log.i("TAG", "setProfileValue: "+imageUrl);
+        Log.i("TAG", "setProfileValue: " + imageUrl);
         Glide.with(Objects.requireNonNull(getActivity())).load(imageUrl).placeholder(R.drawable.ic_broken_image_primary_24dp).into(ivImage);
     }
 
 
-    @OnClick({R.id.tv_my_profile, R.id.tv_Logout, R.id.iv_Image,R.id.tv_Change_Password, R.id.tv_verify_acc, R.id.tv_Change_Preferences})
+    @OnClick({R.id.tv_my_profile, R.id.tv_Logout, R.id.iv_Image, R.id.tv_Change_Password, R.id.tv_verify_acc, R.id.tv_Change_Preferences})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             //
@@ -106,8 +107,8 @@ public class MyProfileFragment extends BaseFragment {
                 startActivity(new Intent(getActivity(), ProfileActivity.class));
                 break;
             case R.id.tv_Change_Password:
-            startActivity(new Intent(getActivity(), ChangePasswordActivity.class));
-            break;
+                startActivity(new Intent(getActivity(), ChangePasswordActivity.class));
+                break;
             case R.id.tv_Logout:
                 FirebaseAuth.getInstance().signOut();
                 LoginManager.getInstance().logOut();
