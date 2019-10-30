@@ -24,6 +24,7 @@ public class User implements Serializable{
     private String nationality;
     private String visit;
     private String age;
+    private int account_type;
 
 
 
@@ -40,7 +41,7 @@ public class User implements Serializable{
 
     public User() { }
 
-    public User(String id, String username, String status, String search, String gender, String age, String email, String social_media, String body_type, String dob, String eyes, String hair, String height, String lang, ArrayList<String> look, ArrayList<String> range_age, String location, String name, String phone, String nationality, String visit) {
+    public User(String id, String username, String status, String search, String gender, String age, String email, String social_media, String body_type, String dob, String eyes, String hair, String height, String lang, ArrayList<String> look, ArrayList<String> range_age, String location, String name, String phone, String nationality, String visit,int account_type) {
         this.id = id;
         this.username = username;
         this.name = name;
@@ -62,6 +63,7 @@ public class User implements Serializable{
         this.phone=phone;
         this.status = status;
         this.search = search;
+        this.account_type=account_type;
     }
 
 
@@ -208,6 +210,14 @@ public class User implements Serializable{
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public int getAccount_type() {
+        return account_type;
+    }
+
+    public void setAccount_type(int account_type) {
+        this.account_type = account_type;
     }
 
     public String getUsername() {
