@@ -9,11 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.chauthai.swipereveallayout.SwipeRevealLayout;
+import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.fragment.visitor.UserImg;
@@ -25,6 +28,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private Context mContext;
     private List<UserImg> mUsers;
     private boolean ischat;
+    private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
 
     public UserAdapter(Context mContext, List<UserImg> mUsers, boolean ischat, UserInterface listener){
         this.mUsers = mUsers;
@@ -53,6 +57,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         Glide.with(mContext).load(mUsers.get(position).getPictureUrl()).placeholder(R.drawable.ic_broken_image_primary_24dp).into(holder.profile_image);
 //        }
 
+        viewBinderHelper.bind(holder.swipe_layout_1, user.getId());
       /*  holder.chat.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -118,6 +123,22 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             }
         });
 
+        holder.tvdelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.swipe_layout_1.close(true);
+                Toast.makeText(mContext, "Delete", Toast.LENGTH_SHORT).show();
+         /*       mUsers.remove(position);
+                notifyDataSetChanged();*/
+            }
+        });
+        holder.tvfavourite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.swipe_layout_1.close(true);
+                Toast.makeText(mContext, "Favourite", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 
@@ -131,8 +152,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         public TextView username;
         public ImageView profile_image;
         private ImageView img_on;
-
+        SwipeRevealLayout swipe_layout_1;
         private ImageView img_off;
+        TextView tvdelete, tvfavourite;
         private TextView last_msg;
         //        private RelativeLayout chat;
         ImageView ic_action_fav_remove;
@@ -146,6 +168,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             img_on = itemView.findViewById(R.id.img_on);
             img_off = itemView.findViewById(R.id.img_off);
             last_msg = itemView.findViewById(R.id.last_msg);
+            swipe_layout_1=itemView.findViewById(R.id.swipe_layout_1);
+            tvfavourite=itemView.findViewById(R.id.tvfavourite);
+            tvdelete=itemView.findViewById(R.id.tvdelete);
 //            chat =itemView.findViewById(R.id.chat);
             ic_action_fav_remove =itemView.findViewById(R.id.fev);
         }
