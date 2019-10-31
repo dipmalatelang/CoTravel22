@@ -371,8 +371,8 @@ public class ProfileActivity extends BaseActivity {
         });
     }
 
-    public void showMenu(View view) {
-        PopupMenu popup = new PopupMenu(ProfileActivity.this, view);
+    public void showMenu(View v) {
+        PopupMenu popup = new PopupMenu(ProfileActivity.this, v);
         popup.getMenuInflater().inflate(R.menu.profile_menu, popup.getMenu());
 
         MenuItem bedMenuItem = popup.getMenu().findItem(R.id.one);
@@ -462,8 +462,8 @@ public class ProfileActivity extends BaseActivity {
     }
 
     @OnClick({R.id.textProfile, R.id.iv_edit_profile, R.id.floatingActionButton2, R.id.iv_fav_user, R.id.fab_backFromProfile, R.id.iv_menu})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
+    public void onViewClicked(View v) {
+        switch (v.getId()) {
 
             case R.id.textProfile:
                 startActivity(new Intent(this, EditPhotoActivity.class));
@@ -494,14 +494,18 @@ public class ProfileActivity extends BaseActivity {
 
             case R.id.iv_fav_user:
                 Log.i(TAG, "onViewClicked: " + fav_int);
-                if (tripL.getFavid() == 1) {
-                    removeFav(fuser.getUid(), tripL.getId());
-                    tripL.setFavid(0);
-                    ivFavUser.setImageResource(R.drawable.ic_action_fav_add);
-                } else {
-                    setFav(fuser.getUid(), tripL.getId());
-                    tripL.setFavid(1);
-                    ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
+                try {
+                    if (tripL.getFavid() == 1) {
+                        removeFav(fuser.getUid(), tripL.getId());
+                        tripL.setFavid(0);
+                        ivFavUser.setImageResource(R.drawable.ic_action_fav_add);
+                    } else {
+                        setFav(fuser.getUid(), tripL.getId());
+                        tripL.setFavid(1);
+                        ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
 
                /* if (iv_fav.getTag().toString().equalsIgnoreCase("ic_action_fav_add")) {
@@ -516,7 +520,7 @@ public class ProfileActivity extends BaseActivity {
                 break;
 
              case R.id.iv_menu:
-            showMenu(view);
+            showMenu(v);
             break;
 
 

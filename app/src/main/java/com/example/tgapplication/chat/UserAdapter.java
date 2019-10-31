@@ -29,7 +29,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private Context mContext;
     private List<UserImg> mUsers;
     private boolean ischat;
-    private String uid;
     String TAG ;
 
     public UserAdapter(Context mContext, List<UserImg> mUsers, boolean ischat, UserInterface listener){
@@ -126,7 +125,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         holder.tvdelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: "+uid);
+
                 mUsers.remove(position);
                 notifyDataSetChanged();
                 makeText(mContext, "click on delete", LENGTH_SHORT).show();
