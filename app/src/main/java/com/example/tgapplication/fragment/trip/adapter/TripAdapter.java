@@ -44,6 +44,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
         final TripList tList = mTrip.get(position);
         Log.i("TAGrecyclerview", "onBindViewHolder: "+tList.getImageUrl());
             Glide.with(mContext).load(tList.getImageUrl())
+                    .centerCrop()
                     .placeholder(R.drawable.ic_broken_image_primary_24dp)
                     .into(holder.mImage);
 

@@ -237,8 +237,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                                         Log.d(TAG, "onComplete: "+txt_email+" "+txt_password);
                                         saveLoginDetails(txt_email,txt_password);
 
-
-
 //                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 //                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 //                                        startActivity(intent);

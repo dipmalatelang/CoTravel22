@@ -1,5 +1,6 @@
 package com.example.tgapplication.fragment.account.profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -10,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tgapplication.R;
 import com.example.tgapplication.photo.FB_Adapter;
-import com.example.tgapplication.photo.MyAdapter;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
@@ -31,8 +31,8 @@ public class FacebookImage extends AppCompatActivity {
 
     @BindView(R.id.fb_recyclerview)
     RecyclerView fbRecyclerview;
-    private ArrayList<Images> lstFBImages;
-    private ArrayList<PhotoAlbum> photoAlbums;
+    private ArrayList<String> lstFBImages;
+    private ArrayList<Images> photoAlbums=new ArrayList<>();
     FB_Adapter fb_adapter;
     private FirebaseUser fuser;
 
@@ -65,14 +65,15 @@ public class FacebookImage extends AppCompatActivity {
                                     JSONObject joMain = response.getJSONObject(); //convert GraphResponse response to JSONObject
                                     if (joMain.has("data")) {
                                         JSONArray jaData = joMain.optJSONArray("data"); //find JSONArray from JSONObject
+                                        Log.i(TAG, "onCompleted: "+jaData.length());
                                         for (int i = 0; i < jaData.length(); i++) {//find no. of album using jaData.length()
                                             JSONObject joAlbum = jaData.getJSONObject(i); //convert perticular album into JSONObject
-                                            Log.i(TAG, "onCompleted: "+joAlbum.toString());
-                                            photoAlbums.add(new PhotoAlbum(joAlbum.optString("id"),joAlbum.optString("name")));
+                                            Log.i(TAG, "onCompleted: "+joAlbum.optString("name"));
+                                            GetFacebookImages(joAlbum.optString("id"),joAlbum.optString("name"));
 //                                            Log.i(TAG, "onCompleted: "+joAlbum.optString("id"));
 
                                         }
-                                        GetFacebookImages(photoAlbums); //find Album ID and get All Images from album
+                                       //find Album ID and get All Images from album
                                     }
                                 } else {
                                     Log.d("Test", response.getError().toString());
@@ -120,7 +121,7 @@ public class FacebookImage extends AppCompatActivity {
     }
 
 
-    public void GetFacebookImages(final ArrayList<PhotoAlbum> albumId) {
+    public void GetFacebookImages(String albumId, String name) {
 //        String url = "https://graph.facebook.com/" + "me" + "/"+albumId+"/photos?access_token=" + AccessToken.getCurrentAccessToken() + "&fields=images";
         Bundle parameters = new Bundle();
         parameters.putString("fields", "images");
@@ -138,11 +139,10 @@ public class FacebookImage extends AppCompatActivity {
                         try {
                             if (response.getError() == null) {
 
-
                                 JSONObject joMain = response.getJSONObject();
                                 if (joMain.has("data")) {
                                     JSONArray jaData = joMain.optJSONArray("data");
-                                    Log.i("TAG", "onCompleted: " + jaData.getJSONObject(0).getJSONArray("images").getJSONObject(0).getString("source"));
+//                                    Log.i("TAG", "onCompleted: " + jaData.getJSONObject(0).getJSONArray("images").getJSONObject(0).getString("source"));
                                     lstFBImages = new ArrayList<>();
                                     for (int i = 0; i < jaData.length(); i++)//Get no. of images
                                     {
@@ -150,25 +150,31 @@ public class FacebookImage extends AppCompatActivity {
                                         JSONArray jaImages = joAlbum.getJSONArray("images");
 
                                         if (jaImages.length() > 0) {
-                                            Images objImages = new Images();//Images is custom class with string url field
-                                            objImages.setImage_Url(jaImages.getJSONObject(0).getString("source"));
-                                            lstFBImages.add(objImages);//lstFBImages is Images object array
+                                            lstFBImages.add(jaImages.getJSONObject(0).getString("source"));//lstFBImages is Images object array
                                         }
-
                                     }
-                                    Log.i("TAG", "onCompleted: " + lstFBImages.size());
+                                  /*  Log.i("TAG", "onCompleted: " + lstFBImages.size());
                                     for (int j = 0; j < lstFBImages.size(); j++) {
                                         Log.i("TAG", "onCompleted: " + lstFBImages.get(j).getImage_Url());
-                                    }
+                                    }*/
 
-                                    fb_adapter = new FB_Adapter(FacebookImage.this, fuser.getUid(), lstFBImages);
-
-//adding adapter to recyclerview
-                                    fbRecyclerview.setAdapter(fb_adapter);
+                                    Log.i("TAG", "onCompleted: " +name+" "+lstFBImages.size());
+                                    if(lstFBImages.size()>0)
+                                    photoAlbums.add(new Images(albumId,name,lstFBImages));
 
                                 }
 
+                                fb_adapter = new FB_Adapter(FacebookImage.this, fuser.getUid(), photoAlbums, new FB_Adapter.FbInterface() {
+                                    @Override
+                                    public void proceed(ArrayList<String> image_url) {
+                                        Intent intent=new Intent(FacebookImage.this,DetailFBImage.class);
+                                        intent.putExtra("detailFb", image_url);
+                                        startActivity(intent);
+                                    }
+                                });
 
+//adding adapter to recyclerview
+                                fbRecyclerview.setAdapter(fb_adapter);
                                 //set your adapter here
                             } else {
                                 Log.v("TAG", response.getError().toString());
@@ -183,23 +189,13 @@ public class FacebookImage extends AppCompatActivity {
 
 
     public class Images {
-        String image_Url;
-
-        public String getImage_Url() {
-            return image_Url;
-        }
-
-        public void setImage_Url(String image_Url) {
-            this.image_Url = image_Url;
-        }
-    }
-
-    private class PhotoAlbum {
         String id, name;
+        ArrayList<String> image_Url;
 
-        public PhotoAlbum(String id, String name) {
+        public Images(String id, String name, ArrayList<String> image_Url) {
             this.id = id;
             this.name = name;
+            this.image_Url = image_Url;
         }
 
         public String getId() {
@@ -216,6 +212,14 @@ public class FacebookImage extends AppCompatActivity {
 
         public void setName(String name) {
             this.name = name;
+        }
+
+        public ArrayList<String> getImage_Url() {
+            return image_Url;
+        }
+
+        public void setImage_Url(ArrayList<String> image_Url) {
+            this.image_Url = image_Url;
         }
     }
 }
