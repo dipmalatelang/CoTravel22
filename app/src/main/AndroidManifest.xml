@@ -49,8 +49,9 @@
             android:name=".fragment.trip.AddTripActivity"
             android:parentActivityName=".MainActivity"
             android:theme="@style/noToolbar"/>
+        
 
-<!--        <activity android:name=".trips.ProfileVisitorActivity" />-->
+
         <activity
             android:name=".chat.MessageActivity"
             android:parentActivityName=".MainActivity"

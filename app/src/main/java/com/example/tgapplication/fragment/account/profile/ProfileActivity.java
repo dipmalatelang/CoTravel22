@@ -156,6 +156,8 @@ public class ProfileActivity extends BaseActivity {
             profileId = tripL.getId();
             getAllImages(profileId);
             getAllTrips(profileId);
+            tripL.getFavid();
+            Log.d(TAG, "onCreategetfavid: "+tripL.getName());
             if (tripL.getFavid() == 1) {
                 ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
             } else {

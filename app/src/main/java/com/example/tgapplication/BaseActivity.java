@@ -219,7 +219,9 @@ public abstract class BaseActivity extends AppCompatActivity {
                 }
         );
     }*/
-
+   public void snackBar(String msg, View v) {
+       Snackbar.make(v, msg, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+   }
 
     public void snackBar(View constrainlayout, String s) {
         Snackbar snackbar = Snackbar.make(constrainlayout, s, Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {

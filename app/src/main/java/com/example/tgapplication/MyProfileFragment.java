@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -59,7 +60,7 @@ public class MyProfileFragment extends BaseFragment {
     View view5;
     private SharedPreferences sharedPreferences;
     String name, imageUrl, age;
-
+    ConstraintLayout container;
     //
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -122,6 +123,8 @@ public class MyProfileFragment extends BaseFragment {
             case R.id.tv_Change_Preferences:
                 Intent mIntent = new Intent(getActivity(), ChangePrefActivity.class);
                 startActivity(mIntent);
+
+
 //              Toast.makeText(getActivity(), "Preferrences", Toast.LENGTH_SHORT).show();
 
                 break;

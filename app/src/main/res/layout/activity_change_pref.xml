@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:backgroundTint="#80000000"
     android:backgroundTintMode="src_over"
+    android:id="@+id/relativelayout"
     android:background="@drawable/img2">
 
     <LinearLayout

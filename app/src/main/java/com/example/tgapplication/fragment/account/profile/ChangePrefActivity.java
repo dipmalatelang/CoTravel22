@@ -1,19 +1,23 @@
 package com.example.tgapplication.fragment.account.profile;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
 import com.example.tgapplication.BaseActivity;
+import com.example.tgapplication.MyProfileFragment;
 import com.example.tgapplication.R;
 import com.example.tgapplication.login.RegisterActivity;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.lang.reflect.Field;
@@ -23,6 +27,7 @@ import java.util.Arrays;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.internal.Utils;
 
 public class ChangePrefActivity extends BaseActivity {
 
@@ -35,12 +40,15 @@ public class ChangePrefActivity extends BaseActivity {
     Spinner spAgeTo;
     ArrayAdapter<String> adapter_age_from, adapter_age_to;
     ArrayList<String> array_age;
+    RelativeLayout relativeLayout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_pref);
         ButterKnife.bind(this);
+        relativeLayout = findViewById(R.id.relativelayout);
+
 
         setPopup();
         setSpinner();
@@ -140,9 +148,22 @@ public class ChangePrefActivity extends BaseActivity {
                 range_age.add(str_age_to);
                 updateRegister(look, range_age);
                 updateUI(mAuth.getCurrentUser());
-                break;
+                snackBar(relativeLayout, " Your Preferences Succssfully Changed..!");
+//                finishActivity();
+                
+//                Intent showContent = new Intent(getApplication(),
+//                        MyProfileFragment.class);
+//                startActivity(showContent);
+                Intent mIntent = new Intent(this, MyProfileFragment.class);
+                startActivity(mIntent);
+            break;
 
 
         }
     }
+
+    private void finishActivity() {
+    }
+
+
 }

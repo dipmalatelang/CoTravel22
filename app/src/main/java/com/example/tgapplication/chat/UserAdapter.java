@@ -6,7 +6,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +23,8 @@ import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.fragment.visitor.UserImg;
 
+
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.widget.Toast.*;
@@ -29,13 +34,19 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private Context mContext;
     private List<UserImg> mUsers;
     private boolean ischat;
-    String TAG ;
+
+
+
 
     public UserAdapter(Context mContext, List<UserImg> mUsers, boolean ischat, UserInterface listener){
         this.mUsers = mUsers;
         this.mContext = mContext;
         this.ischat = ischat;
         this.listener=listener;
+    }
+
+    public static void remove(int position) {
+
     }
 
     @NonNull
@@ -122,6 +133,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                 mContext.startActivity(intent);
             }
         });
+
+
+
+
+
+
         holder.tvdelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
