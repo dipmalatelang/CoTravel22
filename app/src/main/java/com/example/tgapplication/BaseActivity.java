@@ -12,10 +12,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.tgapplication.chat.Chat;
 import com.example.tgapplication.fragment.trip.module.PlanTrip;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
@@ -48,10 +50,13 @@ public abstract class BaseActivity extends AppCompatActivity {
     public long now = System.currentTimeMillis();
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
+    String theLastMessage;
+    Boolean textType;
     //Global Method and Variable
 //    String fUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
     public DatabaseReference PicturesInstance = FirebaseDatabase.getInstance().getReference("Pictures");
+    public DatabaseReference TrashInstance = FirebaseDatabase.getInstance().getReference("Trash");
     public DatabaseReference ChatlistInstance = FirebaseDatabase.getInstance().getReference("Chatlist");
     public DatabaseReference ChatsInstance = FirebaseDatabase.getInstance().getReference("Chats");
     public DatabaseReference FavoritesInstance = FirebaseDatabase.getInstance().getReference("Favorites");
@@ -267,6 +272,16 @@ public abstract class BaseActivity extends AppCompatActivity {
         FavoritesInstance.child(uid).child(id).removeValue();
     }
 
+    public void removeTrash(String uid, String id)
+    {
+        TrashInstance.child(uid).child(id).removeValue();
+    }
+
+    public void setTrash(String uid, String id)
+    {
+        TrashInstance.child(uid).child(id).child("id").setValue(id);
+    }
+
     public void updateUI(FirebaseUser account) {
         if (account != null) {
             startActivity(new Intent(this, MainActivity.class));
@@ -309,6 +324,60 @@ public abstract class BaseActivity extends AppCompatActivity {
                 .child(uid)
                 .child(id).child("id").setValue(id);
     }
+
+    //check for last message
+    public void checkForLastMsg(Context mContext, final String userid, final TextView last_msg) {
+
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        ChatsInstance.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                theLastMessage = "default";
+                textType = true;
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Chat chat = snapshot.getValue(Chat.class);
+                    Log.i("Snap", " " + snapshot);
+                    if (firebaseUser != null && chat != null) {
+                        if (chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userid) ||
+                                chat.getReceiver().equals(userid) && chat.getSender().equals(firebaseUser.getUid())) {
+                            theLastMessage = chat.getMessage();
+                        }
+                    }
+
+                    if (chat.getSender().equals(userid) && !chat.isIsseen()) {
+                        Log.i("TAG", "onDataChange: HighLight " + userid + " " + chat.isIsseen());
+                        textType = chat.isIsseen();
+                    }
+
+                }
+
+                if (!textType)
+                    last_msg.setTextColor(mContext.getResources().getColor(R.color.black));
+                else
+                    last_msg.setTextColor(mContext.getResources().getColor(R.color.gray));
+
+                switch (theLastMessage) {
+                    case "default":
+                        last_msg.setText("No Message");
+                        break;
+
+                    default:
+                        last_msg.setText(theLastMessage);
+                        break;
+                }
+
+//                theLastMessage = "default";
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 
     public boolean showOrHidePwd(MotionEvent event, EditText input_password) {
         final int DRAWABLE_RIGHT = 2;
