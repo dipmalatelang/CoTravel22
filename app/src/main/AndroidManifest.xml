@@ -30,6 +30,8 @@
             android:name=".fragment.trip.DetailActivity"
             android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />-->
+
+        <activity android:name=".fragment.account.profile.DetailFBImage"/>
         <activity
             android:name=".fragment.trip.FilterTripActivity"
             android:parentActivityName=".MainActivity"
