@@ -74,8 +74,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
                             Upload upload = ds.getValue(Upload.class);
 //                    if (Objects.requireNonNull(upload).getType() == 1) {
 //                        Log.i(TAG, "onDataChange Pictures: " + upload.getUrl());
+                            if(upload.getType()==1)
                             profilePhotoDetails(upload.getUrl());
-
 //                    }
                         }
 
@@ -95,6 +95,14 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
 
             }
         });
+    }
+
+    private void profilePhotoDetails(String imageUrl) {
+        Log.i(TAG, "profilePhotoDetails: "+imageUrl);
+        sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString("ImageUrl", imageUrl);
+        editor.apply();
     }
 
 

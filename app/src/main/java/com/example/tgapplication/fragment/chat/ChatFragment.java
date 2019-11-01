@@ -32,15 +32,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import butterknife.BindView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,7 +53,7 @@ public class ChatFragment extends BaseFragment {
     List<UserImg> mUsers = new ArrayList<>();
 
     String pictureUrl = "";
-
+    int fav,trash;
     FirebaseUser fuser;
     FloatingActionButton floatingActionButton;
 
@@ -145,6 +142,33 @@ public class ChatFragment extends BaseFragment {
                         checkForLastMsg(mContext, userid,last_msg);
                     }
 
+                    @Override
+                    public void addToFav(String userid, int position) {
+                        setFav(fuser.getUid(), userid);
+                        mUsers.get(position).setFav(1);
+                        userAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void addToTrash(String userid, int position) {
+                        setTrash(fuser.getUid(),userid);
+                        mUsers.remove(position);
+                        userAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void restoreFromTrash(String userid, int position) {
+                        removeTrash(fuser.getUid(),userid);
+                        mUsers.remove(position);
+                        userAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void removeFromFav(String userid) {
+
+                        removeFav(fuser.getUid(),userid);
+                    }
+
                 });
                 recyclerView.setAdapter(userAdapter);
 
@@ -162,36 +186,95 @@ public class ChatFragment extends BaseFragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-               mUsers.clear();
+                mUsers.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     User user = snapshot.getValue(User.class);
                     for (Chatlist chatlist : usersList) {
                         if (user.getId().equals(chatlist.getId())) {
 
-                            PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            TrashInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                    if (!dataSnapshot.hasChild(user.getId())) {
 
-                                        Upload upload = ds.getValue(Upload.class);
+                                        FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot snapshot) {
 
-                                        if (Objects.requireNonNull(upload).getType() == 1) {
-                                            pictureUrl = upload.getUrl();
-                                        }
+                                                if (snapshot.hasChild(user.getId())) {
+                                                    // run some code
+                                                    fav = 1;
+                                                } else {
+                                                    fav = 0;
+                                                }
+
+                                        PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                pictureUrl="";
+                                                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+
+                                                    Upload upload = ds.getValue(Upload.class);
+
+                                                    if (Objects.requireNonNull(upload).getType() == 1) {
+                                                        pictureUrl = upload.getUrl();
+                                                    }
+                                                }
+
+                                                        Log.i("TAG", "onDataChange: Picture "+pictureUrl);
+                                                        mUsers.add(new UserImg(user, pictureUrl, fav));
+
+                                                        Log.i("TAG", "onDataChange: chat" + mUsers.size());
+                                                        userAdapter = new UserAdapter(getContext(), mUsers, true, new UserAdapter.UserInterface() {
+                                                            @Override
+                                                            public void lastMessage(Context mContext, String userid, TextView last_msg) {
+                                                                checkForLastMsg(mContext, userid, last_msg);
+                                                            }
+
+                                                            @Override
+                                                            public void addToFav(String userid, int position) {
+                                                                setFav(fuser.getUid(), userid);
+                                                                mUsers.get(position).setFav(1);
+                                                                userAdapter.notifyDataSetChanged();
+                                                            }
+
+                                                            @Override
+                                                            public void addToTrash(String userid, int position) {
+                                                                setTrash(fuser.getUid(), userid);
+                                                                mUsers.remove(position);
+                                                                userAdapter.notifyDataSetChanged();
+                                                            }
+
+                                                            @Override
+                                                            public void restoreFromTrash(String userid, int position) {
+                                                                removeTrash(fuser.getUid(),userid);
+                                                                mUsers.remove(position);
+                                                                userAdapter.notifyDataSetChanged();
+                                                            }
+
+                                                            @Override
+                                                            public void removeFromFav(String userid) {
+                                                                removeFav(fuser.getUid(), userid);
+                                                            }
+
+                                                        });
+                                                        recyclerView.setAdapter(userAdapter);
+
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
                                     }
-
-                                    mUsers.add(new UserImg(user, pictureUrl));
-
-                                    Log.i("TAG", "onDataChange: chat" + mUsers.size());
-                                    userAdapter = new UserAdapter(getContext(), mUsers, true, new UserAdapter.UserInterface() {
-                                        @Override
-                                        public void lastMessage(Context mContext, String userid, TextView last_msg) {
-                                            checkForLastMsg(mContext, userid, last_msg);
-                                        }
-
-                                    });
-                                    recyclerView.setAdapter(userAdapter);
-
                                 }
 
                                 @Override
@@ -199,11 +282,12 @@ public class ChatFragment extends BaseFragment {
 
                                 }
                             });
+
                         }
                     }
+
+
                 }
-
-
             }
 
             @Override

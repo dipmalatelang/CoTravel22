@@ -46,7 +46,7 @@ public class MessageActivity extends BaseActivity {
 
     CircleImageView profile_image;
     TextView username;
-
+int fav;
     FirebaseUser fuser;
 
     ImageButton btn_send;
@@ -135,9 +135,26 @@ public class MessageActivity extends BaseActivity {
 //                        Log.i("TAG", "onDataChangeMy: "+pictureUrl);
                         //and this
                         Glide.with(getApplicationContext()).load(pictureUrl).placeholder(R.mipmap.ic_launcher).into(profile_image);
+                        FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot snapshot) {
 
-                        msgArray.add(new UserImg(user, pictureUrl));
+                                if (snapshot.hasChild(user.getId())) {
+                                    // run some code
+                                    fav = 1;
+                                } else {
+                                    fav = 0;
+                                }
+                        msgArray.add(new UserImg(user, pictureUrl,fav));
                         readMesagges(fuser.getUid(), userid, pictureUrl);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+
+                });
                     }
 
                     @Override

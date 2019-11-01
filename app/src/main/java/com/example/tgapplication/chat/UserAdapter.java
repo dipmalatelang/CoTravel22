@@ -28,12 +28,21 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private Context mContext;
     private List<UserImg> mUsers;
     private boolean ischat;
+    private boolean istrash;
     private final ViewBinderHelper viewBinderHelper = new ViewBinderHelper();
 
     public UserAdapter(Context mContext, List<UserImg> mUsers, boolean ischat, UserInterface listener){
         this.mUsers = mUsers;
         this.mContext = mContext;
         this.ischat = ischat;
+        this.listener=listener;
+    }
+
+    public UserAdapter(Context mContext, List<UserImg> mUsers, boolean ischat, boolean istrash, UserInterface listener){
+        this.mUsers = mUsers;
+        this.mContext = mContext;
+        this.ischat = ischat;
+        this.istrash=istrash;
         this.listener=listener;
     }
 
@@ -54,6 +63,15 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             holder.profile_image.setImageResource(R.mipmap.ic_launcher);
         } else {*/
 
+        Log.i("TAG", "onBindViewHolder: Fav "+mUsers.get(position).getFav());
+        if(mUsers.get(position).getFav()==1)
+        {
+            holder.ic_action_fav_remove.setVisibility(View.VISIBLE);
+            holder.tvfavourite.setVisibility(View.GONE);
+        }
+        else {
+            holder.tvfavourite.setVisibility(View.VISIBLE);
+        }
         Glide.with(mContext).load(mUsers.get(position).getPictureUrl()).placeholder(R.drawable.ic_broken_image_primary_24dp).into(holder.profile_image);
 //        }
 
@@ -93,9 +111,18 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
 //      listener.highlightMsg(user.getId(),holder.last_msg);
 
+        if(istrash)
+        {
+            holder.tvrestore.setVisibility(View.VISIBLE);
+            holder.tvdelete.setVisibility(View.GONE);
+        }
+        else {
+            holder.tvrestore.setVisibility(View.GONE);
+        }
 
         if (ischat){
             listener.lastMessage(mContext,user.getId(), holder.last_msg);
+
         } else {
             holder.last_msg.setVisibility(View.GONE);
         }
@@ -123,10 +150,19 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             }
         });
 
+        holder.tvrestore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.swipe_layout_1.close(true);
+                listener.restoreFromTrash(user.getId(),position);
+                Toast.makeText(mContext, "Restore", Toast.LENGTH_SHORT).show();
+            }
+        });
         holder.tvdelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 holder.swipe_layout_1.close(true);
+                listener.addToTrash(user.getId(), position);
                 Toast.makeText(mContext, "Delete", Toast.LENGTH_SHORT).show();
          /*       mUsers.remove(position);
                 notifyDataSetChanged();*/
@@ -136,7 +172,18 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
                 holder.swipe_layout_1.close(true);
+                listener.addToFav(user.getId(),position);
                 Toast.makeText(mContext, "Favourite", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        holder.ic_action_fav_remove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                holder.ic_action_fav_remove.setVisibility(View.GONE);
+                listener.removeFromFav(user.getId());
             }
         });
     }
@@ -154,7 +201,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         private ImageView img_on;
         SwipeRevealLayout swipe_layout_1;
         private ImageView img_off;
-        TextView tvdelete, tvfavourite;
+        TextView tvdelete, tvfavourite, tvrestore;
         private TextView last_msg;
                 private RelativeLayout chat;
         ImageView ic_action_fav_remove;
@@ -171,6 +218,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             swipe_layout_1=itemView.findViewById(R.id.swipe_layout_1);
             tvfavourite=itemView.findViewById(R.id.tvfavourite);
             tvdelete=itemView.findViewById(R.id.tvdelete);
+            tvrestore=itemView.findViewById(R.id.tvrestore);
             chat =itemView.findViewById(R.id.chat);
             ic_action_fav_remove =itemView.findViewById(R.id.fev);
         }
@@ -180,6 +228,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     public interface UserInterface
     {
         void lastMessage(Context mContext, String userid, TextView last_msg);
+        void addToFav(String userid, int position);
+        void addToTrash(String userid, int position);
+        void restoreFromTrash(String userid, int position);
+        void removeFromFav(String userid);
 //        void chatFavorite(String id );
     }
 

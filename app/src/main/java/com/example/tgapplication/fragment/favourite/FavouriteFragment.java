@@ -158,6 +158,17 @@ public class FavouriteFragment extends BaseFragment {
                                     User user = dataSnapshot.getValue(User.class);
                                     // HERE WHAT CORRESPONDS TO JOIN
 //                                    if(Objects.requireNonNull(user).getAccount_type()==1){
+
+                                    FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot snapshot) {
+
+                                            if (snapshot.hasChild(user.getId())) {
+                                                // run some code
+                                                fav = 1;
+                                            } else {
+                                                fav = 0;
+                                            }
                                     PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -172,7 +183,8 @@ public class FavouriteFragment extends BaseFragment {
                                             }
 
                                             Log.i("TAG", "onDataChangeMy: " + user.getId() + " == " + pictureUrl);
-                                            myFavArray.add(new UserImg(user, pictureUrl));
+
+                                            myFavArray.add(new UserImg(user, pictureUrl,fav));
 
 
 //                                                                }
@@ -212,6 +224,14 @@ public class FavouriteFragment extends BaseFragment {
 
                                 @Override
                                 public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
 
                                 }
                             });
@@ -304,7 +324,7 @@ public class FavouriteFragment extends BaseFragment {
                                                                     }
                                                                     Log.i("TripFromTo", "" + from_to_dates.size());
                                                                     Log.i("Tag", "onDataChange: " + fav);
-                                                                    tripList = findClosestDate(dates, new UserImg(user,pictureUrl), fav);
+                                                                    tripList = findClosestDate(dates, new UserImg(user,pictureUrl,fav));
 
                                                                 }
 //                                                tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), favArray, tripList);
