@@ -27,6 +27,7 @@ public class FB_Adapter extends RecyclerView.Adapter<FB_Adapter.ImageViewHolder>
     private List<FacebookImage.Images> mUploads;
     private String TAG = "AdapterClass";
     private String uid;
+    int count=0;
     private StorageReference storageReference;
     String previousValue="";
 
@@ -50,15 +51,26 @@ public class FB_Adapter extends RecyclerView.Adapter<FB_Adapter.ImageViewHolder>
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
 
+        count=0;
+
 //        holder.textViewName.setText(uploadCurrent.getName());
 //          holder.below_opt.setVisibility(View.VISIBLE);
+
+        for(int j=0;j<mUploads.get(position).getImage_Url().size();j++)
+        {
+            if(mUploads.get(position).getImage_Url().get(j).getStatus()==1)
+            {
+                count++;
+            }
+        }
+
         Log.i(TAG, "onBindViewHolder: "+mUploads.get(position).getName()+" - "+mUploads.get(position).getImage_Url().size());
             holder.imageView.setAdjustViewBounds(true);
 //          holder.imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             holder.imageView.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT));
 
             holder.txt_title.setText(mUploads.get(position).getName());
-            String body="0 out of "+mUploads.get(position).getImage_Url().size()+" added";
+            String body=count+" out of "+mUploads.get(position).getImage_Url().size()+" added";
             holder.txt_body.setText(body);
 
             holder.cl_image.setOnClickListener(new View.OnClickListener() {
