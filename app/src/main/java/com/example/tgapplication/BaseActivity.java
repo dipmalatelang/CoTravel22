@@ -307,13 +307,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         editor.apply();
     }
 
-    public void profilePhotoDetails(String imageUrl) {
-        sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.putString("ImageUrl", imageUrl);
-        editor.apply();
-    }
-
     public void active_hide_delete_Profile(String id, int account_type) {
         UsersInstance.child(id).child("account_type").setValue(account_type);
     }

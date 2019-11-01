@@ -80,6 +80,7 @@ public class MyProfileFragment extends BaseFragment {
 
         }
 
+        Log.i("TAG", "onCreateView: "+imageUrl);
         setProfileValue(name, age, imageUrl);
 
         return view;
