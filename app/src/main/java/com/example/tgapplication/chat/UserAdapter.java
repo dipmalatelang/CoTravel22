@@ -2,12 +2,12 @@ package com.example.tgapplication.chat;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -113,7 +113,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             holder.img_off.setVisibility(View.GONE);
         }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, MessageActivity.class);
@@ -156,7 +156,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         private ImageView img_off;
         TextView tvdelete, tvfavourite;
         private TextView last_msg;
-        //        private RelativeLayout chat;
+                private RelativeLayout chat;
         ImageView ic_action_fav_remove;
 
 
@@ -171,7 +171,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             swipe_layout_1=itemView.findViewById(R.id.swipe_layout_1);
             tvfavourite=itemView.findViewById(R.id.tvfavourite);
             tvdelete=itemView.findViewById(R.id.tvdelete);
-//            chat =itemView.findViewById(R.id.chat);
+            chat =itemView.findViewById(R.id.chat);
             ic_action_fav_remove =itemView.findViewById(R.id.fev);
         }
     }

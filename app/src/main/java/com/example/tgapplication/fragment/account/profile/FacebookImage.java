@@ -1,8 +1,8 @@
 package com.example.tgapplication.fragment.account.profile;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,7 +27,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -37,6 +36,8 @@ public class FacebookImage extends BaseActivity {
 
     @BindView(R.id.fb_recyclerview)
     RecyclerView fbRecyclerview;
+    @BindView(R.id.detail_recyclerview)
+    RecyclerView detailRecyclerview;
     private ArrayList<FbImage> lstFBImages;
     private ArrayList<Images> photoAlbums = new ArrayList<>();
     FB_Adapter fb_adapter;
@@ -56,9 +57,10 @@ public class FacebookImage extends BaseActivity {
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(this, 3);
         fbRecyclerview.setLayoutManager(mGridLayoutManager);
 
-        getRemoteFbUrl();
+        GridLayoutManager mGridLayoutManager1 = new GridLayoutManager(this, 3);
+        detailRecyclerview.setLayoutManager(mGridLayoutManager1);
 
-//     getAlbum();
+        getAlbum();
 
     }
 
@@ -135,7 +137,7 @@ public class FacebookImage extends BaseActivity {
 
                                         if (jaImages.length() > 0) {
 
-                                            lstFBImages.add(new FbImage(jaImages.getJSONObject(0).getString("source"),0));//lstFBImages is Images object array
+                                            lstFBImages.add(new FbImage(jaImages.getJSONObject(0).getString("source"), 0));//lstFBImages is Images object array
                                         }
                                     }
                                   /*  Log.i("TAG", "onCompleted: " + lstFBImages.size());
@@ -144,19 +146,57 @@ public class FacebookImage extends BaseActivity {
                                     }*/
 
                                     Log.i("TAG", "onCompleted: " + name + " " + lstFBImages.size());
-                                    if (lstFBImages.size() > 0)
-                                        photoAlbums.add(new Images(albumId, name, lstFBImages));
+                                    if (lstFBImages.size() > 0) {
+                                        PicturesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                                    Upload upload = ds.getValue(Upload.class);
+                                                    Log.i(TAG, "onDataChange: " + upload.getUrl());
+                                                    if (upload.getName().equalsIgnoreCase("FB_Image")) {
+                                                        for (int k = 0; k < lstFBImages.size(); k++) {
+                                                            if (upload.getUrl().equals(lstFBImages.get(k).getUrl())) {
+                                                                Log.i(TAG, "onDataChange working: " + 1);
+                                                                lstFBImages.get(k).setStatus(1);
+                                                            }
+                                                        }
+
+                                                    }
+
+                                                }
+                                                photoAlbums.add(new Images(albumId, name, lstFBImages));
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                            }
+                                        });
+
+                                    }
+
 
                                 }
 
                                 fb_adapter = new FB_Adapter(FacebookImage.this, fuser.getUid(), photoAlbums, new FB_Adapter.FbInterface() {
                                     @Override
                                     public void proceed(ArrayList<FbImage> image_url) {
-                                        Intent intent = new Intent(FacebookImage.this, DetailFBImage.class);
-                                        Bundle args = new Bundle();
-                                        args.putSerializable("bundle",(Serializable)image_url);
-                                        intent.putExtra("detailFb",args);
-                                        startActivity(intent);
+                                        fbRecyclerview.setVisibility(View.GONE);
+                                        detailRecyclerview.setVisibility(View.VISIBLE);
+//                                        Intent intent = new Intent(FacebookImage.this, DetailFBImage.class);
+//                                        intent.putExtra("detailFb", new Gson().toJson(image_url));
+//                                        startActivity(intent);
+
+                                        //creating adapter
+                                        DetailFBAdapter fbadapter = new DetailFBAdapter(FacebookImage.this, image_url, new DetailFBAdapter.DetailFbInterface() {
+                                            @Override
+                                            public void fetchFbImage(String imgUrl) {
+                                                String uploadId = PicturesInstance.child(fuser.getUid()).push().getKey();
+                                                Upload upload = new Upload(uploadId,"FB_Image", imgUrl,2);
+                                                PicturesInstance.child(fuser.getUid()).child(uploadId).setValue(upload);
+                                            }
+                                        });
+
+                                        detailRecyclerview.setAdapter(fbadapter);
                                     }
                                 });
 
@@ -173,15 +213,6 @@ public class FacebookImage extends BaseActivity {
                     }
                 }).executeAsync();
     }
-
-    int valueInt;
-    public int getRemoteFbUrl(){
-
-
-        Toast.makeText(this, "Hi "+valueInt, Toast.LENGTH_SHORT).show();
-        return valueInt;
-    }
-
 
     public class Images {
         String id, name;
@@ -218,7 +249,7 @@ public class FacebookImage extends BaseActivity {
         }
     }
 
-    public class FbImage implements Serializable {
+    public class FbImage {
         String url;
         int status;
 
