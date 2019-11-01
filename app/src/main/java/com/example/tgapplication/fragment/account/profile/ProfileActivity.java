@@ -181,7 +181,7 @@ public class ProfileActivity extends BaseActivity {
             getAllImages(profileId);
             getAllTrips(profileId);
 
-         /*   if (userL.getUser().getFavid() == 1) {
+           /* if (userL.getUser().getFavid() == 1) {
                 ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
             } else {
                 ivFavUser.setImageResource(R.drawable.ic_action_fav_add);
@@ -494,15 +494,19 @@ public class ProfileActivity extends BaseActivity {
 
             case R.id.iv_fav_user:
                 Log.i(TAG, "onViewClicked: " + fav_int);
-                if (tripL.getFavid() == 1) {
-                    removeFav(fuser.getUid(), tripL.getId());
-                    tripL.setFavid(0);
-                    ivFavUser.setImageResource(R.drawable.ic_action_fav_add);
-                } else {
-                    setFav(fuser.getUid(), tripL.getId());
-                    tripL.setFavid(1);
-                    ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
+                if(tripL!=null)
+                {
+                    if (tripL.getFavid() == 1) {
+                        removeFav(fuser.getUid(), tripL.getId());
+                        tripL.setFavid(0);
+                        ivFavUser.setImageResource(R.drawable.ic_action_fav_add);
+                    } else {
+                        setFav(fuser.getUid(), tripL.getId());
+                        tripL.setFavid(1);
+                        ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
+                    }
                 }
+
 
                /* if (iv_fav.getTag().toString().equalsIgnoreCase("ic_action_fav_add")) {
                     setFav(fuser.getUid(), tripL.getId());

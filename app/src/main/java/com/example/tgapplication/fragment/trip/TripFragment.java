@@ -426,8 +426,7 @@ public class TripFragment extends BaseFragment {
                             if (!user.getId().equalsIgnoreCase(fuser.getUid())) {
 //                                getFav(fuser.getUid(),user.getId());
                                 // HERE WHAT CORRESPONDS TO JOIN
-                                FavoritesInstance
-                                        .child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot snapshot) {
 

@@ -25,8 +25,8 @@ import java.util.List;
 public class FB_Adapter extends RecyclerView.Adapter<FB_Adapter.ImageViewHolder> {
     private Context mcontext;
     private List<FacebookImage.Images> mUploads;
-    String TAG = "AdapterClass";
-    String uid;
+    private String TAG = "AdapterClass";
+    private String uid;
     private StorageReference storageReference;
     String previousValue="";
 
@@ -58,7 +58,8 @@ public class FB_Adapter extends RecyclerView.Adapter<FB_Adapter.ImageViewHolder>
             holder.imageView.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT));
 
             holder.txt_title.setText(mUploads.get(position).getName());
-            holder.txt_body.setText(String.valueOf(mUploads.get(position).getImage_Url().size()));
+            String body="0 out of "+mUploads.get(position).getImage_Url().size()+" added";
+            holder.txt_body.setText(body);
 
             holder.cl_image.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -111,7 +112,7 @@ public class FB_Adapter extends RecyclerView.Adapter<FB_Adapter.ImageViewHolder>
     FbInterface fbInterface;
 
     public interface FbInterface{
-        void proceed(ArrayList<String> image_url);
+        void proceed(ArrayList<FacebookImage.FbImage> image_url);
     }
 
 }

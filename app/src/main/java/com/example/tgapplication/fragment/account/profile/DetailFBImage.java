@@ -1,5 +1,6 @@
 package com.example.tgapplication.fragment.account.profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -25,7 +26,7 @@ public class DetailFBImage extends BaseActivity {
     RecyclerView detailRecyclerview;
     private FirebaseUser fuser;
 
-    ArrayList<String> detailUploads=new ArrayList<>();
+    ArrayList<FacebookImage.FbImage> detailUploads=new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,7 +34,10 @@ public class DetailFBImage extends BaseActivity {
         setContentView(R.layout.activity_detail_fb_image);
         ButterKnife.bind(this);
 
-        detailUploads=getIntent().getExtras().getStringArrayList("detailFb");
+        Intent intent = getIntent();
+        Bundle args = intent.getBundleExtra("bundle");
+        detailUploads = (ArrayList<FacebookImage.FbImage>) args.getSerializable("detailFb");
+
 
         Log.i(TAG, "onCreate: "+detailUploads.size());
         fuser = FirebaseAuth.getInstance().getCurrentUser();
@@ -43,7 +47,14 @@ public class DetailFBImage extends BaseActivity {
         detailRecyclerview.setLayoutManager(mGridLayoutManager);
 
         //creating adapter
-        DetailFBAdapter fbadapter = new DetailFBAdapter(DetailFBImage.this, detailUploads);
+        DetailFBAdapter fbadapter = new DetailFBAdapter(DetailFBImage.this, detailUploads, new DetailFBAdapter.DetailFbInterface() {
+            @Override
+            public void fetchFbImage(String imgUrl) {
+                String uploadId = PicturesInstance.child(fuser.getUid()).push().getKey();
+                Upload upload = new Upload(uploadId,"FB_Image", imgUrl,2);
+                PicturesInstance.child(fuser.getUid()).child(uploadId).setValue(upload);
+            }
+        });
 
         detailRecyclerview.setAdapter(fbadapter);
 
