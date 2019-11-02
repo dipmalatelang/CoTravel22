@@ -281,6 +281,7 @@ public class EditPhotoActivity extends BaseActivity {
                 break;
 
             case R.id.facebook:
+
                 startActivity(new Intent(this,FacebookImage.class));
 //                Toast.makeText(this, "Facebook", Toast.LENGTH_SHORT).show();
                 break;

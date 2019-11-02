@@ -21,6 +21,7 @@ import com.example.tgapplication.chat.Chat;
 import com.example.tgapplication.fragment.trip.module.PlanTrip;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
+import com.example.tgapplication.fragment.visitor.UserImg;
 import com.example.tgapplication.photo.Upload;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -85,9 +86,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     }*/
 
 
-    public List<TripList> findAllMembers(User user, int fav_id, String profilePhoto) {
+    public List<TripList> findAllMembers(UserImg userImg) {
+        User user=userImg.getUser();
         int visit_id = getVisit(visitArray, user.getId());
-        TripList tripListClass = new TripList(user.getId(), user.getUsername(), profilePhoto, user.getAge(), user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), tripNote, fav_id, visit_id);
+        TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getAge(), user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), tripNote, userImg.getFav(), visit_id);
         tripList.add(tripListClass);
 
         return tripList;
