@@ -64,7 +64,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                Log.i(TAG, "onDataChange User: " + Objects.requireNonNull(user).getName() + " " + user.getAge() + " " + user.getId());
+                Log.i(TAG, "onDataChangeUser: " + Objects.requireNonNull(user).getName() + " " + user.getAge() + " " + user.getId());
                 PicturesInstance.child(fUser.getUid()).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

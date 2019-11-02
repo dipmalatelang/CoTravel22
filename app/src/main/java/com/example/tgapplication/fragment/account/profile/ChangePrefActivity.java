@@ -10,6 +10,7 @@ import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -149,13 +150,13 @@ public class ChangePrefActivity extends BaseActivity {
                 updateRegister(look, range_age);
                 updateUI(mAuth.getCurrentUser());
                 snackBar(relativeLayout, " Your Preferences Succssfully Changed..!");
-//                finishActivity();
+                Toast.makeText(this, "Your Preferences Succssfully Changed..!", Toast.LENGTH_SHORT).show();
+                finishActivity();
                 
 //                Intent showContent = new Intent(getApplication(),
 //                        MyProfileFragment.class);
 //                startActivity(showContent);
-                Intent mIntent = new Intent(this, MyProfileFragment.class);
-                startActivity(mIntent);
+
             break;
 
 

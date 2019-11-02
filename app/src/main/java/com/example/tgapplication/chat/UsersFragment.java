@@ -28,11 +28,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import com.hudomju.swipe.OnItemClickListener;
-import com.hudomju.swipe.SwipeToDismissTouchListener;
-
-import com.hudomju.swipe.SwipeableItemClickListener;
-import com.hudomju.swipe.adapter.RecyclerViewAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,64 +80,8 @@ public class UsersFragment extends BaseFragment {
         });
 
 
-        final SwipeToDismissTouchListener<RecyclerViewAdapter> touchListener =
-                new SwipeToDismissTouchListener<>(
-                        new RecyclerViewAdapter(recyclerView),
-                        new SwipeToDismissTouchListener.DismissCallbacks<RecyclerViewAdapter>() {
-                            @Override
-                            public boolean canDismiss(int position) {
-                                return true;
-                            }
 
 
-
-                            @Override
-                            public void onDismiss(RecyclerViewAdapter view, int position) {
-                                UserAdapter.remove(position);
-                                userAdapter.notifyItemRemoved(position);
-                                userAdapter.notifyItemRangeChanged(position ,userAdapter.getItemCount());
-
-                            }
-                        });
-// Dismiss the item automatically after 3 seconds
-//        touchListener.setDismissDelay(3000);
-//TextView tvdelete,tvfavourite;
-//
-//        tvfavourite = view.findViewById(R.id.tvfavourite);
-//        tvdelete =view.findViewById(R.id.tvdelete);
-//        recyclerView.setOnTouchListener(touchListener);
-//        recyclerView.setOnScrollListener((RecyclerView.OnScrollListener)touchListener.makeScrollListener());
-//        recyclerView.addOnItemTouchListener(new SwipeableItemClickListener(this, new OnItemClickListener() {
-//            @Override
-//            public void onItemClick(View view, int position) {
-//
-//            }
-//        }));
-
-
-//        recyclerView.addOnItemTouchListener(new SwipeableItemClickListener(this, new OnItemClickListener() {
-//            @Override
-//            public void onItemClick(View view, int position) {
-//
-//
-//            }
-
-
-
-//        recyclerView.addOnItemTouchListener(new SwipeableItemClickListener(this,
-//                new OnItemClickListener() {
-//                    @Override
-//                    public void onItemClick(View view, int position) {
-//                        if (view.getId() == R.id.tvdelete) {
-//                            touchListener.processPendingDismisses();
-//                        } else if (view.getId() == R.id.tvfavourite) {
-//                            touchListener.undoPendingDismiss();
-//                        } else { // R.id.txt_data
-//
-//                            Log.d(TAG, "onItemClick: "+position);
-//                        }
-//                    }
-//                }));
 
 
         return view;

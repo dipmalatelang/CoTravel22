@@ -81,20 +81,30 @@ public class ChangePasswordActivity extends BaseActivity {
                     txt_password=(sharedPreferences.getString("Password", ""));
 
                 }
-//                currentpasword.equals(txt_password);
+                currentpasword.equals(txt_password);
+
 
                 Log.d(TAG, "onViewClicked: "+txt_password+" "+currentpasword+" "+newPass+" "+Confirmpassword+" "+email_id);
-                if (currentpasword.equalsIgnoreCase("") || currentpasword == null) {
-                    etCurrentPassword.setError("Enter Current Password");
-                } else if (newPass.equalsIgnoreCase("") || newPass == null ) {
-                    etNewpassword.setError("Enter new Password");
-                } else if (Confirmpassword.equalsIgnoreCase("") || Confirmpassword == null) {
-                    etConfirmpassword.setError("Enter Confirm Password");
-                } else if(!newPass.equals(Confirmpassword)) {
-                    snackBar(clChangepwd,"Current and Confirm Password Not Match");
-//                    DataHolder.alertDialog("Error","",Settings_ChangePassword_Activity.this);
+                if (currentpasword.equalsIgnoreCase("") || currentpasword == null )
+
+                {
+                    snackBar(clChangepwd,"Enter Curren Password");
+
+                } else if (newPass.equalsIgnoreCase("") || newPass == null )
+                {
+                    snackBar(clChangepwd,"Enter New Password..!");
+                } else if (Confirmpassword.equalsIgnoreCase("") || Confirmpassword == null)
+                {
+                    snackBar(clChangepwd,"Enter Confirm Password..!");
+                } else if(!newPass.equals(Confirmpassword))
+                {
+                    snackBar(clChangepwd,"Current and Confirm Password Not Match..!");
                 }else if(newPass.length() < 8){
-                    snackBar(clChangepwd, "password must be at least 8 characters");
+                    snackBar(clChangepwd, "Password must be at least 8 characters..!");
+                }else if(!currentpasword.equals(txt_password))
+                {
+                    snackBar(clChangepwd,"Enter old password Correctly..!");
+
                 }
 
                 else
@@ -147,7 +157,7 @@ public class ChangePasswordActivity extends BaseActivity {
 
 
         }
-// Prompt the user to re-provide their sign-in credentials
+
 
 
 
