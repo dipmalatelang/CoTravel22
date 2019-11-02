@@ -113,7 +113,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
 
             getSupportFragmentManager()
                     .beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+//                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                     .replace(R.id.fragment_main_screen, fragment)
                     .commit();
             return true;

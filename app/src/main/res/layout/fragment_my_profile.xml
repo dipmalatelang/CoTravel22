@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".MyProfileFragment">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/iv_Image"
         android:layout_width="100dp"
         android:layout_height="100dp"
@@ -64,7 +64,7 @@
         style="@style/text_view_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
         android:text="My Profile"
