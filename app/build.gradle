@@ -52,14 +52,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:20.0.0'
 
     implementation 'com.wajahatkarim3.EasyFlipView:EasyFlipView:2.1.2'
-    implementation 'ru.rambler.android:swipe-layout:1.1.0'
-
 
     //Google Map Place
     implementation 'com.google.android.libraries.places:places:2.0.0'
 
     implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
-    implementation 'com.hudomju:swipe-to-dismiss-undo:1.0'
 
 }
 apply plugin: 'com.google.gms.google-services'

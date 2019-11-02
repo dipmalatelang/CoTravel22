@@ -156,8 +156,6 @@ public class ProfileActivity extends BaseActivity {
             profileId = tripL.getId();
             getAllImages(profileId);
             getAllTrips(profileId);
-            tripL.getFavid();
-            Log.d(TAG, "onCreategetfavid: "+tripL.getName());
             if (tripL.getFavid() == 1) {
                 ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
             } else {
@@ -183,7 +181,7 @@ public class ProfileActivity extends BaseActivity {
             getAllImages(profileId);
             getAllTrips(profileId);
 
-         /*   if (userL.getUser().getFavid() == 1) {
+           /* if (userL.getUser().getFavid() == 1) {
                 ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
             } else {
                 ivFavUser.setImageResource(R.drawable.ic_action_fav_add);
@@ -373,8 +371,8 @@ public class ProfileActivity extends BaseActivity {
         });
     }
 
-    public void showMenu(View v) {
-        PopupMenu popup = new PopupMenu(ProfileActivity.this, v);
+    public void showMenu(View view) {
+        PopupMenu popup = new PopupMenu(ProfileActivity.this, view);
         popup.getMenuInflater().inflate(R.menu.profile_menu, popup.getMenu());
 
         MenuItem bedMenuItem = popup.getMenu().findItem(R.id.one);
@@ -464,8 +462,8 @@ public class ProfileActivity extends BaseActivity {
     }
 
     @OnClick({R.id.textProfile, R.id.iv_edit_profile, R.id.floatingActionButton2, R.id.iv_fav_user, R.id.fab_backFromProfile, R.id.iv_menu})
-    public void onViewClicked(View v) {
-        switch (v.getId()) {
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
 
             case R.id.textProfile:
                 startActivity(new Intent(this, EditPhotoActivity.class));
@@ -496,7 +494,8 @@ public class ProfileActivity extends BaseActivity {
 
             case R.id.iv_fav_user:
                 Log.i(TAG, "onViewClicked: " + fav_int);
-                try {
+                if(tripL!=null)
+                {
                     if (tripL.getFavid() == 1) {
                         removeFav(fuser.getUid(), tripL.getId());
                         tripL.setFavid(0);
@@ -506,9 +505,8 @@ public class ProfileActivity extends BaseActivity {
                         tripL.setFavid(1);
                         ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
+
 
                /* if (iv_fav.getTag().toString().equalsIgnoreCase("ic_action_fav_add")) {
                     setFav(fuser.getUid(), tripL.getId());
@@ -522,7 +520,7 @@ public class ProfileActivity extends BaseActivity {
                 break;
 
              case R.id.iv_menu:
-            showMenu(v);
+            showMenu(view);
             break;
 
 
