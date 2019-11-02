@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ScrollView01"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -16,12 +20,7 @@
 
     <!--android:backgroundTint="#9A7B5181"-->
 
-    <ScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="none"
-        >
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_register_form"
         android:layout_width="match_parent"
@@ -275,7 +274,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_register"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+
 
 
     <!--<LinearLayout
@@ -469,3 +468,4 @@
     </LinearLayout>-->
 
 </RelativeLayout>
+</ScrollView>

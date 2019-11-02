@@ -7,10 +7,20 @@ import java.io.Serializable;
 public class UserImg implements Serializable {
     User user;
     String pictureUrl;
+    int fav;
 
-    public UserImg(User user, String pictureUrl) {
+    public UserImg(User user, String pictureUrl, int fav) {
         this.user=user;
         this.pictureUrl=pictureUrl;
+        this.fav=fav;
+    }
+
+    public int getFav() {
+        return fav;
+    }
+
+    public void setFav(int fav) {
+        this.fav = fav;
     }
 
     public User getUser() {

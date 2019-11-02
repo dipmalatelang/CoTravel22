@@ -11,18 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.example.tgapplication.fragment.account.profile.ChangePasswordActivity;
 import com.example.tgapplication.fragment.account.profile.ChangePrefActivity;
 import com.example.tgapplication.fragment.account.profile.ProfileActivity;
+import com.example.tgapplication.fragment.account.profile.TrashActivity;
 import com.example.tgapplication.fragment.account.profile.verify.EditPhoneActivity;
 import com.example.tgapplication.login.LoginActivity;
-import com.example.tgapplication.login.RegisterActivity;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -58,9 +54,11 @@ public class MyProfileFragment extends BaseFragment {
     TextView tvLogout;
     @BindView(R.id.view5)
     View view5;
+    @BindView(R.id.tv_Trash)
+    TextView tvTrash;
     private SharedPreferences sharedPreferences;
     String name, imageUrl, age;
-    ConstraintLayout container;
+
     //
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -82,6 +80,7 @@ public class MyProfileFragment extends BaseFragment {
 
         }
 
+        Log.i("TAG", "onCreateView: "+imageUrl);
         setProfileValue(name, age, imageUrl);
 
         return view;
@@ -95,10 +94,14 @@ public class MyProfileFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.tv_my_profile, R.id.tv_Logout, R.id.iv_Image, R.id.tv_Change_Password, R.id.tv_verify_acc, R.id.tv_Change_Preferences})
+    @OnClick({R.id.tv_my_profile, R.id.tv_Logout, R.id.iv_Image, R.id.tv_Change_Password, R.id.tv_verify_acc, R.id.tv_Change_Preferences, R.id.tv_Trash})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             //
+
+            case R.id.tv_Trash:
+                startActivity(new Intent(getActivity(), TrashActivity.class));
+                break;
 
             case R.id.tv_verify_acc:
                 startActivity(new Intent(getActivity(), EditPhoneActivity.class));
@@ -123,8 +126,6 @@ public class MyProfileFragment extends BaseFragment {
             case R.id.tv_Change_Preferences:
                 Intent mIntent = new Intent(getActivity(), ChangePrefActivity.class);
                 startActivity(mIntent);
-
-
 //              Toast.makeText(getActivity(), "Preferrences", Toast.LENGTH_SHORT).show();
 
                 break;

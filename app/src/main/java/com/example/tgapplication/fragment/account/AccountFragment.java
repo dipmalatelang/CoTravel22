@@ -506,21 +506,10 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
     }
 
 
-    private void setFav(String uid, String id) {
-
-        FavoritesInstance
-                .child(uid)
-                .child(id).child("id").setValue(id);
-
-    }
 
 
-    public void removeFav(String uid, String id) {
 
-        FavoritesInstance
-                .child(uid).child(id).removeValue();
 
-    }
 
     public void myList(FirebaseUser fuser) {
         // any way you managed to go the node that has the 'grp_key'

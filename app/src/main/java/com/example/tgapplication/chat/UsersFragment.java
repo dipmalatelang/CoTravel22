@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,11 +27,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
 
 
 public class UsersFragment extends BaseFragment {
@@ -42,8 +39,7 @@ public class UsersFragment extends BaseFragment {
     private UserAdapter userAdapter;
     private List<UserImg> mUsers;
     String pictureUrl;
-    String TAG ;
-
+int fav;
     EditText search_users;
     final FirebaseUser fuser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -79,11 +75,6 @@ public class UsersFragment extends BaseFragment {
             }
         });
 
-
-
-
-
-
         return view;
     }
 
@@ -98,18 +89,18 @@ public class UsersFragment extends BaseFragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 mUsers.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     User user = snapshot.getValue(User.class);
 
                     assert user != null;
                     assert fuser != null;
-                    if (!user.getId().equals(fuser.getUid())){
+                    if (!user.getId().equals(fuser.getUid())) {
 
                         PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                pictureUrl="";
+                                pictureUrl = "";
                                 for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
 
                                     Upload mainPhoto = snapshot1.getValue(Upload.class);
@@ -117,28 +108,67 @@ public class UsersFragment extends BaseFragment {
                                         pictureUrl = mainPhoto.getUrl();
 
                                 }
-                                Log.i("TAG", "onDataChangeMy: "+pictureUrl);
-                                mUsers.add(new UserImg(user,pictureUrl));
+                                Log.i("TAG", "onDataChangeMy: " + pictureUrl);
+                                FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot snapshot) {
 
+                                        if (snapshot.hasChild(user.getId())) {
+                                            // run some code
+                                            fav = 1;
+                                        } else {
+                                            fav = 0;
+                                        }
+                                        mUsers.add(new UserImg(user, pictureUrl,fav));
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+
+                                });
                             }
+
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
 
                             }
 
                         });
+
                     }
 
+                    userAdapter = new UserAdapter(getContext(), mUsers, false, new UserAdapter.UserInterface() {
+                        @Override
+                        public void lastMessage(Context mContext, String userid, TextView last_msg) {
+                            checkForLastMsg(mContext, userid, last_msg);
+                        }
+
+                        @Override
+                        public void addToFav(String userid, int position) {
+
+                        }
+
+                        @Override
+                        public void addToTrash(String userid, int position) {
+
+                        }
+
+                        @Override
+                        public void restoreFromTrash(String userid, int position) {
+
+                        }
+
+                        @Override
+                        public void removeFromFav(String userid) {
+
+                        }
+
+                    });
+                    recyclerView.setAdapter(userAdapter);
                 }
-
-                userAdapter = new UserAdapter(getContext(), mUsers, false, new UserAdapter.UserInterface() {
-                    @Override
-                    public void lastMessage(Context mContext, String userid, TextView last_msg) {
-                        checkForLastMsg(mContext, userid,last_msg);
-                    }
-
-                });
-                recyclerView.setAdapter(userAdapter);
             }
 
             @Override
@@ -165,7 +195,7 @@ public class UsersFragment extends BaseFragment {
                         Log.i("hghghhgh1",""+firebaseUser.getUid());
                         try {
                             if (!user.getId().equals(firebaseUser.getUid())){
-                                mUsers.add(new UserImg(user,pictureUrl));
+                                mUsers.add(new UserImg(user,pictureUrl,fav));
                                 Log.i("hghghhgh2",""+mUsers);
                             }
                         } catch (Exception e) {
@@ -177,6 +207,27 @@ public class UsersFragment extends BaseFragment {
                         @Override
                         public void lastMessage(Context mContext, String userid, TextView last_msg) {
                             checkForLastMsg(mContext, userid,last_msg);
+                        }
+
+                        @Override
+                        public void addToFav(String userid, int position) {
+
+                        }
+
+                        @Override
+                        public void addToTrash(String userid, int position) {
+
+                        }
+
+                        @Override
+                        public void restoreFromTrash(String userid, int position) {
+
+
+                        }
+
+                        @Override
+                        public void removeFromFav(String userid) {
+
                         }
 
                     });

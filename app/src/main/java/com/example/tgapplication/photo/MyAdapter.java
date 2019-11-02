@@ -95,7 +95,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
                     @Override
                     public void onClick(View view) {
 
-                        Log.i(TAG, "onClick: Set Main "+mUploads.get(position).getId()+" previous "+((EditPhotoActivity)mcontext).getAppDetails("CurProfilePhoto"));
+                        Log.i(TAG, "onClick: Set Main "+mUploads.get(position).getUrl()+" previous "+((EditPhotoActivity)mcontext).getAppDetails("CurProfilePhoto"));
                         listener.setProfilePhoto(mUploads.get(position).getId(),((EditPhotoActivity)mcontext).getAppDetails("CurProfilePhoto"),position);
                         holder.ivTitle.setVisibility(View.VISIBLE);
 

@@ -108,6 +108,8 @@ public class ProfileActivity extends BaseActivity {
     ImageView ivFavUser;
     @BindView(R.id.iv_menu)
     ImageView ivMenu;
+    private ArrayList<Upload> upload1 = new ArrayList<>();
+    private ArrayList<Upload> upload2 = new ArrayList<>();
     private ArrayList<Upload> uploads = new ArrayList<>();
     ArrayList<User> userList = new ArrayList<>();
     int account_type=1;
@@ -333,6 +335,62 @@ public class ProfileActivity extends BaseActivity {
         PicturesInstance.child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
+                upload1 = new ArrayList<>();
+                upload2 = new ArrayList<>();
+                uploads = new ArrayList<>();
+
+                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                    Upload upload = postSnapshot.getValue(Upload.class);
+                    if (upload.getType() == 1) {
+                        upload1.add(upload);
+                    } else if (upload.getType() == 2) {
+                        upload2.add(upload);
+                    }
+                }
+
+                if (upload1.size() > 0) {
+                    uploads.addAll(upload1);
+                }
+                if (upload2.size() > 0) {
+                    uploads.addAll(upload2);
+                }
+
+                if (uploads.size() > 0) {
+                    adapter = new CustomAdapter(ProfileActivity.this, uid, uploads);
+                    viewPager.setAdapter(adapter);
+
+                    viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                        @Override
+                        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                            int i = position + 1;
+                            textView.setText(i + " / " + uploads.size());
+                        }
+
+                        @Override
+                        public void onPageSelected(int position) {
+
+                        }
+
+                        @Override
+                        public void onPageScrollStateChanged(int state) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+  /*  public void getAllImages(String uid) {
+        PicturesInstance.child(uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
                 uploads = new ArrayList<>();
 
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
@@ -369,7 +427,7 @@ public class ProfileActivity extends BaseActivity {
 
             }
         });
-    }
+    }*/
 
     public void showMenu(View view) {
         PopupMenu popup = new PopupMenu(ProfileActivity.this, view);

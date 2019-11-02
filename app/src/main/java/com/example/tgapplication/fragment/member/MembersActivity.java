@@ -16,6 +16,7 @@ import com.example.tgapplication.fragment.account.profile.ProfileActivity;
 import com.example.tgapplication.fragment.member.adapter.MembersAdapter;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
+import com.example.tgapplication.fragment.visitor.UserImg;
 import com.example.tgapplication.photo.Upload;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -74,6 +75,7 @@ public class MembersActivity extends BaseActivity {
                                             fav = 0;
                                         }
 
+                                        Log.i(TAG, "onDataChange: "+user.getName()+" "+fav);
 
                                             PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                                                 @Override
@@ -88,7 +90,7 @@ public class MembersActivity extends BaseActivity {
 
                                                     }
                                                     Log.i(TAG, "onDataChangeMy: "+pictureUrl);
-                                                    tripList=findAllMembers(user,fav,pictureUrl);
+                                                    tripList=findAllMembers(new UserImg(user,pictureUrl,fav));
 
 
 

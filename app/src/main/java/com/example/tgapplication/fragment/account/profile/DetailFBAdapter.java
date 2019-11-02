@@ -38,6 +38,14 @@ public class DetailFBAdapter extends RecyclerView.Adapter<DetailFBAdapter.Detail
     public void onBindViewHolder(@NonNull DetailFBAdapter.DetailFBHolder holder, int position) {
         Log.i("TAG", "onBindViewHolder: "+urlImages.get(position));
 
+        if(urlImages.get(position).getStatus()==1)
+        {
+            holder.ivTitle.setVisibility(View.VISIBLE);
+        }
+        else {
+            holder.ivTitle.setVisibility(View.INVISIBLE);
+        }
+
         holder.rl_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,7 +55,7 @@ public class DetailFBAdapter extends RecyclerView.Adapter<DetailFBAdapter.Detail
                 Toast.makeText(context, "Clicked "+position, Toast.LENGTH_SHORT).show();
             }
         });
-        Glide.with(context).load(urlImages.get(position)).placeholder(R.drawable.ic_broken_image_primary_24dp)
+        Glide.with(context).load(urlImages.get(position).getUrl()).placeholder(R.drawable.ic_broken_image_primary_24dp)
                 .centerCrop().into(holder.imageView);
     }
 

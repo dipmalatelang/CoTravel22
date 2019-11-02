@@ -248,7 +248,7 @@ public class TripFragment extends BaseFragment {
                                                                             if(str_look.contains(user.getLook().get(i)))
                                                                             {
                                                                                 Log.i(TAG, "onDataChange: PictureUrl "+pictureUrl);
-                                                                                tripList = findClosestDate(dates, new UserImg(user,pictureUrl), fav);
+                                                                                tripList = findClosestDate(dates, new UserImg(user,pictureUrl, fav));
                                                                             }
 
                                                                         }
@@ -453,7 +453,7 @@ public class TripFragment extends BaseFragment {
                                                 }
 
                                                 Log.i(TAG, "onDataChange: PictureUrl "+user.getId()+" => "+pictureUrl);
-                                                UserImg userImg=new UserImg(user,pictureUrl);
+                                                UserImg userImg=new UserImg(user,pictureUrl,fav);
 
                                                 TripsInstance.orderByKey().equalTo(user.getId())
                                                         .addValueEventListener(new ValueEventListener() {
@@ -491,7 +491,7 @@ public class TripFragment extends BaseFragment {
                                                                     }
                                                                     Log.i("TripFromTo", "" + from_to_dates.size());
                                                                     Log.i("Tag", "onDataChange: "+fav);
-                                                                    tripList = findClosestDate(dates, userImg ,fav);
+                                                                    tripList = findClosestDate(dates, userImg);
                                                                     Log.i(TAG, "onDataChange: "+tripList);
                                                                 }
 //                                                tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), favArray, tripList);

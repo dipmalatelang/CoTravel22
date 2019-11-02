@@ -2,7 +2,9 @@ package com.example.tgapplication.fragment.account.profile;
 
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +32,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.annotations.NotNull;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -46,12 +49,13 @@ public class EditPhotoActivity extends BaseActivity {
     @BindView(R.id.private_recyclerView)
     RecyclerView privateRecyclerView;
     private FirebaseUser fuser;
-    private ArrayList<Upload> public_uploads, private_uploads;
+    private ArrayList<Upload> public_uploads, private_uploads, upload1, upload2;
     private MyAdapter public_adapter, private_adapter;
     private Uri filePath;
     private static final int PICK_IMAGE_REQUEST = 234;
     private StorageReference storageReference;
     private String getDownloadImageUrl;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,6 +74,108 @@ public class EditPhotoActivity extends BaseActivity {
         storageReference = FirebaseStorage.getInstance().getReference();
 
         PicturesInstance.child(fuser.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NotNull DataSnapshot snapshot) {
+//dismissing the progress dialog
+                dismissProgressDialog();
+                upload1 = new ArrayList<>();
+                upload2 = new ArrayList<>();
+                public_uploads = new ArrayList<>();
+                private_uploads = new ArrayList<>();
+
+//iterating through all the values in database
+                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                    Upload upload = postSnapshot.getValue(Upload.class);
+                    if (upload.getType() == 3) {
+                        private_uploads.add(upload);
+                    }
+                    else if(upload.getType()==1) {
+                        upload1.add(upload);
+                    }
+                    else if(upload.getType()==2) {
+                        upload2.add(upload);
+                    }
+
+                }
+
+                if (upload1.size() > 0) {
+                    public_uploads.addAll(upload1);
+                }
+                if (upload2.size() > 0) {
+                    public_uploads.addAll(upload2);
+                }
+
+                if (public_uploads.size() > 0) {
+
+
+//creating adapter
+                    public_adapter = new MyAdapter(EditPhotoActivity.this, fuser.getUid(), public_uploads, new MyAdapter.PhotoInterface() {
+
+                        @Override
+                        public void setProfilePhoto(String id, String previousValue, int pos) {
+                            PicturesInstance
+                                    .child(fuser.getUid())
+                                    .child(id).child("type").setValue(1);
+
+                            if(!previousValue.equals("") && !previousValue.equals(id))
+                                PicturesInstance.child(fuser.getUid()).child(previousValue).child("type").setValue(2);
+                            Log.i(TAG, "setProfilePhoto: "+public_uploads.get(pos).getUrl());
+                            profilePhotoDetails(public_uploads.get(pos).getUrl());
+                        }
+
+                        @Override
+                        public void removePhoto(String id) {
+                            PicturesInstance.child(fuser.getUid()).child(id).removeValue();
+                        }
+
+                        @Override
+                        public void setPhotoAsPrivate(String id) {
+                            PicturesInstance
+                                    .child(fuser.getUid())
+                                    .child(id).child("type").setValue(3);
+                        }
+                    });
+                }
+
+                private_adapter = new MyAdapter(EditPhotoActivity.this, fuser.getUid(), private_uploads, new MyAdapter.PhotoInterface() {
+
+                    @Override
+                    public void setProfilePhoto(String id, String previousValue, int pos) {
+                        PicturesInstance
+                                .child(fuser.getUid())
+                                .child(id).child("type").setValue(1);
+
+                        if(!previousValue.equals("") && !previousValue.equals(id))
+                            PicturesInstance.child(fuser.getUid()).child(previousValue).child("type").setValue(2);
+                        profilePhotoDetails(private_uploads.get(pos).getUrl());
+                    }
+
+                    @Override
+                    public void removePhoto(String id) {
+                        PicturesInstance.child(fuser.getUid()).child(id).removeValue();
+                    }
+
+                    @Override
+                    public void setPhotoAsPrivate(String id) {
+                        PicturesInstance
+                                .child(fuser.getUid())
+                                .child(id).child("type").setValue(2);
+                    }
+                });
+
+//adding adapter to recyclerview
+                publicRecyclerView.setAdapter(public_adapter);
+                privateRecyclerView.setAdapter(private_adapter);
+
+            }
+
+            @Override
+            public void onCancelled(@NotNull DatabaseError databaseError) {
+                dismissProgressDialog();
+            }
+        });
+
+    /*    PicturesInstance.child(fuser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
 //dismissing the progress dialog
@@ -148,9 +254,16 @@ public class EditPhotoActivity extends BaseActivity {
             public void onCancelled(DatabaseError databaseError) {
                 dismissProgressDialog();
             }
-        });
+        });*/
 
 
+    }
+    private void profilePhotoDetails(String imageUrl) {
+//        Log.i(TAG, "profilePhotoDetails: "+imageUrl);
+       SharedPreferences sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("ImageUrl", imageUrl);
+        editor.apply();
     }
 
     @Override
@@ -168,6 +281,7 @@ public class EditPhotoActivity extends BaseActivity {
                 break;
 
             case R.id.facebook:
+
                 startActivity(new Intent(this,FacebookImage.class));
 //                Toast.makeText(this, "Facebook", Toast.LENGTH_SHORT).show();
                 break;

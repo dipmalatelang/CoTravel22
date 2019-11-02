@@ -24,12 +24,22 @@
                 android:textColor="@android:color/white" />
 
             <TextView
-                android:id="@+id/tvdelete"
+            android:id="@+id/tvdelete"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/holo_red_dark"
+            android:gravity="center"
+            android:text="Delete"
+            android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/tvrestore"
                 android:layout_width="70dp"
+                android:visibility="gone"
                 android:layout_height="match_parent"
                 android:background="@android:color/holo_red_dark"
                 android:gravity="center"
-                android:text="Delete"
+                android:text="Restore"
                 android:textColor="@android:color/white" />
 
 

@@ -53,6 +53,7 @@ public abstract class BaseFragment extends Fragment {
     Boolean textType;
 
     public DatabaseReference PicturesInstance = FirebaseDatabase.getInstance().getReference("Pictures");
+    public DatabaseReference TrashInstance = FirebaseDatabase.getInstance().getReference("Trash");
     public DatabaseReference ChatlistInstance = FirebaseDatabase.getInstance().getReference("Chatlist");
     public DatabaseReference ChatsInstance = FirebaseDatabase.getInstance().getReference("Chats");
     public DatabaseReference FavoritesInstance = FirebaseDatabase.getInstance().getReference("Favorites");
@@ -62,7 +63,7 @@ public abstract class BaseFragment extends Fragment {
     public DatabaseReference UsersInstance = FirebaseDatabase.getInstance().getReference("Users");
 
 
-    public List<TripList> findClosestDate(List<Date> dates, UserImg userImg, int fav_id) {
+    public List<TripList> findClosestDate(List<Date> dates, UserImg userImg) {
 
         User user = userImg.getUser();
 
@@ -90,14 +91,14 @@ public abstract class BaseFragment extends Fragment {
 //                String ageValue= getBirthday(user.getDob());
                 String dateFromTo = from_to_dates.get(i).getDate_from() + " - " + from_to_dates.get(i).getDate_to();
 
-                TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getAge(), user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), from_to_dates.get(i).getLocation(), tripNote, dateFromTo, fav_id, visit_id);
+                TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getAge(), user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), from_to_dates.get(i).getLocation(), tripNote, dateFromTo, userImg.getFav(), visit_id);
                 tripList.add(tripListClass);
             }
         }
 
         if (tripList.size() < 1) {
 
-            TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getAge(), user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), "", tripNote, "", fav_id, visit_id);
+            TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getAge(), user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), "", tripNote, "", userImg.getFav(), visit_id);
             tripList.add(tripListClass);
         }
 
@@ -122,6 +123,32 @@ public abstract class BaseFragment extends Fragment {
         }
         return fav_int;
     }
+
+    public void setFav(String uid, String id) {
+
+        FavoritesInstance
+                .child(uid)
+                .child(id).child("id").setValue(id);
+    }
+
+
+    public void setTrash(String uid, String id)
+    {
+        TrashInstance.child(uid).child(id).child("id").setValue(id);
+    }
+
+    public void removeTrash(String uid, String id)
+    {
+        TrashInstance.child(uid).child(id).removeValue();
+    }
+
+    public void removeFav(String uid, String id) {
+
+        FavoritesInstance
+                .child(uid).child(id).removeValue();
+
+    }
+
 
     public void snackBar(View constrainlayout, String s) {
         Snackbar snackbar = Snackbar.make(constrainlayout, s, Snackbar.LENGTH_LONG).setAction("Retry", new View.OnClickListener() {

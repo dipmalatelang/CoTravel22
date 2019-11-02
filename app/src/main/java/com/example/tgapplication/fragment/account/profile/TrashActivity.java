@@ -1,33 +1,26 @@
-package com.example.tgapplication.fragment.chat;
-
+package com.example.tgapplication.fragment.account.profile;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.tgapplication.BaseFragment;
+import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.chat.Chatlist;
 import com.example.tgapplication.chat.Token;
 import com.example.tgapplication.chat.UserAdapter;
-import com.example.tgapplication.fragment.member.MembersActivity;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.fragment.visitor.UserImg;
 import com.example.tgapplication.photo.Upload;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -39,46 +32,46 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class ChatFragment extends BaseFragment {
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
+public class TrashActivity extends BaseActivity {
 
-
-    EditText search_users;
-    private RecyclerView recyclerView;
-
-    private UserAdapter userAdapter;
-    List<UserImg> mUsers = new ArrayList<>();
+    @BindView(R.id.trash_recyclerview)
+    RecyclerView trashRecyclerview;
+    @BindView(R.id.search_users)
+    EditText searchUsers;
 
     String pictureUrl = "";
     int fav,trash;
     FirebaseUser fuser;
-    FloatingActionButton floatingActionButton;
-
-
-//    private FloatingActionButton floatingActionButton;
+    private UserAdapter userAdapter;
+    List<UserImg> mUsers = new ArrayList<>();
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_chat, container, false);
-
-        setHasOptionsMenu(false);
-        recyclerView = view.findViewById(R.id.recycler_view);
-        search_users=view.findViewById(R.id.search_users);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_trash);
+        ButterKnife.bind(this);
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
 
-        floatingActionButton = view.findViewById(R.id.floatingActionButton);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+        trashRecyclerview.setLayoutManager(new LinearLayoutManager(this));
+
+        searchUsers.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(), MembersActivity.class));
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                searchUsers(charSequence.toString().toLowerCase());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
             }
         });
 
@@ -104,76 +97,54 @@ public class ChatFragment extends BaseFragment {
 
         updateToken(FirebaseInstanceId.getInstance().getToken());
 
-
-        search_users.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                searchUsers(charSequence.toString().toLowerCase());
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
-        return view;
     }
 
-    private void searchUsers(String s)
-    {
-        ArrayList<UserImg> mUser=new ArrayList<>();
+    private void searchUsers(String s) {
+        ArrayList<UserImg> mUser = new ArrayList<>();
 
-        for(UserImg userImg : mUsers){
-            if(userImg.getUser().getSearch() != null && (userImg.getUser().getSearch().contains(s)))
-            {
+        for (UserImg userImg : mUsers) {
+            if (userImg.getUser().getSearch() != null && (userImg.getUser().getSearch().contains(s))) {
                 mUser.add(userImg);
             }
             //something here
         }
-                userAdapter = new UserAdapter(getContext(), mUser, true, new UserAdapter.UserInterface() {
-                    @Override
-                    public void lastMessage(Context mContext, String userid, TextView last_msg) {
-                        checkForLastMsg(mContext, userid,last_msg);
-                    }
+        userAdapter = new UserAdapter(this, mUser, true, true,new UserAdapter.UserInterface() {
+            @Override
+            public void lastMessage(Context mContext, String userid, TextView last_msg) {
+                checkForLastMsg(mContext, userid, last_msg);
+            }
 
-                    @Override
-                    public void addToFav(String userid, int position) {
-                        setFav(fuser.getUid(), userid);
-                        mUsers.get(position).setFav(1);
-                        userAdapter.notifyDataSetChanged();
-                    }
+            @Override
+            public void addToFav(String userid, int position) {
+                setFav(fuser.getUid(), userid);
+                mUsers.get(position).setFav(1);
+                userAdapter.notifyDataSetChanged();
+            }
 
-                    @Override
-                    public void addToTrash(String userid, int position) {
-                        setTrash(fuser.getUid(),userid);
-                        mUsers.remove(position);
-                        userAdapter.notifyDataSetChanged();
-                    }
+            @Override
+            public void addToTrash(String userid, int position) {
+                setTrash(fuser.getUid(), userid);
+                mUsers.remove(position);
+                userAdapter.notifyDataSetChanged();
+            }
 
-                    @Override
-                    public void restoreFromTrash(String userid, int position) {
-                        removeTrash(fuser.getUid(),userid);
-                        mUsers.remove(position);
-                        userAdapter.notifyDataSetChanged();
-                    }
+            @Override
+            public void restoreFromTrash(String userid, int position) {
+                removeTrash(fuser.getUid(),userid);
+                mUsers.remove(position);
+                userAdapter.notifyDataSetChanged();
+            }
 
-                    @Override
-                    public void removeFromFav(String userid) {
+            @Override
+            public void removeFromFav(String userid) {
 
-                        removeFav(fuser.getUid(),userid);
-                    }
+                removeFav(fuser.getUid(), userid);
+            }
 
-                });
-                recyclerView.setAdapter(userAdapter);
+        });
+        trashRecyclerview.setAdapter(userAdapter);
 
     }
-
 
     private void updateToken(String token) {
         Token token1 = new Token(token);
@@ -195,8 +166,15 @@ public class ChatFragment extends BaseFragment {
                             TrashInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    if (!dataSnapshot.hasChild(user.getId())) {
-
+                                    if (dataSnapshot.hasChild(user.getId())) {
+                                        // run some code
+                                     /*   trash=1;
+                                        Log.i("TAG", "onDataChange: Trash if"+user.getId());
+                                    } else {
+                                        trash=0;
+                                        Log.i("TAG", "onDataChange: Trash else"+user.getId());
+                                    }
+*/
                                         FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(DataSnapshot snapshot) {
@@ -207,6 +185,7 @@ public class ChatFragment extends BaseFragment {
                                                 } else {
                                                     fav = 0;
                                                 }
+
 
                                         PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
@@ -221,11 +200,11 @@ public class ChatFragment extends BaseFragment {
                                                     }
                                                 }
 
-                                                        Log.i("TAG", "onDataChange: Picture "+pictureUrl);
+
                                                         mUsers.add(new UserImg(user, pictureUrl, fav));
 
                                                         Log.i("TAG", "onDataChange: chat" + mUsers.size());
-                                                        userAdapter = new UserAdapter(getContext(), mUsers, true, new UserAdapter.UserInterface() {
+                                                        userAdapter = new UserAdapter(TrashActivity.this, mUsers, true, true,new UserAdapter.UserInterface() {
                                                             @Override
                                                             public void lastMessage(Context mContext, String userid, TextView last_msg) {
                                                                 checkForLastMsg(mContext, userid, last_msg);
@@ -258,7 +237,7 @@ public class ChatFragment extends BaseFragment {
                                                             }
 
                                                         });
-                                                        recyclerView.setAdapter(userAdapter);
+                                                        trashRecyclerview.setAdapter(userAdapter);
 
                                                     }
 
@@ -296,6 +275,5 @@ public class ChatFragment extends BaseFragment {
             }
         });
     }
-
 
 }
