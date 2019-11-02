@@ -23,6 +23,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.example.tgapplication.BaseActivity;
@@ -49,6 +50,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -65,7 +67,6 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     CheckBox cb_girl, cb_men;
     CoordinatorLayout activity_profile_coordinatelayout;
     FirebaseUser fuser;
-    String value;
     User prevUser;
     ArrayList<String> str_look = new ArrayList<>();
 
@@ -77,7 +78,6 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
 
     Calendar mcalendar = Calendar.getInstance();
 
-    ProgressWheel progress_wheel;
     @BindView(R.id.rb_male)
     RadioButton rbMale;
     @BindView(R.id.rb_female)
@@ -236,7 +236,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         UsersInstance.addValueEventListener(
                 new ValueEventListener() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         prevUserList.clear();
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
@@ -252,7 +252,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
                     }
 
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
                     }
                 }
@@ -296,7 +296,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void setPopup() {
-        Field popup = null;
+        Field popup;
         try {
             popup = AutoCompleteTextView.class.getDeclaredField("mPopup");
             popup.setAccessible(true);
@@ -307,16 +307,16 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
             ListPopupWindow HeightpopupWindow = (ListPopupWindow) popup.get(suggestion_height);
 
             // Set popupWindow height to 500px
-            NationalitypopupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
-            LanguagepopupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
-            HeightpopupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+            Objects.requireNonNull(NationalitypopupWindow).setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+            Objects.requireNonNull(LanguagepopupWindow).setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+            Objects.requireNonNull(HeightpopupWindow).setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
         } catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {
             // silently fail...
         }
     }
 
     private void setPopup1() {
-        Field popup1 = null;
+        Field popup1;
         try {
             popup1 = Spinner.class.getDeclaredField("mPopup");
             popup1.setAccessible(true);
@@ -327,9 +327,9 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
             ListPopupWindow EyespopupWindow = (ListPopupWindow) popup1.get(Sp_eyes);
 
             // Set popupWindow height to 500px
-            BodypopupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
-            HairpopupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
-            EyespopupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+            Objects.requireNonNull(BodypopupWindow).setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+            Objects.requireNonNull(HairpopupWindow).setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+            Objects.requireNonNull(EyespopupWindow).setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
         } catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {
             // silently fail...
         }
@@ -490,7 +490,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.
                 Status status = Autocomplete.getStatusFromIntent(data);
-                Log.i(TAG, status.getStatusMessage());
+                Log.i(TAG, Objects.requireNonNull(status.getStatusMessage()));
             } else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.
             }
@@ -502,7 +502,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.
                 Status status = Autocomplete.getStatusFromIntent(data);
-                Log.i(TAG, status.getStatusMessage());
+                Log.i(TAG, Objects.requireNonNull(status.getStatusMessage()));
             } else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.
             }

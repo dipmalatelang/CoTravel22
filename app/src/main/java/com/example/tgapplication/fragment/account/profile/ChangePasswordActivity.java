@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +23,8 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,7 +48,6 @@ public class ChangePasswordActivity extends BaseActivity {
     @BindView(R.id.cl_changepwd)
     ConstraintLayout clChangepwd;
     SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
     String email_id,txt_password;
 
 
@@ -64,88 +64,80 @@ public class ChangePasswordActivity extends BaseActivity {
 
     @OnClick({R.id.btnSaveNow})
     public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.btnSaveNow:
-                currentpasword =etCurrentPassword.getText().toString();
-                newPass = etNewpassword.getText().toString();
-                Confirmpassword =etConfirmpassword.getText().toString();
+        if (view.getId() == R.id.btnSaveNow) {
+            currentpasword = etCurrentPassword.getText().toString();
+            newPass = etNewpassword.getText().toString();
+            Confirmpassword = etConfirmpassword.getText().toString();
 
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 // Get auth credentials from the user for re-authentication. The example below shows
-                sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
-                if (sharedPreferences.contains("Email")) {
-                    email_id=(sharedPreferences.getString("Email", ""));
-                }
-                if (sharedPreferences.contains("Password"))
-                {
-                    txt_password=(sharedPreferences.getString("Password", ""));
+            sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+            if (sharedPreferences.contains("Email")) {
+                email_id = (sharedPreferences.getString("Email", ""));
+            }
+            if (sharedPreferences.contains("Password")) {
+                txt_password = (sharedPreferences.getString("Password", ""));
 
-                }
+            }
 //                currentpasword.equals(txt_password);
 
-                Log.d(TAG, "onViewClicked: "+txt_password+" "+currentpasword+" "+newPass+" "+Confirmpassword+" "+email_id);
-                if (currentpasword.equalsIgnoreCase("") || currentpasword == null) {
-                    etCurrentPassword.setError("Enter Current Password");
-                } else if (newPass.equalsIgnoreCase("") || newPass == null ) {
-                    etNewpassword.setError("Enter new Password");
-                } else if (Confirmpassword.equalsIgnoreCase("") || Confirmpassword == null) {
-                    etConfirmpassword.setError("Enter Confirm Password");
-                } else if(!newPass.equals(Confirmpassword)) {
-                    snackBar(clChangepwd,"Current and Confirm Password Not Match");
+            Log.d(TAG, "onViewClicked: " + txt_password + " " + currentpasword + " " + newPass + " " + Confirmpassword + " " + email_id);
+            if (currentpasword.equalsIgnoreCase("")) {
+                etCurrentPassword.setError("Enter Current Password");
+            } else if (newPass.equalsIgnoreCase("")) {
+                etNewpassword.setError("Enter new Password");
+            } else if (Confirmpassword.equalsIgnoreCase("")) {
+                etConfirmpassword.setError("Enter Confirm Password");
+            } else if (!newPass.equals(Confirmpassword)) {
+                snackBar(clChangepwd, "Current and Confirm Password Not Match");
 //                    DataHolder.alertDialog("Error","",Settings_ChangePassword_Activity.this);
-                }else if(newPass.length() < 8){
-                    snackBar(clChangepwd, "password must be at least 8 characters");
-                }
+            } else if (newPass.length() < 8) {
+                snackBar(clChangepwd, "password must be at least 8 characters");
+            } else {
+                AuthCredential credential = EmailAuthProvider
+                        .getCredential(email_id, txt_password);
+                Log.d(TAG, "onViewClicked:" + txt_password);
+                Objects.requireNonNull(user).reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "onComplete: " + newPass);
+                            user.updatePassword(newPass).addOnCompleteListener(new OnCompleteListener<Void>() {
 
-                else
-                {
-                    AuthCredential credential = EmailAuthProvider
-                            .getCredential(email_id, txt_password);
-                    Log.d(TAG, "onViewClicked:"+txt_password);
-                    user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                Log.d(TAG, "onComplete: "+newPass);
-                                user.updatePassword(newPass).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
 
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Log.d(TAG, "Password updated");
+                                        snackBar(clChangepwd, "Password updated");
+                                        new Handler().postDelayed(new Runnable() {
 
-                                        if (task.isSuccessful()) {
-                                            Log.d(TAG, "Password updated");
-                                            snackBar(clChangepwd, "Password updated");
-                                            new Handler().postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                // change image
+                                                FirebaseAuth.getInstance().signOut();
+                                                LoginManager.getInstance().logOut();
+                                                finish();
+                                                startActivity(new Intent(ChangePasswordActivity.this, LoginActivity.class));
+                                            }
 
-                                                @Override
-                                                public void run() {
-                                                    // change image
-                                                    FirebaseAuth.getInstance().signOut();
-                                                    LoginManager.getInstance().logOut();
-                                                    finish();
-                                                    startActivity(new Intent(ChangePasswordActivity.this, LoginActivity.class));
-                                                }
+                                        }, 900);
 
-                                            }, 900);
-
-                                        } else {
-                                            Log.d(TAG, "Error password not updated");
-                                            snackBar(clChangepwd, "Error password not updated");
-                                        }
+                                    } else {
+                                        Log.d(TAG, "Error password not updated");
+                                        snackBar(clChangepwd, "Error password not updated");
                                     }
-                                });
-                            } else {
-                                Log.d(TAG, "Error auth failed");
-                                snackBar(clChangepwd, "Enter valid Password");
-                            }
-
+                                }
+                            });
+                        } else {
+                            Log.d(TAG, "Error auth failed");
+                            snackBar(clChangepwd, "Enter valid Password");
                         }
-                    });
 
-                }
+                    }
+                });
 
-
-
+            }
         }
 // Prompt the user to re-provide their sign-in credentials
 

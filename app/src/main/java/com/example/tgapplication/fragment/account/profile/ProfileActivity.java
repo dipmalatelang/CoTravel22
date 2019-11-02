@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
@@ -135,7 +136,8 @@ public class ProfileActivity extends BaseActivity {
         ButterKnife.bind(this);
         fuser = FirebaseAuth.getInstance().getCurrentUser();
 
-
+        LinearLayoutManager ll_manager = new LinearLayoutManager(ProfileActivity.this);
+        rvTripValue.setLayoutManager(ll_manager);
 
         if (getIntent().getSerializableExtra("MyObj") == null && getIntent().getSerializableExtra("MyUserObj") == null) {
             ivEditProfile.setVisibility(View.VISIBLE);
@@ -155,7 +157,7 @@ public class ProfileActivity extends BaseActivity {
             ivFavUser.setVisibility(View.VISIBLE);
             floatingActionButton2.show();
             tripL = (TripList) getIntent().getSerializableExtra("MyObj");
-            profileId = tripL.getId();
+            profileId = Objects.requireNonNull(tripL).getId();
             getAllImages(profileId);
             getAllTrips(profileId);
             if (tripL.getFavid() == 1) {
@@ -179,7 +181,7 @@ public class ProfileActivity extends BaseActivity {
             ivFavUser.setVisibility(View.VISIBLE);
             floatingActionButton2.show();
             userL = (UserImg) getIntent().getSerializableExtra("MyUserObj");
-            profileId = userL.getUser().getId();
+            profileId = Objects.requireNonNull(userL).getUser().getId();
             getAllImages(profileId);
             getAllTrips(profileId);
 
@@ -280,13 +282,13 @@ public class ProfileActivity extends BaseActivity {
         UsersInstance.child(id).addValueEventListener(
                 new ValueEventListener() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         userList.clear();
 //                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
                             User user = dataSnapshot.getValue(User.class);
 //                            if (user != null && user.getId().equalsIgnoreCase(fuser.getUid())) {
-                            account_type=user.getAccount_type();
+                            account_type= Objects.requireNonNull(user).getAccount_type();
                             setDetails(user.getName(), user.getGender(), user.getAge(), user.getLook(),user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(),user.getVisit(), "", "", "default");
 
                  /*           userList.add(user);
@@ -299,7 +301,7 @@ public class ProfileActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
                     }
                 }
@@ -313,7 +315,7 @@ public class ProfileActivity extends BaseActivity {
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     TripData tripData = dataSnapshot1.getValue(TripData.class);
                     planTripsList.add(tripData);
-                    Log.i(TAG, "onDataChange: Trips " + dataSnapshot1.getValue(TripData.class).getLocation());
+                    Log.i(TAG, "onDataChange: Trips " + Objects.requireNonNull(dataSnapshot1.getValue(TripData.class)).getLocation());
                 }
 
                 if (planTripsList.size() <= 0)
@@ -334,14 +336,14 @@ public class ProfileActivity extends BaseActivity {
     public void getAllImages(String uid) {
         PicturesInstance.child(uid).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
                 upload1 = new ArrayList<>();
                 upload2 = new ArrayList<>();
                 uploads = new ArrayList<>();
 
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                     Upload upload = postSnapshot.getValue(Upload.class);
-                    if (upload.getType() == 1) {
+                    if (Objects.requireNonNull(upload).getType() == 1) {
                         upload1.add(upload);
                     } else if (upload.getType() == 2) {
                         upload2.add(upload);
@@ -380,7 +382,7 @@ public class ProfileActivity extends BaseActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
@@ -561,6 +563,20 @@ public class ProfileActivity extends BaseActivity {
                     } else {
                         setFav(fuser.getUid(), tripL.getId());
                         tripL.setFavid(1);
+                        ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
+                    }
+                }
+                else if(userL!=null)
+                {
+                    if(userL.getFav()==1)
+                    {
+                        removeFav(fuser.getUid(),userL.getUser().getId());
+                        userL.setFav(0);
+                        ivFavUser.setImageResource(R.drawable.ic_action_fav_add);
+                    }
+                    else {
+                        setFav(fuser.getUid(),userL.getUser().getId());
+                        userL.setFav(1);
                         ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
                     }
                 }

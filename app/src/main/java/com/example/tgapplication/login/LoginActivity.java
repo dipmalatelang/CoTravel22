@@ -1,8 +1,6 @@
 package com.example.tgapplication.login;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -12,13 +10,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.tgapplication.BaseActivity;
-import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.photo.Upload;
@@ -168,11 +164,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         ArrayList<String> look = new ArrayList<>();
         ArrayList<String> range_age=new ArrayList<>();
 
-        User userClass=new User(user.getUid(), user.getDisplayName(), "offline", user.getDisplayName().toLowerCase(), "", "",  user.getEmail(), user.getProviderId(), "", "", "", "", "", "", look, range_age, "",  user.getDisplayName().toLowerCase(), user.getPhoneNumber(), "", "",1);
-        UsersInstance.child(mAuth.getCurrentUser().getUid()).setValue(userClass);
+        User userClass=new User(Objects.requireNonNull(user).getUid(), user.getDisplayName(), "offline", Objects.requireNonNull(user.getDisplayName()).toLowerCase(), "", "",  user.getEmail(), user.getProviderId(), "", "", "", "", "", "", look, range_age, "",  user.getDisplayName().toLowerCase(), user.getPhoneNumber(), "", "",1);
+        UsersInstance.child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).setValue(userClass);
 
         String uploadId = PicturesInstance.child(user.getUid()).push().getKey();
-        PicturesInstance.child(user.getUid()).child(uploadId).setValue(new Upload(uploadId,"Image", user.getPhotoUrl().toString()+"?type=large",1));
+        PicturesInstance.child(user.getUid()).child(Objects.requireNonNull(uploadId)).setValue(new Upload(uploadId,"Image", Objects.requireNonNull(user.getPhotoUrl()).toString()+"?type=large",1));
 
         updateUI(mAuth.getCurrentUser());
     }
@@ -244,7 +240,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 //
 
                                     } else {
-                                        snackBar(constrainlayout,task.getException().getMessage());
+                                        snackBar(constrainlayout, Objects.requireNonNull(task.getException()).getMessage());
                                         dismissProgressDialog();
                                     }
                                 }

@@ -5,9 +5,7 @@ public class PlanTrip {
     private String date_from;
     private String date_to;
 
-    public PlanTrip() {
 
-    }
 
     public PlanTrip(String location, String date_from, String date_to) {
         this.location = location;

@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -27,7 +26,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.BuildConfig;
-import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.account.profile.ChangePrefActivity;
 import com.example.tgapplication.fragment.trip.module.User;
@@ -76,14 +74,13 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     EditText regi_et_name, regi_et_email, regi_et_pass,regi_et_location;
     TextInputLayout textInput_location;
 
-    LinearLayout travelprefer_form;
     ConstraintLayout regi_form;
     RadioGroup regi_rg;
     RadioButton rb_gender;
     RelativeLayout relativelayout;
 
     ArrayList<String> array_age;
-    ArrayAdapter<String> adapter_age, adapter_age_from, adapter_age_to;
+    ArrayAdapter<String> adapter_age;
     private String TAG="RegisterActivity";
 
     @Override
@@ -235,7 +232,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             android.widget.ListPopupWindow AgepopupWindow = (android.widget.ListPopupWindow) popup.get(sp_age);
 
             // Set popupWindow height to 500px
-            AgepopupWindow.setHeight(500);
+            Objects.requireNonNull(AgepopupWindow).setHeight(500);
 
 
         }
@@ -266,11 +263,11 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            User userClass=new User(user.getUid(), user.getDisplayName(), "offline", user.getDisplayName().toLowerCase(), "", "",  user.getEmail(), user.getProviderId(), "", "", "", "", "", "", look, range_age, "",  user.getDisplayName().toLowerCase(), user.getPhoneNumber(), "", "",1);
-                            UsersInstance.child(mAuth.getCurrentUser().getUid()).setValue(userClass);
+                            User userClass=new User(Objects.requireNonNull(user).getUid(), user.getDisplayName(), "offline", Objects.requireNonNull(user.getDisplayName()).toLowerCase(), "", "",  user.getEmail(), user.getProviderId(), "", "", "", "", "", "", look, range_age, "",  user.getDisplayName().toLowerCase(), user.getPhoneNumber(), "", "",1);
+                            UsersInstance.child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).setValue(userClass);
 
                             String uploadId = PicturesInstance.child(user.getUid()).push().getKey();
-                            PicturesInstance.child(user.getUid()).child(uploadId).setValue(new Upload(uploadId,"Image", user.getPhotoUrl().toString()+"?type=large",1));
+                            PicturesInstance.child(user.getUid()).child(Objects.requireNonNull(uploadId)).setValue(new Upload(uploadId,"Image", Objects.requireNonNull(user.getPhotoUrl()).toString()+"?type=large",1));
 
                             updateUI(mAuth.getCurrentUser());
 
@@ -378,7 +375,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 if (age_value <= 25) {
                     range_age.add("18");
                     range_age.add("" + (age_value + 7));
-                } else if (age_value >= 25) {
+                } else {
                     range_age.add("" + (age_value - 7));
                     range_age.add("" + (age_value + 7));
                 }
@@ -427,7 +424,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
 
 
-
+/*
     private String validateDOB(String str_dob)
     {
         Date today = new Date();
@@ -439,7 +436,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             e.printStackTrace();
         }
 
-        int age = today.getYear() - birth.getYear();
+        int age = today.getYear() - Objects.requireNonNull(birth).getYear();
 
         if(age>18)
         {
@@ -448,7 +445,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         else {
             return "notValid";
         }
-    }
+    }*/
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
@@ -491,7 +488,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.
                 Status status = Autocomplete.getStatusFromIntent(data);
-                Log.i(TAG, status.getStatusMessage());
+                Log.i(TAG, Objects.requireNonNull(status.getStatusMessage()));
             } else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.
             }

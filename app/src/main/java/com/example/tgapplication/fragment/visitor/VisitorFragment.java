@@ -26,7 +26,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -53,13 +52,12 @@ public class VisitorFragment extends BaseFragment {
         view = inflater.inflate(R.layout.fragment_visitor, container, false);
 
         myVisitRV = view.findViewById(R.id.myVisitRV);
-        GridLayoutManager mGridLayoutManager = new GridLayoutManager(getActivity(), 2);
         RecyclerView.LayoutManager nLayoutManager = new LinearLayoutManager(getActivity());
         myVisitRV.setLayoutManager(nLayoutManager);
 
         showProgressDialog();
         fuser = FirebaseAuth.getInstance().getCurrentUser();
-        revVisitList(fuser);
+        revVisitList(Objects.requireNonNull(fuser));
 //
 //        favList = (List<TripList>) getIntent().getSerializableExtra("myFav");
 //        favArray = (List<String>) getIntent().getSerializableExtra("ListFav");
@@ -77,11 +75,7 @@ public class VisitorFragment extends BaseFragment {
         return view;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
 
-    }
 
 //    public void visitList(FirebaseUser fuser) {
 //        // any way you managed to go the node that has the 'grp_key'
@@ -140,26 +134,26 @@ public class VisitorFragment extends BaseFragment {
 
         ProfileVisitorInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                                                                         @Override
-                                                                                        public void onDataChange(DataSnapshot snapshot) {
+                                                                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                                                                                             myFavArray.clear();
                                                                                             for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
                                                                                                 String userKey = dataSnapshot.getKey();
 
-                                                                                                UsersInstance.child(userKey).addValueEventListener(
+                                                                                                UsersInstance.child(Objects.requireNonNull(userKey)).addValueEventListener(
                                                                                                         new ValueEventListener() {
                                                                                                             @Override
-                                                                                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                                                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                                                                                                                 User user = dataSnapshot.getValue(User.class);
 
 //                                                                                                                if (Objects.requireNonNull(user).getAccount_type() == 1) {
                                                                                                                 FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                                                                                                     @Override
-                                                                                                                    public void onDataChange(DataSnapshot snapshot) {
+                                                                                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                                                                                                                        if (snapshot.hasChild(user.getId())) {
+                                                                                                                        if (snapshot.hasChild(Objects.requireNonNull(user).getId())) {
                                                                                                                             // run some code
                                                                                                                             fav = 1;
                                                                                                                         } else {
@@ -226,7 +220,7 @@ public class VisitorFragment extends BaseFragment {
                                                                                             }
                                                                                         }
                                                                                         @Override
-                                                                                        public void onCancelled(DatabaseError databaseError) {
+                                                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
                                                                                         }
                                                                                     }
@@ -236,13 +230,13 @@ public class VisitorFragment extends BaseFragment {
 
     int fav;
 
-    private void getData(String id){
+   /* private void getData(String id){
         // any way you managed to go the node that has the 'grp_key'
 
         UsersInstance.addValueEventListener(
                 new ValueEventListener() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         tripList.clear();
                         myDetail.clear();
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -251,11 +245,11 @@ public class VisitorFragment extends BaseFragment {
 
 //                                getFav(fuser.getUid(),user.getId());
                             // HERE WHAT CORRESPONDS TO JOIN
-                            if (user.getId().equalsIgnoreCase(id)) {
+                            if (Objects.requireNonNull(user).getId().equalsIgnoreCase(id)) {
                                 FavoritesInstance
                                         .child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
-                                    public void onDataChange(DataSnapshot snapshot) {
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                                         if (snapshot.hasChild(user.getId())) {
                                             // run some code
@@ -271,7 +265,7 @@ public class VisitorFragment extends BaseFragment {
                                                 for(DataSnapshot ds: dataSnapshot.getChildren())
                                                 {
                                                     Upload upload=ds.getValue(Upload.class);
-                                                    if(upload.getType()==1)
+                                                    if(Objects.requireNonNull(upload).getType()==1)
                                                     {
                                                         pictureUrl=upload.getUrl();
                                                     }
@@ -284,7 +278,7 @@ public class VisitorFragment extends BaseFragment {
                                                         .addValueEventListener(new ValueEventListener() {
 
                                                             @Override
-                                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                                                                 from_to_dates.clear();
                                                                 dates.clear();
@@ -297,7 +291,7 @@ public class VisitorFragment extends BaseFragment {
                                                                     for (DataSnapshot snapshot1 : snapshot.getChildren()) {
 
                                                                         TripData tripData = snapshot1.getValue(TripData.class);
-                                                                        Log.i("VishalD", "" + user.getUsername() + " , " + tripData.getLocation());
+                                                                        Log.i("VishalD", "" + user.getUsername() + " , " + Objects.requireNonNull(tripData).getLocation());
 
                                                                         city += tripData.getLocation();
                                                                         tripNote += tripData.getTrip_note();
@@ -329,14 +323,14 @@ public class VisitorFragment extends BaseFragment {
                                                             }
 
                                                             @Override
-                                                            public void onCancelled(DatabaseError databaseError) {
+                                                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
                                                             }
                                                         });
                                             }
 
                                             @Override
-                                            public void onCancelled(DatabaseError databaseError) {
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
                                             }
                                         });
@@ -353,12 +347,12 @@ public class VisitorFragment extends BaseFragment {
                     }
 
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
                     }
                 }
         );
 
-    }
+    }*/
 
 }

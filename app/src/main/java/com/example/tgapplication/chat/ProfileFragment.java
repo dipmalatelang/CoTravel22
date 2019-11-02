@@ -33,6 +33,7 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -68,18 +69,18 @@ public class ProfileFragment extends BaseFragment {
         storageReference = FirebaseStorage.getInstance().getReference("uploads");
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
-        UsersInstance.child(fuser.getUid()).addValueEventListener(new ValueEventListener() {
+        UsersInstance.child(Objects.requireNonNull(fuser).getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                username.setText(user.getUsername());
+                username.setText(Objects.requireNonNull(user).getUsername());
                 String imageUrl="default";
 
                     // need to check this getting terminated
 //                    java.lang.NullPointerException: Attempt to invoke virtual method 'android.content.Context android.support.v4.app.FragmentActivity.getApplicationContext()' on a null object reference
 //                    at com.free.travelguide.fragment.ProfileFragment$1.onDataChange(ProfileFragment.java:82)
 
-                    Glide.with(getActivity().getApplicationContext()).load(imageUrl).placeholder(R.mipmap.ic_launcher).into(image_profile);
+                    Glide.with(Objects.requireNonNull(getActivity()).getApplicationContext()).load(imageUrl).placeholder(R.mipmap.ic_launcher).centerCrop().into(image_profile);
             }
 
             @Override
@@ -106,7 +107,7 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private String getFileExtension(Uri uri){
-        ContentResolver contentResolver = getContext().getContentResolver();
+        ContentResolver contentResolver = Objects.requireNonNull(getContext()).getContentResolver();
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
     }
@@ -125,7 +126,7 @@ public class ProfileFragment extends BaseFragment {
                 @Override
                 public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
                     if (!task.isSuccessful()){
-                        throw  task.getException();
+                        throw Objects.requireNonNull(task.getException());
                     }
 
                     return  fileReference.getDownloadUrl();
@@ -135,7 +136,7 @@ public class ProfileFragment extends BaseFragment {
                 public void onComplete(@NonNull Task<Uri> task) {
                     if (task.isSuccessful()){
                         Uri downloadUri = task.getResult();
-                        String mUri = downloadUri.toString();
+                        String mUri = Objects.requireNonNull(downloadUri).toString();
 
                         HashMap<String, Object> map = new HashMap<>();
                         map.put("imageURL", ""+mUri);

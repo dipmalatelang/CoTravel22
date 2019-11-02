@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
+import com.example.tgapplication.fragment.account.MyProfileFragment;
 import com.example.tgapplication.fragment.chat.ChatFragment;
 import com.example.tgapplication.fragment.favourite.FavouriteFragment;
 import com.example.tgapplication.fragment.trip.TripFragment;
@@ -39,6 +40,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     ConstraintLayout container;
     private SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
+    String fragmentValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,13 +52,10 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         retrieveUserDetail();
 
         navView = findViewById(R.id.nav_view);
-        navView.setSelectedItemId(R.id.nav_trip);
         navView.setOnNavigationItemSelectedListener(this);
 
         container = findViewById(R.id.container);
 
-        fragment = new TripFragment();
-        loadFragment(fragment);
     }
 
     private void retrieveUserDetail() {
@@ -74,7 +73,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
                             Upload upload = ds.getValue(Upload.class);
 //                    if (Objects.requireNonNull(upload).getType() == 1) {
 //                        Log.i(TAG, "onDataChange Pictures: " + upload.getUrl());
-                            if(upload.getType()==1)
+                            if(Objects.requireNonNull(upload).getType()==1)
                             profilePhotoDetails(upload.getUrl());
 //                    }
                         }
@@ -105,6 +104,63 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         editor.apply();
     }
 
+    private void storedFragment(String fragmentString)
+    {
+        sharedPreferences=getSharedPreferences("LoginDetails",Context.MODE_PRIVATE);
+        editor=sharedPreferences.edit();
+        editor.putString("loadFrag",fragmentString);
+        editor.apply();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getBackRunningFragment();
+    }
+
+    private void getBackRunningFragment()
+    {
+        sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        if (sharedPreferences.contains("loadFrag")) {
+            fragmentValue = (sharedPreferences.getString("loadFrag", ""));
+        }
+        if(fragmentValue==null)
+        {
+            fragment = new TripFragment();
+            navView.setSelectedItemId(R.id.nav_trip);
+        }
+        else {
+            if(fragmentValue.equalsIgnoreCase("profile"))
+            {
+                fragment = new MyProfileFragment();
+                navView.setSelectedItemId(R.id.nav_account);
+            }
+            else if(fragmentValue.equalsIgnoreCase("chat"))
+            {
+                fragment = new ChatFragment();
+                navView.setSelectedItemId(R.id.nav_chat);
+            }
+            else if(fragmentValue.equalsIgnoreCase("favourite"))
+            {
+                fragment = new FavouriteFragment();
+                navView.setSelectedItemId(R.id.nav_favorites);
+            }
+            else if(fragmentValue.equalsIgnoreCase("visitor"))
+            {
+                fragment = new VisitorFragment();
+                navView.setSelectedItemId(R.id.nav_vistor);
+            }
+            else
+            {
+                fragment = new TripFragment();
+                navView.setSelectedItemId(R.id.nav_trip);
+            }
+        }
+
+        loadFragment(fragment);
+
+    }
 
     private boolean loadFragment(Fragment fragment) {
         //switching fragment
@@ -127,23 +183,29 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         switch (item.getItemId()) {
             case R.id.nav_account:
                 fragment = new MyProfileFragment();
+                storedFragment("profile");
                 break;
             case R.id.nav_chat:
                 fragment = new ChatFragment();
+                storedFragment("chat");
                 break;
             case R.id.nav_favorites:
                 fragment = new FavouriteFragment();
+                storedFragment("favourite");
                 break;
             case R.id.nav_trip:
                 fragment = new TripFragment();
+                storedFragment("trip");
                 break;
             case R.id.nav_vistor:
                 fragment = new VisitorFragment();
+                storedFragment("visitor");
                 break;
         }
 
         return loadFragment(fragment);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -1,3 +1,4 @@
+/*
 package com.example.tgapplication.fragment.account;
 
 import android.app.ProgressDialog;
@@ -45,6 +46,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -118,7 +120,7 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
         View v = inflater.inflate(R.layout.fragment_account, container, false);
         ButterKnife.bind(this, v);
 
-        SharedPreferences prefs = getActivity().getSharedPreferences("Filter_TripList", MODE_PRIVATE);
+        SharedPreferences prefs = Objects.requireNonNull(Objects.requireNonNull(getActivity())).getSharedPreferences("Filter_TripList", MODE_PRIVATE);
 
         String str_city = prefs.getString("str_city", "not_defined");//"No name defined" is the default value.
         String str_lang = prefs.getString("str_lang", "not_defined"); //0 is the default value.
@@ -191,7 +193,7 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
         storageReference = FirebaseStorage.getInstance().getReference();
         PicturesInstance.child(fuser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
 //dismissing the progress dialog
                 progressDialog.dismiss();
 
@@ -223,7 +225,7 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
                 progressDialog.dismiss();
             }
         });
@@ -249,7 +251,8 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
 
 
 
-      /*  if (getActivity().getIntent() != null) {
+      */
+/*  if (getActivity().getIntent() != null) {
             if (getActivity().getIntent().getSerializableExtra("MyObj") == null) {
                 userList = (List<User>) getActivity().getIntent().getSerializableExtra("MyDataObj");
                 Log.i("My Name", userList.get(i).getName());
@@ -297,7 +300,8 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
 
 //            mDate.setText(tripL.getFrom_to_date());
             }
-        }*/
+        }*//*
+
 
         return v;
     }
@@ -415,7 +419,7 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
 
         if(getActivity()!=null)
         {
-                Glide.with(getActivity()).load(imageUrl).placeholder(R.drawable.ic_broken_image_primary_24dp).into(mTrip);
+                Glide.with(getActivity()).load(imageUrl).placeholder(R.drawable.ic_broken_image_primary_24dp).centerCrop().into(mTrip);
         }
     }
 
@@ -508,14 +512,13 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
 
 
 
-
     public void myList(FirebaseUser fuser) {
         // any way you managed to go the node that has the 'grp_key'
 
         UsersInstance.addValueEventListener(
                 new ValueEventListener() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         userList.clear();
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
@@ -532,7 +535,7 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
                     }
 
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
                     }
                 }
@@ -562,7 +565,7 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
     }
 
     public String getFileExtension(Uri uri) {
-        ContentResolver cR = getActivity().getContentResolver();
+        ContentResolver cR = Objects.requireNonNull(Objects.requireNonNull(getActivity())).getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(cR.getType(uri));
     }
@@ -597,7 +600,7 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
                                 public void onComplete(@NonNull Task<Uri> task) {
                                     if(task.isSuccessful())
                                     {
-                                        getDownloadImageUrl = task.getResult().toString();
+                                        getDownloadImageUrl = Objects.requireNonNull(Objects.requireNonNull(task.getResult())).toString();
                                         Log.i("FirebaseImages",getDownloadImageUrl);
 
 //creating the upload object to store uploaded image details
@@ -605,10 +608,10 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
 
 //adding an upload to firebase database
 
-                                        PicturesInstance.child(fuser.getUid()).child(uploadId).setValue(upload);
+                                        PicturesInstance.child(fuser.getUid()).child(Objects.requireNonNull(uploadId)).setValue(upload);
                                     }
                                else {
-                                   snackBar(fragment_acc_constraintLayout,task.getException().getMessage());
+                                   snackBar(fragment_acc_constraintLayout, Objects.requireNonNull(task.getException()).getMessage());
                                     }
                                 }
                             });
@@ -620,7 +623,7 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
                         @Override
                         public void onFailure(@NonNull Exception exception) {
                             progressDialog.dismiss();
-                            Log.i("Failure",exception.getMessage());
+                            Log.i("Failure", Objects.requireNonNull(exception.getMessage()));
                         }
                     })
                     .addOnProgressListener(taskSnapshot -> {
@@ -634,3 +637,4 @@ public class AccountFragment extends BaseFragment implements View.OnClickListene
     }
 
 }
+*/

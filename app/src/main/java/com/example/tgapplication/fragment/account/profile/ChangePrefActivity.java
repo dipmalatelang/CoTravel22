@@ -13,12 +13,12 @@ import androidx.annotation.Nullable;
 
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
-import com.example.tgapplication.login.RegisterActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -100,8 +100,8 @@ public class ChangePrefActivity extends BaseActivity {
             android.widget.ListPopupWindow AgeFrompopupWindow = (android.widget.ListPopupWindow) popup.get(spAgeFrom);
             android.widget.ListPopupWindow AgeTopopupWindow = (android.widget.ListPopupWindow) popup.get(spAgeTo);
             // Set popupWindow height to 500px
-            AgeFrompopupWindow.setHeight(500);
-            AgeTopopupWindow.setHeight(500);
+            Objects.requireNonNull(AgeFrompopupWindow).setHeight(500);
+            Objects.requireNonNull(AgeTopopupWindow).setHeight(500);
 
         }
         catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {

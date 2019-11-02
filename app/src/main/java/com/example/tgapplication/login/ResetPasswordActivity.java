@@ -16,6 +16,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Objects;
+
 public class ResetPasswordActivity extends BaseActivity implements View.OnClickListener {
 
     EditText send_email;
@@ -38,7 +40,7 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
         send_email = findViewById(R.id.send_email);
         btn_reset = findViewById(R.id.btn_reset);
 
-        value = getIntent().getExtras().getString("nextActivity");
+        value = Objects.requireNonNull(getIntent().getExtras()).getString("nextActivity");
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -49,39 +51,33 @@ public class ResetPasswordActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-        switch (v.getId())
-        {
-            case R.id.btn_reset:
-                showProgressDialog();
-                        String email = send_email.getText().toString();
+        if (v.getId() == R.id.btn_reset) {
+            showProgressDialog();
+            String email = send_email.getText().toString();
 
-                        if (email.equals("")){
+            if (email.equals("")) {
+                dismissProgressDialog();
+                snackBar(linearLayout, "All fileds are required!");
+            } else {
+                firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
                             dismissProgressDialog();
-                            snackBar(linearLayout,"All fileds are required!");
+                            snackBar(linearLayout, "Please check you Email");
+                            Intent resetIntent = new Intent(ResetPasswordActivity.this, LoginActivity.class);
+                            resetIntent.putExtra("nextActivity", value);
+                            startActivity(resetIntent);
                         } else {
-                            firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful())
-                                    {
-                                        dismissProgressDialog();
-                                       snackBar(linearLayout,"Please check you Email");
-                                        Intent resetIntent= new Intent(ResetPasswordActivity.this,LoginActivity.class);
-                                        resetIntent.putExtra("nextActivity",value);
-                                        startActivity(resetIntent);
-                                    }
-                                    else
-                                    {
-                                        dismissProgressDialog();
-                                        String error = task.getException().getMessage();
+                            dismissProgressDialog();
+                            String error = Objects.requireNonNull(task.getException()).getMessage();
 
-                                        snackBar(linearLayout,error);
+                            snackBar(linearLayout, error);
 
-                                    }
-                                }
-                            });
                         }
-                break;
+                    }
+                });
+            }
         }
     }
 }

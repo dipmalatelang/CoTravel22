@@ -12,7 +12,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.bumptech.glide.Glide;
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.User;
@@ -25,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -45,12 +45,12 @@ public class ChatActivity extends BaseActivity {
         username = findViewById(R.id.username);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        Log.i("FirebaseUser",firebaseUser.getUid());
+        Log.i("FirebaseUser", Objects.requireNonNull(firebaseUser).getUid());
         UsersInstance.child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                    username.setText(user.getUsername());
+                    username.setText(Objects.requireNonNull(user).getUsername());
                      profile_image.setImageResource(R.drawable.image1);
                      Log.i("ImageUser",""+user);
 
@@ -80,7 +80,7 @@ public class ChatActivity extends BaseActivity {
                 int unread = 0;
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Chat chat = snapshot.getValue(Chat.class);
-                    if (chat.getReceiver().equals(firebaseUser.getUid()) && !chat.isIsseen()){
+                    if (Objects.requireNonNull(chat).getReceiver().equals(firebaseUser.getUid()) && !chat.isIsseen()){
                         unread++;
                     }
                 }
@@ -140,6 +140,7 @@ public class ChatActivity extends BaseActivity {
             this.titles = new ArrayList<>();
         }
 
+        @NonNull
         @Override
         public Fragment getItem(int position) {
             return fragments.get(position);

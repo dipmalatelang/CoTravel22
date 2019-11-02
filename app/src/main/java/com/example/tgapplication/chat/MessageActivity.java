@@ -118,7 +118,7 @@ int fav;
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                username.setText(user.getUsername());
+                username.setText(Objects.requireNonNull(user).getUsername());
 
                 PicturesInstance.child(userid).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -134,10 +134,10 @@ int fav;
                         }
 //                        Log.i("TAG", "onDataChangeMy: "+pictureUrl);
                         //and this
-                        Glide.with(getApplicationContext()).load(pictureUrl).placeholder(R.mipmap.ic_launcher).into(profile_image);
+                        Glide.with(getApplicationContext()).load(pictureUrl).placeholder(R.mipmap.ic_launcher).centerCrop().into(profile_image);
                         FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
-                            public void onDataChange(DataSnapshot snapshot) {
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                                 if (snapshot.hasChild(user.getId())) {
                                     // run some code
@@ -181,7 +181,7 @@ int fav;
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Chat chat = snapshot.getValue(Chat.class);
-                    if (chat.getReceiver().equals(fuser.getUid()) && chat.getSender().equals(userid)) {
+                    if (Objects.requireNonNull(chat).getReceiver().equals(fuser.getUid()) && chat.getSender().equals(userid)) {
                         HashMap<String, Object> hashMap = new HashMap<>();
                         hashMap.put("isseen", true);
                         snapshot.getRef().updateChildren(hashMap);
@@ -232,7 +232,7 @@ int fav;
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 if (notify) {
-                    sendNotifiaction(receiver, user.getUsername(), msg);
+                    sendNotifiaction(receiver, Objects.requireNonNull(user).getUsername(), msg);
                 }
                 notify = false;
             }
@@ -254,21 +254,21 @@ int fav;
                     Data data = new Data(fuser.getUid(), R.mipmap.ic_launcher, username + ": " + message, "New Message",
                             userid);
 
-                    Sender sender = new Sender(data, token.getToken());
+                    Sender sender = new Sender(data, Objects.requireNonNull(token).getToken());
 
                     apiService.sendNotification(sender)
                             .enqueue(new Callback<MyResponse>() {
                                 @Override
-                                public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                                public void onResponse(@NonNull Call<MyResponse> call, @NonNull Response<MyResponse> response) {
                                     if (response.code() == 200) {
-                                        if (response.body().success != 1) {
+                                        if (Objects.requireNonNull(response.body()).success != 1) {
                                             snackBar(message_realtivelayout, "Failed!");
                                         }
                                     }
                                 }
 
                                 @Override
-                                public void onFailure(Call<MyResponse> call, Throwable t) {
+                                public void onFailure(@NonNull Call<MyResponse> call, @NonNull Throwable t) {
 
                                 }
                             });
@@ -291,7 +291,7 @@ int fav;
                 mchat.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Chat chat = snapshot.getValue(Chat.class);
-                    if (chat.getReceiver().equals(myid) && chat.getSender().equals(userid) ||
+                    if (Objects.requireNonNull(chat).getReceiver().equals(myid) && chat.getSender().equals(userid) ||
                             chat.getReceiver().equals(userid) && chat.getSender().equals(myid)) {
                         mchat.add(chat);
                     }
@@ -339,19 +339,15 @@ int fav;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                // todo: goto back activity from here
+        if (item.getItemId() == android.R.id.home) {// todo: goto back activity from here
 
-                Intent intent = new Intent(MessageActivity.this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                finish();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
+            Intent intent = new Intent(MessageActivity.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     @OnClick({R.id.toolbar, R.id.btn_send})
