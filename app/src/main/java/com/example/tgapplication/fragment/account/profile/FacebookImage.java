@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -23,11 +22,6 @@ import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -43,8 +37,6 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static com.facebook.FacebookSdk.setAutoLogAppEventsEnabled;
 
 public class FacebookImage extends BaseActivity {
 
@@ -103,7 +95,7 @@ public class FacebookImage extends BaseActivity {
                                         JSONObject joMain = response.getJSONObject(); //convert GraphResponse response to JSONObject
                                         if (joMain.has("data")) {
                                             JSONArray jaData = joMain.optJSONArray("data"); //find JSONArray from JSONObject
-                                            Log.i(TAG, "onCompleted: " + jaData.length());
+                                            Log.i(TAG, "onCompleted: " + Objects.requireNonNull(jaData).length());
                                             for (int i = 0; i < jaData.length(); i++) {//find no. of album using jaData.length()
                                                 JSONObject joAlbum = jaData.getJSONObject(i); //convert perticular album into JSONObject
                                                 Log.i(TAG, "onCompleted: " + joAlbum.optString("name"));
@@ -189,7 +181,7 @@ public class FacebookImage extends BaseActivity {
                                     JSONObject joMain = response.getJSONObject(); //convert GraphResponse response to JSONObject
                                     if (joMain.has("data")) {
                                         JSONArray jaData = joMain.optJSONArray("data"); //find JSONArray from JSONObject
-                                        Log.i(TAG, "onCompleted: " + jaData.length());
+                                        Log.i(TAG, "onCompleted: " + Objects.requireNonNull(jaData).length());
                                         for (int i = 0; i < jaData.length(); i++) {//find no. of album using jaData.length()
                                             JSONObject joAlbum = jaData.getJSONObject(i); //convert perticular album into JSONObject
                                             Log.i(TAG, "onCompleted: " + joAlbum.optString("name"));
@@ -239,7 +231,7 @@ public class FacebookImage extends BaseActivity {
                                     JSONArray jaData = joMain.optJSONArray("data");
 //                                    Log.i("TAG", "onCompleted: " + jaData.getJSONObject(0).getJSONArray("images").getJSONObject(0).getString("source"));
                                     lstFBImages = new ArrayList<>();
-                                    for (int i = 0; i < jaData.length(); i++)//Get no. of images
+                                    for (int i = 0; i < Objects.requireNonNull(jaData).length(); i++)//Get no. of images
                                     {
                                         JSONObject joAlbum = jaData.getJSONObject(i);
                                         JSONArray jaImages = joAlbum.getJSONArray("images");
@@ -261,7 +253,7 @@ public class FacebookImage extends BaseActivity {
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                                                     Upload upload = ds.getValue(Upload.class);
-                                                    Log.i(TAG, "onDataChange: " + upload.getUrl());
+                                                    Log.i(TAG, "onDataChange: " + Objects.requireNonNull(upload).getUrl());
                                                     if (upload.getName().equalsIgnoreCase("FB_Image")) {
                                                         for (int k = 0; k < lstFBImages.size(); k++) {
                                                             if (upload.getUrl().equals(lstFBImages.get(k).getUrl())) {
@@ -301,7 +293,7 @@ public class FacebookImage extends BaseActivity {
                                             public void fetchFbImage(String imgUrl) {
                                                 String uploadId = PicturesInstance.child(fuser.getUid()).push().getKey();
                                                 Upload upload = new Upload(uploadId, "FB_Image", imgUrl, 2);
-                                                PicturesInstance.child(fuser.getUid()).child(uploadId).setValue(upload);
+                                                PicturesInstance.child(fuser.getUid()).child(Objects.requireNonNull(uploadId)).setValue(upload);
                                             }
                                         });
 

@@ -132,7 +132,7 @@
                         android:fontFamily="@font/montserrat"
                         android:gravity="center"
                         android:textColor="@color/white"
-                        android:textSize="10sp" />
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -162,7 +162,7 @@
                         android:fontFamily="@font/montserrat"
                         android:gravity="center"
                         android:textColor="@color/white"
-                        android:textSize="10sp" />
+                        android:textSize="12sp" />
                 </LinearLayout>
 
             </LinearLayout>

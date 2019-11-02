@@ -22,6 +22,7 @@ import com.example.tgapplication.R;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class FilterTripActivity extends BaseActivity implements View.OnClickListener {
 
@@ -201,13 +202,13 @@ public class FilterTripActivity extends BaseActivity implements View.OnClickList
             android.widget.ListPopupWindow EyespopupWindow = (android.widget.ListPopupWindow) popup.get(spinner_eyes);
 
             // Set popupWindow height to 500px
-            TopopupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
-            FrompopupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
-            LanguagepopupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
-            HeightpopupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
-            BodypopupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
-            HairpopupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
-            EyespopupWindow.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+            Objects.requireNonNull(TopopupWindow).setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+            Objects.requireNonNull(FrompopupWindow).setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+            Objects.requireNonNull(LanguagepopupWindow).setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+            Objects.requireNonNull(HeightpopupWindow).setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+            Objects.requireNonNull(BodypopupWindow).setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+            Objects.requireNonNull(HairpopupWindow).setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+            Objects.requireNonNull(EyespopupWindow).setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
         }
         catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {
             // silently fail...
@@ -216,48 +217,40 @@ public class FilterTripActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        switch (v.getId())
-        {
-            case R.id.btn_add_trip:
+        if (v.getId() == R.id.btn_add_trip) {
+            if (et_city.getText().toString().length() <= 0) {
+                snackBar(activity_filter_trip_coodinatelayout, "Please enter city name");
+            } else {
 
-                if (et_city.getText().toString().length()<=0){
-                    snackBar(activity_filter_trip_coodinatelayout,"Please enter city name");
-                }
-                else
-                {
+                int selectedId = rg_trip.getCheckedRadioButtonId();
+                rb_visit = findViewById(selectedId);
 
-                    int selectedId= rg_trip.getCheckedRadioButtonId();
-                    rb_visit=findViewById(selectedId);
+                String str_city = et_city.getText().toString();
+                String str_lang = spinner_lang.getSelectedItem().toString();
+                String str_eyes = spinner_eyes.getSelectedItem().toString();
+                String str_hairs = spinner_hairs.getSelectedItem().toString();
+                String str_height = spinner_height.getSelectedItem().toString();
+                String str_bodytype = spinner_bodytype.getSelectedItem().toString();
+                String str_look = spinner_look.getSelectedItem().toString();
+                String str_from = spinner_from.getSelectedItem().toString();
+                String str_to = spinner_to.getSelectedItem().toString();
+                String str_visit = rb_visit.getText().toString();
 
-                    String str_city=et_city.getText().toString();
-                    String str_lang = spinner_lang.getSelectedItem().toString();
-                    String str_eyes=spinner_eyes.getSelectedItem().toString();
-                    String str_hairs=spinner_hairs.getSelectedItem().toString();
-                    String str_height=spinner_height.getSelectedItem().toString();
-                    String str_bodytype=spinner_bodytype.getSelectedItem().toString();
-                    String str_look = spinner_look.getSelectedItem().toString();
-                    String str_from = spinner_from.getSelectedItem().toString();
-                    String str_to = spinner_to.getSelectedItem().toString();
-                    String str_visit= rb_visit.getText().toString();
+                editor = prefs.edit();
+                editor.putString("str_city", str_city);
+                editor.putString("str_lang", str_lang);
+                editor.putString("str_eyes", str_eyes);
+                editor.putString("str_hairs", str_hairs);
+                editor.putString("str_height", str_height);
+                editor.putString("str_bodytype", str_bodytype);
+                editor.putString("str_look", str_look);
+                editor.putString("str_from", str_from);
+                editor.putString("str_to", str_to);
+                editor.putString("str_visit", str_visit);
+                editor.apply();
 
-                    editor = prefs.edit();
-                    editor.putString("str_city", str_city);
-                    editor.putString("str_lang", str_lang);
-                    editor.putString("str_eyes",str_eyes);
-                    editor.putString("str_hairs",str_hairs);
-                    editor.putString("str_height",str_height);
-                    editor.putString("str_bodytype",str_bodytype);
-                    editor.putString("str_look",str_look);
-                    editor.putString("str_from",str_from);
-                    editor.putString("str_to",str_to);
-                    editor.putString("str_visit",str_visit);
-                    editor.apply();
-
-                    startActivity(new Intent(FilterTripActivity.this, MainActivity.class));
-                }
-
-
-                break;
+                startActivity(new Intent(FilterTripActivity.this, MainActivity.class));
+            }
         }
     }
 }

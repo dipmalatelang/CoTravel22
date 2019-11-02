@@ -1,21 +1,19 @@
 package com.example.tgapplication.fragment.visitor.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
-import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.fragment.visitor.UserImg;
 
 import java.util.List;
@@ -26,8 +24,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
     private Context mContext;
     private List<UserImg> mTrip;
     private String uid;
-    private int fav_int;
-    private List<String> favArray;
+
 
     public VisitorAdapter(Context mContext, String uid, List<UserImg> mTrip, VisitorInterface listener)
     {
@@ -39,6 +36,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
     }
 
 
+    @NonNull
     @Override
     public VisitorViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
@@ -68,7 +66,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
 //            Glide.with(mContext).load(getBitmapFromURL(tList.getUser().getImageURL())).into(holder.mImage);
 //        }
 
-        Glide.with(mContext).load(tList.getPictureUrl()).placeholder(R.drawable.ic_broken_image_primary_24dp).into(holder.mImage);
+        Glide.with(mContext).load(tList.getPictureUrl()).placeholder(R.drawable.ic_broken_image_primary_24dp).centerCrop().into(holder.mImage);
 //        holder.mImage.setImageResource(tList.getPictureUrl());
         holder.mTitle.setText(tList.getUser().getName());
 
@@ -119,7 +117,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
     {
 
         ImageView mImage, ivTitle;
-        TextView mTitle, mCity, mDate;
+        TextView mTitle, mCity;
         CardView mCardView;
 
         VisitorViewHolder(View itemView)

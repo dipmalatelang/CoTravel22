@@ -72,7 +72,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         else {
             holder.tvfavourite.setVisibility(View.VISIBLE);
         }
-        Glide.with(mContext).load(mUsers.get(position).getPictureUrl()).placeholder(R.drawable.ic_broken_image_primary_24dp).into(holder.profile_image);
+        Glide.with(mContext).load(mUsers.get(position).getPictureUrl()).centerCrop().placeholder(R.drawable.ic_broken_image_primary_24dp).into(holder.profile_image);
 //        }
 
         viewBinderHelper.bind(holder.swipe_layout_1, user.getId());
@@ -116,12 +116,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             holder.tvrestore.setVisibility(View.VISIBLE);
             holder.tvdelete.setVisibility(View.GONE);
         }
-        else {
+        else
+            {
             holder.tvrestore.setVisibility(View.GONE);
         }
 
         if (ischat){
-            listener.lastMessage(mContext,user.getId(), holder.last_msg);
+            listener.lastMessage(mContext,user.getId(), holder.last_msg, holder.chat);
 
         } else {
             holder.last_msg.setVisibility(View.GONE);
@@ -227,7 +228,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     UserInterface listener;
     public interface UserInterface
     {
-        void lastMessage(Context mContext, String userid, TextView last_msg);
+        void lastMessage(Context mContext, String userid, TextView last_msg, RelativeLayout chat);
         void addToFav(String userid, int position);
         void addToTrash(String userid, int position);
         void restoreFromTrash(String userid, int position);

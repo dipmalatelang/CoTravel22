@@ -7,13 +7,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
-import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.fragment.visitor.UserImg;
 
@@ -25,8 +25,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
     private Context mContext;
     private List<UserImg> mTrip;
     private String uid;
-    private int fav_int;
-    private List<String> favArray;
+
 
     public FavouriteAdapter(Context mContext, String uid, List<UserImg> mTrip, FavouriteInterface listener) {
         this.uid=uid;
@@ -38,6 +37,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
 
 
 
+    @NonNull
     @Override
     public ProfileVisitorViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
@@ -50,7 +50,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
     {
 
         final User tList = mTrip.get(position).getUser();
-        Glide.with(mContext).load(mTrip.get(position).getPictureUrl()).placeholder(R.drawable.ic_broken_image_primary_24dp).into(holder.mImage);
+        Glide.with(mContext).load(mTrip.get(position).getPictureUrl()).centerCrop().placeholder(R.drawable.ic_broken_image_primary_24dp).into(holder.mImage);
 
         holder.mTitle.setText(tList.getName());
 //        holder.mCity.setVisibility(View.GONE);
@@ -107,7 +107,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
     {
 
         ImageView mImage, ivTitle;
-        TextView mTitle, mCity, mDate;
+        TextView mTitle, mCity;
         CardView mCardView;
 
         ProfileVisitorViewHolder(View itemView)

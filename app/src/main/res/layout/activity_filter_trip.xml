@@ -85,7 +85,7 @@
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:hint="City, Country"
-            style="@style/edit_text_profile_edit_style"/>
+            style="@style/edit_text_profile_edit_style" />
 
         <TextView
             android:layout_width="match_parent"

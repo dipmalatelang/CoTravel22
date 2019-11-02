@@ -1,4 +1,4 @@
-package com.example.tgapplication;
+package com.example.tgapplication.fragment.account;
 
 
 import android.content.Context;
@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.tgapplication.BaseFragment;
+import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.account.profile.ChangePasswordActivity;
 import com.example.tgapplication.fragment.account.profile.ChangePrefActivity;
 import com.example.tgapplication.fragment.account.profile.ProfileActivity;
@@ -67,7 +69,7 @@ public class MyProfileFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_my_profile, container, false);
         ButterKnife.bind(this, view);
 
-        sharedPreferences = getActivity().getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        sharedPreferences = Objects.requireNonNull(getActivity()).getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
         if (sharedPreferences.contains("Name")) {
             name = (sharedPreferences.getString("Name", ""));
         }
@@ -90,7 +92,7 @@ public class MyProfileFragment extends BaseFragment {
         tvProfileName.setText(name);
         tvProfileAge.setText(age);
         Log.i("TAG", "setProfileValue: " + imageUrl);
-        Glide.with(Objects.requireNonNull(getActivity())).load(imageUrl).placeholder(R.drawable.ic_broken_image_primary_24dp).into(ivImage);
+        Glide.with(Objects.requireNonNull(getActivity())).load(imageUrl).placeholder(R.drawable.ic_broken_image_primary_24dp).centerCrop().into(ivImage);
     }
 
 

@@ -38,6 +38,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -75,7 +76,7 @@ public class EditPhotoActivity extends BaseActivity {
 
         PicturesInstance.child(fuser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NotNull DataSnapshot snapshot) {
+            public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
 //dismissing the progress dialog
                 dismissProgressDialog();
                 upload1 = new ArrayList<>();
@@ -86,7 +87,7 @@ public class EditPhotoActivity extends BaseActivity {
 //iterating through all the values in database
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                     Upload upload = postSnapshot.getValue(Upload.class);
-                    if (upload.getType() == 3) {
+                    if (Objects.requireNonNull(upload).getType() == 3) {
                         private_uploads.add(upload);
                     }
                     else if(upload.getType()==1) {
@@ -170,7 +171,7 @@ public class EditPhotoActivity extends BaseActivity {
             }
 
             @Override
-            public void onCancelled(@NotNull DatabaseError databaseError) {
+            public void onCancelled(@NonNull @NotNull DatabaseError databaseError) {
                 dismissProgressDialog();
             }
         });
@@ -342,7 +343,7 @@ public class EditPhotoActivity extends BaseActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Uri> task) {
                                     if (task.isSuccessful()) {
-                                        getDownloadImageUrl = task.getResult().toString();
+                                        getDownloadImageUrl = Objects.requireNonNull(task.getResult()).toString();
                                         Log.i("FirebaseImages", getDownloadImageUrl);
 
 //creating the upload object to store uploaded image details
@@ -356,9 +357,9 @@ public class EditPhotoActivity extends BaseActivity {
 //adding an upload to firebase database
                                         Log.i(TAG, "onComplete: " + PicturesInstance.child(fuser.getUid()).getKey());
 
-                                        PicturesInstance.child(fuser.getUid()).child(uploadId).setValue(upload);
+                                        PicturesInstance.child(fuser.getUid()).child(Objects.requireNonNull(uploadId)).setValue(upload);
                                     } else {
-                                        Toast.makeText(EditPhotoActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(EditPhotoActivity.this, Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
 //                                        snackBar(fragment_acc_constraintLayout,task.getException().getMessage());
                                     }
                                 }
@@ -371,7 +372,7 @@ public class EditPhotoActivity extends BaseActivity {
                         @Override
                         public void onFailure(@NonNull Exception exception) {
                             progressDialog.dismiss();
-                            Log.i("Failure", exception.getMessage());
+                            Log.i("Failure", Objects.requireNonNull(exception.getMessage()));
                         }
                     })
                     .addOnProgressListener(taskSnapshot -> {

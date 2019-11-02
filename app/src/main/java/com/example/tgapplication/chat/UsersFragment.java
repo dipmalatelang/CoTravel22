@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -41,7 +42,7 @@ public class UsersFragment extends BaseFragment {
     String pictureUrl;
 int fav;
     EditText search_users;
-    final FirebaseUser fuser = FirebaseAuth.getInstance().getCurrentUser();
+//    final FirebaseUser fuser = FirebaseAuth.getInstance().getCurrentUser();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -111,7 +112,7 @@ int fav;
                                 Log.i("TAG", "onDataChangeMy: " + pictureUrl);
                                 FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
-                                    public void onDataChange(DataSnapshot snapshot) {
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                                         if (snapshot.hasChild(user.getId())) {
                                             // run some code
@@ -142,8 +143,8 @@ int fav;
 
                     userAdapter = new UserAdapter(getContext(), mUsers, false, new UserAdapter.UserInterface() {
                         @Override
-                        public void lastMessage(Context mContext, String userid, TextView last_msg) {
-                            checkForLastMsg(mContext, userid, last_msg);
+                        public void lastMessage(Context mContext, String userid, TextView last_msg, RelativeLayout chat) {
+                            checkForLastMsg(mContext, userid, last_msg,chat);
                         }
 
                         @Override
@@ -191,8 +192,8 @@ int fav;
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         User user = snapshot.getValue(User.class);
 
-                        Log.i("hghghhgh",""+user.getId());
-                        Log.i("hghghhgh1",""+firebaseUser.getUid());
+                        Log.i("hghghhgh",""+ Objects.requireNonNull(user).getId());
+                        Log.i("hghghhgh1",""+ Objects.requireNonNull(firebaseUser).getUid());
                         try {
                             if (!user.getId().equals(firebaseUser.getUid())){
                                 mUsers.add(new UserImg(user,pictureUrl,fav));
@@ -205,8 +206,8 @@ int fav;
 
                     userAdapter = new UserAdapter(getContext(), mUsers, false, new UserAdapter.UserInterface() {
                         @Override
-                        public void lastMessage(Context mContext, String userid, TextView last_msg) {
-                            checkForLastMsg(mContext, userid,last_msg);
+                        public void lastMessage(Context mContext, String userid, TextView last_msg, RelativeLayout chat) {
+                            checkForLastMsg(mContext, userid, last_msg,chat);
                         }
 
                         @Override

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -94,7 +95,7 @@ int fav;
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     User user = snapshot.getValue(User.class);
                     for (Chatlist chatlist : usersList) {
-                        if (user.getId().equals(chatlist.getId())) {
+                        if (Objects.requireNonNull(user).getId().equals(chatlist.getId())) {
                             PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -110,7 +111,7 @@ int fav;
                                     Log.i("TAG", "onDataChangeMy: " + pictureUrl);
                                     FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
-                                        public void onDataChange(DataSnapshot snapshot) {
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                                             if (snapshot.hasChild(user.getId())) {
                                                 // run some code
@@ -130,9 +131,10 @@ int fav;
                                     });
 
                                     userAdapter = new UserAdapter(getContext(), mUsers, true, new UserAdapter.UserInterface() {
+
                                         @Override
-                                        public void lastMessage(Context mContext, String userid, TextView last_msg) {
-                                            checkForLastMsg(mContext, userid, last_msg);
+                                        public void lastMessage(Context mContext, String userid, TextView last_msg, RelativeLayout chat) {
+                                            checkForLastMsg(mContext, userid, last_msg,chat);
                                         }
 
                                         @Override
