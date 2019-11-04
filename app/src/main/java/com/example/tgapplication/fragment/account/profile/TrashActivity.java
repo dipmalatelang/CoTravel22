@@ -6,6 +6,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -43,7 +44,7 @@ public class TrashActivity extends BaseActivity {
     EditText searchUsers;
 
     String pictureUrl = "";
-    int fav,trash;
+    int fav;
     FirebaseUser fuser;
     private UserAdapter userAdapter;
     List<UserImg> mUsers = new ArrayList<>();
@@ -110,8 +111,8 @@ public class TrashActivity extends BaseActivity {
         }
         userAdapter = new UserAdapter(this, mUser, true, true,new UserAdapter.UserInterface() {
             @Override
-            public void lastMessage(Context mContext, String userid, TextView last_msg) {
-                checkForLastMsg(mContext, userid, last_msg);
+            public void lastMessage(Context mContext, String userid, TextView last_msg, RelativeLayout chat) {
+                checkForLastMsg(mContext, userid, last_msg,chat);
             }
 
             @Override
@@ -161,7 +162,7 @@ public class TrashActivity extends BaseActivity {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     User user = snapshot.getValue(User.class);
                     for (Chatlist chatlist : usersList) {
-                        if (user.getId().equals(chatlist.getId())) {
+                        if (Objects.requireNonNull(user).getId().equals(chatlist.getId())) {
 
                             TrashInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
@@ -177,7 +178,7 @@ public class TrashActivity extends BaseActivity {
 */
                                         FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
-                                            public void onDataChange(DataSnapshot snapshot) {
+                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                                                 if (snapshot.hasChild(user.getId())) {
                                                     // run some code
@@ -206,8 +207,8 @@ public class TrashActivity extends BaseActivity {
                                                         Log.i("TAG", "onDataChange: chat" + mUsers.size());
                                                         userAdapter = new UserAdapter(TrashActivity.this, mUsers, true, true,new UserAdapter.UserInterface() {
                                                             @Override
-                                                            public void lastMessage(Context mContext, String userid, TextView last_msg) {
-                                                                checkForLastMsg(mContext, userid, last_msg);
+                                                            public void lastMessage(Context mContext, String userid, TextView last_msg, RelativeLayout chat) {
+                                                                checkForLastMsg(mContext, userid, last_msg,chat);
                                                             }
 
                                                             @Override

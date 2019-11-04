@@ -6,8 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +18,8 @@ import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.TripList;
 
 import java.util.List;
+
+import static android.graphics.Color.parseColor;
 
 public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder > {
 
@@ -31,6 +35,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
     }
 
 
+    @NonNull
     @Override
     public TripViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -52,6 +57,22 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
 
         holder.mCity.setText(tList.getPlanLocation());
         holder.mDate.setText(tList.getFrom_to_date());
+
+        if (position%3==0) {
+            holder.linearLayout.setBackgroundColor(parseColor("#26A69A"));
+        } else if(position%2==0){
+            holder.linearLayout.setBackgroundColor(parseColor("#EC407A"));
+        } else if(position%4==0)
+        {
+            holder.linearLayout.setBackgroundColor(parseColor("#8D6E63"));
+        }
+        else {
+            holder.linearLayout.setBackgroundColor(parseColor("#FFCA28"));
+
+        }
+
+
+
 
         holder.mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +102,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
         ImageView mImage;
         TextView mTitle, mCity, mDate;
         CardView mCardView;
+        LinearLayout linearLayout;
 
         TripViewHolder(View itemView) {
             super(itemView);
@@ -90,6 +112,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
             mCity = itemView.findViewById(R.id.tvCity);
             mDate = itemView.findViewById(R.id.tvDate);
             mCardView = itemView.findViewById(R.id.cardview);
+            linearLayout = itemView.findViewById(R.id.linearLayout);
         }
     }
 }

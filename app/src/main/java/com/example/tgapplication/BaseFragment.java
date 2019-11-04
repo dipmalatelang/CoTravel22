@@ -3,12 +3,11 @@ package com.example.tgapplication;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -34,6 +33,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public abstract class BaseFragment extends Fragment {
 
@@ -46,9 +46,7 @@ public abstract class BaseFragment extends Fragment {
     public List<Date> dates = new ArrayList<>();
     private Date closest;
     public List<PlanTrip> from_to_dates = new ArrayList<>();
-    String str_city, str_lang, str_eyes, str_hairs, str_height, str_bodytype, str_look, str_from, str_to, str_visit;
     String tripNote = "";
-    public List<TripList> myFavArray = new ArrayList<>();
     String theLastMessage;
     Boolean textType;
 
@@ -106,7 +104,7 @@ public abstract class BaseFragment extends Fragment {
     }
 
     public void clearSharedPref() {
-        SharedPreferences preferences = getActivity().getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        SharedPreferences preferences = Objects.requireNonNull(getActivity()).getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
         editor.apply();
@@ -167,13 +165,13 @@ public abstract class BaseFragment extends Fragment {
 
     //Progress Bar
     public void showProgressDialog() {
-        if (!getActivity().isFinishing()) {
+        if (!Objects.requireNonNull(getActivity()).isFinishing()) {
             ProgressActivity.showDialog(getActivity());
         }
     }
 
     public void dismissProgressDialog() {
-        if (!getActivity().isFinishing()) {
+        if (!Objects.requireNonNull(getActivity()).isFinishing()) {
             ProgressActivity.dismissDialog();
         }
     }
@@ -204,7 +202,7 @@ public abstract class BaseFragment extends Fragment {
     }*/
 
     //check for last message
-    public void checkForLastMsg(Context mContext, final String userid, final TextView last_msg) {
+    public void checkForLastMsg(Context mContext, final String userid, TextView last_msg, RelativeLayout rl_chat) {
 
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -224,26 +222,33 @@ public abstract class BaseFragment extends Fragment {
                         }
                     }
 
-                    if (chat.getSender().equals(userid) && !chat.isIsseen()) {
+                    if (Objects.requireNonNull(chat).getSender().equals(userid) && !chat.isIsseen()) {
                         Log.i("TAG", "onDataChange: HighLight " + userid + " " + chat.isIsseen());
                         textType = chat.isIsseen();
                     }
 
+                  /*  if (chat.getReceiver().equals(firebaseUser.getUid()) && !chat.isIsseen()){
+                        unread++;
+                    }*/
+
                 }
 
-                if (!textType)
+      /*          if (!textType)
+                {
+//                    rl_chat.setBackgroundColor(Color.GRAY);
                     last_msg.setTextColor(mContext.getResources().getColor(R.color.black));
+
+                }
                 else
+                {
+//                    rl_chat.setBackgroundColor(Color.LTGRAY);
                     last_msg.setTextColor(mContext.getResources().getColor(R.color.gray));
+                }*/
 
-                switch (theLastMessage) {
-                    case "default":
-                        last_msg.setText("No Message");
-                        break;
-
-                    default:
-                        last_msg.setText(theLastMessage);
-                        break;
+                if ("default".equals(theLastMessage)) {
+                    last_msg.setText("No Message");
+                } else {
+                    last_msg.setText(theLastMessage);
                 }
 
 //                theLastMessage = "default";
@@ -256,8 +261,8 @@ public abstract class BaseFragment extends Fragment {
         });
     }
 
-    public void appDetails(String key, String value) {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("AppDetails", Context.MODE_PRIVATE);
+/*    public void appDetails(String key, String value) {
+        SharedPreferences sharedPreferences = Objects.requireNonNull(getActivity()).getSharedPreferences("AppDetails", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(key, value);
         editor.apply();
@@ -265,11 +270,11 @@ public abstract class BaseFragment extends Fragment {
 
     public String getAppDetails(String key) {
         String name = "";
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("AppDetails", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = Objects.requireNonNull(getActivity()).getSharedPreferences("AppDetails", Context.MODE_PRIVATE);
         if (sharedPreferences.contains(key)) {
             name = sharedPreferences.getString(key, "");
         }
         return name;
-    }
+    }*/
 
 }

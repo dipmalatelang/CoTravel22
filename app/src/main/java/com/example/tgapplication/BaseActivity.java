@@ -3,6 +3,7 @@ package com.example.tgapplication;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.text.method.HideReturnsTransformationMethod;
@@ -12,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,7 +24,6 @@ import com.example.tgapplication.fragment.trip.module.PlanTrip;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.fragment.visitor.UserImg;
-import com.example.tgapplication.photo.Upload;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -42,13 +43,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     public String TAG = "Activity";
     public List<String> visitArray = new ArrayList<>();
     public List<TripList> tripList = new ArrayList<>();
-    public List<PlanTrip> from_to_dates = new ArrayList<>();
-    public List<Date> dates = new ArrayList<>();
-    private Date closest;
     String tripNote = "";
     public int fav_int;
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    public long now = System.currentTimeMillis();
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
     String theLastMessage;
@@ -303,7 +300,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void updateRegister(final ArrayList<String> look, ArrayList<String> age) {
 
 //        User userClass=new User(look,age);
-        UsersInstance.child(mAuth.getCurrentUser().getUid()).child("look").setValue(look);
+        UsersInstance.child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).child("look").setValue(look);
         UsersInstance.child(mAuth.getCurrentUser().getUid()).child("range_age").setValue(age);
 
     }
@@ -330,7 +327,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     //check for last message
-    public void checkForLastMsg(Context mContext, final String userid, final TextView last_msg) {
+    public void checkForLastMsg(Context mContext, final String userid, final TextView last_msg, RelativeLayout rl_chat) {
 
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -350,7 +347,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                         }
                     }
 
-                    if (chat.getSender().equals(userid) && !chat.isIsseen()) {
+                    if (Objects.requireNonNull(chat).getSender().equals(userid) && !chat.isIsseen()) {
                         Log.i("TAG", "onDataChange: HighLight " + userid + " " + chat.isIsseen());
                         textType = chat.isIsseen();
                     }
@@ -358,18 +355,21 @@ public abstract class BaseActivity extends AppCompatActivity {
                 }
 
                 if (!textType)
+                {
+                    rl_chat.setBackgroundColor(Color.DKGRAY);
                     last_msg.setTextColor(mContext.getResources().getColor(R.color.black));
+
+                }
                 else
+                {
+                    rl_chat.setBackgroundColor(Color.GRAY);
                     last_msg.setTextColor(mContext.getResources().getColor(R.color.gray));
+                }
 
-                switch (theLastMessage) {
-                    case "default":
-                        last_msg.setText("No Message");
-                        break;
-
-                    default:
-                        last_msg.setText(theLastMessage);
-                        break;
+                if ("default".equals(theLastMessage)) {
+                    last_msg.setText("No Message");
+                } else {
+                    last_msg.setText(theLastMessage);
                 }
 
 //                theLastMessage = "default";
@@ -407,6 +407,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
 
+/*
     public static class CheckNetwork {
 
 
@@ -414,8 +415,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 
         public static boolean isInternetAvailable(Context context) {
-            NetworkInfo info = (NetworkInfo) ((ConnectivityManager)
-                    context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+            NetworkInfo info = ((ConnectivityManager)
+                    Objects.requireNonNull(context.getSystemService(Context.CONNECTIVITY_SERVICE))).getActiveNetworkInfo();
 
             if (info == null) {
                 Log.d("", "no internet connection");
@@ -432,12 +433,13 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
         }
     }
+*/
 
 
-    private void updateProfilePic(String picUrl) {
+/*    private void updateProfilePic(String picUrl) {
 
-        UsersInstance.child(mAuth.getCurrentUser().getUid()).child("imageURL").setValue(picUrl);
-    }
+        UsersInstance.child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).child("imageURL").setValue(picUrl);
+    }*/
 
 /*    public void hideKeyboard(View view) {
         InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -452,13 +454,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         View view = this.getCurrentFocus();
         if (view != null) {
             InputMethodManager inputManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            Objects.requireNonNull(inputManager).hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
 
-    public String firstletterCap(String myString) {
+  /*  public String firstletterCap(String myString) {
         return myString.substring(0, 1).toUpperCase() + myString.substring(1);
-    }
+    }*/
 
 
 

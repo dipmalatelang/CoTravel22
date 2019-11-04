@@ -1,34 +1,28 @@
 package com.example.tgapplication.fragment.account.profile;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import com.example.tgapplication.BaseActivity;
-import com.example.tgapplication.MyProfileFragment;
 import com.example.tgapplication.R;
-import com.example.tgapplication.login.RegisterActivity;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.internal.Utils;
 
 public class ChangePrefActivity extends BaseActivity {
 
@@ -41,15 +35,12 @@ public class ChangePrefActivity extends BaseActivity {
     Spinner spAgeTo;
     ArrayAdapter<String> adapter_age_from, adapter_age_to;
     ArrayList<String> array_age;
-    RelativeLayout relativeLayout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_pref);
         ButterKnife.bind(this);
-        relativeLayout = findViewById(R.id.relativelayout);
-
 
         setPopup();
         setSpinner();
@@ -109,8 +100,8 @@ public class ChangePrefActivity extends BaseActivity {
             android.widget.ListPopupWindow AgeFrompopupWindow = (android.widget.ListPopupWindow) popup.get(spAgeFrom);
             android.widget.ListPopupWindow AgeTopopupWindow = (android.widget.ListPopupWindow) popup.get(spAgeTo);
             // Set popupWindow height to 500px
-            AgeFrompopupWindow.setHeight(500);
-            AgeTopopupWindow.setHeight(500);
+            Objects.requireNonNull(AgeFrompopupWindow).setHeight(500);
+            Objects.requireNonNull(AgeTopopupWindow).setHeight(500);
 
         }
         catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {
@@ -149,22 +140,9 @@ public class ChangePrefActivity extends BaseActivity {
                 range_age.add(str_age_to);
                 updateRegister(look, range_age);
                 updateUI(mAuth.getCurrentUser());
-                snackBar(relativeLayout, " Your Preferences Succssfully Changed..!");
-                Toast.makeText(this, "Your Preferences Succssfully Changed..!", Toast.LENGTH_SHORT).show();
-                finishActivity();
-                
-//                Intent showContent = new Intent(getApplication(),
-//                        MyProfileFragment.class);
-//                startActivity(showContent);
-
-            break;
+                break;
 
 
         }
     }
-
-    private void finishActivity() {
-    }
-
-
 }

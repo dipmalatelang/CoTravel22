@@ -42,7 +42,6 @@ import java.util.Objects;
  */
 public class FavouriteFragment extends BaseFragment {
 
-    String TAG="Favourite";
     //    private final List<TripList> tripList;
     private RecyclerView myFavRV;
     private FirebaseUser fuser;
@@ -63,7 +62,7 @@ public class FavouriteFragment extends BaseFragment {
 
         showProgressDialog();
         fuser = FirebaseAuth.getInstance().getCurrentUser();
-        favList(fuser);
+        favList(Objects.requireNonNull(fuser));
 
 //
 //        favList = (List<TripList>) getIntent().getSerializableExtra("myFav");
@@ -145,13 +144,13 @@ public class FavouriteFragment extends BaseFragment {
 
         FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
                 myFavArray.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
                     String userKey = dataSnapshot.getKey();
-
-                    UsersInstance.child(userKey).addValueEventListener(
+                    fav= 1;
+                    UsersInstance.child(Objects.requireNonNull(userKey)).addValueEventListener(
                             new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -159,17 +158,16 @@ public class FavouriteFragment extends BaseFragment {
                                     // HERE WHAT CORRESPONDS TO JOIN
 //                                    if(Objects.requireNonNull(user).getAccount_type()==1){
 
-                                    FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                               /*     FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot snapshot) {
-
                                             if (snapshot.hasChild(user.getId())) {
                                                 // run some code
                                                 fav = 1;
                                             } else {
                                                 fav = 0;
-                                            }
-                                    PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            }*/
+                                    PicturesInstance.child(Objects.requireNonNull(user).getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -223,18 +221,18 @@ public class FavouriteFragment extends BaseFragment {
                                 }
 
                                 @Override
-                                public void onCancelled(DatabaseError databaseError) {
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
 
                                 }
                             });
 
-                                }
+                               /* }
 
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError databaseError) {
 
                                 }
-                            });
+                            });*/
 
                 }}
             @Override
@@ -254,7 +252,7 @@ public class FavouriteFragment extends BaseFragment {
         UsersInstance.addValueEventListener(
                 new ValueEventListener() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         tripList.clear();
                         myDetail.clear();
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -263,10 +261,10 @@ public class FavouriteFragment extends BaseFragment {
 
 //                                getFav(fuser.getUid(),user.getId());
                             // HERE WHAT CORRESPONDS TO JOIN
-                            if (user.getId().equalsIgnoreCase(id)) {
+                            if (Objects.requireNonNull(user).getId().equalsIgnoreCase(id)) {
                                 FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
-                                    public void onDataChange(DataSnapshot snapshot) {
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                                         if (snapshot.hasChild(user.getId())) {
                                             // run some code
@@ -282,7 +280,7 @@ public class FavouriteFragment extends BaseFragment {
                                                 for(DataSnapshot ds: dataSnapshot.getChildren())
                                                 {
                                                     Upload upload=ds.getValue(Upload.class);
-                                                    if(upload.getType()==1)
+                                                    if(Objects.requireNonNull(upload).getType()==1)
                                                     {
                                                         pictureUrl=upload.getUrl();
                                                     }
@@ -292,7 +290,7 @@ public class FavouriteFragment extends BaseFragment {
                                                         .addValueEventListener(new ValueEventListener() {
 
                                                             @Override
-                                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                                                                 from_to_dates.clear();
                                                                 dates.clear();
@@ -305,7 +303,7 @@ public class FavouriteFragment extends BaseFragment {
                                                                     for (DataSnapshot snapshot1 : snapshot.getChildren()) {
 
                                                                         TripData tripData = snapshot1.getValue(TripData.class);
-                                                                        Log.i("VishalD", "" + user.getUsername() + " , " + tripData.getLocation());
+                                                                        Log.i("VishalD", "" + user.getUsername() + " , " + Objects.requireNonNull(tripData).getLocation());
 
                                                                         city += tripData.getLocation();
                                                                         tripNote += tripData.getTrip_note();
@@ -336,7 +334,7 @@ public class FavouriteFragment extends BaseFragment {
                                                             }
 
                                                             @Override
-                                                            public void onCancelled(DatabaseError databaseError) {
+                                                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
                                                             }
                                                         });
@@ -344,7 +342,7 @@ public class FavouriteFragment extends BaseFragment {
                                             }
 
                                             @Override
-                                            public void onCancelled(DatabaseError databaseError) {
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
                                             }
                                         });
@@ -360,7 +358,7 @@ public class FavouriteFragment extends BaseFragment {
                     }
 
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
                     }
                 }

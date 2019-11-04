@@ -32,7 +32,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -89,7 +88,7 @@ public class TripFragment extends BaseFragment {
 //        mTripList = new ArrayList<>();
 //        mTripList1 = new ArrayList<>();
 
-        prefs = getActivity().getSharedPreferences("Filter_TripList", 0);
+        prefs = Objects.requireNonNull(getActivity()).getSharedPreferences("Filter_TripList", 0);
 
         str_city = prefs.getString("str_city", "not_defined");//"No name defined" is the default value.
         str_lang = prefs.getString("str_lang", "not_defined"); //0 is the default value.
@@ -148,11 +147,11 @@ public class TripFragment extends BaseFragment {
     }
 
     private void getDataToFilter() {
-        if (str_lang == "All") {
+        if (str_lang.equals("All")) {
             str_lang = "Arabic,Danish,German,Belorussian,Dutch,Greek,Japanese,Portuguese,Italian,Polish,Spanish,Swedish,Bulgarian,English,Hebrew,Korean,Romanian,Thai,Catalan,Estonian,Hindi,Latvian,Russian,Turkish,Chinese,Filipino,Hungarian,Lithuanian,Serbian,Ukrainian,Croatian,Finnish,Icelandic,Norwegian,Slovak,Urdu,Czech,French,Indonesian,Persian,Slovenian,Vietnamese,Nepali,Armenian,Kurdish";
         }
 
-        if (str_look == "All") {
+        if (str_look.equals("All")) {
             str_look = "Female,Male";
         }
         filterTripList(str_city, str_lang, str_eyes, str_hairs, str_height, str_bodytype, str_look, str_from, str_to, str_visit);
@@ -167,18 +166,18 @@ public class TripFragment extends BaseFragment {
         UsersInstance.addValueEventListener(
                 new ValueEventListener() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         tripList.clear();
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
                             final User user = snapshot.getValue(User.class);
-                            if (!user.getId().equalsIgnoreCase(fuser.getUid())) {
+                            if (!Objects.requireNonNull(user).getId().equalsIgnoreCase(fuser.getUid())) {
 //                                getFav(fuser.getUid(),user.getId());
                                 // HERE WHAT CORRESPONDS TO JOIN
                                 FavoritesInstance
                                         .child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
-                                    public void onDataChange(DataSnapshot snapshot) {
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                                         if (snapshot.hasChild(user.getId())) {
                                             // run some code
@@ -193,7 +192,7 @@ public class TripFragment extends BaseFragment {
                                                 for(DataSnapshot ds: dataSnapshot.getChildren())
                                                 {
                                                     Upload upload=ds.getValue(Upload.class);
-                                                    if(upload.getType()==1)
+                                                    if(Objects.requireNonNull(upload).getType()==1)
                                                     {
                                                         pictureUrl=upload.getUrl();
                                                     }
@@ -204,7 +203,7 @@ public class TripFragment extends BaseFragment {
                                                         .addValueEventListener(new ValueEventListener() {
 
                                                             @Override
-                                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                                                                 from_to_dates.clear();
                                                                 dates.clear();
@@ -219,7 +218,7 @@ public class TripFragment extends BaseFragment {
                                                                         TripData tripData = snapshot1.getValue(TripData.class);
 //                                                                    Log.i("VishalD", "" + user.getUsername() + " , " + tripData.getLocation());
 
-                                                                        city += tripData.getLocation();
+                                                                        city += Objects.requireNonNull(tripData).getLocation();
                                                                         tripNote += tripData.getTrip_note();
                                                                         date += tripData.getFrom_date() + " - " + tripData.getTo_date();
 
@@ -287,7 +286,7 @@ public class TripFragment extends BaseFragment {
                                             }
 
                                             @Override
-                                            public void onCancelled(DatabaseError databaseError) {
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
                                             }
                                         });
@@ -304,7 +303,7 @@ public class TripFragment extends BaseFragment {
                     }
 
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
                     }
                 }
@@ -317,7 +316,7 @@ public class TripFragment extends BaseFragment {
         FavoritesInstance
                 .child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 if (snapshot.hasChild(id)) {
                     // run some code
@@ -374,19 +373,14 @@ public class TripFragment extends BaseFragment {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
         Log.i("Check Now",""+favArray.size());
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
 
-
-    }
 
     public void getAllVisit(FirebaseUser fuser) {
 
@@ -401,12 +395,12 @@ public class TripFragment extends BaseFragment {
 //                  for (DataSnapshot snapshot1 : snapshot.getChildren()) {
 
                     FavList favData = snapshot.getValue(FavList.class);
-                    visitArray.add(favData.getId());
+                    visitArray.add(Objects.requireNonNull(favData).getId());
                 }
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
@@ -418,17 +412,17 @@ public class TripFragment extends BaseFragment {
         UsersInstance.addValueEventListener(
                 new ValueEventListener() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         tripList.clear();
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
                             final User user = snapshot.getValue(User.class);
-                            if (!user.getId().equalsIgnoreCase(fuser.getUid())) {
+                            if (!Objects.requireNonNull(user).getId().equalsIgnoreCase(fuser.getUid())) {
 //                                getFav(fuser.getUid(),user.getId());
                                 // HERE WHAT CORRESPONDS TO JOIN
                                 FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
-                                    public void onDataChange(DataSnapshot snapshot) {
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                                         if (snapshot.hasChild(user.getId())) {
                                             // run some code
@@ -446,7 +440,7 @@ public class TripFragment extends BaseFragment {
                                                 for(DataSnapshot ds: dataSnapshot.getChildren())
                                                 {
                                                     Upload upload=ds.getValue(Upload.class);
-                                                    if(upload.getType()==1)
+                                                    if(Objects.requireNonNull(upload).getType()==1)
                                                     {
                                                         pictureUrl=upload.getUrl();
                                                     }
@@ -459,7 +453,7 @@ public class TripFragment extends BaseFragment {
                                                         .addValueEventListener(new ValueEventListener() {
 
                                                             @Override
-                                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                                                                 from_to_dates.clear();
                                                                 dates.clear();
@@ -472,7 +466,7 @@ public class TripFragment extends BaseFragment {
                                                                     for (DataSnapshot snapshot1 : snapshot.getChildren()) {
 
                                                                         TripData tripData = snapshot1.getValue(TripData.class);
-                                                                        Log.i("VishalD", "" + user.getUsername() + " , " + tripData.getLocation());
+                                                                        Log.i("VishalD", "" + user.getUsername() + " , " + Objects.requireNonNull(tripData).getLocation());
 
                                                                         city += tripData.getLocation();
                                                                         tripNote += tripData.getTrip_note();
@@ -515,14 +509,14 @@ public class TripFragment extends BaseFragment {
                                                             }
 
                                                             @Override
-                                                            public void onCancelled(DatabaseError databaseError) {
+                                                            public void onCancelled(@NonNull DatabaseError databaseError) {
                                                                 Log.i(TAG, "DatabaseError1: "+databaseError);
                                                             }
                                                         });
                                             }
 
                                             @Override
-                                            public void onCancelled(DatabaseError databaseError) {
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
                                             }
                                         });
@@ -539,26 +533,26 @@ public class TripFragment extends BaseFragment {
                     }
 
                     @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
                         Log.i(TAG, "DatabaseError3: "+databaseError);
                     }
                 }
         );
     }
 
-    public String dateformateConverter(String myDate){
+   /* public String dateformateConverter(String myDate){
 
-        Date date = null;
+        Date date;
         try {
             DateFormat originalFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
             DateFormat targetFormat = new SimpleDateFormat("dd MM yyyy",Locale.ENGLISH);
 
             date = originalFormat.parse(myDate);
-            return targetFormat.format(date);
+            return targetFormat.format(Objects.requireNonNull(date));
 
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return myDate;
-    }
+    }*/
 }

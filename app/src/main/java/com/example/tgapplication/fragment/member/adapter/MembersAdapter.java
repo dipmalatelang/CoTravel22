@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,6 +32,7 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.TripView
     }
 
 
+    @NonNull
     @Override
     public TripViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -48,7 +50,7 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.TripView
         }
         else {*/
         Log.i("TAG", "onBindViewHolder: "+tList.getImageUrl());
-            Glide.with(mContext).load(tList.getImageUrl()).placeholder(R.drawable.ic_broken_image_primary_24dp).into(holder.mImage);
+            Glide.with(mContext).load(tList.getImageUrl()).placeholder(R.drawable.ic_broken_image_primary_24dp).centerCrop().into(holder.mImage);
 //        }
 
         holder.mTitle.setText(tList.getName()+" "+tList.getAge());

@@ -26,7 +26,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
     private List<Upload> mUploads;
     String TAG = "AdapterClass";
     String uid;
-    private StorageReference storageReference;
     String previousValue="";
 
 

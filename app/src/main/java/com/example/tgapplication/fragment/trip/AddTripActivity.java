@@ -11,6 +11,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -42,6 +43,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,14 +52,12 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
 
     FirebaseUser fuser;
     Button btn_add_trip;
-    TextView tv_from_date1, tv_to_date1;
     EditText tv_to_date, tv_from_date;
     EditText et_note;
     Calendar mcalendar = Calendar.getInstance();
     int day, month, year;
     RecyclerView recyclerView;
     TripListAdapter mtripAdapter;
-    Toolbar toolbar;
     ArrayList<TripData> trips = new ArrayList<>();
     @BindView(R.id.trip_relativelayout)
     CoordinatorLayout tripRelativelayout;
@@ -168,7 +168,7 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
                 .addValueEventListener(
                         new ValueEventListener() {
                             @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 trips.clear();
                                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                     String city = "";
@@ -206,7 +206,7 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
                             }
 
                             @Override
-                            public void onCancelled(DatabaseError databaseError) {
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
                             }
                         });
@@ -223,10 +223,10 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
             snackBar(tripRelativelayout, "Trip added Successfully..!");
             dismissProgressDialog();
         }
-        TripData tripData = new TripData(userId, et_location.getText().toString(), et_note.getText().toString(),
+        TripData tripData = new TripData(userId, Objects.requireNonNull(et_location.getText()).toString(), et_note.getText().toString(),
                 tv_from_date.getText().toString(), tv_to_date.getText().toString());
 
-        TripsInstance.child(fuser.getUid()).child(userId).setValue(tripData);
+        TripsInstance.child(fuser.getUid()).child(Objects.requireNonNull(userId)).setValue(tripData);
 
 
         displayTripList(fuser.getUid());
@@ -256,7 +256,7 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
             case R.id.btn_add_trip:
                 hideKeyboard();
                 showProgressDialog();
-                String et_locations = et_location.getText().toString().trim();
+                String et_locations = Objects.requireNonNull(et_location.getText()).toString().trim();
                 String et_notes = et_note.getText().toString().trim();
                 String tv_from_dates = tv_from_date.getText().toString().trim();
 
@@ -344,6 +344,7 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
@@ -352,7 +353,7 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.
                 Status status = Autocomplete.getStatusFromIntent(data);
-                Log.i(TAG, status.getStatusMessage());
+                Log.i(TAG, Objects.requireNonNull(status.getStatusMessage()));
             } else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.
             }

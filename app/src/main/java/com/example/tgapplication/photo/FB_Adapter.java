@@ -28,10 +28,8 @@ public class FB_Adapter extends RecyclerView.Adapter<FB_Adapter.ImageViewHolder>
     private Context mcontext;
     private List<FacebookImage.Images> mUploads;
     private String TAG = "AdapterClass";
-    private String uid;
     int count=0;
-    private StorageReference storageReference;
-    String previousValue="";
+    String uid;
 
 
     public FB_Adapter(Context context, String uid, List<FacebookImage.Images> uploads, FbInterface fbInterface) {
@@ -105,10 +103,8 @@ public class FB_Adapter extends RecyclerView.Adapter<FB_Adapter.ImageViewHolder>
     }
 
     public class ImageViewHolder extends RecyclerView.ViewHolder{
-        public ImageView imageView,ivTitle;
+        public ImageView imageView;
         ConstraintLayout cl_image;
-        TextView set_main, pp_eye, delete;
-        EasyFlipView flipView;
         TextView txt_title, txt_body;
 //        public ConstraintLayout cllist;
 
