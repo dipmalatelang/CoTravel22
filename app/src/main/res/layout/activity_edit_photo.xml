@@ -1,148 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout
-
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:background="@color/white"
+<ScrollView android:id="@+id/scrollView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:scrollbars="none"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="1.0"
+    app:layout_constraintStart_toStartOf="parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent"
+    android:weightSum="2"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
+        android:layout_margin="5dp"
+        android:background="@drawable/bg_white_grey_border"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
         <TextView
+            android:paddingStart="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
             android:text="Public Photos"
-            app:layout_constraintBottom_toTopOf="@+id/scrollView"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="5dp" />
+            android:textColor="@color/black"
+            android:textSize="15sp" />
 
-        <ScrollView
-            android:id="@+id/scrollView"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/public_recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="none"
-
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/public_recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_margin="5dp"
-                android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@+id/search_users" />
-
-        </ScrollView>
+            android:layout_margin="5dp"
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 
     <LinearLayout
-        android:visibility="gone"
+        android:layout_margin="5dp"
+        android:background="@drawable/bg_white_grey_border"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="7dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
         <TextView
+            android:paddingStart="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
             android:text="Private Photos"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0"
-            tools:layout_editor_absoluteX="3dp" />
+            android:textColor="@color/black"
+            android:textSize="15sp" />
 
-        <ScrollView
-            android:id="@+id/scrollView01"
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/private_recyclerView"
             android:layout_width="match_parent"
+            android:layout_margin="5dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="52dp"
-            android:scrollbars="none"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent">
-
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/private_recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_margin="5dp"
-                android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@+id/search_users" />
-
-        </ScrollView>
-
+      />
     </LinearLayout>
 
+</LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
-
-<!--<LinearLayout -->
-<!--    android:layout_margin="8dp"-->
-<!--    android:orientation="vertical"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="wrap_content"-->
-
-<!--    xmlns:android="http://schemas.android.com/apk/res/android">-->
-<!--        <TextView-->
-<!--            android:layout_marginTop="8dp"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:textColor="@color/black"-->
-<!--            android:textSize="15sp"-->
-<!--            android:text="Public Photos"/>-->
-<!--    -->
-<!--    <ScrollView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--    <androidx.recyclerview.widget.RecyclerView-->
-<!--    android:id="@+id/public_recyclerView"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="wrap_content"/>-->
-
-<!--        <TextView-->
-<!--            android:layout_marginTop="8dp"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:textColor="@color/black"-->
-<!--            android:textSize="15sp"-->
-<!--            android:text="Private Photos"/>-->
-<!--        <androidx.recyclerview.widget.RecyclerView-->
-<!--            android:id="@+id/private_recyclerView"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"/>-->
-
-
-<!--    </LinearLayout>-->
-
-
-<!--ghb-->
+</ScrollView>

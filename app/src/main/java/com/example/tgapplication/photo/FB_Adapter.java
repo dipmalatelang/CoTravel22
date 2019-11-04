@@ -21,6 +21,8 @@ import com.wajahatkarim3.easyflipview.EasyFlipView;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.graphics.Color.parseColor;
+
 
 public class FB_Adapter extends RecyclerView.Adapter<FB_Adapter.ImageViewHolder> {
     private Context mcontext;
@@ -55,6 +57,13 @@ public class FB_Adapter extends RecyclerView.Adapter<FB_Adapter.ImageViewHolder>
 
 //        holder.textViewName.setText(uploadCurrent.getName());
 //          holder.below_opt.setVisibility(View.VISIBLE);
+
+
+//        if (position%2==0) {
+//            holder.cllist.setBackgroundColor(parseColor("#e8e6e6"));
+//        } else {
+//            holder.cllist.setBackgroundColor(parseColor("#d1c7c7"));
+//        }
 
         for(int j=0;j<mUploads.get(position).getImage_Url().size();j++)
         {
@@ -101,6 +110,8 @@ public class FB_Adapter extends RecyclerView.Adapter<FB_Adapter.ImageViewHolder>
         TextView set_main, pp_eye, delete;
         EasyFlipView flipView;
         TextView txt_title, txt_body;
+//        public ConstraintLayout cllist;
+
 //        public LinearLayout below_opt;
 
         public ImageViewHolder(@NonNull View itemView) {
@@ -111,6 +122,8 @@ public class FB_Adapter extends RecyclerView.Adapter<FB_Adapter.ImageViewHolder>
             txt_title=itemView.findViewById(R.id.txt_title);
             txt_body=itemView.findViewById(R.id.txt_body);
             cl_image=itemView.findViewById(R.id.cl_image);
+//            cllist =itemView.findViewById(R.id.cllist);
+
            /* ivTitle=itemView.findViewById(R.id.ivTitle);
 
             flipView=itemView.findViewById(R.id.flipView);

@@ -274,6 +274,7 @@ public class FacebookImage extends BaseActivity {
 
                                                 }
                                                 photoAlbums.add(new Images(albumId, name, lstFBImages));
+
                                             }
 
                                             @Override
@@ -291,6 +292,9 @@ public class FacebookImage extends BaseActivity {
                                     public void proceed(ArrayList<FbImage> image_url) {
                                         fbRecyclerview.setVisibility(View.GONE);
                                         detailRecyclerview.setVisibility(View.VISIBLE);
+
+
+
 //                                        Intent intent = new Intent(FacebookImage.this, DetailFBImage.class);
 //                                        intent.putExtra("detailFb", new Gson().toJson(image_url));
 //                                        startActivity(intent);
