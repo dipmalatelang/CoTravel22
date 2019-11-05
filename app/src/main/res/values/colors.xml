@@ -73,7 +73,7 @@
     <color name="goldenrod">#DAA520</color>
     <color name="orchid">#DA70D6</color>
     <color name="thistle">#D8BFD8</color>
-    <color name="light_grey">#D3D3D3</color>
+    <color name="light_grey">#54D3D3D3</color>
     <color name="tan">#D2B48C</color>
     <color name="chocolate">#D2691E</color>
     <color name="peru">#CD853F</color>
@@ -155,6 +155,15 @@
     <color name="navy">#000080</color>
     <color name="black">#000000</color>
     <color name="greenTrans">#A9008000</color>
+    
+    
+    
+    <color name="colorpurple1">#5C864B83</color>
+    <color name="colorgreen2">#5B76B071</color>
+    <color name="colorblue3">#5B7E73A3</color>
+    <color name="colorbrowne4">#5B946165</color>
+
+
 
     <color name="background">#1A6C3E72</color>
     <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">@color/colorPrimary</color>

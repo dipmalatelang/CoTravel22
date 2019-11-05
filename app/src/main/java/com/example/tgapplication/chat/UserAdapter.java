@@ -23,6 +23,8 @@ import com.example.tgapplication.fragment.visitor.UserImg;
 
 import java.util.List;
 
+import static android.graphics.Color.parseColor;
+
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     private Context mContext;
@@ -150,6 +152,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                 mContext.startActivity(intent);
             }
         });
+
+//        if (position%2==0) {
+//            holder.chat.setBackgroundColor(parseColor("#e49fcd"));
+//        } else {
+//            holder.chat.setBackgroundColor(parseColor("#ecc4e1"));
+//        }
 
         holder.tvrestore.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -67,7 +67,7 @@
 
     <TextView
         android:id="@+id/tv_my_profile"
-        style="@style/text_view_style"
+        style="@style/text_view_style1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -97,7 +97,7 @@
         android:layout_marginTop="8dp"
         android:text="Change Preferences"
         android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
-        style="@style/text_view_style"
+        style="@style/text_view_style1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view1" />
 
@@ -119,7 +119,7 @@
         android:layout_marginTop="8dp"
         android:text="Verify Account"
         android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
-        style="@style/text_view_style"
+        style="@style/text_view_style1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view2" />
 
@@ -141,7 +141,7 @@
         android:layout_marginTop="8dp"
         android:text="Change Password"
         android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
-        style="@style/text_view_style"
+        style="@style/text_view_style1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view3" />
 
@@ -163,7 +163,7 @@
         android:layout_marginTop="8dp"
         android:text="Trash"
         android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
-        style="@style/text_view_style"
+        style="@style/text_view_style1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view4" />
 
@@ -185,7 +185,7 @@
         android:layout_marginTop="8dp"
         android:text="Logout"
         android:drawableEnd="@drawable/ic_keyboard_arrow_right_black_24dp"
-        style="@style/text_view_style"
+        style="@style/text_view_style1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view5" />
 

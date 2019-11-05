@@ -482,6 +482,7 @@ public class ProfileActivity extends BaseActivity {
         popup.show();//showing popup menu
     }
 
+
     private void alertDialogAccountRemove() {
         AlertDialog.Builder dialog=new AlertDialog.Builder(this);
         dialog.setMessage("Are you sure you want to remove your account?");
