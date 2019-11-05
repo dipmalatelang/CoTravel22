@@ -1,14 +1,17 @@
 package com.example.tgapplication.fragment.favourite.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -18,6 +21,10 @@ import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.fragment.visitor.UserImg;
 
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
+import static android.graphics.Color.parseColor;
 
 public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.ProfileVisitorViewHolder >
 {
@@ -45,6 +52,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
         return new ProfileVisitorViewHolder(mView);
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(final ProfileVisitorViewHolder holder, int position)
     {
@@ -83,8 +91,25 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
 //                mIntent.putExtra("MyObj", tList);
 ////                mIntent.putExtra("FavId",fav_id);
 //                mContext.startActivity(mIntent);
+
             }
+
         });
+        if (position%3==0)
+        {
+            holder.linearLayout.setBackgroundColor(R.color.colorpurple1);
+        } else if(position%2==0)
+        {
+            holder.linearLayout.setBackgroundColor(R.color.colorgreen2);
+        } else if(position%4==0)
+        {
+            holder.linearLayout.setBackgroundColor(R.color.colorblue3);
+        }
+
+        else
+            {
+            holder.linearLayout.setBackgroundColor(R.color.colorbrowne4);
+        }
 
         holder.ivTitle.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_action_fav_remove));
 
@@ -109,6 +134,9 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
         ImageView mImage, ivTitle;
         TextView mTitle, mCity;
         CardView mCardView;
+        public ConstraintLayout cllist;
+        LinearLayout linearLayout;
+
 
         ProfileVisitorViewHolder(View itemView)
         {
@@ -120,6 +148,8 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
             mCity = itemView.findViewById(R.id.tvCity);
             // mDate = itemView.findViewById(R.id.tvDate);
             mCardView = itemView.findViewById(R.id.cardview);
+            cllist =itemView.findViewById(R.id.cllist);
+            linearLayout =itemView.findViewById(R.id.linearLayout);
         }
     }
 
@@ -127,6 +157,6 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
     public interface FavouriteInterface{
         void sendFavourite(String id);
         void setProfileVisit(String uid, String id);
-        void setData(User mTrip,int position);
+        void setData(User mTrip, int position);
     }
 }

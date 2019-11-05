@@ -13,13 +13,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/background">
 
-        <!--        <de.hdodenhof.circleimageview.CircleImageView-->
-        <!--            android:id="@+id/profile_image"-->
-        <!--            android:layout_width="50dp"-->
-        <!--            android:layout_height="50dp"-->
-        <!--            android:src="@drawable/ic_broken_image_primary_24dp" />-->
+        android:background="@drawable/backgroudcolor">
+
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/ivImage"
@@ -80,12 +76,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!--<TextView-->
-    <!--android:id="@+id/tvDate"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="TextView"-->
-    <!--android:textStyle="italic"-->
-    <!--android:gravity="center"/>-->
+
 
 </androidx.cardview.widget.CardView>

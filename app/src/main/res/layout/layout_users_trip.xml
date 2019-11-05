@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    app:cardElevation="1dp"
-    android:layout_margin="1dp"
+    app:cardElevation="0.5dp"
+    android:layout_margin="0.5dp"
     app:cardUseCompatPadding="true"
-    app:cardCornerRadius="1dp"
+    app:cardCornerRadius="0.5dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -33,26 +33,30 @@
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="104dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:layout_editor_absoluteX="84dp">
 
             <TextView
                 android:id="@+id/tvTitle"
+                style="@style/text_view_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/quando"
+                android:textSize="18sp"
                 android:gravity="center"
                 android:text="TextView"
-                android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ivImage" />
 
             <TextView
                 android:id="@+id/tvCity"
+                style="@style/text_view_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat"
                 android:gravity="center"
                 android:text="TextView"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -69,6 +73,7 @@
                 android:paddingEnd="4dp"
                 android:text="TextView"
                 android:textSize="12sp"
+                style="@style/text_view_style"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvCity" />

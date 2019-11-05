@@ -66,6 +66,10 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
         {
             holder.linearLayout.setBackgroundColor(parseColor("#8D6E63"));
         }
+        else if(position%5==0)
+        {
+            holder.linearLayout.setBackgroundColor(parseColor("#b0003a"));
+        }
         else {
             holder.linearLayout.setBackgroundColor(parseColor("#FFCA28"));
 
