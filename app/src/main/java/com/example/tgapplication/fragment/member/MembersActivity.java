@@ -28,6 +28,11 @@ import com.google.firebase.database.annotations.NotNull;
 import java.util.List;
 import java.util.Objects;
 
+import static com.example.tgapplication.Constants.FavoritesInstance;
+import static com.example.tgapplication.Constants.PicturesInstance;
+import static com.example.tgapplication.Constants.ProfileVisitorInstance;
+import static com.example.tgapplication.Constants.UsersInstance;
+
 public class MembersActivity extends BaseActivity {
     private RecyclerView recyclerView;
 

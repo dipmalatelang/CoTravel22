@@ -29,6 +29,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.example.tgapplication.Constants.ChatListInstance;
+import static com.example.tgapplication.Constants.FavoritesInstance;
+import static com.example.tgapplication.Constants.PicturesInstance;
+import static com.example.tgapplication.Constants.TokensInstance;
+import static com.example.tgapplication.Constants.UsersInstance;
+
 public class ChatsFragment extends BaseFragment {
 
     private RecyclerView recyclerView;
@@ -56,7 +62,7 @@ int fav;
 
 
 
-        ChatlistInstance.child(fuser.getUid()).addValueEventListener(new ValueEventListener() {
+        ChatListInstance.child(fuser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 usersList.clear();

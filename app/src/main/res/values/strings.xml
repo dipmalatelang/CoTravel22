@@ -25,9 +25,9 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="todo">TODO</string>
 
-    <string name="add_phone">Add your phone number</string>
-    <string name="phone_verify">We will text a verification code to this number.</string>
-    <string name="verify">Enter the code that send to</string>
+    <string name="add_phone">Verify your phone number</string>
+    <string name="phone_verify">Tap next to verify your account with your phone number</string>
+    <string name="verify">Enter the code that was send to</string>
 
 
     <string name="crop_image_menu_rotate_left">Rotate counter clockwise</string>
@@ -40,6 +40,15 @@
     <string name="Favorites">Add To Favorites</string>
     <string name="Delete">Add To Trash</string>
 
+    <string name="Photo_request">Photo requests</string>
+    <string name="Photo_permits">Photo permit</string>
+    <string name="given_permits">Your given permits</string>
+
+    <string name="Hide_photo">Hide private photo</string>
+    <string name="can_see">Can see private photos</string>
+
+    <string name="gave_access">Gave you access to see private photos</string>
+    <string name="want_to_see_photo">Wants to see your private photos</string>
 
 
 

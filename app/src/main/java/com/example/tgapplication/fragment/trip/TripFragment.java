@@ -41,6 +41,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import static com.example.tgapplication.Constants.FavoritesInstance;
+import static com.example.tgapplication.Constants.PicturesInstance;
+import static com.example.tgapplication.Constants.ProfileVisitorInstance;
+import static com.example.tgapplication.Constants.TripsInstance;
+import static com.example.tgapplication.Constants.UsersInstance;
+
 
 public class TripFragment extends BaseFragment {
 

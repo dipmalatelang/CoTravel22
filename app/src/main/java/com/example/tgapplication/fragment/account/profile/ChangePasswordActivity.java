@@ -54,7 +54,7 @@ public class ChangePasswordActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chnage);
+        setContentView(R.layout.activity_change);
         ButterKnife.bind(this);
 
         etCurrentPassword.setOnTouchListener((view, motionEvent) -> showOrHidePwd(motionEvent, etCurrentPassword));

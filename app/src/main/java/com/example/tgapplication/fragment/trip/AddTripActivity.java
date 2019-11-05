@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -37,6 +38,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -47,6 +49,8 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.example.tgapplication.Constants.TripsInstance;
 
 public class AddTripActivity extends BaseActivity implements View.OnClickListener {
 
@@ -68,6 +72,7 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
     TextInputEditText et_location;
     @BindView(R.id.til_location)
     TextInputLayout til_location;
+    Date tvDateFrom, tvDateTo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -223,7 +228,9 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
             snackBar(tripRelativelayout, "Trip added Successfully..!");
             dismissProgressDialog();
         }
-        TripData tripData = new TripData(userId, Objects.requireNonNull(et_location.getText()).toString(), et_note.getText().toString(),
+
+
+            TripData tripData = new TripData(userId, Objects.requireNonNull(et_location.getText()).toString(), et_note.getText().toString(),
                 tv_from_date.getText().toString(), tv_to_date.getText().toString());
 
         TripsInstance.child(fuser.getUid()).child(Objects.requireNonNull(userId)).setValue(tripData);
@@ -244,8 +251,12 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
     private void clearText() {
         et_note.setText("");
         et_location.setText("");
+        tv_from_date.setText("");
+        tv_to_date.setText("");
         et_location.clearFocus();
         et_note.clearFocus();
+        tv_from_date.clearFocus();
+        tv_to_date.clearFocus();
         edit_id = "";
     }
 
@@ -259,13 +270,51 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
                 String et_locations = Objects.requireNonNull(et_location.getText()).toString().trim();
                 String et_notes = et_note.getText().toString().trim();
                 String tv_from_dates = tv_from_date.getText().toString().trim();
+                String tv_to_dates = tv_to_date.getText().toString().trim();
 
                 if (TextUtils.isEmpty(et_locations) || TextUtils.isEmpty(et_notes) || TextUtils.isEmpty(tv_from_dates) || TextUtils.isEmpty(tv_from_dates)) {
                     snackBar(tripRelativelayout, "All fileds are required !");
                     dismissProgressDialog();
                 } else {
-                    Trips(edit_id);
 
+                    try {
+                        tvDateFrom = new SimpleDateFormat("dd/MM/yyyy").parse(tv_from_dates);
+                        tvDateTo=new SimpleDateFormat("dd/MM/yyyy").parse(tv_to_dates);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    if(trips.size()>0)
+                    {
+                        dismissProgressDialog();
+                        if(!new Date(tv_from_dates).after(new Date(tv_to_dates))) {
+                            for(int i=0;i<trips.size();i++)
+                            {
+                                Log.i(TAG, "onClick: "+new Date(tv_to_dates));
+                                try {
+                                    Date listDateFrom = new SimpleDateFormat("dd/MM/yyyy").parse(trips.get(i).getFrom_date());
+                                    Date listDateTo=new SimpleDateFormat("dd/MM/yyyy").parse(trips.get(i).getTo_date());
+
+                                    if ((tvDateFrom.before(listDateFrom) && tvDateTo.before(listDateFrom))||(tvDateFrom.after(listDateTo) && tvDateTo.after(listDateTo))) {
+                                        Trips(edit_id);
+                                    }
+                                    else {
+                                        snackBar(tripRelativelayout, "Maybe Trip has already planned for these days");
+                                        dismissProgressDialog();
+                                    }
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                    else if(!tvDateFrom.after(tvDateTo)){
+                        Trips(edit_id);
+                    }
+                    else {
+                        snackBar(tripRelativelayout,"Enter proper dates");
+                        dismissProgressDialog();
+                    }
                 }
                 break;
 

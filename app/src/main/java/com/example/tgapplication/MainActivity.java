@@ -32,6 +32,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Objects;
 
+import static com.example.tgapplication.Constants.PicturesInstance;
+import static com.example.tgapplication.Constants.UsersInstance;
+
 public class MainActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     FirebaseUser fUser;

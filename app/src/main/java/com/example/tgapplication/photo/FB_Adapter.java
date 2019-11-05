@@ -78,9 +78,10 @@ public class FB_Adapter extends RecyclerView.Adapter<FB_Adapter.ImageViewHolder>
                 }
             });
 
-            if(mUploads.get(position).getImage_Url().size()>0)
+        Log.i(TAG, "onBindViewHolder: Glide"+mUploads.get(position).getImage_Url().get(0).getUrl());
+//            if(mUploads.get(position).getImage_Url().size()>0)
             Glide.with(mcontext)
-                    .load(mUploads.get(position).getImage_Url().get(0))
+                    .load(mUploads.get(position).getImage_Url().get(0).getUrl())
                     .placeholder(R.drawable.ic_broken_image_primary_24dp)
                     .into(holder.imageView);
 

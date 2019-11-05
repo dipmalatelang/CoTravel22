@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.example.tgapplication.BaseFragment;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.account.profile.ChangePasswordActivity;
 import com.example.tgapplication.fragment.account.profile.ChangePrefActivity;
+import com.example.tgapplication.fragment.account.profile.PhotoRequestActivity;
 import com.example.tgapplication.fragment.account.profile.ProfileActivity;
 import com.example.tgapplication.fragment.account.profile.TrashActivity;
 import com.example.tgapplication.fragment.account.profile.verify.EditPhoneActivity;
@@ -58,6 +60,8 @@ public class MyProfileFragment extends BaseFragment {
     View view5;
     @BindView(R.id.tv_Trash)
     TextView tvTrash;
+    @BindView(R.id.tv_photo_request)
+    TextView tvPhotoRequest;
     private SharedPreferences sharedPreferences;
     String name, imageUrl, age;
 
@@ -82,7 +86,7 @@ public class MyProfileFragment extends BaseFragment {
 
         }
 
-        Log.i("TAG", "onCreateView: "+imageUrl);
+        Log.i("TAG", "onCreateView: " + imageUrl);
         setProfileValue(name, age, imageUrl);
 
         return view;
@@ -96,11 +100,14 @@ public class MyProfileFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.tv_my_profile, R.id.tv_Logout, R.id.iv_Image, R.id.tv_Change_Password, R.id.tv_verify_acc, R.id.tv_Change_Preferences, R.id.tv_Trash})
+    @OnClick({R.id.tv_my_profile, R.id.tv_Logout, R.id.iv_Image, R.id.tv_Change_Password, R.id.tv_verify_acc, R.id.tv_Change_Preferences, R.id.tv_Trash, R.id.tv_photo_request})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             //
 
+            case R.id.tv_photo_request:
+                startActivity(new Intent(getActivity(), PhotoRequestActivity.class));
+                break;
             case R.id.tv_Trash:
                 startActivity(new Intent(getActivity(), TrashActivity.class));
                 break;

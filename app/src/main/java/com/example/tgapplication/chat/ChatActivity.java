@@ -28,6 +28,9 @@ import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.example.tgapplication.Constants.ChatsInstance;
+import static com.example.tgapplication.Constants.UsersInstance;
+
 public class ChatActivity extends BaseActivity {
 
     CircleImageView profile_image;
