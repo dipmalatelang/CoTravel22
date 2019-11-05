@@ -42,6 +42,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.example.tgapplication.Constants.ChatListInstance;
+import static com.example.tgapplication.Constants.ChatsInstance;
+import static com.example.tgapplication.Constants.FavoritesInstance;
+import static com.example.tgapplication.Constants.PicturesInstance;
+import static com.example.tgapplication.Constants.TokensInstance;
+import static com.example.tgapplication.Constants.UsersInstance;
+
 public class MessageActivity extends BaseActivity {
 
     CircleImageView profile_image;
@@ -209,11 +216,11 @@ int fav;
 
         // add user to chat fragment
 
-        ChatlistInstance.child(fuser.getUid()).child(userid).addListenerForSingleValueEvent(new ValueEventListener() {
+        ChatListInstance.child(fuser.getUid()).child(userid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.exists()) {
-                    ChatlistInstance.child(fuser.getUid()).child(userid).child("id").setValue(userid);
+                    ChatListInstance.child(fuser.getUid()).child(userid).child("id").setValue(userid);
                 }
             }
 
@@ -223,7 +230,7 @@ int fav;
             }
         });
 
-        ChatlistInstance.child(userid).child(fuser.getUid()).child("id").setValue(fuser.getUid());
+        ChatListInstance.child(userid).child(fuser.getUid()).child("id").setValue(fuser.getUid());
 
         final String msg = message;
 

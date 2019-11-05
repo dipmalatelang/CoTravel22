@@ -39,6 +39,9 @@ import java.util.Objects;
 
 import butterknife.ButterKnife;
 
+import static com.example.tgapplication.Constants.PicturesInstance;
+import static com.example.tgapplication.Constants.UsersInstance;
+
 //import com.example.tgapplication.trips.TripActivity;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener, View.OnKeyListener {
@@ -164,7 +167,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         ArrayList<String> look = new ArrayList<>();
         ArrayList<String> range_age=new ArrayList<>();
 
-        User userClass=new User(Objects.requireNonNull(user).getUid(), user.getDisplayName(), "offline", Objects.requireNonNull(user.getDisplayName()).toLowerCase(), "", "",  user.getEmail(), user.getProviderId(), "", "", "", "", "", "", look, range_age, "",  user.getDisplayName().toLowerCase(), user.getPhoneNumber(), "", "",1);
+        User userClass=new User(Objects.requireNonNull(user).getUid(), user.getDisplayName(), "offline", Objects.requireNonNull(user.getDisplayName()).toLowerCase(), "", "",  user.getEmail(), user.getProviderId(), "", "", "", "", "", "", look, range_age, "",  user.getDisplayName().toLowerCase(), user.getPhoneNumber(), "", "",1,"");
         UsersInstance.child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).setValue(userClass);
 
         String uploadId = PicturesInstance.child(user.getUid()).push().getKey();

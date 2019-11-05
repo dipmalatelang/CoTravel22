@@ -25,10 +25,12 @@ public class User implements Serializable{
     private String visit;
     private String age;
     private int account_type;
+    private String about_me;
 
+    public User() {
+    }
 
-
-//    public User(String id, String username, String imageURL, String status, String search,String email, String social_media) {
+    //    public User(String id, String username, String imageURL, String status, String search,String email, String social_media) {
 //        this.id = id;
 //        this.username = username;
 //        this.imageURL = imageURL;
@@ -39,9 +41,8 @@ public class User implements Serializable{
 //    }
 
 
-    public User() { }
 
-    public User(String id, String username, String status, String search, String gender, String age, String email, String social_media, String body_type, String dob, String eyes, String hair, String height, String lang, ArrayList<String> look, ArrayList<String> range_age, String location, String name, String phone, String nationality, String visit,int account_type) {
+    public User(String id, String username, String status, String search, String gender, String age, String email, String social_media, String body_type, String dob, String eyes, String hair, String height, String lang, ArrayList<String> look, ArrayList<String> range_age, String location, String name, String phone, String nationality, String visit,int account_type, String about_me) {
         this.id = id;
         this.username = username;
         this.name = name;
@@ -64,8 +65,16 @@ public class User implements Serializable{
         this.status = status;
         this.search = search;
         this.account_type=account_type;
+        this.about_me=about_me;
     }
 
+    public String getAbout_me() {
+        return about_me;
+    }
+
+    public void setAbout_me(String about_me) {
+        this.about_me = about_me;
+    }
 
     public ArrayList<String> getRange_age() {
         return range_age;

@@ -60,6 +60,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import static com.example.tgapplication.Constants.PicturesInstance;
+import static com.example.tgapplication.Constants.UsersInstance;
+
 
 public class RegisterActivity extends BaseActivity implements View.OnClickListener, View.OnTouchListener {
 
@@ -263,7 +266,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            User userClass=new User(Objects.requireNonNull(user).getUid(), user.getDisplayName(), "offline", Objects.requireNonNull(user.getDisplayName()).toLowerCase(), "", "",  user.getEmail(), user.getProviderId(), "", "", "", "", "", "", look, range_age, "",  user.getDisplayName().toLowerCase(), user.getPhoneNumber(), "", "",1);
+                            User userClass=new User(Objects.requireNonNull(user).getUid(), user.getDisplayName(), "offline", Objects.requireNonNull(user.getDisplayName()).toLowerCase(), "", "",  user.getEmail(), user.getProviderId(), "", "", "", "", "", "", look, range_age, "",  user.getDisplayName().toLowerCase(), user.getPhoneNumber(), "", "",1,"");
                             UsersInstance.child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).setValue(userClass);
 
                             String uploadId = PicturesInstance.child(user.getUid()).push().getKey();
@@ -300,7 +303,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
                             Log.i("Done","gothere");
                             User userClass=new User(userid, username,"offline",username.toLowerCase(),str_gender,str_age,email, firebaseUser.getProviderId(),"","","",
-                                    "","","", look, range_age,"",username,"","","",1);
+                                    "","","", look, range_age,"",username,"","","",1,"");
                             UsersInstance.child(userid).setValue(userClass);
                             Log.i("Done","gotin");
 //                            startActivity(new Intent(RegisterActivity.this,LoginActivity.class));

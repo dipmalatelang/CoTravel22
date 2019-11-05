@@ -43,6 +43,8 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.example.tgapplication.Constants.PicturesInstance;
+
 public class EditPhotoActivity extends BaseActivity {
 
     @BindView(R.id.public_recyclerView)

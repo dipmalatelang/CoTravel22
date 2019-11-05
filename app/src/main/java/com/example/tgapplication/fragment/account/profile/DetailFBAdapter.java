@@ -41,18 +41,24 @@ public class DetailFBAdapter extends RecyclerView.Adapter<DetailFBAdapter.Detail
         if(urlImages.get(position).getStatus()==1)
         {
             holder.ivTitle.setVisibility(View.VISIBLE);
+            holder.ivadd.setVisibility(View.INVISIBLE);
         }
-        else {
+        else{
             holder.ivTitle.setVisibility(View.INVISIBLE);
+            holder.ivadd.setVisibility(View.VISIBLE);
         }
+
 
         holder.rl_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                detailFbInterface.fetchFbImage(urlImages.get(position).getUrl());
-                urlImages.get(position).setStatus(1);
-                holder.ivTitle.setVisibility(View.VISIBLE);
-                Toast.makeText(context, "Clicked "+position, Toast.LENGTH_SHORT).show();
+                if(urlImages.get(position).getStatus()!=1)
+                {
+                    detailFbInterface.fetchFbImage(urlImages.get(position).getUrl());
+                    urlImages.get(position).setStatus(1);
+                    holder.ivTitle.setVisibility(View.VISIBLE);
+                    holder.ivadd.setVisibility(View.INVISIBLE);
+                }
             }
         });
         Glide.with(context).load(urlImages.get(position).getUrl()).placeholder(R.drawable.ic_broken_image_primary_24dp)
@@ -65,7 +71,7 @@ public class DetailFBAdapter extends RecyclerView.Adapter<DetailFBAdapter.Detail
     }
 
     public class DetailFBHolder extends RecyclerView.ViewHolder {
-        ImageView imageView, ivTitle;
+        ImageView imageView, ivTitle, ivadd;
         RelativeLayout rl_image;
 
         public DetailFBHolder(@NonNull View itemView) {
@@ -73,6 +79,7 @@ public class DetailFBAdapter extends RecyclerView.Adapter<DetailFBAdapter.Detail
             imageView=itemView.findViewById(R.id.imageView);
             rl_image=itemView.findViewById(R.id.rl_image);
             ivTitle=itemView.findViewById(R.id.ivTitle);
+            ivadd=itemView.findViewById(R.id.ivadd);
 
         }
     }

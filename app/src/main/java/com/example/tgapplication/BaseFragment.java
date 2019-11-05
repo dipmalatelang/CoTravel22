@@ -35,6 +35,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import static com.example.tgapplication.Constants.ChatsInstance;
+import static com.example.tgapplication.Constants.FavoritesInstance;
+import static com.example.tgapplication.Constants.TrashInstance;
+
 public abstract class BaseFragment extends Fragment {
 
     public List<String> visitArray = new ArrayList<>();
@@ -50,15 +54,8 @@ public abstract class BaseFragment extends Fragment {
     String theLastMessage;
     Boolean textType;
 
-    public DatabaseReference PicturesInstance = FirebaseDatabase.getInstance().getReference("Pictures");
-    public DatabaseReference TrashInstance = FirebaseDatabase.getInstance().getReference("Trash");
-    public DatabaseReference ChatlistInstance = FirebaseDatabase.getInstance().getReference("Chatlist");
-    public DatabaseReference ChatsInstance = FirebaseDatabase.getInstance().getReference("Chats");
-    public DatabaseReference FavoritesInstance = FirebaseDatabase.getInstance().getReference("Favorites");
-    public DatabaseReference ProfileVisitorInstance = FirebaseDatabase.getInstance().getReference("ProfileVisitor");
-    public DatabaseReference TokensInstance = FirebaseDatabase.getInstance().getReference("Tokens");
-    public DatabaseReference TripsInstance = FirebaseDatabase.getInstance().getReference("Trips");
-    public DatabaseReference UsersInstance = FirebaseDatabase.getInstance().getReference("Users");
+
+
 
 
     public List<TripList> findClosestDate(List<Date> dates, UserImg userImg) {
@@ -89,14 +86,14 @@ public abstract class BaseFragment extends Fragment {
 //                String ageValue= getBirthday(user.getDob());
                 String dateFromTo = from_to_dates.get(i).getDate_from() + " - " + from_to_dates.get(i).getDate_to();
 
-                TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getAge(), user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), from_to_dates.get(i).getLocation(), tripNote, dateFromTo, userImg.getFav(), visit_id);
+                TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getAge(), user.getGender(), user.getAbout_me(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), from_to_dates.get(i).getLocation(), tripNote, dateFromTo, userImg.getFav(), visit_id);
                 tripList.add(tripListClass);
             }
         }
 
         if (tripList.size() < 1) {
 
-            TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getAge(), user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), "", tripNote, "", userImg.getFav(), visit_id);
+            TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getAge(), user.getGender(), user.getAbout_me(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), "", tripNote, "", userImg.getFav(), visit_id);
             tripList.add(tripListClass);
         }
 

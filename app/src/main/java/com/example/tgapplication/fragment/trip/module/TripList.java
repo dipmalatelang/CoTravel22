@@ -9,6 +9,7 @@ public class TripList implements Serializable {
     private int favid;
     private String id;
     private String name;
+    private String about_me;
     private String imageUrl;
     private String planLocation;
     private String trip_note;
@@ -23,7 +24,7 @@ public class TripList implements Serializable {
 
     }
 
-    public TripList(String id, String name, String imageUrl, String age, String gender, String userLocation, String nationality, String lang, String height, String body_type, String eyes, String hair, ArrayList<String> look, String visit, String planLocation, String trip_note, String from_to_date, int favid, int visit_id) {
+    public TripList(String id, String name, String imageUrl, String age, String gender, String about_me, String userLocation, String nationality, String lang, String height, String body_type, String eyes, String hair, ArrayList<String> look, String visit, String planLocation, String trip_note, String from_to_date, int favid, int visit_id) {
         this.id=id;
         this.name=name;
         this.imageUrl=imageUrl;
@@ -32,6 +33,7 @@ public class TripList implements Serializable {
         this.from_to_date = from_to_date;
         this.age=age;
         this.gender=gender;
+        this.about_me=about_me;
         this.userLocation=userLocation;
         this.nationality=nationality;
         this.lang= lang;
@@ -45,13 +47,14 @@ public class TripList implements Serializable {
         this.visit_id=visit_id;
     }
 
-    public TripList(String id, String username, String imageURL, String age, String gender, String location, String nationality, String lang, String height, String body_type, String eyes, String hair, ArrayList<String> look, String visit, String tripNote, int fav_id, int visit_id) {
+    public TripList(String id, String username, String imageURL, String age, String gender, String about_me, String location, String nationality, String lang, String height, String body_type, String eyes, String hair, ArrayList<String> look, String visit, String tripNote, int fav_id, int visit_id) {
         this.id=id;
         this.name=username;
         this.imageUrl=imageURL;
         this.trip_note = tripNote;
         this.age=age;
         this.gender=gender;
+        this.about_me=about_me;
         this.userLocation=location;
         this.nationality=nationality;
         this.lang= lang;
@@ -63,6 +66,15 @@ public class TripList implements Serializable {
         this.visit= visit;
         this.favid=fav_id;
         this.visit_id=visit_id;
+    }
+
+
+    public String getAbout_me() {
+        return about_me;
+    }
+
+    public void setAbout_me(String about_me) {
+        this.about_me = about_me;
     }
 
     public int getVisit_id() {

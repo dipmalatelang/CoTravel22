@@ -41,7 +41,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.pnikosis.materialishprogress.ProgressWheel;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
@@ -56,25 +55,29 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.example.tgapplication.Constants.UsersInstance;
+
 public class EditProfileActivity extends BaseActivity implements View.OnClickListener {
 
-    Button btn_regi;
-    EditText et_name, et_location, et_visit;
-    RadioGroup rg_gender;
-    RadioButton rb_gender;
-    TextView TV_dob;
+    /* Button btn_regi;
+     EditText et_name, et_location, et_visit;
+     RadioGroup rg_gender;
+
+     TextView TV_dob;*/
     int day, month, year;
-    CheckBox cb_girl, cb_men;
-    CoordinatorLayout activity_profile_coordinatelayout;
+    RadioButton rb_gender;
+
+    /* CheckBox cb_girl, cb_men;
+     CoordinatorLayout activity_profile_coordinatelayout;*/
     FirebaseUser fuser;
     User prevUser;
     ArrayList<String> str_look = new ArrayList<>();
 
-
+/*
     AutoCompleteTextView suggestion_nationality, suggestion_height;
-    MultiAutoCompleteTextView suggestion_lang;
+    MultiAutoCompleteTextView suggestion_lang;*/
 
-    Spinner Sp_bodytype, Sp_hairs, Sp_eyes;
+    /*Spinner Sp_bodytype, Sp_hairs, Sp_eyes;*/
 
     Calendar mcalendar = Calendar.getInstance();
 
@@ -82,6 +85,38 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     RadioButton rbMale;
     @BindView(R.id.rb_female)
     RadioButton rbFemale;
+    @BindView(R.id.et_name)
+    EditText etName;
+    @BindView(R.id.tv_dob)
+    TextView tvDob;
+    @BindView(R.id.et_location)
+    EditText etLocation;
+    @BindView(R.id.Nationality_suggestion)
+    AutoCompleteTextView NationalitySuggestion;
+    @BindView(R.id.Lang_suggestion)
+    MultiAutoCompleteTextView LangSuggestion;
+    @BindView(R.id.Height_suggestion)
+    AutoCompleteTextView HeightSuggestion;
+    @BindView(R.id.sp_body_type)
+    Spinner spBodyType;
+    @BindView(R.id.sp_eyes)
+    Spinner spEyes;
+    @BindView(R.id.sp_hair)
+    Spinner spHair;
+    @BindView(R.id.et_visit)
+    EditText etVisit;
+    @BindView(R.id.rg_gender)
+    RadioGroup rgGender;
+    @BindView(R.id.cb_men)
+    CheckBox cbMen;
+    @BindView(R.id.cb_girl)
+    CheckBox cbGirl;
+    @BindView(R.id.btn_regi)
+    Button btnRegi;
+    @BindView(R.id.activity_profile_coordinatelayout)
+    CoordinatorLayout activityProfileCoordinatelayout;
+    @BindView(R.id.et_about_me)
+    EditText etAboutMe;
     private ArrayList<User> prevUserList = new ArrayList<>();
     ArrayAdapter<String> Nationalityadapter, Languageadapter, Heightadapter, Bodyadapter, Hairadapter, Eyesadapter;
 
@@ -102,26 +137,26 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         ButterKnife.bind(this);
         Places.initialize(getApplicationContext(), BuildConfig.map_api_key);
 
-        btn_regi = findViewById(R.id.btn_regi);
+       /* btn_regi = findViewById(R.id.btn_regi);
         et_name = findViewById(R.id.et_name);
         et_location = findViewById(R.id.et_location);
         et_visit = findViewById(R.id.et_visit);
         rg_gender = findViewById(R.id.rg_gender);
         TV_dob = findViewById(R.id.tv_dob);
-        activity_profile_coordinatelayout = findViewById(R.id.activity_profile_coordinatelayout);
+        activity_profile_coordinatelayout = findViewById(R.id.activity_profile_coordinatelayout);*/
 
-        Sp_bodytype = findViewById(R.id.sp_body_type);
+     /*   Sp_bodytype = findViewById(R.id.sp_body_type);
         Sp_hairs = findViewById(R.id.sp_hair);
         Sp_eyes = findViewById(R.id.sp_eyes);
 
         suggestion_nationality = findViewById(R.id.Nationality_suggestion);
         suggestion_lang = findViewById(R.id.Lang_suggestion);
-        suggestion_height = findViewById(R.id.Height_suggestion);
+        suggestion_height = findViewById(R.id.Height_suggestion);*/
 
-        cb_girl = findViewById(R.id.cb_girl);
-        cb_men = findViewById(R.id.cb_men);
-        cb_girl.setOnClickListener(this);
-        cb_men.setOnClickListener(this);
+     /*   cb_girl = findViewById(R.id.cb_girl);
+        cb_men = findViewById(R.id.cb_men);*/
+        cbGirl.setOnClickListener(this);
+        cbMen.setOnClickListener(this);
 
 
         day = mcalendar.get(Calendar.DAY_OF_MONTH);
@@ -132,14 +167,14 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         Date today = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String dateTostr = simpleDateFormat.format(today);
-        TV_dob.setText(dateTostr);
+        tvDob.setText(dateTostr);
 
         // Initialize Firebase Auth
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
         myList(fuser);
 
-        btn_regi.setOnClickListener(this);
+        btnRegi.setOnClickListener(this);
 
 
         String[] nationalitySpinner = new String[]{
@@ -168,30 +203,30 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
 
         Nationalityadapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, nationalitySpinner);
         Nationalityadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        suggestion_nationality.setAdapter(Nationalityadapter);
+        NationalitySuggestion.setAdapter(Nationalityadapter);
 
         Languageadapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, langSpinner);
         Languageadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        suggestion_lang.setAdapter(Languageadapter);
-        suggestion_lang.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+        LangSuggestion.setAdapter(Languageadapter);
+        LangSuggestion.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
 
         Heightadapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, heightSpinner);
         Heightadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        suggestion_height.setAdapter(Heightadapter);
+        HeightSuggestion.setAdapter(Heightadapter);
 
         Bodyadapter = new ArrayAdapter<>(this, R.layout.spinner_text, BodyTypeSpinner);
         Bodyadapter.setDropDownViewResource(R.layout.spinner_text);
-        Sp_bodytype.setAdapter(Bodyadapter);
+        spBodyType.setAdapter(Bodyadapter);
 
         Hairadapter = new ArrayAdapter<>(this, R.layout.spinner_text, HairSpinner);
         Hairadapter.setDropDownViewResource(R.layout.spinner_text);
-        Sp_hairs.setAdapter(Hairadapter);
+        spHair.setAdapter(Hairadapter);
 
         Eyesadapter = new ArrayAdapter<>(this, R.layout.spinner_text, EyeSpinner);
         Eyesadapter.setDropDownViewResource(R.layout.spinner_text);
-        Sp_eyes.setAdapter(Eyesadapter);
+        spEyes.setAdapter(Eyesadapter);
 
-        TV_dob.setOnClickListener(new View.OnClickListener() {
+        tvDob.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DatePickerDialog.OnDateSetListener dob = new DatePickerDialog.OnDateSetListener() {
@@ -213,7 +248,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
                         }
 
 //                        view.setMinDate(System.currentTimeMillis());
-                        TV_dob.setText(new StringBuilder().append(sDay).append("/").append(sMonth).append("/").append(year).append(" "));
+                        tvDob.setText(new StringBuilder().append(sDay).append("/").append(sMonth).append("/").append(year).append(" "));
                     }
                 };
 
@@ -247,7 +282,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
                         }
                         if (prevUserList.size() > 0) {
                             for (int i = 0; i < prevUserList.size(); i++)
-                                setDefaultVal(prevUserList.get(i).getName(), prevUserList.get(i).getDob(), prevUserList.get(i).getGender(), prevUserList.get(i).getAge(), prevUserList.get(i).getLook(), prevUserList.get(i).getLocation(), prevUserList.get(i).getNationality(), prevUserList.get(i).getLang(), prevUserList.get(i).getHeight(), prevUserList.get(i).getBody_type(), prevUserList.get(i).getEyes(), prevUserList.get(i).getHair(), prevUserList.get(i).getVisit());
+                                setDefaultVal(prevUserList.get(i).getName(), prevUserList.get(i).getDob(), prevUserList.get(i).getGender(), prevUserList.get(i).getAbout_me(), prevUserList.get(i).getAge(), prevUserList.get(i).getLook(), prevUserList.get(i).getLocation(), prevUserList.get(i).getNationality(), prevUserList.get(i).getLang(), prevUserList.get(i).getHeight(), prevUserList.get(i).getBody_type(), prevUserList.get(i).getEyes(), prevUserList.get(i).getHair(), prevUserList.get(i).getVisit());
                         }
                     }
 
@@ -259,26 +294,28 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         );
     }
 
-    private void setDefaultVal(String name, String dob, String gender, String age, ArrayList<String> look, String location, String nationality, String lang, String height, String body_type, String eyes, String hair, String visit) {
-        et_name.setText(name);
-        et_location.setText(location);
-        et_visit.setText(visit);
-        suggestion_nationality.setText(nationality);
+    private void setDefaultVal(String name, String dob, String gender, String about_me,String age, ArrayList<String> look, String location, String nationality, String lang, String height, String body_type, String eyes, String hair, String visit) {
+        etName.setText(name);
+        etLocation.setText(location);
+        etVisit.setText(visit);
+        etAboutMe.setText(about_me);
+        NationalitySuggestion.setText(nationality);
         if (lang != null && !lang.equalsIgnoreCase("")) {
-            suggestion_lang.setText(lang + ", ");
+            LangSuggestion.setText(lang + ", ");
         } else {
-            suggestion_lang.setText(lang);
+            LangSuggestion.setText(lang);
         }
-        suggestion_height.setText(height);
-        TV_dob.setText(dob);
+        HeightSuggestion.setText(height);
+        tvDob.setText(dob);
         str_look = look;
-        Sp_hairs.setSelection(Hairadapter.getPosition(hair));
-        Sp_eyes.setSelection(Eyesadapter.getPosition(eyes));
-        Sp_bodytype.setSelection(Bodyadapter.getPosition(body_type));
+        spHair.setSelection(Hairadapter.getPosition(hair));
+        spEyes.setSelection(Eyesadapter.getPosition(eyes));
+        spBodyType.setSelection(Bodyadapter.getPosition(body_type));
 
-        if (gender.equalsIgnoreCase("female")) {
+        Log.i(TAG, "setDefaultVal: Gender" + gender);
+        if (gender.equalsIgnoreCase("female") || gender.equalsIgnoreCase("Girl")) {
             rbFemale.setChecked(true);
-        } else if (gender.equalsIgnoreCase("male")) {
+        } else if (gender.equalsIgnoreCase("male") || gender.equalsIgnoreCase("Boy")) {
             rbMale.setChecked(true);
         }
 
@@ -286,9 +323,9 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         for (int i = 0; i < look.size(); i++) {
             Log.i("TAG", "setDefaultVal: " + look.get(i));
             if (look.get(i).equalsIgnoreCase("female")) {
-                cb_girl.setChecked(true);
+                cbGirl.setChecked(true);
             } else if (look.get(i).equalsIgnoreCase("male")) {
-                cb_men.setChecked(true);
+                cbMen.setChecked(true);
             }
         }
 
@@ -302,9 +339,9 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
             popup.setAccessible(true);
 
             // Get private mPopup member variable and try cast to ListPopupWindow
-            ListPopupWindow NationalitypopupWindow = (ListPopupWindow) popup.get(suggestion_nationality);
-            ListPopupWindow LanguagepopupWindow = (ListPopupWindow) popup.get(suggestion_lang);
-            ListPopupWindow HeightpopupWindow = (ListPopupWindow) popup.get(suggestion_height);
+            ListPopupWindow NationalitypopupWindow = (ListPopupWindow) popup.get(NationalitySuggestion);
+            ListPopupWindow LanguagepopupWindow = (ListPopupWindow) popup.get(LangSuggestion);
+            ListPopupWindow HeightpopupWindow = (ListPopupWindow) popup.get(HeightSuggestion);
 
             // Set popupWindow height to 500px
             Objects.requireNonNull(NationalitypopupWindow).setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -322,9 +359,9 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
             popup1.setAccessible(true);
 
             // Get private mPopup member variable and try cast to ListPopupWindow
-            ListPopupWindow BodypopupWindow = (ListPopupWindow) popup1.get(Sp_bodytype);
-            ListPopupWindow HairpopupWindow = (ListPopupWindow) popup1.get(Sp_hairs);
-            ListPopupWindow EyespopupWindow = (ListPopupWindow) popup1.get(Sp_eyes);
+            ListPopupWindow BodypopupWindow = (ListPopupWindow) popup1.get(spBodyType);
+            ListPopupWindow HairpopupWindow = (ListPopupWindow) popup1.get(spHair);
+            ListPopupWindow EyespopupWindow = (ListPopupWindow) popup1.get(spEyes);
 
             // Set popupWindow height to 500px
             Objects.requireNonNull(BodypopupWindow).setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -336,17 +373,17 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     }
 
 
-    private void register(FirebaseUser fuser, String str_name, String str_dob, String str_gender, String age, String str_location, String str_nationality, String str_lang, ArrayList<String> str_look, String str_height, String str_body_type, String str_eyes, String str_hair, String str_visit) {
+    private void register(FirebaseUser fuser, String str_name, String str_dob, String str_gender,String str_about_me, String age, String str_location, String str_nationality, String str_lang, ArrayList<String> str_look, String str_height, String str_body_type, String str_eyes, String str_hair, String str_visit) {
 
         //uncomment this below lines later don't forget
 
         User userClass = new User(fuser.getUid(), prevUserList.get(0).getUsername(), "offline", prevUserList.get(0).getSearch(), str_gender, age, prevUserList.get(0).getEmail(),
                 fuser.getProviderId(), str_body_type, str_dob, str_eyes, str_hair, str_height, str_lang,
-                str_look, prevUserList.get(0).getRange_age(), str_location, str_name, fuser.getPhoneNumber(), str_nationality, str_visit,prevUserList.get(0).getAccount_type());
+                str_look, prevUserList.get(0).getRange_age(), str_location, str_name, fuser.getPhoneNumber(), str_nationality, str_visit, prevUserList.get(0).getAccount_type(),str_about_me);
 
         UsersInstance.child(fuser.getUid()).setValue(userClass);
 
-        snackBar(activity_profile_coordinatelayout, "Your profile has been successfully updated");
+        snackBar(activityProfileCoordinatelayout, "Your profile has been successfully updated");
         finish();
 //        updateUI(user);
 
@@ -424,36 +461,45 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
 
             case R.id.btn_regi:
 
-                if (et_name.getText().toString().length() <= 0) {
-
-                    snackBar(activity_profile_coordinatelayout, "Please enter your name");
-                } else if (et_location.getText().toString().length() <= 0) {
-                    snackBar(activity_profile_coordinatelayout, "Enter a city you want to visit");
-                } else if (et_visit.getText().toString().length() <= 0) {
-                    snackBar(activity_profile_coordinatelayout, "Please enter your location");
+                if (etName.getText().toString().length() <= 0) {
+                    etName.requestFocus();
+                    snackBar(activityProfileCoordinatelayout, "Please enter your name");
+                } else if (etLocation.getText().toString().length() <= 0) {
+                    etLocation.requestFocus();
+                    snackBar(activityProfileCoordinatelayout, "Please enter your location");
+                } else if (etVisit.getText().toString().length() <= 0) {
+                    etVisit.requestFocus();
+                    snackBar(activityProfileCoordinatelayout, "Enter a city you want to visit");
 
                 } else {
-                    int selectedGender = rg_gender.getCheckedRadioButtonId();
-                    rb_gender = findViewById(selectedGender);
+                    int selectedGender = rgGender.getCheckedRadioButtonId();
+                    if (selectedGender < 0) {
+                        snackBar(activityProfileCoordinatelayout, "Select Gender");
+                    } else {
+                        Log.i(TAG, "onClick: " + selectedGender);
+                        rb_gender = findViewById(selectedGender);
 
-                    String str_name = et_name.getText().toString();
-                    String str_dob = TV_dob.getText().toString();
-                    String str_location = et_location.getText().toString();
-                    String str_nationality = suggestion_nationality.getText().toString();
-                    String str_lang = suggestion_lang.getText().toString();
-                    str_lang = str_lang.replaceAll(", $", "");
-                    String str_height = suggestion_height.getText().toString();
-                    String str_body_type = Sp_bodytype.getSelectedItem().toString();
-                    String str_eyes = Sp_eyes.getSelectedItem().toString();
-                    String str_hair = Sp_hairs.getSelectedItem().toString();
-                    String str_visit = et_visit.getText().toString();
-                    String str_gender = rb_gender.getText().toString();
-                    String age = "18";
+                        String str_name = etName.getText().toString();
+                        String str_dob = tvDob.getText().toString();
+                        String str_location = etLocation.getText().toString();
+                        String str_about_me=etAboutMe.getText().toString();
+                        String str_nationality = NationalitySuggestion.getText().toString();
+                        String str_lang = LangSuggestion.getText().toString();
+                        str_lang = str_lang.replaceAll(", $", "");
+                        String str_height = HeightSuggestion.getText().toString();
+                        String str_body_type = spBodyType.getSelectedItem().toString();
+                        String str_eyes = spEyes.getSelectedItem().toString();
+                        String str_hair = spHair.getSelectedItem().toString();
+                        String str_visit = etVisit.getText().toString();
+                        String str_gender = rb_gender.getText().toString();
+                        String age = "18";
 
 
-                    Log.i("Simu", " " + str_look.size());
+                        Log.i("Simu", " " + str_look.size());
 
-                    register(fuser, str_name, str_dob, str_gender, age, str_location, str_nationality, str_lang, str_look, str_height, str_body_type, str_eyes, str_hair, str_visit);
+                        register(fuser, str_name, str_dob, str_gender,str_about_me, age, str_location, str_nationality, str_lang, str_look, str_height, str_body_type, str_eyes, str_hair, str_visit);
+
+                    }
 
                 }
                 break;
@@ -461,7 +507,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     }
 
 
-    @OnClick({R.id.imgv_location,R.id.imgv_dream_location})
+    @OnClick({R.id.imgv_location, R.id.imgv_dream_location})
     public void onClickBind(View v) {
 
         List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS);
@@ -486,7 +532,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
                 Log.i(TAG, "Placeq: " + place.getName() + ", " + place.getId() + ", " + place.getAddress());
-                et_location.setText(place.getName());
+                etLocation.setText(place.getName());
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.
                 Status status = Autocomplete.getStatusFromIntent(data);
@@ -498,7 +544,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
                 Log.i(TAG, "Placeq: " + place.getName() + ", " + place.getId() + ", " + place.getAddress());
-                et_visit.setText(place.getName());
+                etVisit.setText(place.getName());
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.
                 Status status = Autocomplete.getStatusFromIntent(data);

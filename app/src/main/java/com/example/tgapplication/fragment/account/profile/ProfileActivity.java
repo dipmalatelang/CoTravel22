@@ -46,6 +46,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.example.tgapplication.Constants.PhotoRequestInstance;
+import static com.example.tgapplication.Constants.PicturesInstance;
+import static com.example.tgapplication.Constants.TripsInstance;
+import static com.example.tgapplication.Constants.UsersInstance;
+
 public class ProfileActivity extends BaseActivity {
 
     CustomAdapter adapter;
@@ -53,16 +58,12 @@ public class ProfileActivity extends BaseActivity {
     ConstraintLayout constraintLayout;
     @BindView(R.id.profile_details)
     ConstraintLayout profileDetails;
-    @BindView(R.id.textView)
-    Chip textView;
+    @BindView(R.id.tvCount)
+    Chip tvCount;
     @BindView(R.id.textProfile)
     Chip textProfile;
     @BindView(R.id.view_pager)
     ViewPager viewPager;
-    @BindView(R.id.textView2)
-    TextView textView2;
-    @BindView(R.id.textView3)
-    TextView textView3;
     @BindView(R.id.iv_edit_profile)
     ImageView ivEditProfile;
     /*  @BindView(R.id.iv_info)
@@ -109,11 +110,15 @@ public class ProfileActivity extends BaseActivity {
     ImageView ivFavUser;
     @BindView(R.id.iv_menu)
     ImageView ivMenu;
+    @BindView(R.id.tvCountry)
+    TextView tvCountry;
+    @BindView(R.id.tvUser)
+    TextView tvUser;
     private ArrayList<Upload> upload1 = new ArrayList<>();
     private ArrayList<Upload> upload2 = new ArrayList<>();
     private ArrayList<Upload> uploads = new ArrayList<>();
     ArrayList<User> userList = new ArrayList<>();
-    int account_type=1;
+    int account_type = 1;
 
     private FirebaseUser fuser;
     TripList tripL;
@@ -152,7 +157,9 @@ public class ProfileActivity extends BaseActivity {
 
         } else if (getIntent().getSerializableExtra("MyObj") != null) {
             ivEditProfile.setVisibility(View.GONE);
-            textProfile.setVisibility(View.GONE);
+//            textProfile.setVisibility(View.GONE);
+            textProfile.setText("");
+            textProfile.setChipIconResource(R.drawable.ic_action_eye);
             ivMenu.setVisibility(View.GONE);
             ivFavUser.setVisibility(View.VISIBLE);
             floatingActionButton2.show();
@@ -168,7 +175,7 @@ public class ProfileActivity extends BaseActivity {
 
 
             Log.i(TAG, "onCreate: " + tripL.getName() + " " + tripL.getFavid());
-            setDetails(tripL.getName(), tripL.getGender(), tripL.getAge(), tripL.getLook(), tripL.getUserLocation(), tripL.getNationality(),
+            setDetails(tripL.getName(), tripL.getGender(), tripL.getAbout_me(), tripL.getAge(), tripL.getLook(), tripL.getUserLocation(), tripL.getNationality(),
                     tripL.getLang(), tripL.getHeight(), tripL.getBody_type(), tripL.getEyes(), tripL.getHair(), tripL.getVisit(), tripL.getPlanLocation(), tripL.getFrom_to_date(), tripL.getImageUrl());
 //            if(tripL==null)
 //            setDetails(userList.get(i).getName(), userList.get(i).getGender(), userList.get(i).getAge(), userList.get(i).getLook(), userList.get(i).getLocation(), userList.get(i).getNationality(), userList.get(i).getLang(), userList.get(i).getHeight(), userList.get(i).getBody_type(), userList.get(i).getEyes(), userList.get(i).getHair(), userList.get(i).getVisit(), "", "", userList.get(i).getImageURL());
@@ -176,7 +183,9 @@ public class ProfileActivity extends BaseActivity {
 
         } else if (getIntent().getSerializableExtra("MyUserObj") != null) {
             ivEditProfile.setVisibility(View.GONE);
-            textProfile.setVisibility(View.GONE);
+//            textProfile.setVisibility(View.GONE);
+            textProfile.setText("");
+            textProfile.setChipIconResource(R.drawable.ic_action_eye);
             ivMenu.setVisibility(View.GONE);
             ivFavUser.setVisibility(View.VISIBLE);
             floatingActionButton2.show();
@@ -192,7 +201,7 @@ public class ProfileActivity extends BaseActivity {
             }*/
 
             Log.i(TAG, "MyUserObj : " + userL.getUser().getName() + " ");
-            setDetails(userL.getUser().getName(), userL.getUser().getGender(), userL.getUser().getAge(), userL.getUser().getLook(), "", userL.getUser().getNationality(),
+            setDetails(userL.getUser().getName(), userL.getUser().getGender(), userL.getUser().getAbout_me(),userL.getUser().getAge(), userL.getUser().getLook(), "", userL.getUser().getNationality(),
                     userL.getUser().getLang(), userL.getUser().getHeight(), userL.getUser().getBody_type(), userL.getUser().getEyes(), userL.getUser().getHair(), userL.getUser().getVisit(), "", "", "");
 
         }
@@ -201,18 +210,23 @@ public class ProfileActivity extends BaseActivity {
     }
 
 
-
-    private void setDetails(String name, String gender, String age, ArrayList<String> look, String userLocation, String nationality, String lang, String height, String body_type, String eyes, String hair, String visit, String planLocation, String from_to_date, String imageUrl) {
+    private void setDetails(String name, String gender, String about_me, String age, ArrayList<String> look, String userLocation, String nationality, String lang, String height, String body_type, String eyes, String hair, String visit, String planLocation, String from_to_date, String imageUrl) {
 
         String str_look = null;
 
         if (name != null && !name.equalsIgnoreCase("") || age != null && !age.equalsIgnoreCase("")) {
-            textView2.setText(name + " , " + age);
+            tvUser.setText(name + " , " + age);
         }
 
    /*     if (gender != null && !gender.equalsIgnoreCase("")) {
             tvSex.setText(gender);
         }*/
+
+        if (about_me != null && !about_me.equalsIgnoreCase(""))
+        {
+            tvAboutMeValue.setText(about_me);
+        }
+
 
         if (look != null) {
             for (int j = 0; j < look.size(); j++) {
@@ -231,7 +245,6 @@ public class ProfileActivity extends BaseActivity {
 
         if (height != null && !height.equalsIgnoreCase("")) {
             tvHeightValue.setText(height);
-            tvAboutMeValue.setText(height);
         }
 
         if (body_type != null && !body_type.equalsIgnoreCase("")) {
@@ -247,7 +260,11 @@ public class ProfileActivity extends BaseActivity {
         }
 
         if (userLocation != null && !userLocation.equalsIgnoreCase("")) {
-            tvTvDreamPlaceValue.setText(userLocation);
+            tvCountry.setText(userLocation);
+        }
+
+        if (visit != null && !visit.equalsIgnoreCase("")) {
+            tvTvDreamPlaceValue.setText(visit);
         }
 
 
@@ -260,9 +277,7 @@ public class ProfileActivity extends BaseActivity {
             tvLanguage.setText(lang);
         }
 
-        if (visit != null && !visit.equalsIgnoreCase("")) {
-            tvWantToVisit.setText(visit);
-        }
+
 
         if (planLocation != null && !planLocation.equalsIgnoreCase("")) {
             tvPlannedtrip.setText(planLocation);
@@ -286,10 +301,10 @@ public class ProfileActivity extends BaseActivity {
                         userList.clear();
 //                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                            User user = dataSnapshot.getValue(User.class);
+                        User user = dataSnapshot.getValue(User.class);
 //                            if (user != null && user.getId().equalsIgnoreCase(fuser.getUid())) {
-                            account_type= Objects.requireNonNull(user).getAccount_type();
-                            setDetails(user.getName(), user.getGender(), user.getAge(), user.getLook(),user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(),user.getVisit(), "", "", "default");
+                        account_type = Objects.requireNonNull(user).getAccount_type();
+                        setDetails(user.getName(), user.getGender(),user.getAbout_me(), user.getAge(), user.getLook(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getVisit(), "", "", "default");
 
                  /*           userList.add(user);
 //                            }
@@ -334,50 +349,67 @@ public class ProfileActivity extends BaseActivity {
 
 
     public void getAllImages(String uid) {
-        PicturesInstance.child(uid).addValueEventListener(new ValueEventListener() {
+        PhotoRequestInstance.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                upload1 = new ArrayList<>();
-                upload2 = new ArrayList<>();
-                uploads = new ArrayList<>();
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Permit permit = ds.getValue(Permit.class);
+                    if (Objects.requireNonNull(permit).getSender().equals(fuser.getUid()) && Objects.requireNonNull(permit).getStatus() == 1) {
 
-                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                    Upload upload = postSnapshot.getValue(Upload.class);
-                    if (Objects.requireNonNull(upload).getType() == 1) {
-                        upload1.add(upload);
-                    } else if (upload.getType() == 2) {
-                        upload2.add(upload);
+                        PicturesInstance.child(uid).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                upload1 = new ArrayList<>();
+                                upload2 = new ArrayList<>();
+                                uploads = new ArrayList<>();
+
+                                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                                    Upload upload = postSnapshot.getValue(Upload.class);
+                                    if (Objects.requireNonNull(upload).getType() == 1) {
+                                        upload1.add(upload);
+                                    } else if (upload.getType() == 2) {
+                                        upload2.add(upload);
+                                    }
+                                }
+
+                                if (upload1.size() > 0) {
+                                    uploads.addAll(upload1);
+                                }
+                                if (upload2.size() > 0) {
+                                    uploads.addAll(upload2);
+                                }
+
+                                if (uploads.size() > 0) {
+                                    adapter = new CustomAdapter(ProfileActivity.this, uid, uploads);
+                                    viewPager.setAdapter(adapter);
+
+                                    viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                                        @Override
+                                        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                                            int i = position + 1;
+                                            tvCount.setText(i + " / " + uploads.size());
+                                        }
+
+                                        @Override
+                                        public void onPageSelected(int position) {
+
+                                        }
+
+                                        @Override
+                                        public void onPageScrollStateChanged(int state) {
+
+                                        }
+                                    });
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
                     }
-                }
-
-                if (upload1.size() > 0) {
-                    uploads.addAll(upload1);
-                }
-                if (upload2.size() > 0) {
-                    uploads.addAll(upload2);
-                }
-
-                if (uploads.size() > 0) {
-                    adapter = new CustomAdapter(ProfileActivity.this, uid, uploads);
-                    viewPager.setAdapter(adapter);
-
-                    viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                        @Override
-                        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                            int i = position + 1;
-                            textView.setText(i + " / " + uploads.size());
-                        }
-
-                        @Override
-                        public void onPageSelected(int position) {
-
-                        }
-
-                        @Override
-                        public void onPageScrollStateChanged(int state) {
-
-                        }
-                    });
                 }
             }
 
@@ -436,14 +468,12 @@ public class ProfileActivity extends BaseActivity {
         popup.getMenuInflater().inflate(R.menu.profile_menu, popup.getMenu());
 
         MenuItem bedMenuItem = popup.getMenu().findItem(R.id.one);
-        if(account_type==1)
-        {
+        if (account_type == 1) {
             bedMenuItem.setTitle("Hide profile");
-            account_type=2;
-        }
-        else {
+            account_type = 2;
+        } else {
             bedMenuItem.setTitle("Unhide profile");
-            account_type=1;
+            account_type = 1;
         }
 
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -451,8 +481,13 @@ public class ProfileActivity extends BaseActivity {
                 int id = item.getItemId();
 
                 if (id == R.id.one) {
-
-                    alertDialogHideProfile(account_type);
+                    if(account_type==2){
+                        alertDialogHideProfile();
+                    }
+                    else {
+                        alertDialogHideProfile2();
+                    }
+//                    alertDialogHideProfile(account_type);
 //                    Toast.makeText(ProfileActivity.this, "Add to fav", Toast.LENGTH_SHORT).show();
                     //  holder.ic_action_fav_remove.setVisibility(View.VISIBLE);
 //                            listener.chatFavorite(user.getId());
@@ -473,17 +508,17 @@ public class ProfileActivity extends BaseActivity {
     }
 
     private void alertDialogAccountRemove() {
-        AlertDialog.Builder dialog=new AlertDialog.Builder(this);
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setMessage("Are you sure you want to remove your account?");
         dialog.setTitle("Account removal");
         dialog.setPositiveButton("YES",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,
                                         int which) {
-                        active_hide_delete_Profile(fuser.getUid(),3);
+                        active_hide_delete_Profile(fuser.getUid(), 3);
                         fuser.delete();
 
-                        Toast.makeText(ProfileActivity.this,"Account remove successfully",Toast.LENGTH_LONG).show();
+                        Toast.makeText(ProfileActivity.this, "Account remove successfully", Toast.LENGTH_LONG).show();
 
                         FirebaseAuth.getInstance().signOut();
                         LoginManager.getInstance().logOut();
@@ -491,19 +526,17 @@ public class ProfileActivity extends BaseActivity {
                         startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
                     }
                 });
-        dialog.setNegativeButton("cancel",new DialogInterface.OnClickListener() {
+        dialog.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(ProfileActivity.this,"cancel is clicked",Toast.LENGTH_LONG).show();
+                Toast.makeText(ProfileActivity.this, "cancel is clicked", Toast.LENGTH_LONG).show();
             }
         });
-        AlertDialog alertDialog =dialog.create();
+        AlertDialog alertDialog = dialog.create();
         alertDialog.show();
     }
 
-
-
-    private void alertDialogHideProfile(int account_type) {
+    private void alertDialogHideProfile() {
         AlertDialog.Builder dialog=new AlertDialog.Builder(this);
         dialog.setMessage("Are you sure you want to hide your profile? Users won't be able to find you through the site in any way."
         );
@@ -521,12 +554,76 @@ public class ProfileActivity extends BaseActivity {
         alertDialog.show();
     }
 
+    private void alertDialogHideProfile2() {
+        AlertDialog.Builder dialog=new AlertDialog.Builder(this);
+        dialog.setMessage("Your profile is hidden. Do you want to make it public again?"
+        );
+        dialog.setTitle("Profile visibility");
+        dialog.setPositiveButton("Yes ,make it public...",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,
+                                        int which) {
+                        active_hide_delete_Profile(fuser.getUid(),account_type);
+
+                        Toast.makeText(ProfileActivity.this,"unhide My Profile is clicked",Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        AlertDialog alertDialog =dialog.create();
+        alertDialog.show();
+    }
+
+    /*private void alertDialogHideProfile(int account_type) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setMessage("Are you sure you want to hide your profile? Users won't be able to find you through the site in any way."
+        );
+        dialog.setTitle("Profile visibility");
+        dialog.setPositiveButton("Hide My Profile",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,
+                                        int which) {
+                        active_hide_delete_Profile(fuser.getUid(), account_type);
+                        Toast.makeText(ProfileActivity.this, "Hide My Profile is clicked", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        AlertDialog alertDialog = dialog.create();
+        alertDialog.show();
+    }*/
+
+    private void alertDialogRequestPermission() {
+        AlertDialog.Builder dialog=new AlertDialog.Builder(this);
+        dialog.setMessage("Do you want to request permission to see private photo?");
+        dialog.setTitle("Request Permission");
+        dialog.setPositiveButton("YES",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,
+                                        int which) {
+                        PhotoRequestInstance.push().setValue(new Permit(fuser.getUid(),tripL.getId(),0));
+                    }
+                });
+        dialog.setNegativeButton("No",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(ProfileActivity.this,"cancel is clicked",Toast.LENGTH_LONG).show();
+            }
+        });
+        AlertDialog alertDialog =dialog.create();
+        alertDialog.show();
+    }
+
     @OnClick({R.id.textProfile, R.id.iv_edit_profile, R.id.floatingActionButton2, R.id.iv_fav_user, R.id.fab_backFromProfile, R.id.iv_menu})
     public void onViewClicked(View view) {
         switch (view.getId()) {
 
             case R.id.textProfile:
-                startActivity(new Intent(this, EditPhotoActivity.class));
+                if(textProfile.getText().toString().equalsIgnoreCase(""))
+                {
+                    alertDialogRequestPermission();
+                }
+                else {
+                    startActivity(new Intent(this, EditPhotoActivity.class));
+                }
                 break;
 
             case R.id.iv_edit_profile:
@@ -541,7 +638,6 @@ public class ProfileActivity extends BaseActivity {
                 startActivity(intent);
 
 
-
                 break;
 
             case R.id.fab_backFromProfile:
@@ -554,8 +650,7 @@ public class ProfileActivity extends BaseActivity {
 
             case R.id.iv_fav_user:
                 Log.i(TAG, "onViewClicked: " + fav_int);
-                if(tripL!=null)
-                {
+                if (tripL != null) {
                     if (tripL.getFavid() == 1) {
                         removeFav(fuser.getUid(), tripL.getId());
                         tripL.setFavid(0);
@@ -565,17 +660,13 @@ public class ProfileActivity extends BaseActivity {
                         tripL.setFavid(1);
                         ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
                     }
-                }
-                else if(userL!=null)
-                {
-                    if(userL.getFav()==1)
-                    {
-                        removeFav(fuser.getUid(),userL.getUser().getId());
+                } else if (userL != null) {
+                    if (userL.getFav() == 1) {
+                        removeFav(fuser.getUid(), userL.getUser().getId());
                         userL.setFav(0);
                         ivFavUser.setImageResource(R.drawable.ic_action_fav_add);
-                    }
-                    else {
-                        setFav(fuser.getUid(),userL.getUser().getId());
+                    } else {
+                        setFav(fuser.getUid(), userL.getUser().getId());
                         userL.setFav(1);
                         ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
                     }
@@ -593,9 +684,9 @@ public class ProfileActivity extends BaseActivity {
                 }*/
                 break;
 
-             case R.id.iv_menu:
-            showMenu(view);
-            break;
+            case R.id.iv_menu:
+                showMenu(view);
+                break;
 
 
         }

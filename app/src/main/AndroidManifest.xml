@@ -35,6 +35,10 @@
 
         <activity android:name=".fragment.account.profile.TrashActivity"/>
 
+        <activity android:name=".fragment.account.profile.PhotoRequestActivity"/>
+
+        <activity android:name=".fragment.account.profile.ViewPhotoRequestActivity"/>
+
         <activity
             android:name=".fragment.trip.FilterTripActivity"
             android:parentActivityName=".MainActivity"
@@ -93,11 +97,11 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".fragment.account.profile.cropphoto.Main2Activity">
+<!--        <activity android:name=".fragment.account.profile.cropphoto.Main2Activity">-->
 
 
-        </activity>
-        <activity android:name=".fragment.account.profile.cropphoto.CropImageActivity"/>
+<!--        </activity>-->
+<!--        <activity android:name=".fragment.account.profile.cropphoto.CropImageActivity"/>-->
 
         <activity android:name=".fragment.account.profile.ProfileActivity"
             android:theme="@style/noToolbar" >

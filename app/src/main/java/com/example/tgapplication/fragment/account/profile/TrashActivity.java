@@ -36,6 +36,13 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.example.tgapplication.Constants.ChatListInstance;
+import static com.example.tgapplication.Constants.FavoritesInstance;
+import static com.example.tgapplication.Constants.PicturesInstance;
+import static com.example.tgapplication.Constants.TokensInstance;
+import static com.example.tgapplication.Constants.TrashInstance;
+import static com.example.tgapplication.Constants.UsersInstance;
+
 public class TrashActivity extends BaseActivity {
 
     @BindView(R.id.trash_recyclerview)
@@ -76,7 +83,7 @@ public class TrashActivity extends BaseActivity {
             }
         });
 
-        ChatlistInstance.child(fuser.getUid()).addValueEventListener(new ValueEventListener() {
+        ChatListInstance.child(fuser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<Chatlist> usersList = new ArrayList<>();

@@ -38,6 +38,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import static com.example.tgapplication.Constants.ChatsInstance;
+import static com.example.tgapplication.Constants.FavoritesInstance;
+import static com.example.tgapplication.Constants.ProfileVisitorInstance;
+import static com.example.tgapplication.Constants.TrashInstance;
+import static com.example.tgapplication.Constants.UsersInstance;
+
 public abstract class BaseActivity extends AppCompatActivity {
 
     public String TAG = "Activity";
@@ -53,15 +59,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     //Global Method and Variable
 //    String fUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-    public DatabaseReference PicturesInstance = FirebaseDatabase.getInstance().getReference("Pictures");
-    public DatabaseReference TrashInstance = FirebaseDatabase.getInstance().getReference("Trash");
-    public DatabaseReference ChatlistInstance = FirebaseDatabase.getInstance().getReference("Chatlist");
-    public DatabaseReference ChatsInstance = FirebaseDatabase.getInstance().getReference("Chats");
-    public DatabaseReference FavoritesInstance = FirebaseDatabase.getInstance().getReference("Favorites");
-    public DatabaseReference ProfileVisitorInstance = FirebaseDatabase.getInstance().getReference("ProfileVisitor");
-    public DatabaseReference TokensInstance = FirebaseDatabase.getInstance().getReference("Tokens");
-    public DatabaseReference TripsInstance = FirebaseDatabase.getInstance().getReference("Trips");
-    public DatabaseReference UsersInstance = FirebaseDatabase.getInstance().getReference("Users");
+
 /*
     public List<TripList> getMyFav() {
         for (int i = 0; i < tripList.size(); i++) {
@@ -86,7 +84,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public List<TripList> findAllMembers(UserImg userImg) {
         User user=userImg.getUser();
         int visit_id = getVisit(visitArray, user.getId());
-        TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getAge(), user.getGender(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), tripNote, userImg.getFav(), visit_id);
+        TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getAge(), user.getGender(), user.getAbout_me(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), tripNote, userImg.getFav(), visit_id);
         tripList.add(tripListClass);
 
         return tripList;
@@ -316,6 +314,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                 .child(uid)
                 .child(id).child("id").setValue(id);
     }
+
 
     //check for last message
     public void checkForLastMsg(Context mContext, final String userid, final TextView last_msg, RelativeLayout rl_chat) {
