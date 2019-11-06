@@ -160,6 +160,12 @@
     <color name="colorblue3">#5B7E73A3</color>
     <color name="colorbrowne4">#5B946165</color>
 
+    <color name="color5">#85EC407A</color>
+    <color name="color6">#838D6E63</color>
+    <color name="color7">#8026A69A</color>
+    <color name="color8">#85B0003A</color>
+    <color name="color9">#8BFFCA28</color>
+
     <color name="background">#1A6C3E72</color>
     <color name="mtrl_textinput_default_box_stroke_color" tools:override="true">@color/colorPrimary</color>
 </resources>

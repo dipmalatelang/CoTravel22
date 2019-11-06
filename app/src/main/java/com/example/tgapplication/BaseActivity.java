@@ -346,13 +346,13 @@ public abstract class BaseActivity extends AppCompatActivity {
 
                 if (!textType)
                 {
-                    rl_chat.setBackgroundColor(Color.DKGRAY);
+
                     last_msg.setTextColor(mContext.getResources().getColor(R.color.black));
 
                 }
                 else
                 {
-                    rl_chat.setBackgroundColor(Color.GRAY);
+
                     last_msg.setTextColor(mContext.getResources().getColor(R.color.gray));
                 }
 

@@ -95,10 +95,10 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
             }
 
         });
-        if (position%3==0)
+        if (position%2==0)
         {
             holder.linearLayout.setBackgroundColor(R.color.colorpurple1);
-        } else if(position%2==0)
+        } else if(position%3==0)
         {
             holder.linearLayout.setBackgroundColor(R.color.colorgreen2);
         } else if(position%4==0)

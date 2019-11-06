@@ -1,5 +1,6 @@
 package com.example.tgapplication.fragment.trip.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +21,8 @@ import com.example.tgapplication.fragment.trip.module.TripList;
 import java.util.List;
 
 import static android.graphics.Color.parseColor;
+import static com.example.tgapplication.R.color.color8;
+import static com.example.tgapplication.R.color.color9;
 
 public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder > {
 
@@ -43,6 +46,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
         return new TripViewHolder(mView);
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(final TripViewHolder holder, int position) {
 
@@ -58,20 +62,19 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
         holder.mCity.setText(tList.getPlanLocation());
         holder.mDate.setText(tList.getFrom_to_date());
 
-        if (position%3==0) {
-            holder.linearLayout.setBackgroundColor(parseColor("#26A69A"));
-        } else if(position%2==0){
-            holder.linearLayout.setBackgroundColor(parseColor("#EC407A"));
+        if (position%2==0) holder.linearLayout.setBackgroundColor(color8);
+        else if(position%3==0){
+            holder.linearLayout.setBackgroundColor(color9);
         } else if(position%4==0)
         {
-            holder.linearLayout.setBackgroundColor(parseColor("#8D6E63"));
+            holder.linearLayout.setBackgroundColor(R.color.color6);
         }
         else if(position%5==0)
         {
-            holder.linearLayout.setBackgroundColor(parseColor("#b0003a"));
+            holder.linearLayout.setBackgroundColor(R.color.color5);
         }
         else {
-            holder.linearLayout.setBackgroundColor(parseColor("#FFCA28"));
+            holder.linearLayout.setBackgroundColor(R.color.colorbrowne4);
 
         }
 

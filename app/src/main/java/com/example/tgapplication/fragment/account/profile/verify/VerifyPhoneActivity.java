@@ -4,13 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.chaos.view.PinView;
 import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,7 +25,7 @@ import com.google.firebase.auth.PhoneAuthProvider;
 public class VerifyPhoneActivity extends AppCompatActivity {
 
 
-    EditText editTextCode;
+    PinView pinView;
     Button buttonSignIn;
     private FirebaseAuth mAuth;
     ProgressBar progressBar;
@@ -35,7 +35,7 @@ public class VerifyPhoneActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verify_phone);
 
-        editTextCode=findViewById(R.id.editTextCode);
+        pinView = findViewById(R.id.pinView);
 
         buttonSignIn=findViewById(R.id.buttonSignIn);
 
@@ -44,7 +44,6 @@ public class VerifyPhoneActivity extends AppCompatActivity {
         String mVerificationId = intent.getStringExtra("mVerificationId");
 //        String code = intent.getStringExtra("code");
 
-        progressBar = findViewById(R.id.progressbar);
 
         buttonSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,11 +51,11 @@ public class VerifyPhoneActivity extends AppCompatActivity {
 
 
 
-                String code = editTextCode.getText().toString().trim();
+                String code = pinView.getText().toString().trim();
                 progressBar.setVisibility(View.GONE);
                 if (code.isEmpty() || code.length() < 6) {
-                    editTextCode.setError("Enter valid code");
-                    editTextCode.requestFocus();
+                    pinView.setError("Enter valid code");
+                    pinView.requestFocus();
                     return;
                 }
 

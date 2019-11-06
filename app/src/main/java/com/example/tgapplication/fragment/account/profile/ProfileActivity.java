@@ -116,6 +116,8 @@ public class ProfileActivity extends BaseActivity {
     TextView tvUser;
     private ArrayList<Upload> upload1 = new ArrayList<>();
     private ArrayList<Upload> upload2 = new ArrayList<>();
+    private ArrayList<Upload> upload3 = new ArrayList<>();
+
     private ArrayList<Upload> uploads = new ArrayList<>();
     ArrayList<User> userList = new ArrayList<>();
     int account_type = 1;
@@ -129,6 +131,7 @@ public class ProfileActivity extends BaseActivity {
     RecyclerView rvTripValue;
 
     ArrayList<TripData> planTripsList = new ArrayList<>();
+    int privateValue=0;
 
     //    @BindView(R.id.bottomNav)
 //    ConstraintLayout bottomNav;
@@ -201,7 +204,7 @@ public class ProfileActivity extends BaseActivity {
             }*/
 
             Log.i(TAG, "MyUserObj : " + userL.getUser().getName() + " ");
-            setDetails(userL.getUser().getName(), userL.getUser().getGender(), userL.getUser().getAbout_me(),userL.getUser().getAge(), userL.getUser().getLook(), "", userL.getUser().getNationality(),
+            setDetails(userL.getUser().getName(), userL.getUser().getGender(), userL.getUser().getAbout_me(), userL.getUser().getAge(), userL.getUser().getLook(), "", userL.getUser().getNationality(),
                     userL.getUser().getLang(), userL.getUser().getHeight(), userL.getUser().getBody_type(), userL.getUser().getEyes(), userL.getUser().getHair(), userL.getUser().getVisit(), "", "", "");
 
         }
@@ -222,8 +225,7 @@ public class ProfileActivity extends BaseActivity {
             tvSex.setText(gender);
         }*/
 
-        if (about_me != null && !about_me.equalsIgnoreCase(""))
-        {
+        if (about_me != null && !about_me.equalsIgnoreCase("")) {
             tvAboutMeValue.setText(about_me);
         }
 
@@ -304,7 +306,7 @@ public class ProfileActivity extends BaseActivity {
                         User user = dataSnapshot.getValue(User.class);
 //                            if (user != null && user.getId().equalsIgnoreCase(fuser.getUid())) {
                         account_type = Objects.requireNonNull(user).getAccount_type();
-                        setDetails(user.getName(), user.getGender(),user.getAbout_me(), user.getAge(), user.getLook(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getVisit(), "", "", "default");
+                        setDetails(user.getName(), user.getGender(), user.getAbout_me(), user.getAge(), user.getLook(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getVisit(), "", "", "default");
 
                  /*           userList.add(user);
 //                            }
@@ -349,75 +351,282 @@ public class ProfileActivity extends BaseActivity {
 
 
     public void getAllImages(String uid) {
+
         PhotoRequestInstance.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Permit permit = ds.getValue(Permit.class);
-                    if (Objects.requireNonNull(permit).getSender().equals(fuser.getUid()) && Objects.requireNonNull(permit).getStatus() == 1) {
+                upload1 = new ArrayList<>();
+                upload2 = new ArrayList<>();
+                upload3 = new ArrayList<>();
+                uploads = new ArrayList<>();
 
-                        PicturesInstance.child(uid).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                upload1 = new ArrayList<>();
-                                upload2 = new ArrayList<>();
-                                uploads = new ArrayList<>();
+                if (dataSnapshot.hasChildren()) {
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
-                                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                                    Upload upload = postSnapshot.getValue(Upload.class);
-                                    if (Objects.requireNonNull(upload).getType() == 1) {
-                                        upload1.add(upload);
-                                    } else if (upload.getType() == 2) {
-                                        upload2.add(upload);
+                        Permit permit = ds.getValue(Permit.class);
+                        Log.i(TAG, "Sarita : Sender " + permit.getSender() + " Status " + permit.getStatus());
+                        Log.i(TAG, "Sarita : Receiver " + permit.getReceiver());
+                        if (permit.getSender().equals(fuser.getUid()) && permit.getReceiver().equals(uid) && permit.getStatus() == 1) {
+                                PicturesInstance.child(uid).addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+
+                                        for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                                            Upload upload = postSnapshot.getValue(Upload.class);
+                                            if (Objects.requireNonNull(upload).getType() == 1) {
+                                                upload1.add(upload);
+                                            } else if (upload.getType() == 2) {
+                                                upload2.add(upload);
+                                            } else if (upload.getType() == 3) {
+                                                upload3.add(upload);
+                                            }
+                                        }
+
+                                        Log.i(TAG, "onDataChange: Upload1 " + upload1.size());
+                                        if (upload1.size() > 0) {
+                                            uploads.addAll(upload1);
+                                        }
+                                        Log.i(TAG, "onDataChange: Upload2 " + upload2.size());
+                                        if (upload2.size() > 0) {
+                                            uploads.addAll(upload2);
+                                        }
+                                        Log.i(TAG, "onDataChange: Upload3 " + upload3.size());
+                                        if (upload3.size() > 0) {
+                                            uploads.addAll(upload3);
+                                        }
+
+                                        privateValue=1;
+
+
+                                        if (uploads.size() > 0) {
+                                            adapter = new CustomAdapter(ProfileActivity.this, uid, uploads);
+                                            viewPager.setAdapter(adapter);
+                                            adapter.notifyDataSetChanged();
+
+                                            viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                                                @Override
+                                                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                                                    int i = position + 1;
+                                                    tvCount.setText(i + " / " + uploads.size());
+                                                }
+
+                                                @Override
+                                                public void onPageSelected(int position) {
+
+                                                }
+
+                                                @Override
+                                                public void onPageScrollStateChanged(int state) {
+
+                                                }
+                                            });
+                                        }
+
                                     }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+                            }
+                        else {
+                            PicturesInstance.child(uid).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    upload1 = new ArrayList<>();
+                                    upload2 = new ArrayList<>();
+                                    uploads = new ArrayList<>();
+
+                                    for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                                        Upload upload = postSnapshot.getValue(Upload.class);
+                                        if (Objects.requireNonNull(upload).getType() == 1) {
+                                            upload1.add(upload);
+                                        } else if (upload.getType() == 2) {
+                                            upload2.add(upload);
+                                        }
+                                    }
+
+                                    Log.i(TAG, "onDataChange: Uploads" + upload1.size());
+                                    if (upload1.size() > 0) {
+                                        uploads.addAll(upload1);
+                                    }
+                                    Log.i(TAG, "onDataChange: Uploads" + upload2.size());
+                                    if (upload2.size() > 0) {
+                                        uploads.addAll(upload2);
+                                    }
+
+                                    privateValue=0;
+
+                                    Log.i(TAG, "onDataChange: Uploads" + uploads.size());
+                                    if (uploads.size() > 0) {
+                                        adapter = new CustomAdapter(ProfileActivity.this, uid, uploads);
+                                        viewPager.setAdapter(adapter);
+
+                                        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                                            @Override
+                                            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                                                int i = position + 1;
+                                                tvCount.setText(i + " / " + uploads.size());
+                                            }
+
+                                            @Override
+                                            public void onPageSelected(int position) {
+
+                                            }
+
+                                            @Override
+                                            public void onPageScrollStateChanged(int state) {
+
+                                            }
+                                        });
+                                    }
+
                                 }
 
-                                if (upload1.size() > 0) {
-                                    uploads.addAll(upload1);
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
                                 }
-                                if (upload2.size() > 0) {
-                                    uploads.addAll(upload2);
+                            });
+                        }
+                        if(permit.getReceiver().equals(uid))
+                        {
+                            break;
+                        }
+                        }
+                       /* else {
+                            PicturesInstance.child(uid).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    upload1 = new ArrayList<>();
+                                    upload2 = new ArrayList<>();
+                                    uploads = new ArrayList<>();
+
+                                    for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                                        Upload upload = postSnapshot.getValue(Upload.class);
+                                        if (Objects.requireNonNull(upload).getType() == 1) {
+                                            upload1.add(upload);
+                                        } else if (upload.getType() == 2) {
+                                            upload2.add(upload);
+                                        }
+                                    }
+
+                                    Log.i(TAG, "onDataChange: Uploads" + upload1.size());
+                                    if (upload1.size() > 0) {
+                                        uploads.addAll(upload1);
+                                    }
+                                    Log.i(TAG, "onDataChange: Uploads" + upload2.size());
+                                    if (upload2.size() > 0) {
+                                        uploads.addAll(upload2);
+                                    }
+
+
+                                    Log.i(TAG, "onDataChange: Uploads" + uploads.size());
+                                    if (uploads.size() > 0) {
+                                        adapter = new CustomAdapter(ProfileActivity.this, uid, uploads);
+                                        viewPager.setAdapter(adapter);
+
+                                        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                                            @Override
+                                            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                                                int i = position + 1;
+                                                tvCount.setText(i + " / " + uploads.size());
+                                            }
+
+                                            @Override
+                                            public void onPageSelected(int position) {
+
+                                            }
+
+                                            @Override
+                                            public void onPageScrollStateChanged(int state) {
+
+                                            }
+                                        });
+                                    }
+
                                 }
 
-                                if (uploads.size() > 0) {
-                                    adapter = new CustomAdapter(ProfileActivity.this, uid, uploads);
-                                    viewPager.setAdapter(adapter);
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                    viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                                        @Override
-                                        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                                            int i = position + 1;
-                                            tvCount.setText(i + " / " + uploads.size());
-                                        }
+                                }
+                            });
+                        }*/
+//                    }
+                } else {
+                    PicturesInstance.child(uid).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            upload1 = new ArrayList<>();
+                            upload2 = new ArrayList<>();
+                            uploads = new ArrayList<>();
 
-                                        @Override
-                                        public void onPageSelected(int position) {
-
-                                        }
-
-                                        @Override
-                                        public void onPageScrollStateChanged(int state) {
-
-                                        }
-                                    });
+                            for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                                Upload upload = postSnapshot.getValue(Upload.class);
+                                if (Objects.requireNonNull(upload).getType() == 1) {
+                                    upload1.add(upload);
+                                } else if (upload.getType() == 2) {
+                                    upload2.add(upload);
                                 }
                             }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                            Log.i(TAG, "onDataChange: Uploads" + upload1.size());
+                            if (upload1.size() > 0) {
+                                uploads.addAll(upload1);
                             }
-                        });
+                            Log.i(TAG, "onDataChange: Uploads" + upload2.size());
+                            if (upload2.size() > 0) {
+                                uploads.addAll(upload2);
+                            }
 
-                    }
+                            privateValue=0;
+
+
+                            Log.i(TAG, "onDataChange: Uploads" + uploads.size());
+                            if (uploads.size() > 0) {
+                                adapter = new CustomAdapter(ProfileActivity.this, uid, uploads);
+                                viewPager.setAdapter(adapter);
+
+                                viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                                    @Override
+                                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                                        int i = position + 1;
+                                        tvCount.setText(i + " / " + uploads.size());
+                                    }
+
+                                    @Override
+                                    public void onPageSelected(int position) {
+
+                                    }
+
+                                    @Override
+                                    public void onPageScrollStateChanged(int state) {
+
+                                    }
+                                });
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Log.i(TAG, "onCancelled: " + databaseError.getMessage());
             }
         });
+
+//
 
     }
 
@@ -481,10 +690,9 @@ public class ProfileActivity extends BaseActivity {
                 int id = item.getItemId();
 
                 if (id == R.id.one) {
-                    if(account_type==2){
+                    if (account_type == 2) {
                         alertDialogHideProfile();
-                    }
-                    else {
+                    } else {
                         alertDialogHideProfile2();
                     }
 //                    alertDialogHideProfile(account_type);
@@ -537,7 +745,7 @@ public class ProfileActivity extends BaseActivity {
     }
 
     private void alertDialogHideProfile() {
-        AlertDialog.Builder dialog=new AlertDialog.Builder(this);
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setMessage("Are you sure you want to hide your profile? Users won't be able to find you through the site in any way."
         );
         dialog.setTitle("Profile visibility");
@@ -545,17 +753,17 @@ public class ProfileActivity extends BaseActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,
                                         int which) {
-                        active_hide_delete_Profile(fuser.getUid(),account_type);
-                        Toast.makeText(ProfileActivity.this,"Hide My Profile is clicked",Toast.LENGTH_LONG).show();
+                        active_hide_delete_Profile(fuser.getUid(), account_type);
+                        Toast.makeText(ProfileActivity.this, "Hide My Profile is clicked", Toast.LENGTH_LONG).show();
                     }
                 });
 
-        AlertDialog alertDialog =dialog.create();
+        AlertDialog alertDialog = dialog.create();
         alertDialog.show();
     }
 
     private void alertDialogHideProfile2() {
-        AlertDialog.Builder dialog=new AlertDialog.Builder(this);
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setMessage("Your profile is hidden. Do you want to make it public again?"
         );
         dialog.setTitle("Profile visibility");
@@ -563,13 +771,13 @@ public class ProfileActivity extends BaseActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,
                                         int which) {
-                        active_hide_delete_Profile(fuser.getUid(),account_type);
+                        active_hide_delete_Profile(fuser.getUid(), account_type);
 
-                        Toast.makeText(ProfileActivity.this,"unhide My Profile is clicked",Toast.LENGTH_LONG).show();
+                        Toast.makeText(ProfileActivity.this, "unhide My Profile is clicked", Toast.LENGTH_LONG).show();
                     }
                 });
 
-        AlertDialog alertDialog =dialog.create();
+        AlertDialog alertDialog = dialog.create();
         alertDialog.show();
     }
 
@@ -592,22 +800,54 @@ public class ProfileActivity extends BaseActivity {
     }*/
 
     private void alertDialogRequestPermission() {
-        AlertDialog.Builder dialog=new AlertDialog.Builder(this);
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setMessage("Do you want to request permission to see private photo?");
         dialog.setTitle("Request Permission");
         dialog.setPositiveButton("YES",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,
                                         int which) {
-                        PhotoRequestInstance.push().setValue(new Permit(fuser.getUid(),tripL.getId(),0));
+                        PhotoRequestInstance.push().setValue(new Permit(fuser.getUid(), tripL.getId(), 0));
+                        alertDialogRP();
                     }
                 });
-        dialog.setNegativeButton("No",new DialogInterface.OnClickListener() {
+        dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(ProfileActivity.this,"cancel is clicked",Toast.LENGTH_LONG).show();
+                Toast.makeText(ProfileActivity.this, "cancel is clicked", Toast.LENGTH_LONG).show();
             }
         });
+        AlertDialog alertDialog = dialog.create();
+        alertDialog.show();
+    }
+
+    private void alertDialogAlreadyRequest() {
+        AlertDialog.Builder dialog=new AlertDialog.Builder(this);
+        dialog.setTitle("Already requested");
+        dialog.setPositiveButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,
+                                        int which) {
+
+                    }
+                });
+
+        AlertDialog alertDialog =dialog.create();
+        alertDialog.show();
+    }
+
+    private void alertDialogRP() {
+
+        AlertDialog.Builder dialog=new AlertDialog.Builder(this);
+        dialog.setTitle("Request permission..!");
+        dialog.setPositiveButton("Request sent",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,
+                                        int which) {
+
+                    }
+                });
+
         AlertDialog alertDialog =dialog.create();
         alertDialog.show();
     }
@@ -617,11 +857,12 @@ public class ProfileActivity extends BaseActivity {
         switch (view.getId()) {
 
             case R.id.textProfile:
-                if(textProfile.getText().toString().equalsIgnoreCase(""))
-                {
-                    alertDialogRequestPermission();
+                if (textProfile.getText().toString().equalsIgnoreCase("") && privateValue==1) {
+                    alertDialogAlreadyRequest();
                 }
-                else {
+                else if (textProfile.getText().toString().equalsIgnoreCase("")){
+                    alertDialogRequestPermission();
+                } else {
                     startActivity(new Intent(this, EditPhotoActivity.class));
                 }
                 break;
