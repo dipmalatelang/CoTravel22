@@ -2,6 +2,8 @@ package com.example.tgapplication.chat;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.ClipDrawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +14,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 import com.chauthai.swipereveallayout.SwipeRevealLayout;
 import com.chauthai.swipereveallayout.ViewBinderHelper;
 import com.example.tgapplication.R;
@@ -72,7 +81,63 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         else {
             holder.tvfavourite.setVisibility(View.VISIBLE);
         }
-        Glide.with(mContext).load(mUsers.get(position).getPictureUrl()).centerCrop().placeholder(R.drawable.ic_broken_image_primary_24dp).into(holder.profile_image);
+
+        if(user.getGender().equalsIgnoreCase("Female")||user.getGender().equalsIgnoreCase("Girl"))
+        {
+            Glide.with(mContext).asBitmap().load(mUsers.get(position).getPictureUrl())
+                    .fitCenter()
+                    .override(450,600)
+                    .listener(new RequestListener<Bitmap>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+//                            holder.progressBar.setVisibility(View.GONE);
+                            holder.profile_image.setImageResource(R.drawable.no_photo_female);
+                            holder.profile_image.setImageLevel(50);
+                           /* ClipDrawable mImageDrawable = (ClipDrawable) holder.profile_image.getDrawable();
+                            mImageDrawable.setLevel(5000);*/
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+//                            holder.progressBar.setVisibility(View.GONE);
+                            return false;
+                        }
+                    })
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+
+                            holder.profile_image.setImageBitmap(resource);
+                        }
+                    });
+        }
+        else {
+            Glide.with(mContext).asBitmap().load(mUsers.get(position).getPictureUrl())
+                    .centerCrop()
+                    .override(450,600)
+                    .listener(new RequestListener<Bitmap>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+//                            holder.progressBar.setVisibility(View.GONE);
+                            holder.profile_image.setImageResource(R.drawable.no_photo_male);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+//                            holder.progressBar.setVisibility(View.GONE);
+                            return false;
+                        }
+                    })
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                            holder.profile_image.setImageBitmap(resource);
+                        }
+                    });
+        }
+//        Glide.with(mContext).load(mUsers.get(position).getPictureUrl()).centerCrop().placeholder(R.drawable.ic_broken_image_primary_24dp).into(holder.profile_image);
 //        }
 
         viewBinderHelper.bind(holder.swipe_layout_1, user.getId());

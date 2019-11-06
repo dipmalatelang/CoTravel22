@@ -1,6 +1,7 @@
 package com.example.tgapplication.chat;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,9 +9,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 import com.example.tgapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,14 +32,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     private Context mContext;
     private List<Chat> mChat;
-    private String imageurl;
+    private String imageurl, gender;
 
     FirebaseUser fuser;
 
-    public MessageAdapter(Context mContext, List<Chat> mChat, String imageurl){
+    public MessageAdapter(Context mContext, List<Chat> mChat, String imageurl, String gender){
         this.mChat = mChat;
         this.mContext = mContext;
         this.imageurl = imageurl;
+        this.gender=gender;
     }
 
     @NonNull
@@ -53,11 +62,63 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
         holder.show_message.setText(chat.getMessage());
 
-        if (imageurl.equals("default")){
-            holder.profile_image.setImageResource(R.mipmap.ic_launcher);
-        } else {
-            Glide.with(mContext).load(imageurl).centerCrop().into(holder.profile_image);
+        if(gender.equalsIgnoreCase("Female")||gender.equalsIgnoreCase("Girl"))
+        {
+            Glide.with(mContext).asBitmap().load(imageurl)
+                    .fitCenter()
+                    .override(450,600)
+                    .listener(new RequestListener<Bitmap>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+//                            holder.progressBar.setVisibility(View.GONE);
+                            holder.profile_image.setImageResource(R.drawable.no_photo_female);
+                           /* ClipDrawable mImageDrawable = (ClipDrawable) holder.profile_image.getDrawable();
+                            mImageDrawable.setLevel(5000);*/
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+//                            holder.progressBar.setVisibility(View.GONE);
+                            return false;
+                        }
+                    })
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+
+                            holder.profile_image.setImageBitmap(resource);
+                        }
+                    });
         }
+        else {
+            Glide.with(mContext).asBitmap().load(imageurl)
+                    .centerCrop()
+                    .override(450,600)
+                    .listener(new RequestListener<Bitmap>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+//                            holder.progressBar.setVisibility(View.GONE);
+                            holder.profile_image.setImageResource(R.drawable.no_photo_male);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+//                            holder.progressBar.setVisibility(View.GONE);
+                            return false;
+                        }
+                    })
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                            holder.profile_image.setImageBitmap(resource);
+                        }
+                    });
+        }
+
+
+
 
         if (position == mChat.size()-1){
             if (chat.isIsseen()){

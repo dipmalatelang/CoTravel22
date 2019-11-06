@@ -61,11 +61,13 @@
             android:background="@color/background"
             android:padding="5dp">
 
+
+
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_image"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/ic_broken_image_primary_24dp" />
+                android:src="@drawable/whitewallpapar" />
 
 
             <de.hdodenhof.circleimageview.CircleImageView
