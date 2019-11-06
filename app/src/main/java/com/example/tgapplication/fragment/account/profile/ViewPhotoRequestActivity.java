@@ -137,6 +137,9 @@ public class ViewPhotoRequestActivity extends BaseActivity {
 
                                                     @Override
                                                     public void hidePhotoRequest(String id, int pos) {
+                                                        removePhotoRequest(id,0);
+                                                        userList.remove(pos);
+                                                        viewPhotoRequestAdapter.notifyDataSetChanged();
                                                        /* PrivatePhotoAccessInstance.child(fuser.getUid()).child(id).child("status").setValue(0);
                                                         userList.remove(pos);
                                                         viewPhotoRequestAdapter.notifyDataSetChanged();*/
@@ -274,6 +277,9 @@ public class ViewPhotoRequestActivity extends BaseActivity {
 
                                                     @Override
                                                     public void hidePhotoRequest(String id, int pos) {
+                                                        removePhotoRequest(id,0);
+                                                        userList.remove(pos);
+                                                        viewPhotoRequestAdapter.notifyDataSetChanged();
                                                        /* PrivatePhotoAccessInstance.child(fuser.getUid()).child(id).child("status").setValue(0);
                                                         userList.remove(pos);
                                                         viewPhotoRequestAdapter.notifyDataSetChanged();*/
@@ -326,6 +332,30 @@ public class ViewPhotoRequestActivity extends BaseActivity {
                         HashMap<String, Object> hashMap = new HashMap<>();
                         hashMap.put("status", i);
                         snapshot.getRef().updateChildren(hashMap);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private void removePhotoRequest(String userid, int i)
+    {
+        PhotoRequestInstance.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Permit permit = snapshot.getValue(Permit.class);
+                    if (Objects.requireNonNull(permit).getReceiver().equals(fuser.getUid()) && permit.getSender().equals(userid)) {
+                       /* HashMap<String, Object> hashMap = new HashMap<>();
+                        hashMap.put("status", i);
+                        snapshot.getRef().updateChildren(hashMap);*/
+                        snapshot.getRef().removeValue();
                     }
                 }
             }
@@ -403,6 +433,9 @@ public class ViewPhotoRequestActivity extends BaseActivity {
 
                                                     @Override
                                                     public void hidePhotoRequest(String id, int pos) {
+                                                        removePhotoRequest(id,0);
+                                                        userList.remove(pos);
+                                                        viewPhotoRequestAdapter.notifyDataSetChanged();
                                                        /* PrivatePhotoAccessInstance.child(fuser.getUid()).child(id).child("status").setValue(0);
                                                         userList.remove(pos);
                                                         viewPhotoRequestAdapter.notifyDataSetChanged();*/
