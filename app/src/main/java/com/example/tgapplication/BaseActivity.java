@@ -294,12 +294,13 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     }
 
-    public void saveDetailsLater(String id, String email, String password) {
+    public void saveDetailsLater(String id, String name, String age, String gender) {
         sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.putString("Id", id);
-        editor.putString("Name", email);
-        editor.putString("Age", password);
+        editor.putString("Name", name);
+        editor.putString("Age", age);
+        editor.putString("Gender",gender);
 
         editor.apply();
     }

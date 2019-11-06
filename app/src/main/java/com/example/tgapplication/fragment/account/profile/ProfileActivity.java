@@ -154,7 +154,7 @@ public class ProfileActivity extends BaseActivity {
             ivFavUser.setVisibility(View.GONE);
             floatingActionButton2.hide();
             profileId = fuser.getUid();
-            getAllImages(profileId);
+            getAllImages(profileId, userL.getUser().getGender());
             getAllTrips(profileId);
             getProfileData(profileId);
 
@@ -168,7 +168,7 @@ public class ProfileActivity extends BaseActivity {
             floatingActionButton2.show();
             tripL = (TripList) getIntent().getSerializableExtra("MyObj");
             profileId = Objects.requireNonNull(tripL).getId();
-            getAllImages(profileId);
+            getAllImages(profileId,userL.getUser().getGender());
             getAllTrips(profileId);
             if (tripL.getFavid() == 1) {
                 ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
@@ -194,7 +194,7 @@ public class ProfileActivity extends BaseActivity {
             floatingActionButton2.show();
             userL = (UserImg) getIntent().getSerializableExtra("MyUserObj");
             profileId = Objects.requireNonNull(userL).getUser().getId();
-            getAllImages(profileId);
+            getAllImages(profileId,userL.getUser().getGender());
             getAllTrips(profileId);
 
            /* if (userL.getUser().getFavid() == 1) {
@@ -350,7 +350,7 @@ public class ProfileActivity extends BaseActivity {
     }
 
 
-    public void getAllImages(String uid) {
+    public void getAllImages(String uid, String gender) {
 
         PhotoRequestInstance.addValueEventListener(new ValueEventListener() {
             @Override
@@ -400,7 +400,7 @@ public class ProfileActivity extends BaseActivity {
 
 
                                         if (uploads.size() > 0) {
-                                            adapter = new CustomAdapter(ProfileActivity.this, uid, uploads);
+                                            adapter = new CustomAdapter(ProfileActivity.this, uid, uploads, gender);
                                             viewPager.setAdapter(adapter);
                                             adapter.notifyDataSetChanged();
 
@@ -461,7 +461,7 @@ public class ProfileActivity extends BaseActivity {
 
                                     Log.i(TAG, "onDataChange: Uploads" + uploads.size());
                                     if (uploads.size() > 0) {
-                                        adapter = new CustomAdapter(ProfileActivity.this, uid, uploads);
+                                        adapter = new CustomAdapter(ProfileActivity.this, uid, uploads, gender);
                                         viewPager.setAdapter(adapter);
 
                                         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -587,7 +587,7 @@ public class ProfileActivity extends BaseActivity {
 
                             Log.i(TAG, "onDataChange: Uploads" + uploads.size());
                             if (uploads.size() > 0) {
-                                adapter = new CustomAdapter(ProfileActivity.this, uid, uploads);
+                                adapter = new CustomAdapter(ProfileActivity.this, uid, uploads, gender);
                                 viewPager.setAdapter(adapter);
 
                                 viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
