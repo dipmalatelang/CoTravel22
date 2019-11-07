@@ -208,9 +208,14 @@ public class FavouriteFragment extends BaseFragment {
 
                                                 @Override
                                                 public void setData(User tList, int position) {
-                                                    Intent mIntent = new Intent(getActivity(), ProfileActivity.class);
-                                                    mIntent.putExtra("MyUserObj", myFavArray.get(position));
-                                                    startActivityForResult(mIntent, 1);
+                                                    if (tList.getAccount_type() == 1) {
+                                                        Intent mIntent = new Intent(getActivity(), ProfileActivity.class);
+                                                        mIntent.putExtra("MyUserObj", myFavArray.get(position));
+                                                        startActivityForResult(mIntent, 1);
+                                                    }
+                                                    else {
+                                                        hiddenProfileDialog();
+                                                    }
                                                 }
 
                                             });

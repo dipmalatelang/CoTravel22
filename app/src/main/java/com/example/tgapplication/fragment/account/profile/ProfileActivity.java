@@ -1,7 +1,9 @@
 package com.example.tgapplication.fragment.account.profile;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -154,7 +156,13 @@ public class ProfileActivity extends BaseActivity {
             ivFavUser.setVisibility(View.GONE);
             floatingActionButton2.hide();
             profileId = fuser.getUid();
-            getAllImages(profileId, userL.getUser().getGender());
+            SharedPreferences sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+
+            if (sharedPreferences.contains("Gender")) {
+                String gender = (sharedPreferences.getString("Gender", ""));
+                getAllImages(profileId, gender);
+            }
+
             getAllTrips(profileId);
             getProfileData(profileId);
 
@@ -168,7 +176,7 @@ public class ProfileActivity extends BaseActivity {
             floatingActionButton2.show();
             tripL = (TripList) getIntent().getSerializableExtra("MyObj");
             profileId = Objects.requireNonNull(tripL).getId();
-            getAllImages(profileId,userL.getUser().getGender());
+            getAllImages(profileId,tripL.getGender());
             getAllTrips(profileId);
             if (tripL.getFavid() == 1) {
                 ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);

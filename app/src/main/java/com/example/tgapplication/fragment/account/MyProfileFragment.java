@@ -172,10 +172,15 @@ public class MyProfileFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.tv_my_profile, R.id.tv_Logout, R.id.iv_Image, R.id.tv_Change_Password, R.id.tv_verify_acc, R.id.tv_Change_Preferences, R.id.tv_Trash, R.id.tv_photo_request})
+    @OnClick({R.id.tv_Setting,R.id.tv_my_profile, R.id.tv_Logout, R.id.iv_Image, R.id.tv_Change_Password, R.id.tv_verify_acc, R.id.tv_Change_Preferences, R.id.tv_Trash, R.id.tv_photo_request})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             //
+
+            case R.id.tv_Setting:
+                Intent sIntent = new Intent(getActivity(), Settings.class);
+                startActivity(sIntent);
+                break;
 
             case R.id.tv_photo_request:
                 startActivity(new Intent(getActivity(), PhotoRequestActivity.class));

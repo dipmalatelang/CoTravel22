@@ -3,6 +3,7 @@ package com.example.tgapplication.fragment.trip.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,58 +62,102 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
     public void onBindViewHolder(final TripViewHolder holder, int position) {
 
         final TripList tList = mTrip.get(position);
-        Log.i("TAGrecyclerview", "onBindViewHolder: "+tList.getImageUrl());
+        Log.i("TAGrecyclerview", "onBindViewHolder: "+tList.getAccount_type());
+
 
         if(tList.getGender().equalsIgnoreCase("Female")||tList.getGender().equalsIgnoreCase("Girl"))
         {
-            Glide.with(mContext).asBitmap().load(tList.getImageUrl())
-                    .centerCrop()
-                    .override(450,600)
-                    .listener(new RequestListener<Bitmap>() {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                            holder.progressBar.setVisibility(View.GONE);
-                            holder.mImage.setImageResource(R.drawable.no_photo_female);
-                            return false;
-                        }
+            if(tList.getAccount_type()==1)
+            {
+                Glide.with(mContext).asBitmap().load(tList.getImageUrl())
+                        .centerCrop()
+                        .override(450,600)
+                        .listener(new RequestListener<Bitmap>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                                holder.progressBar.setVisibility(View.GONE);
+                                holder.mImage.setImageResource(R.drawable.no_photo_female);
+                                return false;
+                            }
 
-                        @Override
-                        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                            holder.progressBar.setVisibility(View.GONE);
-                            return false;
-                        }
-                    })
-                    .into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                            holder.mImage.setImageBitmap(resource);
-                        }
-                    });
+                            @Override
+                            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                                holder.progressBar.setVisibility(View.GONE);
+                                return false;
+                            }
+                        })
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                holder.mImage.setImageBitmap(resource);
+                            }
+                        });
+            }
+            else {
+                    Glide.with(mContext).load(R.drawable.hidden_photo_female_thumb)
+                            .centerCrop()
+                            .override(450, 600)
+                            .listener(new RequestListener<Drawable>() {
+                                @Override
+                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                    holder.progressBar.setVisibility(View.GONE);
+                                    holder.mImage.setImageResource(R.drawable.hidden_photo_female_thumb);
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                    holder.progressBar.setVisibility(View.GONE);
+                                    return false;
+                                }
+                            }).into(holder.mImage);
+                }
         }
         else {
-            Glide.with(mContext).asBitmap().load(tList.getImageUrl())
-                    .centerCrop()
-                    .override(450,600)
-                    .listener(new RequestListener<Bitmap>() {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                            holder.progressBar.setVisibility(View.GONE);
-                            holder.mImage.setImageResource(R.drawable.no_photo_male);
-                            return false;
-                        }
+            if (tList.getAccount_type() == 1) {
+                Glide.with(mContext).asBitmap().load(tList.getImageUrl())
+                        .centerCrop()
+                        .override(450, 600)
+                        .listener(new RequestListener<Bitmap>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                                holder.progressBar.setVisibility(View.GONE);
+                                holder.mImage.setImageResource(R.drawable.no_photo_male);
+                                return false;
+                            }
 
-                        @Override
-                        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                            holder.progressBar.setVisibility(View.GONE);
-                            return false;
-                        }
-                    })
-                    .into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                            holder.mImage.setImageBitmap(resource);
-                        }
-                    });
+                            @Override
+                            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                                holder.progressBar.setVisibility(View.GONE);
+                                return false;
+                            }
+                        })
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                holder.mImage.setImageBitmap(resource);
+                            }
+                        });
+            }
+            else {
+                Glide.with(mContext).load(R.drawable.hidden_photo_male_thumb)
+                        .centerCrop()
+                        .override(450, 600)
+                        .listener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                holder.progressBar.setVisibility(View.GONE);
+                                holder.mImage.setImageResource(R.drawable.hidden_photo_male_thumb);
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                holder.progressBar.setVisibility(View.GONE);
+                                return false;
+                            }
+                        }).into(holder.mImage);
+            }
         }
 
 

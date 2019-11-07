@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import static com.example.tgapplication.Constants.ChatsInstance;
 import static com.example.tgapplication.Constants.FavoritesInstance;
@@ -84,7 +85,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public List<TripList> findAllMembers(UserImg userImg) {
         User user=userImg.getUser();
         int visit_id = getVisit(visitArray, user.getId());
-        TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getAge(), user.getGender(), user.getAbout_me(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), tripNote, userImg.getFav(), visit_id);
+        TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getAge(), user.getGender(), user.getAbout_me(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), tripNote, user.getAccount_type(), userImg.getFav(), visit_id);
         tripList.add(tripListClass);
 
         return tripList;

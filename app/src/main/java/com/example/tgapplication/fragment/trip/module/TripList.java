@@ -18,13 +18,14 @@ public class TripList implements Serializable {
     private String gender,age;
     private String nationality, lang, height,  body_type,  eyes,  hair, visit;
     private ArrayList<String> look;
+    private int account_type;
 
 
     public TripList() {
 
     }
 
-    public TripList(String id, String name, String imageUrl, String age, String gender, String about_me, String userLocation, String nationality, String lang, String height, String body_type, String eyes, String hair, ArrayList<String> look, String visit, String planLocation, String trip_note, String from_to_date, int favid, int visit_id) {
+    public TripList(String id, String name, String imageUrl, String age, String gender, String about_me, String userLocation, String nationality, String lang, String height, String body_type, String eyes, String hair, ArrayList<String> look, String visit, String planLocation, String trip_note, String from_to_date, int account_type, int favid, int visit_id) {
         this.id=id;
         this.name=name;
         this.imageUrl=imageUrl;
@@ -43,11 +44,12 @@ public class TripList implements Serializable {
         this.hair=hair;
         this.look=look;
         this.visit= visit;
+        this.account_type=account_type;
         this.favid=favid;
         this.visit_id=visit_id;
     }
 
-    public TripList(String id, String username, String imageURL, String age, String gender, String about_me, String location, String nationality, String lang, String height, String body_type, String eyes, String hair, ArrayList<String> look, String visit, String tripNote, int fav_id, int visit_id) {
+    public TripList(String id, String username, String imageURL, String age, String gender, String about_me, String location, String nationality, String lang, String height, String body_type, String eyes, String hair, ArrayList<String> look, String visit, String tripNote, int account_type, int fav_id, int visit_id) {
         this.id=id;
         this.name=username;
         this.imageUrl=imageURL;
@@ -64,10 +66,19 @@ public class TripList implements Serializable {
         this.hair=hair;
         this.look=look;
         this.visit= visit;
+        this.account_type=account_type;
         this.favid=fav_id;
         this.visit_id=visit_id;
     }
 
+
+    public int getAccount_type() {
+        return account_type;
+    }
+
+    public void setAccount_type(int account_type) {
+        this.account_type = account_type;
+    }
 
     public String getAbout_me() {
         return about_me;

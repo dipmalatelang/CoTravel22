@@ -191,9 +191,14 @@ public class VisitorFragment extends BaseFragment {
 
                                                                                                                                     @Override
                                                                                                                                     public void setData(UserImg mTrip, int position) {
-                                                                                                                                        Intent mIntent = new Intent(getActivity(), ProfileActivity.class);
-                                                                                                                                        mIntent.putExtra("MyUserObj", myFavArray.get(position));
-                                                                                                                                        startActivityForResult(mIntent, 1);
+                                                                                                                                        if (mTrip.getUser().getAccount_type() == 1) {
+                                                                                                                                            Intent mIntent = new Intent(getActivity(), ProfileActivity.class);
+                                                                                                                                            mIntent.putExtra("MyUserObj", myFavArray.get(position));
+                                                                                                                                            startActivityForResult(mIntent, 1);
+                                                                                                                                        }
+                                                                                                                                        else {
+                                                                                                                                            hiddenProfileDialog();
+                                                                                                                                        }
                                                                                                                                     }
                                                                                                                                 });
                                                                                                                                 myVisitRV.setAdapter(tripAdapter);
