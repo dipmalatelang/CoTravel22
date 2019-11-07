@@ -43,7 +43,6 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
-        style="@style/Widget.MaterialComponents.FloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -53,6 +52,8 @@
         android:layout_marginBottom="24dp"
         android:src="@drawable/ic_add_white_48dp"
         app:elevation="6dp"
+        style="@style/Widget.Design.FloatingActionButton"
+        android:theme="@style/Theme.MaterialComponents"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:pressedTranslationZ="12dp" />

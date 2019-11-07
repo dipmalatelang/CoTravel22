@@ -5,12 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -62,6 +62,20 @@ public class MyProfileFragment extends BaseFragment {
     TextView tvTrash;
     @BindView(R.id.tv_photo_request)
     TextView tvPhotoRequest;
+    @BindView(R.id.tv_Change_Preferences)
+    TextView tvChangePreferences;
+    @BindView(R.id.tv_verify_acc)
+    TextView tvVerifyAcc;
+    @BindView(R.id.view6)
+    View view6;
+    @BindView(R.id.tv_Setting)
+    TextView tvSetting;
+    @BindView(R.id.view7)
+    View view7;
+    @BindView(R.id.view8)
+    View view8;
+    @BindView(R.id.scrollView)
+    ScrollView scrollView;
     private SharedPreferences sharedPreferences;
     String name, imageUrl, age;
 
@@ -100,7 +114,7 @@ public class MyProfileFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.tv_my_profile, R.id.tv_Logout, R.id.iv_Image, R.id.tv_Change_Password, R.id.tv_verify_acc, R.id.tv_Change_Preferences, R.id.tv_Trash, R.id.tv_photo_request})
+    @OnClick({R.id.tv_my_profile, R.id.tv_Logout, R.id.iv_Image, R.id.tv_Change_Password, R.id.tv_verify_acc, R.id.tv_Change_Preferences, R.id.tv_Trash, R.id.tv_photo_request ,R.id.tv_Setting})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             //
@@ -138,9 +152,14 @@ public class MyProfileFragment extends BaseFragment {
 //              Toast.makeText(getActivity(), "Preferrences", Toast.LENGTH_SHORT).show();
 
                 break;
-
+            case R.id.tv_Setting:
+                Intent sIntent = new Intent(getActivity(), Settings.class);
+                startActivity(sIntent);
         }
     }
 
 
+    @OnClick(R.id.tv_Setting)
+    public void onViewClicked() {
+    }
 }
