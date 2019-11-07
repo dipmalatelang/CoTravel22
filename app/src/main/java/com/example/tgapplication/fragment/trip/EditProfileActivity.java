@@ -503,6 +503,41 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
 
                 }
                 break;
+
+            case R.id.cb_frnd:
+                boolean checkedfrnd = ((CheckBox) v).isChecked();
+                if (checkedfrnd){
+                    str_look.add("friend");
+                } else {
+                    str_look.remove("friend");
+                }
+                break;
+
+            case R.id.cb_adventure:
+                boolean checkedadventure = ((CheckBox) v).isChecked();
+                if (checkedadventure){
+                    str_look.add("adventure");
+                } else {
+                    str_look.remove("adventure");
+                }
+                break;
+            case R.id.cb_soulmate:
+                boolean checkedsoulmate = ((CheckBox) v).isChecked();
+                if (checkedsoulmate){
+                    str_look.add("soulmate");
+                } else {
+                    str_look.remove("soulmate");
+                }
+                break;
+
+            case R.id.cb_job:
+                boolean checkedjob = ((CheckBox) v).isChecked();
+                if (checkedjob){
+                    str_look.add("job");
+                } else {
+                    str_look.remove("job");
+                }
+                break;
         }
     }
 

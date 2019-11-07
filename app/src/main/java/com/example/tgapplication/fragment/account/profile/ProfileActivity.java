@@ -1,7 +1,9 @@
 package com.example.tgapplication.fragment.account.profile;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -154,7 +156,13 @@ public class ProfileActivity extends BaseActivity {
             ivFavUser.setVisibility(View.GONE);
             floatingActionButton2.hide();
             profileId = fuser.getUid();
-            getAllImages(profileId);
+            SharedPreferences sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+
+            if (sharedPreferences.contains("Gender")) {
+                String gender = (sharedPreferences.getString("Gender", ""));
+                getAllImages(profileId, gender);
+            }
+
             getAllTrips(profileId);
             getProfileData(profileId);
 
@@ -168,7 +176,7 @@ public class ProfileActivity extends BaseActivity {
             floatingActionButton2.show();
             tripL = (TripList) getIntent().getSerializableExtra("MyObj");
             profileId = Objects.requireNonNull(tripL).getId();
-            getAllImages(profileId);
+            getAllImages(profileId,tripL.getGender());
             getAllTrips(profileId);
             if (tripL.getFavid() == 1) {
                 ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
@@ -194,7 +202,7 @@ public class ProfileActivity extends BaseActivity {
             floatingActionButton2.show();
             userL = (UserImg) getIntent().getSerializableExtra("MyUserObj");
             profileId = Objects.requireNonNull(userL).getUser().getId();
-            getAllImages(profileId);
+            getAllImages(profileId,userL.getUser().getGender());
             getAllTrips(profileId);
 
            /* if (userL.getUser().getFavid() == 1) {
@@ -350,7 +358,7 @@ public class ProfileActivity extends BaseActivity {
     }
 
 
-    public void getAllImages(String uid) {
+    public void getAllImages(String uid, String gender) {
 
         PhotoRequestInstance.addValueEventListener(new ValueEventListener() {
             @Override
@@ -400,7 +408,7 @@ public class ProfileActivity extends BaseActivity {
 
 
                                         if (uploads.size() > 0) {
-                                            adapter = new CustomAdapter(ProfileActivity.this, uid, uploads);
+                                            adapter = new CustomAdapter(ProfileActivity.this, uid, uploads, gender);
                                             viewPager.setAdapter(adapter);
                                             adapter.notifyDataSetChanged();
 
@@ -461,7 +469,7 @@ public class ProfileActivity extends BaseActivity {
 
                                     Log.i(TAG, "onDataChange: Uploads" + uploads.size());
                                     if (uploads.size() > 0) {
-                                        adapter = new CustomAdapter(ProfileActivity.this, uid, uploads);
+                                        adapter = new CustomAdapter(ProfileActivity.this, uid, uploads, gender);
                                         viewPager.setAdapter(adapter);
 
                                         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -587,7 +595,7 @@ public class ProfileActivity extends BaseActivity {
 
                             Log.i(TAG, "onDataChange: Uploads" + uploads.size());
                             if (uploads.size() > 0) {
-                                adapter = new CustomAdapter(ProfileActivity.this, uid, uploads);
+                                adapter = new CustomAdapter(ProfileActivity.this, uid, uploads, gender);
                                 viewPager.setAdapter(adapter);
 
                                 viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

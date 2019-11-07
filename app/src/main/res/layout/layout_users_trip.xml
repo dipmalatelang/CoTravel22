@@ -14,8 +14,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:background="@drawable/imagebg"
         android:layout_height="wrap_content">
+
 
         <ImageView
             android:id="@+id/ivImage"
@@ -23,14 +23,22 @@
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:contentDescription="TODO"
+            android:src="@drawable/whitewallpapar"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_broken_image_primary_24dp"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
             app:layout_constraintDimensionRatio="w,1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/ivImage"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/ivImage" />
 
         <LinearLayout
             android:id="@+id/linearLayout"

@@ -67,7 +67,7 @@
                 tools:layout_editor_absoluteX="8dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
+        <Switch
             android:id="@+id/switch1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -79,9 +79,9 @@
             tools:layout_editor_absoluteX="8dp">
 
 
-        </com.google.android.material.switchmaterial.SwitchMaterial>
+        </Switch>
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
+        <Switch
             android:id="@+id/switch2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -91,7 +91,7 @@
             app:layout_constraintTop_toBottomOf="@+id/switch1"
             tools:layout_editor_absoluteX="8dp">
 
-        </com.google.android.material.switchmaterial.SwitchMaterial>
+        </Switch>
 
 
     </LinearLayout>
@@ -137,7 +137,7 @@
                 tools:layout_editor_absoluteX="8dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
+        <Switch
             android:id="@+id/switch3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -149,9 +149,9 @@
             tools:layout_editor_absoluteX="8dp">
 
 
-        </com.google.android.material.switchmaterial.SwitchMaterial>
+        </Switch>
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
+        <Switch
             android:id="@+id/switch4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -161,7 +161,7 @@
             app:layout_constraintTop_toBottomOf="@+id/switch3"
             tools:layout_editor_absoluteX="8dp">
 
-        </com.google.android.material.switchmaterial.SwitchMaterial>
+        </Switch>
 
     </LinearLayout>
 

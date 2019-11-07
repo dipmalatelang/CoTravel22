@@ -385,6 +385,62 @@
                     android:buttonTint="@color/colorPrimary"
                     android:backgroundTint="@color/colorPrimary"/>
             </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="I'm looking for"
+                style="@style/text_profile_edit_style"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingStart="5dp">
+
+                <CheckBox
+                    android:id="@+id/cb_frnd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Friend"
+                    android:textSize="16sp"
+                    android:textColor="@color/ebony"
+                    android:buttonTint="@color/colorPrimary"
+                    android:backgroundTint="@color/colorPrimary" />
+
+                <CheckBox
+                    android:id="@+id/cb_adventure"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Adventure"
+                    android:textSize="16sp"
+                    android:layout_marginStart="50dp"
+                    android:textColor="@color/ebony"
+                    android:buttonTint="@color/colorPrimary"
+                    android:backgroundTint="@color/colorPrimary"/>
+
+                <CheckBox
+                    android:id="@+id/cb_soulmate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Soulmate"
+                    android:textSize="16sp"
+                    android:layout_marginStart="50dp"
+                    android:textColor="@color/ebony"
+                    android:buttonTint="@color/colorPrimary"
+                    android:backgroundTint="@color/colorPrimary"/>
+
+                <CheckBox
+                    android:id="@+id/cb_job"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Job"
+                    android:textSize="16sp"
+                    android:layout_marginStart="50dp"
+                    android:textColor="@color/ebony"
+                    android:buttonTint="@color/colorPrimary"
+                    android:backgroundTint="@color/colorPrimary"/>
+
+            </LinearLayout>
 
             <Button
                 android:id="@+id/btn_regi"

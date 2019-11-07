@@ -2,6 +2,7 @@ package com.example.tgapplication.chat;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -10,12 +11,20 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
@@ -141,7 +150,60 @@ int fav;
                         }
 //                        Log.i("TAG", "onDataChangeMy: "+pictureUrl);
                         //and this
-                        Glide.with(getApplicationContext()).load(pictureUrl).placeholder(R.mipmap.ic_launcher).centerCrop().into(profile_image);
+                        if(user.getGender().equalsIgnoreCase("Female")||user.getGender().equalsIgnoreCase("Girl"))
+                        {
+                            Glide.with(getApplicationContext()).asBitmap().load(pictureUrl)
+                                    .fitCenter()
+                                    .override(450,600)
+                                    .listener(new RequestListener<Bitmap>() {
+                                        @Override
+                                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+//                            holder.progressBar.setVisibility(View.GONE);
+                                            profile_image.setImageResource(R.drawable.no_photo_female);
+                           /* ClipDrawable mImageDrawable = (ClipDrawable) holder.profile_image.getDrawable();
+                            mImageDrawable.setLevel(5000);*/
+                                            return false;
+                                        }
+
+                                        @Override
+                                        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+//                            holder.progressBar.setVisibility(View.GONE);
+                                            return false;
+                                        }
+                                    })
+                                    .into(new SimpleTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+
+                                            profile_image.setImageBitmap(resource);
+                                        }
+                                    });
+                        }
+                        else {
+                            Glide.with(getApplicationContext()).asBitmap().load(pictureUrl)
+                                    .centerCrop()
+                                    .override(450,600)
+                                    .listener(new RequestListener<Bitmap>() {
+                                        @Override
+                                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+//                            holder.progressBar.setVisibility(View.GONE);
+                                            profile_image.setImageResource(R.drawable.no_photo_male);
+                                            return false;
+                                        }
+
+                                        @Override
+                                        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+//                            holder.progressBar.setVisibility(View.GONE);
+                                            return false;
+                                        }
+                                    })
+                                    .into(new SimpleTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                            profile_image.setImageBitmap(resource);
+                                        }
+                                    });
+                        }
                         FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -153,7 +215,7 @@ int fav;
                                     fav = 0;
                                 }
                         msgArray.add(new UserImg(user, pictureUrl,fav));
-                        readMesagges(fuser.getUid(), userid, pictureUrl);
+                        readMesagges(fuser.getUid(), userid, pictureUrl, user.getGender());
                     }
 
                     @Override
@@ -289,7 +351,7 @@ int fav;
         });
     }
 
-    private void readMesagges(final String myid, final String userid, final String imageurl) {
+    private void readMesagges(final String myid, final String userid, final String imageurl, String gender) {
         mchat = new ArrayList<>();
 
         ChatsInstance.addValueEventListener(new ValueEventListener() {
@@ -303,7 +365,7 @@ int fav;
                         mchat.add(chat);
                     }
 
-                    messageAdapter = new MessageAdapter(MessageActivity.this, mchat, imageurl);
+                    messageAdapter = new MessageAdapter(MessageActivity.this, mchat, imageurl,gender);
                     recyclerView.setAdapter(messageAdapter);
                 }
             }
@@ -376,6 +438,7 @@ int fav;
                     sendMessage(fuser.getUid(), userid, msg);
                 } else {
                     snackBar(message_realtivelayout, "You can't send empty message");
+                    Toast.makeText(this, "You can't send empty message", Toast.LENGTH_SHORT).show();
                 }
 //                text_send.setText("");
                 text_send.getText().clear();
