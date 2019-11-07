@@ -6,35 +6,45 @@
     android:layout_height="match_parent"
     tools:context=".fragment.account.profile.PhotoRequestActivity">
 
-        <Button
+        <TextView
             android:id="@+id/btn_photo_rqst"
-            android:layout_width="250dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="76dp"
+            android:layout_marginTop="8dp"
             android:text="@string/Photo_request"
-            android:background="@drawable/back"
+            style="@style/text_view_style1"
+            android:gravity="center"
+            android:background="@color/gray_bg"
+            android:textColor="@color/purple"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
+        <TextView
             android:id="@+id/btn_photo_permits"
-            android:layout_width="250dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="@string/Photo_permits"
-            android:background="@drawable/back"
+            android:layout_marginTop="10dp" android:text="@string/Photo_permits"
+            style="@style/text_view_style1"
+            android:gravity="center"
+            android:textColor="@color/purple"
+            android:background="@color/gray_bg"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_photo_rqst" />
 
-        <Button
+        <TextView
             android:id="@+id/btn_given_permits"
-            android:layout_width="250dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
+            style="@style/text_view_style1"
+            android:gravity="center"
+            android:textColor="@color/purple"
+            android:background="@color/gray_bg"
+
             android:text="@string/given_permits"
-            android:background="@drawable/back"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_photo_permits" />
