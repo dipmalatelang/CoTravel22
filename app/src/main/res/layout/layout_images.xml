@@ -23,8 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="135dp"
             android:background="@color/dark_cyan"
-            android:layout_gravity="center"
-            android:id="@+id/r2_image">
+            android:layout_gravity="center">
 
             <TextView
                 android:id="@+id/set_main"

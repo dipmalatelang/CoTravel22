@@ -17,7 +17,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.User;
-import com.example.tgapplication.photo.Upload;
+import com.example.tgapplication.fragment.account.profile.module.Upload;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;

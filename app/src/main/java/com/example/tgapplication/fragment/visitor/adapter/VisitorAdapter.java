@@ -54,7 +54,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
     }
 
     @Override
-    public void onBindViewHolder(final VisitorViewHolder holder, int position)
+    public void onBindViewHolder(@NonNull final VisitorViewHolder holder, int position)
     {
 
         final UserImg tList = mTrip.get(position);

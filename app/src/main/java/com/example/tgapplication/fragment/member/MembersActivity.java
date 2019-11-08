@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,12 +13,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
-import com.example.tgapplication.fragment.account.profile.ProfileActivity;
+import com.example.tgapplication.fragment.account.profile.ui.ProfileActivity;
 import com.example.tgapplication.fragment.member.adapter.MembersAdapter;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.fragment.visitor.UserImg;
-import com.example.tgapplication.photo.Upload;
+import com.example.tgapplication.fragment.account.profile.module.Upload;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -30,7 +29,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 import static com.example.tgapplication.Constants.FavoritesInstance;

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -14,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
@@ -22,14 +20,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.BuildConfig;
 import com.example.tgapplication.R;
-import com.example.tgapplication.fragment.account.profile.ChangePrefActivity;
+import com.example.tgapplication.fragment.account.profile.ui.ChangePrefActivity;
 import com.example.tgapplication.fragment.trip.module.User;
-import com.example.tgapplication.photo.Upload;
+import com.example.tgapplication.fragment.account.profile.module.Upload;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -52,11 +49,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.lang.reflect.Field;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -78,7 +72,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     EditText regi_et_name, regi_et_email, regi_et_pass,regi_et_location;
     TextInputLayout textInput_location;
 
-    ConstraintLayout regi_form;
     RadioGroup regi_rg;
     RadioButton rb_gender;
     RelativeLayout relativelayout;
@@ -113,7 +106,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         cb_regi_girl.setOnClickListener(this);
         cb_regi_men.setOnClickListener(this);*/
 
-        regi_form=findViewById(R.id.cl_register_form);
 //        travelprefer_form=findViewById(R.id.travelprefer_form);
 
         btn_register=findViewById(R.id.btn_register);
@@ -308,7 +300,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                             UsersInstance.child(userid).setValue(userClass);
                             Log.i("Done","gotin");
 //                            startActivity(new Intent(RegisterActivity.this,LoginActivity.class));
-                            regi_form.setVisibility(View.GONE);
 
 //                            travelprefer_form.setVisibility(View.VISIBLE);
                             range_age.clear();
@@ -365,23 +356,15 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 */
             case R.id.btn_register:
                 int selectedId = regi_rg.getCheckedRadioButtonId();
+                Log.i(TAG, "onClick: "+selectedId);
                 rb_gender = findViewById(selectedId);
 
-                String str_gender = null;
-                if(rb_gender.getText().toString().equalsIgnoreCase("Girl"))
-                {
-                    str_gender="Female";
-                }
-                else if(rb_gender.getText().toString().equalsIgnoreCase("Boy"))
-                {
-                    str_gender="Male";
-                }
+               /* String str_gender = null;
                 String txt_username = regi_et_name.getText().toString();
                 String txt_email = regi_et_email.getText().toString();
                 String txt_password = regi_et_pass.getText().toString();
                 String str_age = sp_age.getSelectedItem().toString();
                 String txt_location = regi_et_location.getText().toString();
-
 
 
                 int age_value = Integer.parseInt(str_age);
@@ -393,15 +376,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                     range_age.add("" + (age_value + 7));
                 }
 
-
-                if (str_gender.equalsIgnoreCase("Female")) {
-                    travel_with.add("Male");
-                } else if (str_gender.equalsIgnoreCase("Male")) {
-                    travel_with.add("Female");
-                } else {
-                    travel_with.add("Female");
-                    travel_with.add("Male");
-                }
                 if (TextUtils.isEmpty(txt_username) || TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password ) ||TextUtils.isEmpty(txt_location)) {
                     snackBar(relativelayout, "All fileds are required");
 
@@ -413,12 +387,34 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
                     snackBar(relativelayout, "password must be at least 6 characters");
                 }
+                else if(rb_gender==null)
+                {
+                    snackBar(relativelayout, "Select gender");
+                }
                 else {
 //                    snackBar(relativelayout, "Register Successfully..!");
+                    if(rb_gender.getText().toString().equalsIgnoreCase("Girl"))
+                    {
+                        str_gender="Female";
+                    }
+                    else if(rb_gender.getText().toString().equalsIgnoreCase("Boy"))
+                    {
+                        str_gender="Male";
+                    }
+
+                    if (str_gender.equalsIgnoreCase("Female")) {
+                        travel_with.add("Male");
+                    } else if (str_gender.equalsIgnoreCase("Male")) {
+                        travel_with.add("Female");
+                    } else {
+                        travel_with.add("Female");
+                        travel_with.add("Male");
+                    }
+
                     Log.i(TAG, "onClick: "+txt_location);
                     register(txt_username, txt_email, txt_password, str_gender, str_age, txt_location, travel_with, range_age);
                 }
-
+*/
                 break;
 
             case R.id.textInput_location: case R.id.regi_et_location:

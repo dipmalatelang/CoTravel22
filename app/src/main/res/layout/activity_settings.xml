@@ -27,7 +27,6 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/linearLayoutphone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -80,7 +79,6 @@
 
 
             <TextView
-                android:id="@+id/email"
                 style="@style/TextAppearance.MaterialComponents.Headline6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -135,7 +133,6 @@
 
 
             <TextView
-                android:id="@+id/phone"
                 style="@style/TextAppearance.MaterialComponents.Headline6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -153,7 +150,6 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Switch
-            android:id="@+id/switch3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text=" SMS notifications about new messages"

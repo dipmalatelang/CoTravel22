@@ -8,31 +8,23 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tgapplication.BaseFragment;
 import com.example.tgapplication.R;
-import com.example.tgapplication.fragment.account.profile.ProfileActivity;
-import com.example.tgapplication.fragment.trip.module.PlanTrip;
-import com.example.tgapplication.fragment.trip.module.TripData;
+import com.example.tgapplication.fragment.account.profile.ui.ProfileActivity;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.fragment.visitor.adapter.VisitorAdapter;
-import com.example.tgapplication.photo.Upload;
+import com.example.tgapplication.fragment.account.profile.module.Upload;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 
 import static com.example.tgapplication.Constants.FavoritesInstance;

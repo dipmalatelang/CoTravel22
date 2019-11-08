@@ -10,11 +10,6 @@
     <string name="home">Home</string>
     <string name="close">Close</string>
     <string name="notification_settings">Notification settings</string>
-    <string name="select_image">select image</string>
-    <string name="result_image_desc">crop result</string>
-    <string name="pick_image_intent_chooser_title">Select source</string>
-    <string name="crop_image_activity_title">image</string>
-    <string name="crop_image_activity_no_permissions">Cancelling, required permissions are not granted</string>
 
 
     <string name="register">Registration</string>
@@ -22,23 +17,12 @@
     <string name="changepassword">Change Password</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="todo">TODO</string>
 
     <string name="add_phone">Verify your phone number</string>
     <string name="phone_verify">Tap next to verify your account with your phone number</string>
     <string name="verify">Enter the code that was send to</string>
 
-
-    <string name="crop_image_menu_rotate_left">Rotate counter clockwise</string>
-    <string name="crop_image_menu_rotate_right">Rotate</string>
-    <string name="crop_image_menu_crop">Crop</string>
-    <string name="crop_image_menu_flip">Flip</string>
-    <string name="crop_image_menu_flip_horizontally">Flip horizontally</string>
-    <string name="crop_image_menu_flip_vertically">Flip vertically</string>
-
-    <string name="Favorites">Add To Favorites</string>
-    <string name="Delete">Add To Trash</string>
 
     <string name="Photo_request">Photo requests</string>
     <string name="Photo_permits">Photo permit</string>

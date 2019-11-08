@@ -33,13 +33,13 @@
 
 <!--        <activity android:name=".fragment.account.profile.DetailFBImage"/>-->
 
-        <activity android:name=".fragment.account.profile.TrashActivity"/>
+        <activity android:name=".fragment.account.profile.ui.TrashActivity"/>
 
-        <activity android:name=".fragment.account.profile.PhotoRequestActivity"/>
+        <activity android:name=".fragment.account.profile.ui.PhotoRequestActivity"/>
 
-        <activity android:name=".fragment.account.profile.ViewPhotoRequestActivity"/>
+        <activity android:name=".fragment.account.profile.ui.ViewPhotoRequestActivity"/>
 
-        <activity android:name=".fragment.account.SettingsActivity"
+        <activity android:name=".fragment.account.profile.ui.SettingsActivity"
             android:theme="@style/noToolbar"
             android:parentActivityName=".MainActivity"/>
 
@@ -55,17 +55,13 @@
             android:parentActivityName=".MainActivity"/>
 
         <activity
-            android:name=".chat.ChatActivity"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/noToolbar" />
-        <activity
             android:name=".fragment.trip.AddTripActivity"
             android:parentActivityName=".MainActivity"
             android:theme="@style/noToolbar"/>
 
 <!--        <activity android:name=".trips.ProfileVisitorActivity" />-->
         <activity
-            android:name=".chat.MessageActivity"
+            android:name=".fragment.chat.MessageActivity"
             android:parentActivityName=".MainActivity"
             android:theme="@style/noToolbar" />
         <activity
@@ -107,16 +103,16 @@
 <!--        </activity>-->
 <!--        <activity android:name=".fragment.account.profile.cropphoto.CropImageActivity"/>-->
 
-        <activity android:name=".fragment.account.profile.ProfileActivity"
+        <activity android:name=".fragment.account.profile.ui.ProfileActivity"
             android:theme="@style/noToolbar" >
 
         </activity>
-        <activity android:name=".fragment.account.profile.EditPhotoActivity"/>
-        <activity android:name=".fragment.account.profile.ChangePasswordActivity"/>
-        <activity android:name=".fragment.account.profile.ChangePrefActivity"
+        <activity android:name=".fragment.account.profile.ui.EditPhotoActivity"/>
+        <activity android:name=".fragment.account.profile.ui.ChangePasswordActivity"/>
+        <activity android:name=".fragment.account.profile.ui.ChangePrefActivity"
             android:theme="@style/noToolbar"/>
 
-        <activity android:name=".fragment.account.profile.FacebookImage"/>
+        <activity android:name=".fragment.account.profile.ui.FacebookImageActivity"/>
 
         <service android:name=".fragment.chat.notification.MyFirebaseIdService"
             android:enabled="true"

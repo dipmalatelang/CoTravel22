@@ -22,7 +22,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.BitmapThumbnailImageViewTarget;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
@@ -31,9 +30,6 @@ import com.example.tgapplication.fragment.trip.module.TripList;
 
 import java.util.List;
 
-import static android.graphics.Color.parseColor;
-import static com.example.tgapplication.R.color.color8;
-import static com.example.tgapplication.R.color.color9;
 
 public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder > {
 
@@ -57,11 +53,10 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
         return new TripViewHolder(mView);
     }
 
-    @SuppressLint("ResourceAsColor")
     @Override
-    public void onBindViewHolder(final TripViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull TripViewHolder holder, int position) {
 
-        final TripList tList = mTrip.get(position);
+         TripList tList = mTrip.get(position);
         Log.i("TAGrecyclerview", "onBindViewHolder: "+tList.getAccount_type());
 
 
@@ -166,19 +161,21 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
         holder.mCity.setText(tList.getPlanLocation());
         holder.mDate.setText(tList.getFrom_to_date());
 
-        if (position%2==0) holder.linearLayout.setBackgroundColor(color8);
+        Log.i("TAG", "onBindViewHolder: "+position);
+
+        if (position%2==0) holder.linearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.color8));
         else if(position%3==0){
-            holder.linearLayout.setBackgroundColor(color9);
+            holder.linearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.color9));
         } else if(position%4==0)
         {
-            holder.linearLayout.setBackgroundColor(R.color.color6);
+            holder.linearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.color6));
         }
         else if(position%5==0)
         {
-            holder.linearLayout.setBackgroundColor(R.color.color5);
+            holder.linearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.color5));
         }
         else {
-            holder.linearLayout.setBackgroundColor(R.color.colorbrowne4);
+            holder.linearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.colorbrowne4));
 
         }
 

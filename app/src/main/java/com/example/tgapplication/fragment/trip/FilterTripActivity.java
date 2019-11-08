@@ -6,11 +6,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toolbar;
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
@@ -24,11 +27,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 public class FilterTripActivity extends BaseActivity implements View.OnClickListener {
 
-    Spinner spinner_lang, spinner_look,spinner_from,spinner_to, spinner_eyes, spinner_hairs, spinner_height, spinner_bodytype;
-    ArrayList<String> array_lang,array_look,array_from,array_to, array_eyes, array_hairs, array_height, array_bodytype;
-    ArrayAdapter<String> adapter_lang, adapter_look, adapter_from, adapter_to, adapter_eyes, adapter_hairs, adapter_height, adapter_bodytype;
+    Spinner spinner_lang, spinner_look,spinner_from,spinner_to, spinner_eyes, spinner_hairs, spinner_height, spinner_bodytype,spinner_sort;
+    ArrayList<String> array_lang,array_look,array_sort,array_from,array_to, array_eyes, array_hairs, array_height, array_bodytype;
+    ArrayAdapter<String> adapter_lang, adapter_look,adapter_sort, adapter_from, adapter_to, adapter_eyes, adapter_hairs, adapter_height, adapter_bodytype;
     EditText et_city;
     Button btn_add_trip;
     RadioButton rb_visit;
@@ -36,16 +42,25 @@ public class FilterTripActivity extends BaseActivity implements View.OnClickList
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
     CoordinatorLayout activity_filter_trip_coodinatelayout;
+    TextView tv_girl,tv_men;
+    LinearLayout linearLayoutfilter, linearLayoutradiobutton;
+    CheckBox checkbox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter_trip);
+
+
+
+
         activity_filter_trip_coodinatelayout = findViewById(R.id.activity_filter_trip_coodinatelayout);
+
+
 
         initComponent();
 
-         prefs = getSharedPreferences("Filter_TripList", MODE_PRIVATE);
+        prefs = getSharedPreferences("Filter_TripList", MODE_PRIVATE);
 
         if (prefs.contains("str_city")) {
             String str_city = prefs.getString("str_city", "not_defined");//"No name defined" is the default value.
@@ -81,7 +96,10 @@ public class FilterTripActivity extends BaseActivity implements View.OnClickList
         }
 
         assert getSupportActionBar() != null; //null check
-    //    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void setSupportActionBar(Toolbar toolbar) {
     }
 
     @Override
@@ -97,7 +115,8 @@ public class FilterTripActivity extends BaseActivity implements View.OnClickList
                         "Estonian","Hindi","Latvian","Russian","Turkish","Chinese","Filipino","Hungarian","Lithuanian","Serbian","Ukrainian","Croatian","Finnish","Icelandic","Norwegian","Slovak","Urdu","Czech","French",
                         "Indonesian","Persian","Slovenian","Vietnamese","Nepali","Armenian","Kurdish"));
 
-        array_look = new ArrayList<>(Arrays.asList("All","Girls","Male"));
+        array_look = new ArrayList<>(Arrays.asList("All","Friends","Adventure","Soulmate","Job"));
+        array_sort = new ArrayList<>(Arrays.asList("Default","Last registered ","Last online"));
 
         array_from = new ArrayList<>(Arrays.asList("18","19","20","21","22","23","24","25","26","27","28","29","30",
                 "31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50",
@@ -143,10 +162,42 @@ public class FilterTripActivity extends BaseActivity implements View.OnClickList
         spinner_height = findViewById(R.id.spinner_height);
         spinner_bodytype = findViewById(R.id.spinner_bodytype);
         btn_add_trip=findViewById(R.id.btn_add_trip);
+        spinner_sort =findViewById(R.id.spinner_sort);
+        tv_girl =findViewById(R.id.tv_girl);
+        tv_men = findViewById(R.id.tv_men);
+        linearLayoutfilter = findViewById(R.id.linearLayoutfilter);
+        linearLayoutradiobutton=findViewById(R.id.linearLayoutradiobutton);
+        checkbox =findViewById(R.id.checkbox);
+
+
+
+        tv_girl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                linearLayoutfilter.setVisibility(VISIBLE);
+                linearLayoutradiobutton.setVisibility(VISIBLE);
+                checkbox.setVisibility(VISIBLE);
+
+            }
+        });
+        tv_men.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                linearLayoutradiobutton.setVisibility(GONE);
+                linearLayoutfilter.setVisibility(VISIBLE);
+                        checkbox.setVisibility(GONE);
+
+            }
+        });
 
         rg_trip=findViewById(R.id.rg_trip);
 //        rb_visit=findViewById(R.id.rb_visit);
         et_city=findViewById(R.id.et_city);
+
+        adapter_sort = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, array_sort);
+        adapter_sort.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_sort.setAdapter(adapter_sort);
+
 
         adapter_lang = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, array_lang);
         adapter_lang.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
