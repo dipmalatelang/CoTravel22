@@ -57,7 +57,7 @@ import butterknife.OnClick;
 
 import static com.example.tgapplication.Constants.UsersInstance;
 
-public class EditProfileActivity extends BaseActivity implements View.OnClickListener {
+public class EditProfileActivity extends BaseActivity {
 
     /* Button btn_regi;
      EditText et_name, et_location, et_visit;
@@ -71,7 +71,8 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
      CoordinatorLayout activity_profile_coordinatelayout;*/
     FirebaseUser fuser;
     User prevUser;
-    ArrayList<String> str_look = new ArrayList<>();
+    ArrayList<String> travel_with = new ArrayList<>();
+    ArrayList<String> looking_for = new ArrayList<>();
 
 /*
     AutoCompleteTextView suggestion_nationality, suggestion_height;
@@ -117,6 +118,14 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     CoordinatorLayout activityProfileCoordinatelayout;
     @BindView(R.id.et_about_me)
     EditText etAboutMe;
+    @BindView(R.id.cb_frnd)
+    CheckBox cbFrnd;
+    @BindView(R.id.cb_soulmate)
+    CheckBox cbSoulmate;
+    @BindView(R.id.cb_adventure)
+    CheckBox cbAdventure;
+    @BindView(R.id.cb_job)
+    CheckBox cbJob;
     private ArrayList<User> prevUserList = new ArrayList<>();
     ArrayAdapter<String> Nationalityadapter, Languageadapter, Heightadapter, Bodyadapter, Hairadapter, Eyesadapter;
 
@@ -155,8 +164,6 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
 
      /*   cb_girl = findViewById(R.id.cb_girl);
         cb_men = findViewById(R.id.cb_men);*/
-        cbGirl.setOnClickListener(this);
-        cbMen.setOnClickListener(this);
 
 
         day = mcalendar.get(Calendar.DAY_OF_MONTH);
@@ -173,9 +180,6 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
         myList(fuser);
-
-        btnRegi.setOnClickListener(this);
-
 
         String[] nationalitySpinner = new String[]{
                 "Afghan", "Albanian", "Algerian", "American", "Andorran", "Angolan", "Antiguans", "Argentinean", "Armenian", "Australian", "Austrian", "Azerbaijani", "Bahamian", "Bahraini", "Bangladeshi", "Barbadian", "Barbudans", "Batswana", "Belarusian", "Belgian", "Belizean", "Beninese", "Bhutanese", "Bolivian", "Bosnian", "Brazilian", "British", "Bruneian", "Bulgarian", "Burkinabe", "Burmese", "Burundian", "Cambodian", "Cameroonian", "Canadian", "Cape Verdean", "Central African", "Chadian", "Chilean", "Chinese", "Colombian", "Comoran", "Congolese", "Costa Rican", "Croatian", "Cuban", "Cypriot", "Czech", "Danish", "Djibouti", "Dominican", "Dutch", "East Timorese", "Ecuadorean", "Egyptian", "Emirian", "Equatorial Guinean", "Eritrean", "Estonian", "Ethiopian", "Fijian", "Filipino", "Finnish", "French", "Gabonese", "Gambian", "Georgian", "German", "Ghanaian", "Greek", "Grenadian", "Guatemalan", "Guinea-Bissauan", "Guinean", "Guyanese", "Haitian", "Herzegovinian", "Honduran", "Hungarian", "Icelander", "Indian", "Indonesian", "Iranian", "Iraqi", "Irish", "Israeli", "Italian", "Ivorian", "Jamaican", "Japanese", "Jordanian", "Kazakhstani", "Kenyan", "Kittian and Nevisian", "Kuwaiti", "Kyrgyz", "Laotian", "Latvian", "Lebanese", "Liberian", "Libyan", "Liechtensteiner", "Lithuanian", "Luxembourger", "Macedonian", "Malagasy", "Malawian", "Malaysian", "Maldivan", "Malian", "Maltese", "Marshallese", "Mauritanian", "Mauritian", "Mexican", "Micronesian", "Moldovan", "Monacan", "Mongolian", "Moroccan", "Mosotho", "Motswana", "Mozambican", "Namibian", "Nauruan", "Nepalese", "New Zealander", "Ni-Vanuatu", "Nicaraguan", "Nigerien", "North Korean", "Northern Irish", "Norwegian", "Omani", "Pakistani", "Palauan", "Panamanian", "Papua New Guinean", "Paraguayan", "Peruvian", "Polish", "Portuguese", "Qatari", "Romanian", "Russian", "Rwandan", "Saint Lucian", "Salvadoran", "Samoan", "San Marinese", "Sao Tomean", "Saudi", "Scottish", "Senegalese", "Serbian", "Seychellois", "Sierra Leonean", "Singaporean", "Slovakian", "Slovenian", "Solomon Islander", "Somali", "South African", "South Korean", "Spanish", "Sri Lankan", "Sudanese", "Surinamer", "Swazi", "Swedish", "Swiss", "Syrian", "Taiwanese", "Tajik", "Tanzanian", "Thai", "Togolese", "Tongan", "Trinidadian or Tobagonian", "Tunisian", "Turkish", "Tuvaluan", "Ugandan", "Ukrainian", "Uruguayan", "Uzbekistani", "Venezuelan", "Vietnamese", "Welsh", "Yemenite", "Zambian", "Zimbabwean"
@@ -282,7 +286,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
                         }
                         if (prevUserList.size() > 0) {
                             for (int i = 0; i < prevUserList.size(); i++)
-                                setDefaultVal(prevUserList.get(i).getName(), prevUserList.get(i).getDob(), prevUserList.get(i).getGender(), prevUserList.get(i).getAbout_me(), prevUserList.get(i).getAge(), prevUserList.get(i).getLook(), prevUserList.get(i).getLocation(), prevUserList.get(i).getNationality(), prevUserList.get(i).getLang(), prevUserList.get(i).getHeight(), prevUserList.get(i).getBody_type(), prevUserList.get(i).getEyes(), prevUserList.get(i).getHair(), prevUserList.get(i).getVisit());
+                                setDefaultVal(prevUserList.get(i).getName(), prevUserList.get(i).getDob(), prevUserList.get(i).getGender(), prevUserList.get(i).getAbout_me(), prevUserList.get(i).getAge(), prevUserList.get(i).getLooking_for(), prevUserList.get(i).getTravel_with(), prevUserList.get(i).getLocation(), prevUserList.get(i).getNationality(), prevUserList.get(i).getLang(), prevUserList.get(i).getHeight(), prevUserList.get(i).getBody_type(), prevUserList.get(i).getEyes(), prevUserList.get(i).getHair(), prevUserList.get(i).getVisit());
                         }
                     }
 
@@ -294,7 +298,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         );
     }
 
-    private void setDefaultVal(String name, String dob, String gender, String about_me,String age, ArrayList<String> look, String location, String nationality, String lang, String height, String body_type, String eyes, String hair, String visit) {
+    private void setDefaultVal(String name, String dob, String gender, String about_me, String age, ArrayList<String> looking_for, ArrayList<String> travel_with, String location, String nationality, String lang, String height, String body_type, String eyes, String hair, String visit) {
         etName.setText(name);
         etLocation.setText(location);
         etVisit.setText(visit);
@@ -305,29 +309,57 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         } else {
             LangSuggestion.setText(lang);
         }
+        this.travel_with = travel_with;
+        this.looking_for=looking_for;
         HeightSuggestion.setText(height);
         tvDob.setText(dob);
-        str_look = look;
         spHair.setSelection(Hairadapter.getPosition(hair));
         spEyes.setSelection(Eyesadapter.getPosition(eyes));
         spBodyType.setSelection(Bodyadapter.getPosition(body_type));
 
         Log.i(TAG, "setDefaultVal: Gender" + gender);
-        if (gender.equalsIgnoreCase("female") || gender.equalsIgnoreCase("Girl")) {
+        if (gender.equalsIgnoreCase("Female")) {
             rbFemale.setChecked(true);
-        } else if (gender.equalsIgnoreCase("male") || gender.equalsIgnoreCase("Boy")) {
+        } else if (gender.equalsIgnoreCase("Male")) {
             rbMale.setChecked(true);
         }
 
 
-        for (int i = 0; i < look.size(); i++) {
-            Log.i("TAG", "setDefaultVal: " + look.get(i));
-            if (look.get(i).equalsIgnoreCase("female")) {
-                cbGirl.setChecked(true);
-            } else if (look.get(i).equalsIgnoreCase("male")) {
-                cbMen.setChecked(true);
+       if(travel_with.size()>0)
+       {
+           for (int i = 0; i < travel_with.size(); i++) {
+               Log.i("TAG", "setDefaultVal: " + travel_with.get(i));
+               if (travel_with.get(i).equalsIgnoreCase("Female")) {
+                   cbGirl.setChecked(true);
+               } else if (travel_with.get(i).equalsIgnoreCase("Male")) {
+                   cbMen.setChecked(true);
+               }
+           }
+       }
+
+        if(looking_for.size()>0)
+        {
+            for(int i=0;i<looking_for.size();i++)
+            {
+                if(looking_for.get(i).equalsIgnoreCase("Friend"))
+                {
+                    cbFrnd.setChecked(true);
+                }
+                else if(looking_for.get(i).equalsIgnoreCase("Adventure"))
+                {
+                    cbAdventure.setChecked(true);
+                }
+                else if(looking_for.get(i).equalsIgnoreCase("Soulmate"))
+                {
+                    cbSoulmate.setChecked(true);
+                }
+                else if(looking_for.get(i).equalsIgnoreCase("Job"))
+                {
+                    cbJob.setChecked(true);
+                }
             }
         }
+
 
 
     }
@@ -373,13 +405,13 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
     }
 
 
-    private void register(FirebaseUser fuser, String str_name, String str_dob, String str_gender,String str_about_me, String age, String str_location, String str_nationality, String str_lang, ArrayList<String> str_look, String str_height, String str_body_type, String str_eyes, String str_hair, String str_visit) {
+    private void register(FirebaseUser fuser, String str_name, String str_dob, String str_gender, String str_about_me, String age, String str_location, String str_nationality, String str_lang, ArrayList<String> looking_for, ArrayList<String> travel_with, String str_height, String str_body_type, String str_eyes, String str_hair, String str_visit) {
 
         //uncomment this below lines later don't forget
 
         User userClass = new User(fuser.getUid(), prevUserList.get(0).getUsername(), "offline", prevUserList.get(0).getSearch(), str_gender, age, prevUserList.get(0).getEmail(),
                 fuser.getProviderId(), str_body_type, str_dob, str_eyes, str_hair, str_height, str_lang,
-                str_look, prevUserList.get(0).getRange_age(), str_location, str_name, fuser.getPhoneNumber(), str_nationality, str_visit, prevUserList.get(0).getAccount_type(),str_about_me);
+                travel_with, looking_for, prevUserList.get(0).getRange_age(), str_location, str_name, fuser.getPhoneNumber(), str_nationality, str_visit, prevUserList.get(0).getAccount_type(), str_about_me);
 
         UsersInstance.child(fuser.getUid()).setValue(userClass);
 
@@ -396,7 +428,7 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
 //        hashMap.put("location",);
 //        hashMap.put("nationality",);
 //        hashMap.put("lang",);
-////        hashMap.put("look",);
+////        hashMap.put("travel_with",);
 //        hashMap.put("height",);
 //        hashMap.put("body_type",);
 //        hashMap.put("eyes",);
@@ -412,9 +444,9 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
 //        hashMap1 = new HashMap<>();
 //        final DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference("Addis_Ababa/Users").child(user.getUid());
 //
-//        databaseReference1.child("look");
-//        for (int i = 0; i < str_look.size(); i++) {
-//            hashMap1.put( databaseReference1.push().getKey(),str_look.get(i));
+//        databaseReference1.child("travel_with");
+//        for (int i = 0; i < travel_with.size(); i++) {
+//            hashMap1.put( databaseReference1.push().getKey(),travel_with.get(i));
 //        }
 //
 ////        databaseReference1.updateChildren(hashMap1);
@@ -435,112 +467,6 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
 //            }
 //        });
     }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-
-            case R.id.cb_girl:
-                boolean checked = ((CheckBox) v).isChecked();
-                if (checked) {
-                    str_look.add("female");
-                } else {
-                    str_look.remove("female");
-                }
-                Log.i("TAG", "onClick: 1" + str_look.size());
-                break;
-            case R.id.cb_men:
-                boolean checkedmen = ((CheckBox) v).isChecked();
-                if (checkedmen) {
-                    str_look.add("male");
-                } else {
-                    str_look.remove("male");
-                }
-                Log.i("TAG", "onClick: 2" + str_look.size());
-                break;
-
-            case R.id.btn_regi:
-
-                if (etName.getText().toString().length() <= 0) {
-                    etName.requestFocus();
-                    snackBar(activityProfileCoordinatelayout, "Please enter your name");
-                } else if (etLocation.getText().toString().length() <= 0) {
-                    etLocation.requestFocus();
-                    snackBar(activityProfileCoordinatelayout, "Please enter your location");
-                } else if (etVisit.getText().toString().length() <= 0) {
-                    etVisit.requestFocus();
-                    snackBar(activityProfileCoordinatelayout, "Enter a city you want to visit");
-
-                } else {
-                    int selectedGender = rgGender.getCheckedRadioButtonId();
-                    if (selectedGender < 0) {
-                        snackBar(activityProfileCoordinatelayout, "Select Gender");
-                    } else {
-                        Log.i(TAG, "onClick: " + selectedGender);
-                        rb_gender = findViewById(selectedGender);
-
-                        String str_name = etName.getText().toString();
-                        String str_dob = tvDob.getText().toString();
-                        String str_location = etLocation.getText().toString();
-                        String str_about_me=etAboutMe.getText().toString();
-                        String str_nationality = NationalitySuggestion.getText().toString();
-                        String str_lang = LangSuggestion.getText().toString();
-                        str_lang = str_lang.replaceAll(", $", "");
-                        String str_height = HeightSuggestion.getText().toString();
-                        String str_body_type = spBodyType.getSelectedItem().toString();
-                        String str_eyes = spEyes.getSelectedItem().toString();
-                        String str_hair = spHair.getSelectedItem().toString();
-                        String str_visit = etVisit.getText().toString();
-                        String str_gender = rb_gender.getText().toString();
-                        String age = "18";
-
-
-                        Log.i("Simu", " " + str_look.size());
-
-                        register(fuser, str_name, str_dob, str_gender,str_about_me, age, str_location, str_nationality, str_lang, str_look, str_height, str_body_type, str_eyes, str_hair, str_visit);
-
-                    }
-
-                }
-                break;
-
-            case R.id.cb_frnd:
-                boolean checkedfrnd = ((CheckBox) v).isChecked();
-                if (checkedfrnd){
-                    str_look.add("friend");
-                } else {
-                    str_look.remove("friend");
-                }
-                break;
-
-            case R.id.cb_adventure:
-                boolean checkedadventure = ((CheckBox) v).isChecked();
-                if (checkedadventure){
-                    str_look.add("adventure");
-                } else {
-                    str_look.remove("adventure");
-                }
-                break;
-            case R.id.cb_soulmate:
-                boolean checkedsoulmate = ((CheckBox) v).isChecked();
-                if (checkedsoulmate){
-                    str_look.add("soulmate");
-                } else {
-                    str_look.remove("soulmate");
-                }
-                break;
-
-            case R.id.cb_job:
-                boolean checkedjob = ((CheckBox) v).isChecked();
-                if (checkedjob){
-                    str_look.add("job");
-                } else {
-                    str_look.remove("job");
-                }
-                break;
-        }
-    }
-
 
     @OnClick({R.id.imgv_location, R.id.imgv_dream_location})
     public void onClickBind(View v) {
@@ -603,4 +529,107 @@ public class EditProfileActivity extends BaseActivity implements View.OnClickLis
         imgv_dream_location.startAnimation(animation);
     }
 
+    @OnClick({R.id.cb_men, R.id.cb_girl, R.id.cb_frnd, R.id.cb_soulmate, R.id.cb_adventure, R.id.cb_job, R.id.btn_regi})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.cb_men:
+                boolean checkedmen = ((CheckBox) view).isChecked();
+                if (checkedmen) {
+                    travel_with.add("Male");
+                } else {
+                    travel_with.remove("Male");
+                }
+                Log.i("TAG", "onClick: 2" + travel_with.size());
+                break;
+            case R.id.cb_girl:
+                boolean checked = ((CheckBox) view).isChecked();
+                if (checked) {
+                    travel_with.add("Female");
+                } else {
+                    travel_with.remove("Female");
+                }
+                Log.i("TAG", "onClick: 1" + travel_with.size());
+                break;
+            case R.id.cb_frnd:
+                boolean checkedfrnd = ((CheckBox) view).isChecked();
+                if (checkedfrnd) {
+                    looking_for.add("Friend");
+                } else {
+                    looking_for.remove("Friend");
+                }
+                Log.i("TAG", "Friend" + looking_for.size());
+                break;
+
+            case R.id.cb_adventure:
+                boolean checkedadventure = ((CheckBox) view).isChecked();
+                if (checkedadventure) {
+                    looking_for.add("Adventure");
+                } else {
+                    looking_for.remove("Adventure");
+                }
+                Log.i("TAG", "Adventure" + looking_for.size());
+                break;
+            case R.id.cb_soulmate:
+                boolean checkedsoulmate = ((CheckBox) view).isChecked();
+                if (checkedsoulmate) {
+                    looking_for.add("Soulmate");
+                } else {
+                    looking_for.remove("Soulmate");
+                }
+                break;
+
+            case R.id.cb_job:
+                boolean checkedjob = ((CheckBox) view).isChecked();
+                if (checkedjob) {
+                    looking_for.add("Job");
+                } else {
+                    looking_for.remove("Job");
+                }
+                break;
+            case R.id.btn_regi:
+
+                if (etName.getText().toString().length() <= 0) {
+                    etName.requestFocus();
+                    snackBar(activityProfileCoordinatelayout, "Please enter your name");
+                } else if (etLocation.getText().toString().length() <= 0) {
+                    etLocation.requestFocus();
+                    snackBar(activityProfileCoordinatelayout, "Please enter your location");
+                } else if (etVisit.getText().toString().length() <= 0) {
+                    etVisit.requestFocus();
+                    snackBar(activityProfileCoordinatelayout, "Enter a city you want to visit");
+
+                } else {
+                    int selectedGender = rgGender.getCheckedRadioButtonId();
+                    if (selectedGender < 0) {
+                        snackBar(activityProfileCoordinatelayout, "Select Gender");
+                    } else {
+                        Log.i(TAG, "onClick: " + selectedGender);
+                        rb_gender = findViewById(selectedGender);
+
+                        String str_name = etName.getText().toString();
+                        String str_dob = tvDob.getText().toString();
+                        String str_location = etLocation.getText().toString();
+                        String str_about_me = etAboutMe.getText().toString();
+                        String str_nationality = NationalitySuggestion.getText().toString();
+                        String str_lang = LangSuggestion.getText().toString();
+                        str_lang = str_lang.replaceAll(", $", "");
+                        String str_height = HeightSuggestion.getText().toString();
+                        String str_body_type = spBodyType.getSelectedItem().toString();
+                        String str_eyes = spEyes.getSelectedItem().toString();
+                        String str_hair = spHair.getSelectedItem().toString();
+                        String str_visit = etVisit.getText().toString();
+                        String str_gender = rb_gender.getText().toString();
+                        String age = "18";
+
+
+                        Log.i("Simu", " Got value " + travel_with.size() + " " + looking_for.size());
+
+                        register(fuser, str_name, str_dob, str_gender,str_about_me, age, str_location, str_nationality, str_lang, looking_for, travel_with, str_height, str_body_type, str_eyes, str_hair, str_visit);
+
+                    }
+
+                }
+                break;
+        }
+    }
 }

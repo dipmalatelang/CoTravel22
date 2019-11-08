@@ -186,7 +186,7 @@ public class ProfileActivity extends BaseActivity {
 
 
             Log.i(TAG, "onCreate: " + tripL.getName() + " " + tripL.getFavid());
-            setDetails(tripL.getName(), tripL.getGender(), tripL.getAbout_me(), tripL.getAge(), tripL.getLook(), tripL.getUserLocation(), tripL.getNationality(),
+            setDetails(tripL.getName(), tripL.getGender(), tripL.getAbout_me(), tripL.getAge(), tripL.getLooking_for(),tripL.getTravel_with(), tripL.getUserLocation(), tripL.getNationality(),
                     tripL.getLang(), tripL.getHeight(), tripL.getBody_type(), tripL.getEyes(), tripL.getHair(), tripL.getVisit(), tripL.getPlanLocation(), tripL.getFrom_to_date(), tripL.getImageUrl());
 //            if(tripL==null)
 //            setDetails(userList.get(i).getName(), userList.get(i).getGender(), userList.get(i).getAge(), userList.get(i).getLook(), userList.get(i).getLocation(), userList.get(i).getNationality(), userList.get(i).getLang(), userList.get(i).getHeight(), userList.get(i).getBody_type(), userList.get(i).getEyes(), userList.get(i).getHair(), userList.get(i).getVisit(), "", "", userList.get(i).getImageURL());
@@ -212,7 +212,7 @@ public class ProfileActivity extends BaseActivity {
             }*/
 
             Log.i(TAG, "MyUserObj : " + userL.getUser().getName() + " ");
-            setDetails(userL.getUser().getName(), userL.getUser().getGender(), userL.getUser().getAbout_me(), userL.getUser().getAge(), userL.getUser().getLook(), "", userL.getUser().getNationality(),
+            setDetails(userL.getUser().getName(), userL.getUser().getGender(), userL.getUser().getAbout_me(), userL.getUser().getAge(), userL.getUser().getLooking_for(), userL.getUser().getTravel_with(), "", userL.getUser().getNationality(),
                     userL.getUser().getLang(), userL.getUser().getHeight(), userL.getUser().getBody_type(), userL.getUser().getEyes(), userL.getUser().getHair(), userL.getUser().getVisit(), "", "", "");
 
         }
@@ -221,9 +221,9 @@ public class ProfileActivity extends BaseActivity {
     }
 
 
-    private void setDetails(String name, String gender, String about_me, String age, ArrayList<String> look, String userLocation, String nationality, String lang, String height, String body_type, String eyes, String hair, String visit, String planLocation, String from_to_date, String imageUrl) {
+    private void setDetails(String name, String gender, String about_me, String age, ArrayList<String> looking_for, ArrayList<String> travel_with, String userLocation, String nationality, String lang, String height, String body_type, String eyes, String hair, String visit, String planLocation, String from_to_date, String imageUrl) {
 
-        String str_look = null;
+        String str_travel_with = null;
 
         if (name != null && !name.equalsIgnoreCase("") || age != null && !age.equalsIgnoreCase("")) {
             tvUser.setText(name + " , " + age);
@@ -238,18 +238,18 @@ public class ProfileActivity extends BaseActivity {
         }
 
 
-        if (look != null) {
-            for (int j = 0; j < look.size(); j++) {
-                if (str_look != null) {
-                    str_look += ", " + look.get(j);
+        if (travel_with != null) {
+            for (int j = 0; j < travel_with.size(); j++) {
+                if (str_travel_with != null) {
+                    str_travel_with += ", " + travel_with.get(j);
                 } else {
-                    str_look = look.get(j);
+                    str_travel_with = travel_with.get(j);
                 }
 
             }
 
-           /* if (str_look != null && !str_look.equalsIgnoreCase("")) {
-                tvLooking.setText(str_look);
+           /* if (str_travel_with != null && !str_travel_with.equalsIgnoreCase("")) {
+                tvLooking.setText(str_travel_with);
             }*/
         }
 
@@ -275,6 +275,17 @@ public class ProfileActivity extends BaseActivity {
 
         if (visit != null && !visit.equalsIgnoreCase("")) {
             tvTvDreamPlaceValue.setText(visit);
+        }
+
+        if(looking_for!=null)
+        {
+            if(looking_for.size()>0)
+            {
+                for(int i=0;i<looking_for.size();i++)
+                {
+                    Log.i(TAG, "setDetails: "+looking_for.get(i));
+                }
+            }
         }
 
 
@@ -314,7 +325,7 @@ public class ProfileActivity extends BaseActivity {
                         User user = dataSnapshot.getValue(User.class);
 //                            if (user != null && user.getId().equalsIgnoreCase(fuser.getUid())) {
                         account_type = Objects.requireNonNull(user).getAccount_type();
-                        setDetails(user.getName(), user.getGender(), user.getAbout_me(), user.getAge(), user.getLook(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getVisit(), "", "", "default");
+                        setDetails(user.getName(), user.getGender(), user.getAbout_me(), user.getAge(), user.getLooking_for(), user.getTravel_with(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getVisit(), "", "", "default");
 
                  /*           userList.add(user);
 //                            }

@@ -75,7 +75,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
 //            Glide.with(mContext).load(getBitmapFromURL(tList.getUser().getImageURL())).into(holder.mImage);
 //        }
 
-        if(tList.getUser().getGender().equalsIgnoreCase("Female")||tList.getUser().getGender().equalsIgnoreCase("Girl"))
+        if(tList.getUser().getGender().equalsIgnoreCase("Female"))
         {
             if (tList.getUser().getAccount_type() == 1) {
                 Glide.with(mContext).asBitmap().load(mTrip.get(position).getPictureUrl())

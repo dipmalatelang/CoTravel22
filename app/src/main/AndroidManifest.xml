@@ -39,8 +39,9 @@
 
         <activity android:name=".fragment.account.profile.ViewPhotoRequestActivity"/>
 
-        <activity android:name=".fragment.account.Settings"
-            android:theme="@style/noToolbar"/>
+        <activity android:name=".fragment.account.SettingsActivity"
+            android:theme="@style/noToolbar"
+            android:parentActivityName=".MainActivity"/>
 
         <activity
             android:name=".fragment.trip.FilterTripActivity"

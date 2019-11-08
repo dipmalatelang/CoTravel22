@@ -57,7 +57,7 @@ public class CustomAdapter extends PagerAdapter {
         ImageView img = v.findViewById(R.id.imageView);
         ProgressBar progressBar=v.findViewById(R.id.progressBar);
 //        img.setImageResource(mUploads.get(position).url);
-        if(gender.equalsIgnoreCase("Female")||gender.equalsIgnoreCase("Girl"))
+        if(gender.equalsIgnoreCase("Female"))
         {
             Glide.with(ctx).asBitmap().load(mUploads.get(position).getUrl())
                     .centerCrop()

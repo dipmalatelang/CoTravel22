@@ -1,11 +1,15 @@
 package com.example.tgapplication.fragment.account.profile;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.ListPopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -14,6 +18,8 @@ import androidx.annotation.Nullable;
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -26,7 +32,7 @@ import butterknife.OnClick;
 
 public class ChangePrefActivity extends BaseActivity {
 
-    ArrayList<String> look = new ArrayList<>();
+    ArrayList<String> travel_with = new ArrayList<>();
     ArrayList<String> range_age = new ArrayList<>();
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     @BindView(R.id.sp_age_from)
@@ -35,6 +41,12 @@ public class ChangePrefActivity extends BaseActivity {
     Spinner spAgeTo;
     ArrayAdapter<String> adapter_age_from, adapter_age_to;
     ArrayList<String> array_age;
+    SharedPreferences sharedPreferences;
+    @BindView(R.id.cb_regi_girl)
+    CheckBox cbRegiGirl;
+    @BindView(R.id.cb_regi_men)
+    CheckBox cbRegiMen;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,6 +54,15 @@ public class ChangePrefActivity extends BaseActivity {
         setContentView(R.layout.activity_change_pref);
         ButterKnife.bind(this);
 
+        sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+
+        if (sharedPreferences.contains("travel_withingFor")) {
+            travel_with = new Gson().fromJson((sharedPreferences.getString("travel_withingFor", "")), new TypeToken<ArrayList<String>>() {}.getType());
+
+        }
+        if (sharedPreferences.contains("AgeRange")) {
+            range_age = new Gson().fromJson((sharedPreferences.getString("AgeRange", "")), new TypeToken<ArrayList<String>>() {}.getType());
+        }
         setPopup();
         setSpinner();
 
@@ -49,11 +70,21 @@ public class ChangePrefActivity extends BaseActivity {
 
     private void setSpinner() {
 
-        array_age = new ArrayList<>(Arrays.asList("18","19","20","21","22","23","24","25","26","27","28","29","30",
-                "31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50",
-                "51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70",
-                "71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90",
-                "91","92","93","94","95","96","97","98","99"));
+        Log.i(TAG, "travel_with_RangeAge: " + travel_with.size() + " " + range_age.size());
+        for (int i = 0; i < travel_with.size(); i++) {
+            if (travel_with.get(i).equalsIgnoreCase("Female")) {
+                cbRegiGirl.setChecked(true);
+            }
+            else if (travel_with.get(i).equalsIgnoreCase("Male")) {
+                cbRegiMen.setChecked(true);
+            }
+        }
+
+        array_age = new ArrayList<>(Arrays.asList("18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30",
+                "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50",
+                "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70",
+                "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "90",
+                "91", "92", "93", "94", "95", "96", "97", "98", "99"));
 
         adapter_age_from = new ArrayAdapter<>(ChangePrefActivity.this, android.R.layout.simple_spinner_item, array_age);
         adapter_age_from.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -89,6 +120,12 @@ public class ChangePrefActivity extends BaseActivity {
 
             }
         });
+
+        if(range_age.size()>0)
+        {
+            spAgeFrom.setSelection(adapter_age_from.getPosition(range_age.get(0)));
+            spAgeTo.setSelection(adapter_age_to.getPosition(range_age.get(1)));
+        }
     }
 
     private void setPopup() {
@@ -97,14 +134,13 @@ public class ChangePrefActivity extends BaseActivity {
             popup.setAccessible(true);
 
             // Get private mPopup member variable and try cast to ListPopupWindow
-            android.widget.ListPopupWindow AgeFrompopupWindow = (android.widget.ListPopupWindow) popup.get(spAgeFrom);
-            android.widget.ListPopupWindow AgeTopopupWindow = (android.widget.ListPopupWindow) popup.get(spAgeTo);
+            ListPopupWindow AgeFrompopupWindow = (ListPopupWindow) popup.get(spAgeFrom);
+            ListPopupWindow AgeTopopupWindow = (ListPopupWindow) popup.get(spAgeTo);
             // Set popupWindow height to 500px
             Objects.requireNonNull(AgeFrompopupWindow).setHeight(500);
             Objects.requireNonNull(AgeTopopupWindow).setHeight(500);
 
-        }
-        catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {
+        } catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {
             // silently fail...
         }
     }
@@ -116,29 +152,29 @@ public class ChangePrefActivity extends BaseActivity {
             case R.id.cb_regi_girl:
                 boolean checked = ((CheckBox) view).isChecked();
                 if (checked) {
-                    look.add("female");
+                    travel_with.add("Female");
                 } else {
-                    look.remove("female");
+                    travel_with.remove("Female");
                 }
 
                 break;
             case R.id.cb_regi_men:
                 boolean checkedmen = ((CheckBox) view).isChecked();
                 if (checkedmen) {
-                    look.add("male");
+                    travel_with.add("Male");
                 } else {
-                    look.remove("male");
+                    travel_with.remove("Male");
                 }
                 break;
 
             case R.id.btn_save_register:
-//                look;
-
+//                travel_with;
+                range_age.clear();
                 String str_age_from = spAgeFrom.getSelectedItem().toString();
                 String str_age_to = spAgeTo.getSelectedItem().toString();
                 range_age.add(str_age_from);
                 range_age.add(str_age_to);
-                updateRegister(look, range_age);
+                updateRegister(travel_with, range_age);
                 updateUI(mAuth.getCurrentUser());
                 break;
 

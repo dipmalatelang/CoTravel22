@@ -55,7 +55,7 @@ public class FilterTripActivity extends BaseActivity implements View.OnClickList
             String str_height=prefs.getString("str_height","not_defined");
             String str_bodytype=prefs.getString("str_bodytype","not_defined");
 
-            String str_look = prefs.getString("str_look","not_defined");
+            String str_travel_with = prefs.getString("str_travel_with","not_defined");
             String str_from= prefs.getString("str_from","not_defined");
             String str_to= prefs.getString("str_to","not_defined");
             String str_visit= prefs.getString("str_visit","not_defined");
@@ -67,7 +67,7 @@ public class FilterTripActivity extends BaseActivity implements View.OnClickList
             spinner_height.setSelection(adapter_height.getPosition(str_height));
             spinner_bodytype.setSelection(adapter_bodytype.getPosition(str_bodytype));
 
-            spinner_look.setSelection(adapter_look.getPosition(str_look));
+            spinner_look.setSelection(adapter_look.getPosition(str_travel_with));
             spinner_from.setSelection(adapter_from.getPosition(str_from));
             spinner_to.setSelection(adapter_to.getPosition(str_to));
 
@@ -231,7 +231,7 @@ public class FilterTripActivity extends BaseActivity implements View.OnClickList
                 String str_hairs = spinner_hairs.getSelectedItem().toString();
                 String str_height = spinner_height.getSelectedItem().toString();
                 String str_bodytype = spinner_bodytype.getSelectedItem().toString();
-                String str_look = spinner_look.getSelectedItem().toString();
+                String str_travel_with = spinner_look.getSelectedItem().toString();
                 String str_from = spinner_from.getSelectedItem().toString();
                 String str_to = spinner_to.getSelectedItem().toString();
                 String str_visit = rb_visit.getText().toString();
@@ -243,7 +243,7 @@ public class FilterTripActivity extends BaseActivity implements View.OnClickList
                 editor.putString("str_hairs", str_hairs);
                 editor.putString("str_height", str_height);
                 editor.putString("str_bodytype", str_bodytype);
-                editor.putString("str_look", str_look);
+                editor.putString("str_travel_with", str_travel_with);
                 editor.putString("str_from", str_from);
                 editor.putString("str_to", str_to);
                 editor.putString("str_visit", str_visit);

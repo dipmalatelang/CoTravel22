@@ -147,8 +147,8 @@ int fav;
 
                     userAdapter = new UserAdapter(getContext(), mUsers, false, new UserAdapter.UserInterface() {
                         @Override
-                        public void lastMessage(Context mContext, String userid, TextView last_msg, RelativeLayout chat) {
-                            checkForLastMsg(mContext, userid, last_msg,chat);
+                        public void lastMessage(Context mContext, String userid, TextView last_msg, TextView last_msg_time,RelativeLayout chat) {
+                            checkForLastMsg(mContext, userid, last_msg, last_msg_time,chat);
                         }
 
                         @Override
@@ -210,8 +210,8 @@ int fav;
 
                     userAdapter = new UserAdapter(getContext(), mUsers, false, new UserAdapter.UserInterface() {
                         @Override
-                        public void lastMessage(Context mContext, String userid, TextView last_msg, RelativeLayout chat) {
-                            checkForLastMsg(mContext, userid, last_msg,chat);
+                        public void lastMessage(Context mContext, String userid, TextView last_msg, TextView last_msg_time,RelativeLayout chat) {
+                            checkForLastMsg(mContext, userid, last_msg, last_msg_time,chat);
                         }
 
                         @Override

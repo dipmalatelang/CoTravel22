@@ -89,7 +89,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
                     }
                 });
 
-                saveDetailsLater(user.getId(), user.getName(), user.getAge(), user.getGender());
+                saveDetailsLater(user.getId(), user.getName(), user.getAge(), user.getGender(), user.getTravel_with(),user.getRange_age());
             }
 
             @Override

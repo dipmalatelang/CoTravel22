@@ -164,10 +164,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     private void registerFromLogin() {
 
         FirebaseUser user = mAuth.getCurrentUser();
-        ArrayList<String> look = new ArrayList<>();
+        ArrayList<String> travel_with = new ArrayList<>();
+        ArrayList<String> looking_for = new ArrayList<>();
         ArrayList<String> range_age=new ArrayList<>();
 
-        User userClass=new User(Objects.requireNonNull(user).getUid(), user.getDisplayName(), "offline", Objects.requireNonNull(user.getDisplayName()).toLowerCase(), "", "",  user.getEmail(), user.getProviderId(), "", "", "", "", "", "", look, range_age, "",  user.getDisplayName().toLowerCase(), user.getPhoneNumber(), "", "",1,"");
+        User userClass=new User(Objects.requireNonNull(user).getUid(), user.getDisplayName(), "offline", Objects.requireNonNull(user.getDisplayName()).toLowerCase(), "", "",  user.getEmail(), user.getProviderId(), "", "", "", "", "", "",travel_with,looking_for, range_age, "",  user.getDisplayName().toLowerCase(), user.getPhoneNumber(), "", "",1,"");
         UsersInstance.child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).setValue(userClass);
 
         String uploadId = PicturesInstance.child(user.getUid()).push().getKey();

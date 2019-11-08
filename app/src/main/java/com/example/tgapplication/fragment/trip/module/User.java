@@ -18,7 +18,7 @@ public class User implements Serializable{
     private String hair;
     private String height;
     private String lang;
-    private ArrayList<String> look,range_age;
+    private ArrayList<String> travel_with,looking_for,range_age;
     private String location;
     private String name , phone;
     private String nationality;
@@ -42,7 +42,7 @@ public class User implements Serializable{
 
 
 
-    public User(String id, String username, String status, String search, String gender, String age, String email, String social_media, String body_type, String dob, String eyes, String hair, String height, String lang, ArrayList<String> look, ArrayList<String> range_age, String location, String name, String phone, String nationality, String visit,int account_type, String about_me) {
+    public User(String id, String username, String status, String search, String gender, String age, String email, String social_media, String body_type, String dob, String eyes, String hair, String height, String lang,ArrayList<String> travel_with, ArrayList<String> looking_for, ArrayList<String> range_age, String location, String name, String phone, String nationality, String visit,int account_type, String about_me) {
         this.id = id;
         this.username = username;
         this.name = name;
@@ -52,7 +52,8 @@ public class User implements Serializable{
         this.location = location;
         this.nationality = nationality;
         this.lang = lang;
-        this.look= look;
+        this.travel_with=travel_with;
+        this.looking_for= looking_for;
         this.range_age=range_age;
         this.height = height;
         this.body_type = body_type;
@@ -100,12 +101,20 @@ public class User implements Serializable{
         this.phone = phone;
     }
 
-    public ArrayList<String> getLook() {
-        return look;
+    public ArrayList<String> getTravel_with() {
+        return travel_with;
     }
 
-    public void setLook(ArrayList<String> look) {
-        this.look = look;
+    public void setTravel_with(ArrayList<String> travel_with) {
+        this.travel_with = travel_with;
+    }
+
+    public ArrayList<String> getLooking_for() {
+        return looking_for;
+    }
+
+    public void setLooking_for(ArrayList<String> looking_for) {
+        this.looking_for = looking_for;
     }
 
     public String getGender() {

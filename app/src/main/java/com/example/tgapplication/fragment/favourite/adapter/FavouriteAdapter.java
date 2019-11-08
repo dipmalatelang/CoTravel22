@@ -70,7 +70,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
         final User tList = mTrip.get(position).getUser();
 
 
-        if(tList.getGender().equalsIgnoreCase("Female")||tList.getGender().equalsIgnoreCase("Girl"))
+        if(tList.getGender().equalsIgnoreCase("Female"))
         {
             if(tList.getAccount_type()==1) {
                 Glide.with(mContext).asBitmap().load(mTrip.get(position).getPictureUrl())

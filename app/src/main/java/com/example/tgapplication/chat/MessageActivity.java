@@ -38,7 +38,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -149,7 +152,7 @@ int fav;
                         }
 //                        Log.i("TAG", "onDataChangeMy: "+pictureUrl);
                         //and this
-                        if(user.getGender().equalsIgnoreCase("Female")||user.getGender().equalsIgnoreCase("Girl"))
+                        if(user.getGender().equalsIgnoreCase("Female"))
                         {
                             Glide.with(getApplicationContext()).asBitmap().load(pictureUrl)
                                     .fitCenter()
@@ -264,12 +267,14 @@ int fav;
         });
     }
 
-    private void sendMessage(String sender, final String receiver, String message) {
+    private void sendMessage(String sender, final String receiver, String message, String str_date, String str_time) {
 
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("sender", sender);
         hashMap.put("receiver", receiver);
         hashMap.put("message", message);
+        hashMap.put("msg_date",str_date);
+        hashMap.put("msg_time",str_time);
         hashMap.put("isseen", false);
 
         ChatsInstance.push().setValue(hashMap);
@@ -434,7 +439,16 @@ int fav;
                 String msg = text_send.getText().toString();
                 Log.i("Message", msg);
                 if (!msg.equals("")) {
-                    sendMessage(fuser.getUid(), userid, msg);
+                    DateFormat dateFormat = new SimpleDateFormat("hh:mm aa");
+                    String str_time = dateFormat.format(new Date()).toString();
+
+                    DateFormat dateFormat2 = new SimpleDateFormat("MM/dd/yyyy");
+                    String str_date = dateFormat2.format(new Date()).toString();
+
+                    Log.i(TAG, "onViewClicked: Date working "+str_date);
+                    Log.i(TAG, "onViewClicked: Time working "+str_time);
+
+                    sendMessage(fuser.getUid(), userid, msg, str_date, str_time);
                 } else {
                     snackBar(message_realtivelayout, "You can't send empty message");
                 }
