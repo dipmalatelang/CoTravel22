@@ -16,7 +16,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
-import com.example.tgapplication.chat.Chat;
+import com.example.tgapplication.fragment.chat.module.Chat;
 import com.example.tgapplication.fragment.trip.module.PlanTrip;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
@@ -26,11 +26,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -269,21 +266,6 @@ public abstract class BaseFragment extends Fragment {
 
             /*    DateFormat dateFormat2 = new SimpleDateFormat("MM/dd/yyyy");
                 String str_date = dateFormat2.format(new Date()).toString();*/
-
-                Date d1 = new Date();
-                Date d2 = new Date("11/01/2019");
-                Log.i("TAG", "onDataChange: "+d1.compareTo(d2));
-                if(d1.compareTo(d2)==1)
-                {
-                    Log.i("TAG", "onDataChange: Today");
-                }
-                else if(d1.compareTo(d2)<0)
-                {
-                    Log.i("TAG", "onDataChange: Yesterday");
-                }
-                else {
-                    Log.i("TAG", "onDataChange: Not working");
-                }
 
                 if ("default".equals(theLastMessage)) {
                     last_msg.setText("No Message");

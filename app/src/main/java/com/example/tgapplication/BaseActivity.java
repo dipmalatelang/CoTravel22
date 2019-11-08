@@ -3,9 +3,6 @@ package com.example.tgapplication;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -19,29 +16,26 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.tgapplication.chat.Chat;
-import com.example.tgapplication.fragment.trip.module.PlanTrip;
+import com.example.tgapplication.fragment.chat.module.Chat;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.fragment.visitor.UserImg;
+import com.example.tgapplication.fragment.account.profile.module.Upload;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import static com.example.tgapplication.Constants.ChatsInstance;
 import static com.example.tgapplication.Constants.FavoritesInstance;
+import static com.example.tgapplication.Constants.PicturesInstance;
 import static com.example.tgapplication.Constants.ProfileVisitorInstance;
 import static com.example.tgapplication.Constants.TrashInstance;
 import static com.example.tgapplication.Constants.UsersInstance;
@@ -245,7 +239,21 @@ public abstract class BaseActivity extends AppCompatActivity {
             ProgressActivity.showDialog(this);
         }
     }
+    public void saveDetailsLater(String id, String name, String age, String gender, ArrayList<String> travel_with, ArrayList<String> range_age) {
+        sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString("Id", id);
+        editor.putString("Name", name);
+        editor.putString("Age", age);
+        editor.putString("Gender",gender);
+        Log.i(TAG, "saveDetailsLater: Travel with size"+travel_with.size());
+        editor.putString("TravelWith",new Gson().toJson(travel_with));
+        editor.putString("AgeRange",new Gson().toJson(range_age));
 
+        editor.apply();
+
+        startActivity(new Intent(this, MainActivity.class));
+    }
     public void saveLoginDetails(String email, String password) {
         sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
@@ -283,8 +291,18 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public void updateUI(FirebaseUser account) {
         if (account != null) {
-            startActivity(new Intent(this, MainActivity.class));
+            retrieveUserDetail(account);
+
         }
+    }
+
+    public void saveDetailsLater(ArrayList<String> travel_with, ArrayList<String> range_age) {
+        sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        Log.i(TAG, "saveDetailsLater: Travel with size"+travel_with.size());
+        editor.putString("TravelWith",new Gson().toJson(travel_with));
+        editor.putString("AgeRange",new Gson().toJson(range_age));
+        editor.apply();
     }
 
 
@@ -294,20 +312,54 @@ public abstract class BaseActivity extends AppCompatActivity {
         UsersInstance.child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).child("travel_with").setValue(travel_with);
         UsersInstance.child(mAuth.getCurrentUser().getUid()).child("range_age").setValue(age);
 
+        saveDetailsLater(travel_with,age);
 
     }
 
-    public void saveDetailsLater(String id, String name, String age, String gender, ArrayList<String> travel_with, ArrayList<String> range_age) {
+    private void retrieveUserDetail(FirebaseUser fUser) {
+        UsersInstance.child(fUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                Log.i(TAG, "onDataChange User: " + Objects.requireNonNull(user).getName() + " " + user.getAge() + " " + user.getId()+" "+user.getTravel_with().size());
+                PicturesInstance.child(fUser.getUid()).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Log.i(TAG, "onDataChange Pictures: ");
+
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            Upload upload = ds.getValue(Upload.class);
+//                    if (Objects.requireNonNull(upload).getType() == 1) {
+//                        Log.i(TAG, "onDataChange Pictures: " + upload.getUrl());
+                            if(Objects.requireNonNull(upload).getType()==1)
+                                profilePhotoDetails(upload.getUrl());
+//                    }
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        Log.i(TAG, "onCancelled: Sarita " + databaseError.getMessage());
+                    }
+                });
+
+                saveDetailsLater(user.getId(), user.getName(), user.getAge(), user.getGender(), user.getTravel_with(),user.getRange_age());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
+    private void profilePhotoDetails(String imageUrl) {
+        Log.i(TAG, "profilePhotoDetails: "+imageUrl);
         sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        editor.putString("Id", id);
-        editor.putString("Name", name);
-        editor.putString("Age", age);
-        editor.putString("Gender",gender);
-        Log.i(TAG, "saveDetailsLater: Travel with size"+travel_with.size());
-        editor.putString("TravelWith",new Gson().toJson(travel_with));
-        editor.putString("AgeRange",new Gson().toJson(range_age));
-
+        editor.putString("ImageUrl", imageUrl);
         editor.apply();
     }
 

@@ -2,7 +2,7 @@ package com.example.tgapplication.fragment.chat.notification;
 
 import androidx.annotation.NonNull;
 
-import com.example.tgapplication.chat.Token;
+import com.example.tgapplication.fragment.chat.module.Token;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;

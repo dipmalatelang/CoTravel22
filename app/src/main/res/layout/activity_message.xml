@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#e6e6e6"
     android:id="@+id/message_realtivelayout"
-    tools:context=".chat.MessageActivity">
+    tools:context=".fragment.chat.MessageActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/bar_layout"

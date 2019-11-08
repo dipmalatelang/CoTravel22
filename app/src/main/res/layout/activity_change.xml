@@ -7,11 +7,10 @@
     android:background="@color/white"
     android:backgroundTintMode="src_over"
     android:id="@+id/cl_changepwd"
-    tools:context=".fragment.account.profile.ChangePasswordActivity">
+    tools:context=".fragment.account.profile.ui.ChangePasswordActivity">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_register_form"
         android:layout_width="match_parent"
         android:layout_height="500sp"
         android:padding="8dp"

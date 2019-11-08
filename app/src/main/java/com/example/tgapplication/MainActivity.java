@@ -18,22 +18,12 @@ import com.example.tgapplication.fragment.account.MyProfileFragment;
 import com.example.tgapplication.fragment.chat.ChatFragment;
 import com.example.tgapplication.fragment.favourite.FavouriteFragment;
 import com.example.tgapplication.fragment.trip.TripFragment;
-import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.fragment.visitor.VisitorFragment;
 import com.example.tgapplication.login.LoginActivity;
-import com.example.tgapplication.photo.Upload;
 import com.facebook.login.LoginManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.Objects;
-
-import static com.example.tgapplication.Constants.PicturesInstance;
-import static com.example.tgapplication.Constants.UsersInstance;
 
 public class MainActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -52,59 +42,11 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
 
         fUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        retrieveUserDetail();
-
         navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(this);
 
         container = findViewById(R.id.container);
 
-    }
-
-    private void retrieveUserDetail() {
-        UsersInstance.child(fUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                Log.i(TAG, "onDataChange User: " + Objects.requireNonNull(user).getName() + " " + user.getAge() + " " + user.getId());
-                PicturesInstance.child(fUser.getUid()).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Log.i(TAG, "onDataChange Pictures: ");
-
-                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                            Upload upload = ds.getValue(Upload.class);
-//                    if (Objects.requireNonNull(upload).getType() == 1) {
-//                        Log.i(TAG, "onDataChange Pictures: " + upload.getUrl());
-                            if(Objects.requireNonNull(upload).getType()==1)
-                            profilePhotoDetails(upload.getUrl());
-//                    }
-                        }
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Log.i(TAG, "onCancelled: Sarita " + databaseError.getMessage());
-                    }
-                });
-
-                saveDetailsLater(user.getId(), user.getName(), user.getAge(), user.getGender(), user.getTravel_with(),user.getRange_age());
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void profilePhotoDetails(String imageUrl) {
-        Log.i(TAG, "profilePhotoDetails: "+imageUrl);
-        sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        editor.putString("ImageUrl", imageUrl);
-        editor.apply();
     }
 
     private void storedFragment(String fragmentString)

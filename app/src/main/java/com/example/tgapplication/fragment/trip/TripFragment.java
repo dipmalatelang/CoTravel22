@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tgapplication.BaseFragment;
 import com.example.tgapplication.R;
-import com.example.tgapplication.fragment.account.profile.ProfileActivity;
+import com.example.tgapplication.fragment.account.profile.ui.ProfileActivity;
 import com.example.tgapplication.fragment.trip.adapter.TripAdapter;
 import com.example.tgapplication.fragment.trip.module.FavList;
 import com.example.tgapplication.fragment.trip.module.PlanTrip;
@@ -25,7 +25,7 @@ import com.example.tgapplication.fragment.trip.module.TripData;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.fragment.visitor.UserImg;
-import com.example.tgapplication.photo.Upload;
+import com.example.tgapplication.fragment.account.profile.module.Upload;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -43,6 +43,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 
 import static com.example.tgapplication.Constants.FavoritesInstance;
@@ -80,39 +81,6 @@ public class TripFragment extends BaseFragment {
         fuser = FirebaseAuth.getInstance().getCurrentUser();
 
 //        getAllFav(fuser);
-
-        sharedPreferences = getActivity().getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
-
-        if (sharedPreferences.contains("TravelWith")) {
-           travel_with = new Gson().fromJson((sharedPreferences.getString("TravelWith", "")), new TypeToken<ArrayList<String>>() {}.getType());
-
-           if(travel_with.size()>0)
-           {
-               if(travel_with.size()>1)
-               {
-                   travel_with_user = "Female,Male";
-                   Log.i(TAG, "onCreateView: travel_with greater than 1 "+travel_with_user);
-
-               }
-               else {
-
-                   travel_with_user=travel_with.get(0);
-                   Log.i(TAG, "onCreateView: travel_with else"+travel_with_user);
-
-               }
-           }
-        }
-        Log.i(TAG, "onCreateView: travel_with"+travel_with_user);
-
-
-        if (sharedPreferences.contains("AgeRange")) {
-           ageRange = new Gson().fromJson((sharedPreferences.getString("AgeRange", "")), new TypeToken<ArrayList<String>>() {
-            }.getType());
-
-            ageFrom= Integer.parseInt(ageRange.get(0));
-            ageTo= Integer.parseInt(ageRange.get(1));
-        }
-
 
 
         tripFilter = view.findViewById(R.id.trip_filter);
@@ -152,6 +120,48 @@ public class TripFragment extends BaseFragment {
 
         getAllVisit(fuser);
 //        tripList();
+
+        sharedPreferences = getActivity().getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+
+        Map<String, ?> sharedData = sharedPreferences.getAll();
+        for(Map.Entry entry:sharedData.entrySet())
+        {
+            Log.i(TAG, "onCreateView: key "+entry.getKey());
+        }
+
+        if (sharedPreferences.contains("TravelWith")) {
+            Log.i(TAG, "onCreateView: Got it Travelwith");
+            travel_with = new Gson().fromJson((sharedPreferences.getString("TravelWith", "")), new TypeToken<ArrayList<String>>() {}.getType());
+            Log.i(TAG, "onCreateView: "+travel_with.size());
+
+
+            if(travel_with.size()>0)
+            {
+                if(travel_with.size()>1)
+                {
+                    travel_with_user = "Female,Male";
+                    Log.i(TAG, "onCreateView: travel_with greater than 1 "+travel_with_user);
+
+                }
+                else {
+
+                    travel_with_user=travel_with.get(0);
+                    Log.i(TAG, "onCreateView: travel_with else"+travel_with_user);
+
+                }
+            }
+        }
+        Log.i(TAG, "onCreateView: travel_with"+travel_with_user);
+
+
+        if (sharedPreferences.contains("AgeRange")) {
+            ageRange = new Gson().fromJson((sharedPreferences.getString("AgeRange", "")), new TypeToken<ArrayList<String>>() {
+            }.getType());
+
+            ageFrom= Integer.parseInt(ageRange.get(0));
+            ageTo= Integer.parseInt(ageRange.get(1));
+        }
+
         if (str_city.equalsIgnoreCase("not_defined")) {
 
             Log.i(TAG, "onCreateView: look1"+travel_with_user);
@@ -455,7 +465,7 @@ public class TripFragment extends BaseFragment {
     public void tripList(FirebaseUser fuser, String travel_with_user, int ageFrom, int ageTo) {
         // any way you managed to go the node that has the 'grp_key'
 
-        UsersInstance.addValueEventListener(
+        UsersInstance.addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

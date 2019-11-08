@@ -32,10 +32,6 @@ import com.example.tgapplication.fragment.visitor.UserImg;
 
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
-import static android.graphics.Color.parseColor;
-
 public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.ProfileVisitorViewHolder >
 {
 
@@ -62,9 +58,8 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
         return new ProfileVisitorViewHolder(mView);
     }
 
-    @SuppressLint("ResourceAsColor")
     @Override
-    public void onBindViewHolder(final ProfileVisitorViewHolder holder, int position)
+    public void onBindViewHolder(@NonNull final ProfileVisitorViewHolder holder, int position)
     {
 
         final User tList = mTrip.get(position).getUser();
@@ -202,18 +197,18 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
         });
         if (position%2==0)
         {
-            holder.linearLayout.setBackgroundColor(R.color.colorpurple1);
+            holder.linearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.colorpurple1));
         } else if(position%3==0)
         {
-            holder.linearLayout.setBackgroundColor(R.color.colorgreen2);
+            holder.linearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.colorgreen2));
         } else if(position%4==0)
         {
-            holder.linearLayout.setBackgroundColor(R.color.colorblue3);
+            holder.linearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.colorblue3));
         }
 
         else
             {
-            holder.linearLayout.setBackgroundColor(R.color.colorbrowne4);
+            holder.linearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.colorbrowne4));
         }
 
         holder.ivTitle.setImageDrawable(mContext.getResources().getDrawable(R.drawable.ic_action_fav_remove));
