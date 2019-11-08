@@ -32,6 +32,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -55,7 +56,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
-    String theLastMessage;
+    String theLastMessage, theLastMsgTime;
     Boolean textType;
     //Global Method and Variable
 //    String fUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -85,7 +86,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public List<TripList> findAllMembers(UserImg userImg) {
         User user=userImg.getUser();
         int visit_id = getVisit(visitArray, user.getId());
-        TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getAge(), user.getGender(), user.getAbout_me(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), tripNote, user.getAccount_type(), userImg.getFav(), visit_id);
+        TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getAge(), user.getGender(), user.getAbout_me(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLooking_for(),user.getTravel_with(), user.getVisit(), tripNote, user.getAccount_type(), userImg.getFav(), visit_id);
         tripList.add(tripListClass);
 
         return tripList;
@@ -287,21 +288,25 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
 
-    public void updateRegister(final ArrayList<String> look, ArrayList<String> age) {
+    public void updateRegister(final ArrayList<String> travel_with, ArrayList<String> age) {
 
-//        User userClass=new User(look,age);
-        UsersInstance.child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).child("look").setValue(look);
+//        User userClass=new User(travel_with,age);
+        UsersInstance.child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).child("travel_with").setValue(travel_with);
         UsersInstance.child(mAuth.getCurrentUser().getUid()).child("range_age").setValue(age);
+
 
     }
 
-    public void saveDetailsLater(String id, String name, String age, String gender) {
+    public void saveDetailsLater(String id, String name, String age, String gender, ArrayList<String> travel_with, ArrayList<String> range_age) {
         sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.putString("Id", id);
         editor.putString("Name", name);
         editor.putString("Age", age);
         editor.putString("Gender",gender);
+        Log.i(TAG, "saveDetailsLater: Travel with size"+travel_with.size());
+        editor.putString("TravelWith",new Gson().toJson(travel_with));
+        editor.putString("AgeRange",new Gson().toJson(range_age));
 
         editor.apply();
     }
@@ -319,7 +324,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 
     //check for last message
-    public void checkForLastMsg(Context mContext, final String userid, final TextView last_msg, RelativeLayout rl_chat) {
+    public void checkForLastMsg(Context mContext, final String userid, TextView last_msg, TextView last_msg_time,RelativeLayout rl_chat) {
 
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -327,6 +332,8 @@ public abstract class BaseActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 theLastMessage = "default";
+                theLastMsgTime="default";
+
                 textType = true;
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -336,6 +343,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                         if (chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userid) ||
                                 chat.getReceiver().equals(userid) && chat.getSender().equals(firebaseUser.getUid())) {
                             theLastMessage = chat.getMessage();
+                            theLastMsgTime= chat.getMsg_time();
                         }
                     }
 
@@ -344,24 +352,30 @@ public abstract class BaseActivity extends AppCompatActivity {
                         textType = chat.isIsseen();
                     }
 
+                  /*  if (chat.getReceiver().equals(firebaseUser.getUid()) && !chat.isIsseen()){
+                        unread++;
+                    }*/
+
                 }
 
-                if (!textType)
+      /*          if (!textType)
                 {
-
+//                    rl_chat.setBackgroundColor(Color.GRAY);
                     last_msg.setTextColor(mContext.getResources().getColor(R.color.black));
 
                 }
                 else
                 {
-
+//                    rl_chat.setBackgroundColor(Color.LTGRAY);
                     last_msg.setTextColor(mContext.getResources().getColor(R.color.gray));
-                }
+                }*/
 
                 if ("default".equals(theLastMessage)) {
                     last_msg.setText("No Message");
+                    last_msg_time.setText("No Time");
                 } else {
                     last_msg.setText(theLastMessage);
+                    last_msg_time.setText(theLastMsgTime);
                 }
 
 //                theLastMessage = "default";

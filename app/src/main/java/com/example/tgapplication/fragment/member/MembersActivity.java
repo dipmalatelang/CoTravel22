@@ -1,6 +1,8 @@
 package com.example.tgapplication.fragment.member;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
@@ -24,7 +26,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.annotations.NotNull;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -39,6 +44,9 @@ public class MembersActivity extends BaseActivity {
     private MembersAdapter membersAdapter;
     int fav=0;
     String pictureUrl;
+    SharedPreferences sharedPreferences;
+    String look_user;
+    int ageTo, ageFrom;
     final FirebaseUser fuser = FirebaseAuth.getInstance().getCurrentUser();
 
     @Override
@@ -46,15 +54,40 @@ public class MembersActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_members);
 
+
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(mGridLayoutManager);
 
-        tripList(fuser);
+        sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+
+        if (sharedPreferences.contains("TravelWith")) {
+            ArrayList<String> travel_with = new Gson().fromJson((sharedPreferences.getString("TravelWith", "")), new TypeToken<ArrayList<String>>() {}.getType());
+
+            if(travel_with.size()>0)
+            {
+                if(travel_with.size()>1)
+                {
+                    look_user = "Female,Male";
+                }
+                else {
+                    look_user=travel_with.get(0);
+                }
+            }
+        }
+
+        if (sharedPreferences.contains("AgeRange")) {
+            ArrayList<String> ageRange = new Gson().fromJson((sharedPreferences.getString("AgeRange", "")), new TypeToken<ArrayList<String>>() {
+            }.getType());
+
+            ageFrom= Integer.parseInt(ageRange.get(0));
+            ageTo= Integer.parseInt(ageRange.get(1));
+        }
+        tripList(fuser,look_user, ageFrom, ageTo);
     }
 
-    public void tripList(FirebaseUser fuser) {
+    public void tripList(FirebaseUser fuser, String look_user, int ageFrom, int ageTo) {
         // any way you managed to go the node that has the 'grp_key'
 
         UsersInstance.addValueEventListener(
@@ -68,58 +101,58 @@ public class MembersActivity extends BaseActivity {
                             if (!Objects.requireNonNull(user).getId().equalsIgnoreCase(fuser.getUid()) && user.getAccount_type()==1) {
 //                                getFav(fuser.getUid(),user.getId());
                                 // HERE WHAT CORRESPONDS TO JOIN
-                                FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                        fav=0;
-                                        if (snapshot.hasChild(user.getId()))
-                                            fav = 1;
+                                if(look_user.contains(user.getGender())&& Integer.parseInt(user.getAge())>=ageFrom && Integer.parseInt(user.getAge())<=ageTo)
+                                {
+                                    FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
+                                            fav = 0;
+                                            if (snapshot.hasChild(user.getId()))
+                                                fav = 1;
 
-                                        Log.i(TAG, "onDataChange: "+user.getName()+" "+fav);
+                                            Log.i(TAG, "onDataChange: " + user.getName() + " " + fav);
 
                                             PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                                                 @Override
                                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                                    pictureUrl="";
+                                                    pictureUrl = "";
                                                     for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
 
                                                         Upload mainPhoto = snapshot1.getValue(Upload.class);
                                                         if (Objects.requireNonNull(mainPhoto).type == 1)
                                                             pictureUrl = mainPhoto.getUrl();
 
-                                                        Log.i(TAG, "onDataChangeMy: "+fav+" ==> "+pictureUrl);
+                                                        Log.i(TAG, "onDataChangeMy: " + fav + " ==> " + pictureUrl);
                                                     }
 
 
-                                                    tripList=findAllMembers(new UserImg(user,pictureUrl,fav));
+                                                    tripList = findAllMembers(new UserImg(user, pictureUrl, fav));
 
 
-
-                                                    for(int k=0;k<tripList.size();k++)
-                                                    {
-                                                        Log.i(TAG, "onDataChange: TripList "+tripList.get(k).getFavid());
+                                                    for (int k = 0; k < tripList.size(); k++) {
+                                                        Log.i(TAG, "onDataChange: TripList " + tripList.get(k).getFavid());
                                                     }
 //                                                tripAdapter = new MembersAdapter(this, fuser.getUid(), favArray, tripList);
 //                                                recyclerview.setAdapter(tripAdapter);
-                                                        membersAdapter = new MembersAdapter(MembersActivity.this, fuser.getUid(), tripList, new MembersAdapter.ProfileData() {
-                                                            @Override
-                                                            public void setData(TripList tList, int position) {
-                                                                Intent mIntent = new Intent(MembersActivity.this, ProfileActivity.class);
-                                                                mIntent.putExtra("MyObj", tripList.get(position));
-                                                                startActivityForResult(mIntent,1);
-                                                            }
+                                                    membersAdapter = new MembersAdapter(MembersActivity.this, fuser.getUid(), tripList, new MembersAdapter.ProfileData() {
+                                                        @Override
+                                                        public void setData(TripList tList, int position) {
+                                                            Intent mIntent = new Intent(MembersActivity.this, ProfileActivity.class);
+                                                            mIntent.putExtra("MyObj", tripList.get(position));
+                                                            startActivityForResult(mIntent, 1);
+                                                        }
 
-                                                            @Override
-                                                            public void setProfileVisit(String uid, String id) {
-                                                                ProfileVisitorInstance.child(id)
-                                                                            .child(uid).child("id").setValue(uid);
+                                                        @Override
+                                                        public void setProfileVisit(String uid, String id) {
+                                                            ProfileVisitorInstance.child(id)
+                                                                    .child(uid).child("id").setValue(uid);
 
-                                                            }
+                                                        }
 
-                                                        });
-                                                        recyclerView.setAdapter(membersAdapter);
-                                                        membersAdapter.notifyDataSetChanged();
+                                                    });
+                                                    recyclerView.setAdapter(membersAdapter);
+                                                    membersAdapter.notifyDataSetChanged();
 
                                                 }
 
@@ -130,12 +163,14 @@ public class MembersActivity extends BaseActivity {
 
                                             });
 
-                                    }
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                                        Log.i(TAG, "DatabaseError2: "+databaseError);
-                                    }
-                                });
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                                            Log.i(TAG, "DatabaseError2: " + databaseError);
+                                        }
+                                    });
+                                }
 
                             }
                         }

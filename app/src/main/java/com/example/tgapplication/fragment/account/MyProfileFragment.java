@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -113,7 +112,7 @@ public class MyProfileFragment extends BaseFragment {
         Log.i("TAG", "setProfileValue: " + imageUrl);
         if(gender!=null && !gender.equalsIgnoreCase(""))
         {
-            if(gender.equalsIgnoreCase("Female")||gender.equalsIgnoreCase("Girl"))
+            if(gender.equalsIgnoreCase("Female"))
             {
                 Glide.with(getActivity()).asBitmap().load(imageUrl)
                         .fitCenter()
@@ -178,7 +177,7 @@ public class MyProfileFragment extends BaseFragment {
             //
 
             case R.id.tv_Setting:
-                Intent sIntent = new Intent(getActivity(), Settings.class);
+                Intent sIntent = new Intent(getActivity(), SettingsActivity.class);
                 startActivity(sIntent);
                 break;
 

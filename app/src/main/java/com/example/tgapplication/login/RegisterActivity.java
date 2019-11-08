@@ -72,7 +72,8 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     LoginButton loginButton;
     Spinner sp_age;
     Button btn_register, btn_save_register;
-    ArrayList<String> look = new ArrayList<>();
+    ArrayList<String> travel_with = new ArrayList<>();
+    ArrayList<String> looking_for = new ArrayList<>();
     ArrayList<String> range_age=new ArrayList<>();
     EditText regi_et_name, regi_et_email, regi_et_pass,regi_et_location;
     TextInputLayout textInput_location;
@@ -266,7 +267,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
                             FirebaseUser user = mAuth.getCurrentUser();
 
-                            User userClass=new User(Objects.requireNonNull(user).getUid(), user.getDisplayName(), "offline", Objects.requireNonNull(user.getDisplayName()).toLowerCase(), "", "",  user.getEmail(), user.getProviderId(), "", "", "", "", "", "", look, range_age, "",  user.getDisplayName().toLowerCase(), user.getPhoneNumber(), "", "",1,"");
+                            User userClass=new User(Objects.requireNonNull(user).getUid(), user.getDisplayName(), "offline", Objects.requireNonNull(user.getDisplayName()).toLowerCase(), "", "",  user.getEmail(), user.getProviderId(), "", "", "", "", "", "", travel_with, looking_for,range_age, "",  user.getDisplayName().toLowerCase(), user.getPhoneNumber(), "", "",1,"");
                             UsersInstance.child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).setValue(userClass);
 
                             String uploadId = PicturesInstance.child(user.getUid()).push().getKey();
@@ -288,7 +289,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         updateUI(currentUser);
     }
 
-    private void register(final String username, final String email, String password, final String str_gender, final String str_age, final ArrayList<String> look, final ArrayList<String> range_age){
+    private void register(final String username, final String email, String password, final String str_gender, final String str_age, String location, final ArrayList<String> travel_with, final ArrayList<String> range_age){
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(RegisterActivity.this,new OnCompleteListener<AuthResult>() {
@@ -303,7 +304,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
                             Log.i("Done","gothere");
                             User userClass=new User(userid, username,"offline",username.toLowerCase(),str_gender,str_age,email, firebaseUser.getProviderId(),"","","",
-                                    "","","", look, range_age,"",username,"","","",1,"");
+                                    "","","", travel_with, looking_for, range_age,location,username,"","","",1,"");
                             UsersInstance.child(userid).setValue(userClass);
                             Log.i("Done","gotin");
 //                            startActivity(new Intent(RegisterActivity.this,LoginActivity.class));
@@ -311,7 +312,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
 //                            travelprefer_form.setVisibility(View.VISIBLE);
                             range_age.clear();
-                            look.clear();
+                            travel_with.clear();
                             startActivity(new Intent(RegisterActivity.this, ChangePrefActivity.class));
 
                         }
@@ -336,29 +337,29 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
            /* case R.id.cb_regi_girl:
                 boolean checked = ((CheckBox) v).isChecked();
                 if (checked) {
-                    look.add("female");
+                    travel_with.add("Female");
                 } else {
-                    look.remove("female");
+                    travel_with.remove("Female");
                 }
 
                 break;
             case R.id.cb_regi_men:
                 boolean checkedmen = ((CheckBox) v).isChecked();
                 if (checkedmen) {
-                    look.add("male");
+                    travel_with.add("Male");
                 } else {
-                    look.remove("male");
+                    travel_with.remove("Male");
                 }
                 break;
 */
          /*   case R.id.btn_save_register:
-//                look;
+//                travel_with;
 
                 String str_age_from = sp_age_from.getSelectedItem().toString();
                 String str_age_to = sp_age_to.getSelectedItem().toString();
                 range_age.add(str_age_from);
                 range_age.add(str_age_to);
-                updateRegister(look, range_age);
+                updateRegister(travel_with, range_age);
                 updateUI(mAuth.getCurrentUser());
                 break;
 */
@@ -366,11 +367,20 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 int selectedId = regi_rg.getCheckedRadioButtonId();
                 rb_gender = findViewById(selectedId);
 
-                String str_gender = rb_gender.getText().toString();
+                String str_gender = null;
+                if(rb_gender.getText().toString().equalsIgnoreCase("Girl"))
+                {
+                    str_gender="Female";
+                }
+                else if(rb_gender.getText().toString().equalsIgnoreCase("Boy"))
+                {
+                    str_gender="Male";
+                }
                 String txt_username = regi_et_name.getText().toString();
                 String txt_email = regi_et_email.getText().toString();
                 String txt_password = regi_et_pass.getText().toString();
                 String str_age = sp_age.getSelectedItem().toString();
+                String txt_location = regi_et_location.getText().toString();
 
 
 
@@ -384,15 +394,15 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 }
 
 
-                if (str_gender.equalsIgnoreCase("girl")) {
-                    look.add("female");
-                } else if (str_gender.equalsIgnoreCase("boy")) {
-                    look.add("male");
+                if (str_gender.equalsIgnoreCase("Female")) {
+                    travel_with.add("Male");
+                } else if (str_gender.equalsIgnoreCase("Male")) {
+                    travel_with.add("Female");
                 } else {
-                    look.add("female");
-                    look.add("male");
+                    travel_with.add("Female");
+                    travel_with.add("Male");
                 }
-                if (TextUtils.isEmpty(txt_username) || TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password )) {
+                if (TextUtils.isEmpty(txt_username) || TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password ) ||TextUtils.isEmpty(txt_location)) {
                     snackBar(relativelayout, "All fileds are required");
 
                 } else if(!android.util.Patterns.EMAIL_ADDRESS.matcher(txt_email).matches())
@@ -402,13 +412,11 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
                 else if (txt_password.length() < 6 ) {
 
                     snackBar(relativelayout, "password must be at least 6 characters");
-
-
                 }
                 else {
-
 //                    snackBar(relativelayout, "Register Successfully..!");
-                    register(txt_username, txt_email, txt_password, str_gender, str_age, look, range_age);
+                    Log.i(TAG, "onClick: "+txt_location);
+                    register(txt_username, txt_email, txt_password, str_gender, str_age, txt_location, travel_with, range_age);
                 }
 
                 break;

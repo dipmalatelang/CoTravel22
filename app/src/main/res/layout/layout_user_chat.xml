@@ -126,6 +126,15 @@
                 android:textColor="@color/gray"
                 android:textSize="14sp" />
 
+            <TextView
+                android:id="@+id/last_msg_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_toStartOf="@+id/fev"
+                android:text="time" />
+
             <ImageView
                 android:id="@+id/fev"
                 android:layout_width="wrap_content"
@@ -134,7 +143,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="10dp"
                 android:src="@drawable/ic_action_fav_remove"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
 
 

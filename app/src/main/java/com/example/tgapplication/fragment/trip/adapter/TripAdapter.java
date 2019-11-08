@@ -65,7 +65,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
         Log.i("TAGrecyclerview", "onBindViewHolder: "+tList.getAccount_type());
 
 
-        if(tList.getGender().equalsIgnoreCase("Female")||tList.getGender().equalsIgnoreCase("Girl"))
+        if(tList.getGender().equalsIgnoreCase("Female"))
         {
             if(tList.getAccount_type()==1)
             {

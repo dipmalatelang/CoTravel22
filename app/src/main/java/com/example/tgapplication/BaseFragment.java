@@ -30,6 +30,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -54,7 +55,7 @@ public abstract class BaseFragment extends Fragment {
     private Date closest;
     public List<PlanTrip> from_to_dates = new ArrayList<>();
     String tripNote = "";
-    String theLastMessage;
+    String theLastMessage, theLastMsgTime, theLastMsgDate;
     Boolean textType;
 
 
@@ -89,14 +90,14 @@ public abstract class BaseFragment extends Fragment {
 //                String ageValue= getBirthday(user.getDob());
                 String dateFromTo = from_to_dates.get(i).getDate_from() + " - " + from_to_dates.get(i).getDate_to();
 
-                TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getAge(), user.getGender(), user.getAbout_me(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), from_to_dates.get(i).getLocation(), tripNote, dateFromTo, user.getAccount_type(),userImg.getFav(), visit_id);
+                TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getAge(), user.getGender(), user.getAbout_me(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLooking_for(), user.getTravel_with(), user.getVisit(), from_to_dates.get(i).getLocation(), tripNote, dateFromTo, user.getAccount_type(),userImg.getFav(), visit_id);
                 tripList.add(tripListClass);
             }
         }
 
         if (tripList.size() < 1) {
 
-            TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getAge(), user.getGender(), user.getAbout_me(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLook(), user.getVisit(), "", tripNote, "", user.getAccount_type(), userImg.getFav(), visit_id);
+            TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getAge(), user.getGender(), user.getAbout_me(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLooking_for(), user.getTravel_with(), user.getVisit(), "", tripNote, "", user.getAccount_type(), userImg.getFav(), visit_id);
             tripList.add(tripListClass);
         }
 
@@ -218,7 +219,7 @@ public abstract class BaseFragment extends Fragment {
     }*/
 
     //check for last message
-    public void checkForLastMsg(Context mContext, final String userid, TextView last_msg, RelativeLayout rl_chat) {
+    public void checkForLastMsg(Context mContext, final String userid, TextView last_msg, TextView last_msg_time,RelativeLayout rl_chat) {
 
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -226,6 +227,9 @@ public abstract class BaseFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 theLastMessage = "default";
+                theLastMsgTime="default";
+                theLastMsgDate="default";
+
                 textType = true;
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -235,6 +239,8 @@ public abstract class BaseFragment extends Fragment {
                         if (chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userid) ||
                                 chat.getReceiver().equals(userid) && chat.getSender().equals(firebaseUser.getUid())) {
                             theLastMessage = chat.getMessage();
+                            theLastMsgTime= chat.getMsg_time();
+                            theLastMsgDate=chat.getMsg_date();
                         }
                     }
 
@@ -261,10 +267,31 @@ public abstract class BaseFragment extends Fragment {
                     last_msg.setTextColor(mContext.getResources().getColor(R.color.gray));
                 }*/
 
+            /*    DateFormat dateFormat2 = new SimpleDateFormat("MM/dd/yyyy");
+                String str_date = dateFormat2.format(new Date()).toString();*/
+
+                Date d1 = new Date();
+                Date d2 = new Date("11/01/2019");
+                Log.i("TAG", "onDataChange: "+d1.compareTo(d2));
+                if(d1.compareTo(d2)==1)
+                {
+                    Log.i("TAG", "onDataChange: Today");
+                }
+                else if(d1.compareTo(d2)<0)
+                {
+                    Log.i("TAG", "onDataChange: Yesterday");
+                }
+                else {
+                    Log.i("TAG", "onDataChange: Not working");
+                }
+
                 if ("default".equals(theLastMessage)) {
                     last_msg.setText("No Message");
+                    last_msg_time.setText("No Time");
                 } else {
                     last_msg.setText(theLastMessage);
+
+                    last_msg_time.setText(theLastMsgTime);
                 }
 
 //                theLastMessage = "default";

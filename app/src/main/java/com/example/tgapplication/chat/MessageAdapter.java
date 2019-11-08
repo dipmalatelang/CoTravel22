@@ -60,9 +60,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
         Chat chat = mChat.get(position);
 
+        holder.right_msg_time.setText(chat.getMsg_time());
         holder.show_message.setText(chat.getMessage());
 
-        if(gender.equalsIgnoreCase("Female")||gender.equalsIgnoreCase("Girl"))
+
+        if(gender.equalsIgnoreCase("Female"))
         {
             Glide.with(mContext).asBitmap().load(imageurl)
                     .fitCenter()
@@ -142,10 +144,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         public TextView show_message;
         public ImageView profile_image;
         public TextView txt_seen;
+        public TextView right_msg_time;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
+            right_msg_time=itemView.findViewById(R.id.right_msg_time);
             show_message = itemView.findViewById(R.id.show_message);
             profile_image = itemView.findViewById(R.id.profile_image);
             txt_seen = itemView.findViewById(R.id.txt_seen);

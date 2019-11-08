@@ -82,7 +82,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             holder.tvfavourite.setVisibility(View.VISIBLE);
         }
 
-        if(user.getGender().equalsIgnoreCase("Female")||user.getGender().equalsIgnoreCase("Girl"))
+        if(user.getGender().equalsIgnoreCase("Female"))
         {
             Glide.with(mContext).asBitmap().load(mUsers.get(position).getPictureUrl())
                     .fitCenter()
@@ -187,10 +187,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         }
 
         if (ischat){
-            listener.lastMessage(mContext,user.getId(), holder.last_msg, holder.chat);
+            listener.lastMessage(mContext,user.getId(), holder.last_msg, holder.last_msg_time, holder.chat);
 
         } else {
             holder.last_msg.setVisibility(View.GONE);
+            holder.last_msg_time.setVisibility(View.GONE);
         }
 
         if (ischat){
@@ -268,7 +269,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         SwipeRevealLayout swipe_layout_1;
         private ImageView img_off;
         TextView tvdelete, tvfavourite, tvrestore;
-        private TextView last_msg;
+        private TextView last_msg,last_msg_time;
                 private RelativeLayout chat;
         ImageView ic_action_fav_remove;
 
@@ -281,6 +282,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             img_on = itemView.findViewById(R.id.img_on);
             img_off = itemView.findViewById(R.id.img_off);
             last_msg = itemView.findViewById(R.id.last_msg);
+            last_msg_time=itemView.findViewById(R.id.last_msg_time);
             swipe_layout_1=itemView.findViewById(R.id.swipe_layout_1);
             tvfavourite=itemView.findViewById(R.id.tvfavourite);
             tvdelete=itemView.findViewById(R.id.tvdelete);
@@ -293,7 +295,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     UserInterface listener;
     public interface UserInterface
     {
-        void lastMessage(Context mContext, String userid, TextView last_msg, RelativeLayout chat);
+        void lastMessage(Context mContext, String userid, TextView last_msg, TextView last_msg_time, RelativeLayout chat);
         void addToFav(String userid, int position);
         void addToTrash(String userid, int position);
         void restoreFromTrash(String userid, int position);
