@@ -206,8 +206,8 @@ public class ProfileActivity extends BaseActivity {
         } else if (getIntent().getSerializableExtra("MyObj") != null) {
             ivEditProfile.setVisibility(View.GONE);
 //            textProfile.setVisibility(View.GONE);
-            textProfile.setText("");
-            textProfile.setChipIconResource(R.drawable.ic_action_eye);
+            textProfile.setText("Request Private photos");
+            textProfile.setChipIconResource(R.drawable.ic_action_black_eye);
             ivMenu.setVisibility(View.GONE);
             ivFavUser.setVisibility(View.VISIBLE);
             floatingActionButton2.show();
@@ -232,8 +232,8 @@ public class ProfileActivity extends BaseActivity {
         } else if (getIntent().getSerializableExtra("MyUserObj") != null) {
             ivEditProfile.setVisibility(View.GONE);
 //            textProfile.setVisibility(View.GONE);
-            textProfile.setText("");
-            textProfile.setChipIconResource(R.drawable.ic_action_eye);
+            textProfile.setText("Request Private photos");
+            textProfile.setChipIconResource(R.drawable.ic_action_black_eye);
             ivMenu.setVisibility(View.GONE);
             ivFavUser.setVisibility(View.VISIBLE);
             floatingActionButton2.show();
@@ -267,32 +267,31 @@ public class ProfileActivity extends BaseActivity {
         }else {
             cardNationality.setVisibility(View.GONE);
         }
-        if (gender !=null &&gender.equalsIgnoreCase("")){
+
+        if (gender !=null && !gender.equalsIgnoreCase("")){
             tvGenderValue.setText(gender);
         }else {
             cardGender.setVisibility(View.GONE);
         }
 
-        if (lang !=null &&lang.equalsIgnoreCase("")){
-
+        if (lang !=null && !lang.equalsIgnoreCase("")){
             tvLanguageValue.setText(lang);
         }else {
-            cardLanguage.setVisibility(View.GONE);
+            cardLanguage.setVisibility(View.INVISIBLE);
         }
 
         if (name != null && !name.equalsIgnoreCase("") || age != null && !age.equalsIgnoreCase("")) {
             tvUser.setText(name + " , " + age);
         }
 
-   /*     if (gender != null && !gender.equalsIgnoreCase("")) {
-            tvSex.setText(gender);
-        }*/
+
 
         if (about_me != null && !about_me.equalsIgnoreCase("")) {
             tvAboutMeValue.setText(about_me);
         }else {
             cardSummary.setVisibility(View.GONE);
         }
+
 
 
         if (travel_with != null) {
@@ -324,6 +323,7 @@ public class ProfileActivity extends BaseActivity {
             cardBodyType.setVisibility(View.GONE);
         }
 
+
         if (eyes != null && !eyes.equalsIgnoreCase("")) {
             tvEyeValue.setText(eyes);
         }else {
@@ -336,6 +336,7 @@ public class ProfileActivity extends BaseActivity {
             cardHair.setVisibility(View.GONE);
         }
 
+
         if (userLocation != null && !userLocation.equalsIgnoreCase("")) {
             tvCountry.setText(userLocation);
         }
@@ -347,6 +348,7 @@ public class ProfileActivity extends BaseActivity {
         }
 
 
+
         String strlookingFor = "";
         if (looking_for != null) {
             if (looking_for.size() > 0) {
@@ -356,9 +358,8 @@ public class ProfileActivity extends BaseActivity {
                 }
                 tvLookingForValue.setText(strlookingFor);
             }
-            else {
-                cardLookingFor.setVisibility(View.GONE);
-            }
+
+
 
         }
 
@@ -502,6 +503,7 @@ public class ProfileActivity extends BaseActivity {
                                             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                                                 int i = position + 1;
                                                 tvCount.setText(i + " / " + uploads.size());
+                                                tvGenderValue.setText(gender);
                                             }
 
                                             @Override
@@ -948,9 +950,9 @@ public class ProfileActivity extends BaseActivity {
         switch (view.getId()) {
 
             case R.id.textProfile:
-                if (textProfile.getText().toString().equalsIgnoreCase("") && privateValue == 1) {
+                if (textProfile.getText().toString().equalsIgnoreCase("Request Private photos") && privateValue == 1) {
                     alertDialogAlreadyRequest();
-                } else if (textProfile.getText().toString().equalsIgnoreCase("")) {
+                } else if (textProfile.getText().toString().equalsIgnoreCase("Request Private photos")) {
                     alertDialogRequestPermission();
                 } else {
                     startActivity(new Intent(this, EditPhotoActivity.class));
