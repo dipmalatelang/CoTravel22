@@ -309,10 +309,10 @@ public class EditProfileActivity extends BaseActivity {
         } else {
             LangSuggestion.setText(lang);
         }
-        this.travel_with = travel_with;
-        this.looking_for=looking_for;
+
         HeightSuggestion.setText(height);
         tvDob.setText(dob);
+        this.travel_with=travel_with;
         spHair.setSelection(Hairadapter.getPosition(hair));
         spEyes.setSelection(Eyesadapter.getPosition(eyes));
         spBodyType.setSelection(Bodyadapter.getPosition(body_type));
@@ -325,40 +325,45 @@ public class EditProfileActivity extends BaseActivity {
         }
 
 
-       if(travel_with.size()>0)
+        if(travel_with!=null) {
+            if (travel_with.size() > 0) {
+                for (int i = 0; i < travel_with.size(); i++) {
+                    Log.i("TAG", "setDefaultVal: " + travel_with.get(i));
+                    if (travel_with.get(i).equalsIgnoreCase("Female")) {
+                        cbGirl.setChecked(true);
+                    } else if (travel_with.get(i).equalsIgnoreCase("Male")) {
+                        cbMen.setChecked(true);
+                    }
+                }
+            }
+        }
+
+       if(looking_for!=null)
        {
-           for (int i = 0; i < travel_with.size(); i++) {
-               Log.i("TAG", "setDefaultVal: " + travel_with.get(i));
-               if (travel_with.get(i).equalsIgnoreCase("Female")) {
-                   cbGirl.setChecked(true);
-               } else if (travel_with.get(i).equalsIgnoreCase("Male")) {
-                   cbMen.setChecked(true);
+           if(looking_for.size()>0)
+           {
+               for(int i=0;i<looking_for.size();i++)
+               {
+                   if(looking_for.get(i).equalsIgnoreCase("Friend"))
+                   {
+                       cbFrnd.setChecked(true);
+                   }
+                   else if(looking_for.get(i).equalsIgnoreCase("Adventure"))
+                   {
+                       cbAdventure.setChecked(true);
+                   }
+                   else if(looking_for.get(i).equalsIgnoreCase("Soulmate"))
+                   {
+                       cbSoulmate.setChecked(true);
+                   }
+                   else if(looking_for.get(i).equalsIgnoreCase("Job"))
+                   {
+                       cbJob.setChecked(true);
+                   }
                }
            }
        }
 
-        if(looking_for.size()>0)
-        {
-            for(int i=0;i<looking_for.size();i++)
-            {
-                if(looking_for.get(i).equalsIgnoreCase("Friend"))
-                {
-                    cbFrnd.setChecked(true);
-                }
-                else if(looking_for.get(i).equalsIgnoreCase("Adventure"))
-                {
-                    cbAdventure.setChecked(true);
-                }
-                else if(looking_for.get(i).equalsIgnoreCase("Soulmate"))
-                {
-                    cbSoulmate.setChecked(true);
-                }
-                else if(looking_for.get(i).equalsIgnoreCase("Job"))
-                {
-                    cbJob.setChecked(true);
-                }
-            }
-        }
 
 
 
@@ -411,7 +416,7 @@ public class EditProfileActivity extends BaseActivity {
 
         User userClass = new User(fuser.getUid(), prevUserList.get(0).getUsername(), "offline", prevUserList.get(0).getSearch(), str_gender, age, prevUserList.get(0).getEmail(),
                 fuser.getProviderId(), str_body_type, str_dob, str_eyes, str_hair, str_height, str_lang,
-                travel_with, looking_for, prevUserList.get(0).getRange_age(), str_location, str_name, fuser.getPhoneNumber(), str_nationality, str_visit, prevUserList.get(0).getAccount_type(), str_about_me);
+                travel_with, looking_for, prevUserList.get(0).getRange_age(), str_location, str_name, prevUserList.get(0).getPhone(), str_nationality, str_visit, prevUserList.get(0).getAccount_type(), str_about_me);
 
         UsersInstance.child(fuser.getUid()).setValue(userClass);
 

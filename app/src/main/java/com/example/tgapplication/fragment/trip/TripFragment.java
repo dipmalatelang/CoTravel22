@@ -478,6 +478,7 @@ public class TripFragment extends BaseFragment {
                                 // HERE WHAT CORRESPONDS TO JOIN
                                 Log.i(TAG, "onDataChange: Gender "+travel_with_user+" == "+user.getGender());
                                 Log.i(TAG, "onDataChange: Gender "+travel_with_user.contains(user.getGender()));
+                                Log.i(TAG, "onDataChange: "+ageFrom+" "+ageTo+" "+user.getAge());
                                 if(travel_with_user.contains(user.getGender()) && Integer.parseInt(user.getAge())>=ageFrom && Integer.parseInt(user.getAge())<=ageTo)
                                 {
                                     Log.i(TAG, "onDataChange: Gender Got in "+user.getGender());

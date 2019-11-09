@@ -58,6 +58,8 @@ public class EditPhotoActivity extends BaseActivity {
     private static final int PICK_IMAGE_REQUEST = 234;
     private StorageReference storageReference;
     private String getDownloadImageUrl;
+    SharedPreferences sharedPreferences;
+    String gender;
 
 
     @Override
@@ -71,6 +73,12 @@ public class EditPhotoActivity extends BaseActivity {
         publicRecyclerView.setLayoutManager(mGridLayoutManager);
         GridLayoutManager mGridLayoutManager1 = new GridLayoutManager(this, 3);
         privateRecyclerView.setLayoutManager(mGridLayoutManager1);
+
+        sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        if (sharedPreferences.contains("Gender")) {
+            gender = (sharedPreferences.getString("Gender", ""));
+
+        }
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -112,7 +120,7 @@ public class EditPhotoActivity extends BaseActivity {
 
 
 //creating adapter
-                    public_adapter = new MyAdapter(EditPhotoActivity.this, fuser.getUid(), public_uploads, new MyAdapter.PhotoInterface() {
+                    public_adapter = new MyAdapter(EditPhotoActivity.this, fuser.getUid(), gender,public_uploads, new MyAdapter.PhotoInterface() {
 
                         @Override
                         public void setProfilePhoto(String id, String previousValue, int pos) {
@@ -140,7 +148,7 @@ public class EditPhotoActivity extends BaseActivity {
                     });
                 }
 
-                private_adapter = new MyAdapter(EditPhotoActivity.this, fuser.getUid(), private_uploads, new MyAdapter.PhotoInterface() {
+                private_adapter = new MyAdapter(EditPhotoActivity.this, fuser.getUid(),gender, private_uploads, new MyAdapter.PhotoInterface() {
 
                     @Override
                     public void setProfilePhoto(String id, String previousValue, int pos) {

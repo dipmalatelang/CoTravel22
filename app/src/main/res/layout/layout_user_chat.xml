@@ -2,6 +2,7 @@
 <com.chauthai.swipereveallayout.SwipeRevealLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipe_layout_1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -54,7 +55,7 @@
 
 
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/chat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -62,27 +63,29 @@
             android:padding="5dp">
 
 
-
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_image"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/whitewallpapar" />
+                android:src="@drawable/whitewallpapar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
-            <de.hdodenhof.circleimageview.CircleImageView
+          <!--  <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/img_on"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_below="@id/username"
-                android:layout_marginLeft="-15dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="3dp"
                 android:layout_toEndOf="@id/profile_image"
                 android:layout_toRightOf="@id/profile_image"
                 android:src="@mipmap/ic_launcher"
-                android:visibility="gone"
+                android:visibility="invisible"
                 app:civ_border_color="#05df29"
-                app:civ_border_width="10dp" />
+                app:civ_border_width="10dp"
+                app:layout_constraintStart_toEndOf="@+id/profile_image"
+                app:layout_constraintTop_toBottomOf="@+id/last_msg" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/img_off"
@@ -90,28 +93,32 @@
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_below="@id/username"
-                android:layout_marginLeft="-15dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="58dp"
                 android:layout_toEndOf="@id/profile_image"
                 android:layout_toRightOf="@id/profile_image"
                 android:src="@mipmap/ic_launcher"
                 android:visibility="gone"
                 app:civ_border_color="#bfbfbf"
-                app:civ_border_width="10dp" />
-
+                app:civ_border_width="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/profile_image"
+                app:layout_constraintTop_toTopOf="parent" />
+-->
             <TextView
                 android:id="@+id/username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/profile_image"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="2dp"
+                android:layout_marginStart="8dp"
                 android:layout_toEndOf="@id/profile_image"
                 android:layout_toRightOf="@id/profile_image"
                 android:fontFamily="@font/montserrat"
                 android:paddingStart="2dp"
+                android:text="sdgasdgsdg"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@+id/profile_image"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/last_msg"
@@ -119,21 +126,25 @@
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@+id/username"
                 android:layout_alignBottom="@+id/profile_image"
-                android:layout_marginBottom="2dp"
                 android:fontFamily="@font/roboto"
                 android:maxLines="1"
                 android:paddingStart="2dp"
+                android:text="hiiiiiiiii"
                 android:textColor="@color/gray"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                app:layout_constraintStart_toStartOf="@+id/username"
+                app:layout_constraintTop_toBottomOf="@+id/username" />
 
             <TextView
                 android:id="@+id/last_msg_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="8dp"
                 android:layout_toStartOf="@+id/fev"
-                android:text="time" />
+                android:text="time"
+                app:layout_constraintBottom_toBottomOf="@+id/fev"
+                app:layout_constraintEnd_toStartOf="@+id/fev"
+                app:layout_constraintTop_toTopOf="@+id/fev" />
 
             <ImageView
                 android:id="@+id/fev"
@@ -141,9 +152,11 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
                 android:src="@drawable/ic_action_fav_remove"
-                android:visibility="visible" />
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
 
@@ -157,7 +170,7 @@
                 android:background="@color/colorPrimary" />-->
 
 
-        </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.cardview.widget.CardView>
