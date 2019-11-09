@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -194,7 +195,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             holder.last_msg_time.setVisibility(View.GONE);
         }
 
-        if (ischat){
+   /*     if (ischat){
             if (user.getStatus().equals("online")){
                 holder.img_on.setVisibility(View.VISIBLE);
                 holder.img_off.setVisibility(View.GONE);
@@ -205,7 +206,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         } else {
             holder.img_on.setVisibility(View.GONE);
             holder.img_off.setVisibility(View.GONE);
-        }
+        }*/
 
         holder.chat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -250,7 +251,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             public void onClick(View v) {
 
                 holder.ic_action_fav_remove.setVisibility(View.GONE);
-                listener.removeFromFav(user.getId());
+                listener.removeFromFav(user.getId(),position);
             }
         });
     }
@@ -265,12 +266,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
         public TextView username;
         public ImageView profile_image;
-        private ImageView img_on;
+//        private ImageView img_on;
         SwipeRevealLayout swipe_layout_1;
-        private ImageView img_off;
+//        private ImageView img_off;
         TextView tvdelete, tvfavourite, tvrestore;
         private TextView last_msg,last_msg_time;
-                private RelativeLayout chat;
+                private ConstraintLayout chat;
         ImageView ic_action_fav_remove;
 
 
@@ -279,8 +280,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
             username = itemView.findViewById(R.id.username);
             profile_image = itemView.findViewById(R.id.profile_image);
-            img_on = itemView.findViewById(R.id.img_on);
-            img_off = itemView.findViewById(R.id.img_off);
+//            img_on = itemView.findViewById(R.id.img_on);
+//            img_off = itemView.findViewById(R.id.img_off);
             last_msg = itemView.findViewById(R.id.last_msg);
             last_msg_time=itemView.findViewById(R.id.last_msg_time);
             swipe_layout_1=itemView.findViewById(R.id.swipe_layout_1);
@@ -295,11 +296,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     UserInterface listener;
     public interface UserInterface
     {
-        void lastMessage(Context mContext, String userid, TextView last_msg, TextView last_msg_time, RelativeLayout chat);
+        void lastMessage(Context mContext, String userid, TextView last_msg, TextView last_msg_time, ConstraintLayout chat);
         void addToFav(String userid, int position);
         void addToTrash(String userid, int position);
         void restoreFromTrash(String userid, int position);
-        void removeFromFav(String userid);
+        void removeFromFav(String userid, int position);
 //        void chatFavorite(String id );
     }
 

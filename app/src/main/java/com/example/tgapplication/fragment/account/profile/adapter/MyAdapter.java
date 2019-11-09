@@ -1,18 +1,28 @@
 package com.example.tgapplication.fragment.account.profile.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.account.profile.module.Upload;
 import com.example.tgapplication.fragment.account.profile.ui.EditPhotoActivity;
@@ -27,12 +37,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
     String TAG = "AdapterClass";
     String uid;
     String previousValue="";
+    String gender;
 
 
-    public MyAdapter(Context context, String uid, List<Upload> uploads, PhotoInterface listener) {
+    public MyAdapter(Context context, String uid, String gender, List<Upload> uploads, PhotoInterface listener) {
         this.uid=uid;
         mcontext =context;
         mUploads =uploads;
+        this.gender=gender;
         this.listener=listener;
     }
 
@@ -58,10 +70,61 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
 //          holder.imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             holder.imageView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
 
-            Glide.with(mcontext)
-                    .load(uploadCurrent.getUrl())
-                    .placeholder(R.drawable.ic_broken_image_primary_24dp)
-                    .into(holder.imageView);
+
+        if(gender.equalsIgnoreCase("Female"))
+        {
+
+                Glide.with(mcontext).asBitmap().load(uploadCurrent.getUrl())
+                        .centerCrop()
+                        .override(450,600)
+                        .listener(new RequestListener<Bitmap>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                                holder.progressBar.setVisibility(View.GONE);
+                                holder.imageView.setImageResource(R.drawable.no_photo_female);
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                                holder.progressBar.setVisibility(View.GONE);
+                                return false;
+                            }
+                        })
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                holder.imageView.setImageBitmap(resource);
+                            }
+                        });
+
+        }
+        else {
+                Glide.with(mcontext).asBitmap().load(uploadCurrent.getUrl())
+                        .centerCrop()
+                        .override(450, 600)
+                        .listener(new RequestListener<Bitmap>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                                holder.progressBar.setVisibility(View.GONE);
+                                holder.imageView.setImageResource(R.drawable.no_photo_male);
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                                holder.progressBar.setVisibility(View.GONE);
+                                return false;
+                            }
+                        })
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                holder.imageView.setImageBitmap(resource);
+                            }
+                        });
+        }
+
 
         if(uploadCurrent.getType()==3)
         {
@@ -131,6 +194,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
         public ImageView imageView,ivTitle;
         TextView set_main, pp_eye, delete;
         EasyFlipView flipView;
+        ProgressBar progressBar;
 //        public LinearLayout below_opt;
 
         public ImageViewHolder(@NonNull View itemView) {
@@ -144,6 +208,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
             set_main=itemView.findViewById(R.id.set_main);
             pp_eye=itemView.findViewById(R.id.pp_eye);
             delete=itemView.findViewById(R.id.delete);
+            progressBar=itemView.findViewById(R.id.progressBar);
 
         }
     }

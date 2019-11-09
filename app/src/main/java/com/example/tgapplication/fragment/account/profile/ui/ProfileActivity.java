@@ -99,8 +99,6 @@ public class ProfileActivity extends BaseActivity {
     TextView tvHair;
     @BindView(R.id.tv_hair_value)
     TextView tvHairValue;
-    @BindView(R.id.card_personal)
-    CardView cardPersonal;
     @BindView(R.id.tv_trip)
     TextView tvTrip;
     @BindView(R.id.card_trip)
@@ -119,6 +117,42 @@ public class ProfileActivity extends BaseActivity {
     TextView tvLookingForValue;
     @BindView(R.id.tv_want_to_visit_value)
     TextView tvWantToVisitValue;
+    @BindView(R.id.fab_backFromProfile)
+    FloatingActionButton fabBackFromProfile;
+    @BindView(R.id.tv_nationality)
+    TextView tvNationality;
+    @BindView(R.id.card_nationality)
+    CardView cardNationality;
+    @BindView(R.id.tv_gender)
+    TextView tvGender;
+    @BindView(R.id.card_Gender)
+    CardView cardGender;
+    @BindView(R.id.card_Language)
+    CardView cardLanguage;
+    @BindView(R.id.card_height)
+    CardView cardHeight;
+    @BindView(R.id.card_body_type)
+    CardView cardBodyType;
+    @BindView(R.id.card_eye)
+    CardView cardEye;
+    @BindView(R.id.card_hair)
+    CardView cardHair;
+    @BindView(R.id.tv_looking_for)
+    TextView tvLookingFor;
+    @BindView(R.id.card_looking_for)
+    CardView cardLookingFor;
+    @BindView(R.id.tv_want_to_visit)
+    TextView tvWantToVisit;
+    @BindView(R.id.card_want_to_visit)
+    CardView cardWantToVisit;
+    @BindView(R.id.tv_nationality_values)
+    TextView tvNationalityValues;
+    @BindView(R.id.tv_gender_value)
+    TextView tvGenderValue;
+    @BindView(R.id.tv_language)
+    TextView tvLanguage;
+    @BindView(R.id.tv_language_value)
+    TextView tvLanguageValue;
     private ArrayList<Upload> upload1 = new ArrayList<>();
     private ArrayList<Upload> upload2 = new ArrayList<>();
     private ArrayList<Upload> upload3 = new ArrayList<>();
@@ -228,6 +262,24 @@ public class ProfileActivity extends BaseActivity {
 
         String str_travel_with = null;
 
+        if (nationality !=null && !nationality.equalsIgnoreCase("")){
+            tvNationalityValues.setText(nationality);
+        }else {
+            cardNationality.setVisibility(View.GONE);
+        }
+        if (gender !=null &&gender.equalsIgnoreCase("")){
+            tvGenderValue.setText(gender);
+        }else {
+            cardGender.setVisibility(View.GONE);
+        }
+
+        if (lang !=null &&lang.equalsIgnoreCase("")){
+
+            tvLanguageValue.setText(lang);
+        }else {
+            cardLanguage.setVisibility(View.GONE);
+        }
+
         if (name != null && !name.equalsIgnoreCase("") || age != null && !age.equalsIgnoreCase("")) {
             tvUser.setText(name + " , " + age);
         }
@@ -238,6 +290,8 @@ public class ProfileActivity extends BaseActivity {
 
         if (about_me != null && !about_me.equalsIgnoreCase("")) {
             tvAboutMeValue.setText(about_me);
+        }else {
+            cardSummary.setVisibility(View.GONE);
         }
 
 
@@ -256,20 +310,30 @@ public class ProfileActivity extends BaseActivity {
             }*/
         }
 
+
         if (height != null && !height.equalsIgnoreCase("")) {
             tvHeightValue.setText(height);
+        }else {
+            cardHeight.setVisibility(View.GONE);
         }
+
 
         if (body_type != null && !body_type.equalsIgnoreCase("")) {
             tvBodyTypeValue.setText(body_type);
+        }else {
+            cardBodyType.setVisibility(View.GONE);
         }
 
         if (eyes != null && !eyes.equalsIgnoreCase("")) {
             tvEyeValue.setText(eyes);
+        }else {
+            cardEye.setVisibility(View.GONE);
         }
 
         if (hair != null && !hair.equalsIgnoreCase("")) {
             tvHairValue.setText(hair);
+        }else {
+            cardHair.setVisibility(View.GONE);
         }
 
         if (userLocation != null && !userLocation.equalsIgnoreCase("")) {
@@ -278,7 +342,10 @@ public class ProfileActivity extends BaseActivity {
 
         if (visit != null && !visit.equalsIgnoreCase("")) {
             tvWantToVisitValue.setText(visit);
+        }else {
+            cardWantToVisit.setVisibility(View.GONE);
         }
+
 
         String strlookingFor = "";
         if (looking_for != null) {
@@ -289,6 +356,10 @@ public class ProfileActivity extends BaseActivity {
                 }
                 tvLookingForValue.setText(strlookingFor);
             }
+            else {
+                cardLookingFor.setVisibility(View.GONE);
+            }
+
         }
 
 

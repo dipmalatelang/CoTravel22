@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -118,7 +119,7 @@ public class TrashActivity extends BaseActivity {
         }
         userAdapter = new UserAdapter(this, mUser, true, true,new UserAdapter.UserInterface() {
             @Override
-            public void lastMessage(Context mContext, String userid, TextView last_msg, TextView last_msg_time, RelativeLayout chat) {
+            public void lastMessage(Context mContext, String userid, TextView last_msg, TextView last_msg_time, ConstraintLayout chat) {
                 checkForLastMsg(mContext, userid, last_msg, last_msg_time,chat);
             }
 
@@ -144,9 +145,10 @@ public class TrashActivity extends BaseActivity {
             }
 
             @Override
-            public void removeFromFav(String userid) {
-
+            public void removeFromFav(String userid, int position) {
                 removeFav(fuser.getUid(), userid);
+                mUsers.get(position).setFav(0);
+                userAdapter.notifyDataSetChanged();
             }
 
         });
@@ -214,7 +216,7 @@ public class TrashActivity extends BaseActivity {
                                                         Log.i("TAG", "onDataChange: chat" + mUsers.size());
                                                         userAdapter = new UserAdapter(TrashActivity.this, mUsers, true, true,new UserAdapter.UserInterface() {
                                                             @Override
-                                                            public void lastMessage(Context mContext, String userid, TextView last_msg, TextView last_msg_time,RelativeLayout chat) {
+                                                            public void lastMessage(Context mContext, String userid, TextView last_msg, TextView last_msg_time,ConstraintLayout chat) {
                                                                 checkForLastMsg(mContext, userid, last_msg,last_msg_time,chat);
                                                             }
 
@@ -240,8 +242,10 @@ public class TrashActivity extends BaseActivity {
                                                             }
 
                                                             @Override
-                                                            public void removeFromFav(String userid) {
+                                                            public void removeFromFav(String userid, int position) {
                                                                 removeFav(fuser.getUid(), userid);
+                                                                mUsers.get(position).setFav(0);
+                                                                userAdapter.notifyDataSetChanged();
                                                             }
 
                                                         });

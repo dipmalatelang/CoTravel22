@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -146,7 +147,7 @@ public class ChatFragment extends BaseFragment {
         }
                 userAdapter = new UserAdapter(getContext(), mUser, true, new UserAdapter.UserInterface() {
                     @Override
-                    public void lastMessage(Context mContext, String userid, TextView last_msg, TextView last_msg_time, RelativeLayout chat) {
+                    public void lastMessage(Context mContext, String userid, TextView last_msg, TextView last_msg_time, ConstraintLayout chat) {
                         checkForLastMsg(mContext, userid, last_msg,last_msg_time,chat);
                     }
 
@@ -172,9 +173,10 @@ public class ChatFragment extends BaseFragment {
                     }
 
                     @Override
-                    public void removeFromFav(String userid) {
-
-                        removeFav(fuser.getUid(),userid);
+                    public void removeFromFav(String userid, int position) {
+                        removeFav(fuser.getUid(), userid);
+                        mUsers.get(position).setFav(0);
+                        userAdapter.notifyDataSetChanged();
                     }
 
                 });
@@ -235,7 +237,7 @@ public class ChatFragment extends BaseFragment {
                                                         Log.i("TAG", "onDataChange: chat" + mUsers.size());
                                                         userAdapter = new UserAdapter(getContext(), mUsers, true, new UserAdapter.UserInterface() {
                                                             @Override
-                                                            public void lastMessage(Context mContext, String userid, TextView last_msg, TextView last_msg_time,RelativeLayout chat) {
+                                                            public void lastMessage(Context mContext, String userid, TextView last_msg, TextView last_msg_time,ConstraintLayout chat) {
                                                                 checkForLastMsg(mContext, userid, last_msg, last_msg_time,chat);
                                                             }
 
@@ -261,8 +263,10 @@ public class ChatFragment extends BaseFragment {
                                                             }
 
                                                             @Override
-                                                            public void removeFromFav(String userid) {
+                                                            public void removeFromFav(String userid, int position) {
                                                                 removeFav(fuser.getUid(), userid);
+                                                                mUsers.get(position).setFav(0);
+                                                                userAdapter.notifyDataSetChanged();
                                                             }
 
                                                         });

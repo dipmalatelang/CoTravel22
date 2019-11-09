@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.tgapplication.fragment.chat.module.Chat;
 import com.example.tgapplication.fragment.trip.module.TripList;
@@ -376,7 +377,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 
     //check for last message
-    public void checkForLastMsg(Context mContext, final String userid, TextView last_msg, TextView last_msg_time,RelativeLayout rl_chat) {
+    public void checkForLastMsg(Context mContext, final String userid, TextView last_msg, TextView last_msg_time, ConstraintLayout rl_chat) {
 
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 

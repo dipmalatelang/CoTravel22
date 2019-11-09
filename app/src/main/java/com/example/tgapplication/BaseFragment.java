@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.example.tgapplication.fragment.chat.module.Chat;
@@ -216,7 +217,7 @@ public abstract class BaseFragment extends Fragment {
     }*/
 
     //check for last message
-    public void checkForLastMsg(Context mContext, final String userid, TextView last_msg, TextView last_msg_time,RelativeLayout rl_chat) {
+    public void checkForLastMsg(Context mContext, final String userid, TextView last_msg, TextView last_msg_time, ConstraintLayout rl_chat) {
 
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
