@@ -110,7 +110,8 @@
 
         </activity>
         <activity android:name=".fragment.account.profile.ui.EditPhotoActivity"/>
-        <activity android:name=".fragment.account.profile.ui.ChangePasswordActivity"/>
+        <activity android:name=".fragment.account.profile.ui.ChangePasswordActivity"
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".fragment.account.profile.ui.ChangePrefActivity"
             android:theme="@style/noToolbar"/>
 

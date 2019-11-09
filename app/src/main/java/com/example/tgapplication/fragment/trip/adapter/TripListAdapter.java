@@ -67,6 +67,7 @@ public class TripListAdapter extends RecyclerView.Adapter<TripListAdapter.TripHo
         final TripData tripDetails=tripDataList.get(position);
         String myString = tripDetails.getLocation();
 
+        Log.i(TAG, "onBindViewHolder: "+myString);
         String City = myString.substring(0,1).toUpperCase() + myString.substring(1);
         holder.tv_city.setText(City);
         holder.tv_date.setText(tripDetails.getFrom_date()+" - "+tripDetails.getTo_date());

@@ -20,6 +20,7 @@ import com.example.tgapplication.BuildConfig;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.adapter.TripListAdapter;
 import com.example.tgapplication.fragment.trip.module.TripData;
+import com.example.tgapplication.fragment.trip.module.TripList;
 import com.google.android.gms.common.api.Status;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -110,12 +111,6 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
         ll_manager = new LinearLayoutManager(AddTripActivity.this);
         recyclerView.setLayoutManager(ll_manager);
 
-//        assert getSupportActionBar() != null; //null check
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-//        setSupportActionBar(toolbar);
-//        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-
         displayTripList(fuser.getUid());
 
         /*tv_from_date.setOnTouchListener((v, event) -> {
@@ -179,7 +174,6 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
 
                                     for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                                         TripData tripData = snapshot1.getValue(TripData.class);
-                                        //Log.i("VishalD",""+fuser.getUsername()+" , "+tripData.getLocation());
 
                                         trips.add(0, tripData);
                                     }
@@ -235,13 +229,7 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
 
         displayTripList(fuser.getUid());
         clearText();
-//        trips.add(tripData);
-//        mtripAdapter.notifyDataSetChanged();
-//        recyclerView.setAdapter(mtripAdapter);
-//                    Intent intent = new Intent(AddTripActivity.this, TripActivity.class);
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    startActivity(intent);
-//                    finish();
+
 
     }
 
@@ -273,7 +261,6 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
                     snackBar(tripRelativelayout, "All fileds are required !");
                     dismissProgressDialog();
                 } else {
-
                     try {
                         tvDateFrom = new SimpleDateFormat("dd/MM/yyyy").parse(tv_from_dates);
                         tvDateTo=new SimpleDateFormat("dd/MM/yyyy").parse(tv_to_dates);
@@ -292,17 +279,26 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
                                     Date listDateFrom = new SimpleDateFormat("dd/MM/yyyy").parse(trips.get(i).getFrom_date());
                                     Date listDateTo=new SimpleDateFormat("dd/MM/yyyy").parse(trips.get(i).getTo_date());
 
-                                    if ((tvDateFrom.before(listDateFrom) && tvDateTo.before(listDateFrom))||(tvDateFrom.after(listDateTo) && tvDateTo.after(listDateTo))) {
+                                    if (!edit_id.equalsIgnoreCase("")) {
                                         Trips(edit_id);
                                     }
                                     else {
-                                        snackBar(tripRelativelayout, "Maybe Trip has already planned for these days");
-                                        dismissProgressDialog();
+                                        if ((tvDateFrom.before(listDateFrom) && tvDateTo.before(listDateFrom)) || (tvDateFrom.after(listDateTo) && tvDateTo.after(listDateTo))) {
+                                                Trips(edit_id);
+
+                                        } else {
+                                            snackBar(tripRelativelayout, "Maybe Trip has already planned for these days");
+                                            dismissProgressDialog();
+                                        }
                                     }
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
                             }
+                        }
+                        else {
+                            snackBar(tripRelativelayout, "Enter proper dates");
+                            dismissProgressDialog();
                         }
                     }
                     else if(!tvDateFrom.after(tvDateTo)){
