@@ -206,7 +206,7 @@ public class ProfileActivity extends BaseActivity {
         } else if (getIntent().getSerializableExtra("MyObj") != null) {
             ivEditProfile.setVisibility(View.GONE);
 //            textProfile.setVisibility(View.GONE);
-            textProfile.setText("Request Private Photos");
+            textProfile.setText("Request Private photos");
             textProfile.setChipIconResource(R.drawable.ic_action_black_eye);
             ivMenu.setVisibility(View.GONE);
             ivFavUser.setVisibility(View.VISIBLE);
@@ -232,7 +232,7 @@ public class ProfileActivity extends BaseActivity {
         } else if (getIntent().getSerializableExtra("MyUserObj") != null) {
             ivEditProfile.setVisibility(View.GONE);
 //            textProfile.setVisibility(View.GONE);
-            textProfile.setText("Request Private Photos");
+            textProfile.setText("Request Private photos");
             textProfile.setChipIconResource(R.drawable.ic_action_black_eye);
             ivMenu.setVisibility(View.GONE);
             ivFavUser.setVisibility(View.VISIBLE);
@@ -260,7 +260,6 @@ public class ProfileActivity extends BaseActivity {
 
     private void setDetails(String name, String gender, String about_me, String age, ArrayList<String> looking_for, ArrayList<String> travel_with, String userLocation, String nationality, String lang, String height, String body_type, String eyes, String hair, String visit, String planLocation, String from_to_date, String imageUrl) {
 
-        Log.i(TAG, "setDetails: Gender"+gender);
         String str_travel_with = null;
 
         if (nationality !=null && !nationality.equalsIgnoreCase("")){
@@ -269,8 +268,10 @@ public class ProfileActivity extends BaseActivity {
             cardNationality.setVisibility(View.GONE);
         }
 
-        if (gender !=null &&!gender.equalsIgnoreCase("")){
+        if (gender !=null && !gender.equalsIgnoreCase("")){
             tvGenderValue.setText(gender);
+        }else {
+            cardGender.setVisibility(View.GONE);
         }
 
         if (lang !=null && !lang.equalsIgnoreCase("")){
@@ -287,6 +288,8 @@ public class ProfileActivity extends BaseActivity {
 
         if (about_me != null && !about_me.equalsIgnoreCase("")) {
             tvAboutMeValue.setText(about_me);
+        }else {
+            cardSummary.setVisibility(View.GONE);
         }
 
 
@@ -309,20 +312,28 @@ public class ProfileActivity extends BaseActivity {
 
         if (height != null && !height.equalsIgnoreCase("")) {
             tvHeightValue.setText(height);
+        }else {
+            cardHeight.setVisibility(View.GONE);
         }
 
 
         if (body_type != null && !body_type.equalsIgnoreCase("")) {
             tvBodyTypeValue.setText(body_type);
+        }else {
+            cardBodyType.setVisibility(View.GONE);
         }
 
 
         if (eyes != null && !eyes.equalsIgnoreCase("")) {
             tvEyeValue.setText(eyes);
+        }else {
+            cardEye.setVisibility(View.GONE);
         }
 
         if (hair != null && !hair.equalsIgnoreCase("")) {
             tvHairValue.setText(hair);
+        }else {
+            cardHair.setVisibility(View.GONE);
         }
 
 
@@ -332,6 +343,8 @@ public class ProfileActivity extends BaseActivity {
 
         if (visit != null && !visit.equalsIgnoreCase("")) {
             tvWantToVisitValue.setText(visit);
+        }else {
+            cardWantToVisit.setVisibility(View.GONE);
         }
 
 
@@ -937,9 +950,9 @@ public class ProfileActivity extends BaseActivity {
         switch (view.getId()) {
 
             case R.id.textProfile:
-                if (textProfile.getText().toString().equalsIgnoreCase("Request Private Photos") && privateValue == 1) {
+                if (textProfile.getText().toString().equalsIgnoreCase("Request Private photos") && privateValue == 1) {
                     alertDialogAlreadyRequest();
-                } else if (textProfile.getText().toString().equalsIgnoreCase("Request Private Photos")) {
+                } else if (textProfile.getText().toString().equalsIgnoreCase("Request Private photos")) {
                     alertDialogRequestPermission();
                 } else {
                     startActivity(new Intent(this, EditPhotoActivity.class));
