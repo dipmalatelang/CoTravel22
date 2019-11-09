@@ -215,6 +215,12 @@ public class RegisterActivity extends BaseActivity implements View.OnTouchListen
 
                             FirebaseUser user = mAuth.getCurrentUser();
 
+                            travel_with.add("Female");
+                            travel_with.add("Male");
+
+                            range_age.add("18");
+                            range_age.add("55");
+
                             User userClass = new User(Objects.requireNonNull(user).getUid(), user.getDisplayName(), "offline", Objects.requireNonNull(user.getDisplayName()).toLowerCase(), "", "18", user.getEmail(), user.getProviderId(), "", "", "", "", "", "", travel_with, looking_for, range_age, "", user.getDisplayName().toLowerCase(), user.getPhoneNumber(), "", "", 1, "");
                             UsersInstance.child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).setValue(userClass);
 
