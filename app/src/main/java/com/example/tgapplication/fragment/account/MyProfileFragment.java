@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.android.volley.toolbox.ImageLoader;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -75,11 +75,10 @@ public class MyProfileFragment extends BaseFragment {
     private SharedPreferences sharedPreferences;
     String name, imageUrl, age,gender;
 
-    //
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_my_profile, container, false);
         ButterKnife.bind(this, view);
 
@@ -101,7 +100,6 @@ public class MyProfileFragment extends BaseFragment {
 
         }
 
-        Log.i("TAG", "onCreateView: " + imageUrl);
         setProfileValue(name, age, imageUrl,gender);
 
         return view;
@@ -110,13 +108,12 @@ public class MyProfileFragment extends BaseFragment {
     private void setProfileValue(String name, String age, String imageUrl, String gender) {
         tvProfileName.setText(name);
         tvProfileAge.setText(age);
-        Log.i("TAG", "setProfileValue: " + imageUrl);
+
         if(gender!=null && !gender.equalsIgnoreCase(""))
         {
             if(gender.equalsIgnoreCase("Female"))
             {
                 Glide.with(getActivity()).asBitmap().load(imageUrl)
-                        .fitCenter()
                         .override(450,600)
                         .listener(new RequestListener<Bitmap>() {
                             @Override
@@ -145,7 +142,6 @@ public class MyProfileFragment extends BaseFragment {
         }
         else {
             Glide.with(getActivity()).asBitmap().load(imageUrl)
-                    .centerCrop()
                     .override(450,600)
                     .listener(new RequestListener<Bitmap>() {
                         @Override
@@ -168,7 +164,6 @@ public class MyProfileFragment extends BaseFragment {
                         }
                     });
         }
-//        Glide.with(Objects.requireNonNull(getActivity())).load(imageUrl).placeholder(R.drawable.ic_broken_image_primary_24dp).centerCrop().into(ivImage);
     }
 
 
@@ -206,13 +201,12 @@ public class MyProfileFragment extends BaseFragment {
                 Objects.requireNonNull(getActivity()).finish();
 
                 startActivity(new Intent(getActivity(), LoginActivity.class));
-//                snackBar(container,"Logout");
+
                 break;
 
             case R.id.tv_Change_Preferences:
                 Intent mIntent = new Intent(getActivity(), ChangePrefActivity.class);
                 startActivity(mIntent);
-//              Toast.makeText(getActivity(), "Preferrences", Toast.LENGTH_SHORT).show();
 
                 break;
 

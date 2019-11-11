@@ -11,14 +11,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout android:orientation="vertical"
+    <LinearLayout
+        android:id="@+id/ll_select_image"
+        android:orientation="vertical"
         android:layout_height="fill_parent"
         android:layout_width="fill_parent"
         android:weightSum="2"
         xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
+        android:id="@+id/ll_public_photos"
         android:layout_margin="5dp"
+        android:visibility="gone"
         android:background="@drawable/bg_white_grey_border"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
@@ -43,7 +47,9 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_private_photos"
         android:layout_margin="5dp"
+        android:visibility="gone"
         android:background="@drawable/bg_white_grey_border"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"

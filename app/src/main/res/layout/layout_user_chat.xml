@@ -63,7 +63,7 @@
             android:padding="5dp">
 
 
-            <de.hdodenhof.circleimageview.CircleImageView
+            <com.pkmmte.view.CircularImageView
                 android:id="@+id/profile_image"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
@@ -72,7 +72,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
 
-          <!--  <de.hdodenhof.circleimageview.CircleImageView
+          <!--  <com.pkmmte.view.CircularImageView
                 android:id="@+id/img_on"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
@@ -87,7 +87,7 @@
                 app:layout_constraintStart_toEndOf="@+id/profile_image"
                 app:layout_constraintTop_toBottomOf="@+id/last_msg" />
 
-            <de.hdodenhof.circleimageview.CircleImageView
+            <com.pkmmte.view.CircularImageView
                 android:id="@+id/img_off"
 
                 android:layout_width="15dp"

@@ -5,13 +5,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -71,12 +69,6 @@ public class ProfileActivity extends BaseActivity {
     ViewPager viewPager;
     @BindView(R.id.iv_edit_profile)
     ImageView ivEditProfile;
-    /*  @BindView(R.id.iv_info)
-      ImageView ivInfo;
-      @BindView(R.id.iv_msg)
-      ImageView ivMsg;
-      @BindView(R.id.iv_trip)
-      ImageView ivTrip;*/
     @BindView(R.id.tv_about_me)
     TextView tvAboutMe;
     @BindView(R.id.tv_about_me_value)
@@ -153,6 +145,12 @@ public class ProfileActivity extends BaseActivity {
     TextView tvLanguage;
     @BindView(R.id.tv_language_value)
     TextView tvLanguageValue;
+    @BindView(R.id.cl_main)
+    ConstraintLayout clMain;
+    @BindView(R.id.cl_language)
+    ConstraintLayout clLanguage;
+    @BindView(R.id.CL_lookingfor)
+    ConstraintLayout CLLookingfor;
     private ArrayList<Upload> upload1 = new ArrayList<>();
     private ArrayList<Upload> upload2 = new ArrayList<>();
     private ArrayList<Upload> upload3 = new ArrayList<>();
@@ -172,14 +170,11 @@ public class ProfileActivity extends BaseActivity {
     ArrayList<TripData> planTripsList = new ArrayList<>();
     int privateValue = 0;
 
-    //    @BindView(R.id.bottomNav)
-//    ConstraintLayout bottomNav;
-
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_view);
+
         ButterKnife.bind(this);
         fuser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -205,7 +200,6 @@ public class ProfileActivity extends BaseActivity {
 
         } else if (getIntent().getSerializableExtra("MyObj") != null) {
             ivEditProfile.setVisibility(View.GONE);
-//            textProfile.setVisibility(View.GONE);
             textProfile.setText("Request Private photos");
             textProfile.setChipIconResource(R.drawable.ic_action_black_eye);
             ivMenu.setVisibility(View.GONE);
@@ -221,17 +215,11 @@ public class ProfileActivity extends BaseActivity {
                 ivFavUser.setImageResource(R.drawable.ic_action_fav_add);
             }
 
-
-            Log.i(TAG, "onCreate: " + tripL.getName() + " " + tripL.getFavid());
             setDetails(tripL.getName(), tripL.getGender(), tripL.getAbout_me(), tripL.getAge(), tripL.getLooking_for(), tripL.getTravel_with(), tripL.getUserLocation(), tripL.getNationality(),
                     tripL.getLang(), tripL.getHeight(), tripL.getBody_type(), tripL.getEyes(), tripL.getHair(), tripL.getVisit(), tripL.getPlanLocation(), tripL.getFrom_to_date(), tripL.getImageUrl());
-//            if(tripL==null)
-//            setDetails(userList.get(i).getName(), userList.get(i).getGender(), userList.get(i).getAge(), userList.get(i).getLook(), userList.get(i).getLocation(), userList.get(i).getNationality(), userList.get(i).getLang(), userList.get(i).getHeight(), userList.get(i).getBody_type(), userList.get(i).getEyes(), userList.get(i).getHair(), userList.get(i).getVisit(), "", "", userList.get(i).getImageURL());
-
 
         } else if (getIntent().getSerializableExtra("MyUserObj") != null) {
             ivEditProfile.setVisibility(View.GONE);
-//            textProfile.setVisibility(View.GONE);
             textProfile.setText("Request Private photos");
             textProfile.setChipIconResource(R.drawable.ic_action_black_eye);
             ivMenu.setVisibility(View.GONE);
@@ -242,13 +230,6 @@ public class ProfileActivity extends BaseActivity {
             getAllImages(profileId, userL.getUser().getGender());
             getAllTrips(profileId);
 
-           /* if (userL.getUser().getFavid() == 1) {
-                ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
-            } else {
-                ivFavUser.setImageResource(R.drawable.ic_action_fav_add);
-            }*/
-
-            Log.i(TAG, "MyUserObj : " + userL.getUser().getName() + " ");
             setDetails(userL.getUser().getName(), userL.getUser().getGender(), userL.getUser().getAbout_me(), userL.getUser().getAge(), userL.getUser().getLooking_for(), userL.getUser().getTravel_with(), "", userL.getUser().getNationality(),
                     userL.getUser().getLang(), userL.getUser().getHeight(), userL.getUser().getBody_type(), userL.getUser().getEyes(), userL.getUser().getHair(), userL.getUser().getVisit(), "", "", "");
 
@@ -262,22 +243,22 @@ public class ProfileActivity extends BaseActivity {
 
         String str_travel_with = null;
 
-        if (nationality !=null && !nationality.equalsIgnoreCase("")){
+        if (nationality != null && !nationality.equalsIgnoreCase("")) {
             tvNationalityValues.setText(nationality);
-        }else {
+        } else {
             cardNationality.setVisibility(View.GONE);
         }
 
-        if (gender !=null && !gender.equalsIgnoreCase("")){
+        if (gender != null && !gender.equalsIgnoreCase("")) {
             tvGenderValue.setText(gender);
-        }else {
+        } else {
             cardGender.setVisibility(View.GONE);
         }
 
-        if (lang !=null && !lang.equalsIgnoreCase("")){
+        if (lang != null && !lang.equalsIgnoreCase("")) {
             tvLanguageValue.setText(lang);
-        }else {
-            cardLanguage.setVisibility(View.INVISIBLE);
+        } else {
+            cardLanguage.setVisibility(View.GONE);
         }
 
         if (name != null && !name.equalsIgnoreCase("") || age != null && !age.equalsIgnoreCase("")) {
@@ -285,54 +266,56 @@ public class ProfileActivity extends BaseActivity {
         }
 
 
-
         if (about_me != null && !about_me.equalsIgnoreCase("")) {
             tvAboutMeValue.setText(about_me);
-        }else {
+        } else {
             cardSummary.setVisibility(View.GONE);
         }
 
 
-
         if (travel_with != null) {
-            for (int j = 0; j < travel_with.size(); j++) {
-                if (str_travel_with != null) {
-                    str_travel_with += ", " + travel_with.get(j);
-                } else {
-                    str_travel_with = travel_with.get(j);
-                }
+            if (travel_with.size() > 0) {
+                for (int j = 0; j < travel_with.size(); j++) {
+                    if (str_travel_with != null) {
+                        str_travel_with += ", " + travel_with.get(j);
+                    } else {
+                        str_travel_with = travel_with.get(j);
+                    }
 
+                }
+            } else {
+                cardLookingFor.setVisibility(View.GONE);
             }
 
-           /* if (str_travel_with != null && !str_travel_with.equalsIgnoreCase("")) {
-                tvLooking.setText(str_travel_with);
-            }*/
+
+        } else {
+            cardLookingFor.setVisibility(View.GONE);
         }
 
 
         if (height != null && !height.equalsIgnoreCase("")) {
             tvHeightValue.setText(height);
-        }else {
+        } else {
             cardHeight.setVisibility(View.GONE);
         }
 
 
         if (body_type != null && !body_type.equalsIgnoreCase("")) {
             tvBodyTypeValue.setText(body_type);
-        }else {
+        } else {
             cardBodyType.setVisibility(View.GONE);
         }
 
 
         if (eyes != null && !eyes.equalsIgnoreCase("")) {
             tvEyeValue.setText(eyes);
-        }else {
+        } else {
             cardEye.setVisibility(View.GONE);
         }
 
         if (hair != null && !hair.equalsIgnoreCase("")) {
             tvHairValue.setText(hair);
-        }else {
+        } else {
             cardHair.setVisibility(View.GONE);
         }
 
@@ -343,71 +326,40 @@ public class ProfileActivity extends BaseActivity {
 
         if (visit != null && !visit.equalsIgnoreCase("")) {
             tvWantToVisitValue.setText(visit);
-        }else {
+        } else {
             cardWantToVisit.setVisibility(View.GONE);
         }
-
 
 
         String strlookingFor = "";
         if (looking_for != null) {
             if (looking_for.size() > 0) {
                 for (int i = 0; i < looking_for.size(); i++) {
-                    Log.i(TAG, "setDetails: " + looking_for.get(i));
                     strlookingFor += looking_for.get(i);
                 }
                 tvLookingForValue.setText(strlookingFor);
+            } else {
+                cardLookingFor.setVisibility(View.GONE);
             }
-
-
-
+        } else {
+            cardLookingFor.setVisibility(View.GONE);
         }
 
-
-        /*
-        if (nationality != null && !nationality.equalsIgnoreCase("")) {
-            tvNatioanlity.setText(nationality);
-        }
-
-        if (lang != null && !lang.equalsIgnoreCase("")) {
-            tvLanguage.setText(lang);
-        }
-
-
-
-        if (planLocation != null && !planLocation.equalsIgnoreCase("")) {
-            tvPlannedtrip.setText(planLocation);
-            tvDate.setText(from_to_date);
-        }*/
-
-    /*    if(getActivity()!=null)
-        {
-            Glide.with(getActivity()).load(imageUrl).placeholder(R.drawable.ic_services_ratings_user_pic).into(mTrip);
-        }*/
     }
 
 
     public void getProfileData(String id) {
-        // any way you managed to go the node that has the 'grp_key'
 
         UsersInstance.child(id).addValueEventListener(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         userList.clear();
-//                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
                         User user = dataSnapshot.getValue(User.class);
-//                            if (user != null && user.getId().equalsIgnoreCase(fuser.getUid())) {
                         account_type = Objects.requireNonNull(user).getAccount_type();
                         setDetails(user.getName(), user.getGender(), user.getAbout_me(), user.getAge(), user.getLooking_for(), user.getTravel_with(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getVisit(), "", "", "default");
 
-                 /*           userList.add(user);
-//                            }
-                        }
-                        if (userList.size() > 0) {
-                            for (int i = 0; i < userList.size(); i++)
-                        }*/
 
                     }
 
@@ -426,7 +378,6 @@ public class ProfileActivity extends BaseActivity {
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     TripData tripData = dataSnapshot1.getValue(TripData.class);
                     planTripsList.add(tripData);
-                    Log.i(TAG, "onDataChange: Trips " + Objects.requireNonNull(dataSnapshot1.getValue(TripData.class)).getLocation());
                 }
 
                 if (planTripsList.size() <= 0)
@@ -458,8 +409,7 @@ public class ProfileActivity extends BaseActivity {
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
                         Permit permit = ds.getValue(Permit.class);
-                        Log.i(TAG, "Sarita : Sender " + permit.getSender() + " Status " + permit.getStatus());
-                        Log.i(TAG, "Sarita : Receiver " + permit.getReceiver());
+
                         if (permit.getSender().equals(fuser.getUid()) && permit.getReceiver().equals(uid) && permit.getStatus() == 1) {
                             PicturesInstance.child(uid).addValueEventListener(new ValueEventListener() {
                                 @Override
@@ -477,15 +427,14 @@ public class ProfileActivity extends BaseActivity {
                                         }
                                     }
 
-                                    Log.i(TAG, "onDataChange: Upload1 " + upload1.size());
                                     if (upload1.size() > 0) {
                                         uploads.addAll(upload1);
                                     }
-                                    Log.i(TAG, "onDataChange: Upload2 " + upload2.size());
+
                                     if (upload2.size() > 0) {
                                         uploads.addAll(upload2);
                                     }
-                                    Log.i(TAG, "onDataChange: Upload3 " + upload3.size());
+
                                     if (upload3.size() > 0) {
                                         uploads.addAll(upload3);
                                     }
@@ -542,18 +491,16 @@ public class ProfileActivity extends BaseActivity {
                                         }
                                     }
 
-                                    Log.i(TAG, "onDataChange: Uploads" + upload1.size());
                                     if (upload1.size() > 0) {
                                         uploads.addAll(upload1);
                                     }
-                                    Log.i(TAG, "onDataChange: Uploads" + upload2.size());
+
                                     if (upload2.size() > 0) {
                                         uploads.addAll(upload2);
                                     }
 
                                     privateValue = 0;
 
-                                    Log.i(TAG, "onDataChange: Uploads" + uploads.size());
                                     if (uploads.size() > 0) {
                                         adapter = new CustomAdapter(ProfileActivity.this, uid, uploads, gender);
                                         viewPager.setAdapter(adapter);
@@ -589,66 +536,7 @@ public class ProfileActivity extends BaseActivity {
                             break;
                         }
                     }
-                       /* else {
-                            PicturesInstance.child(uid).addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    upload1 = new ArrayList<>();
-                                    upload2 = new ArrayList<>();
-                                    uploads = new ArrayList<>();
 
-                                    for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                                        Upload upload = postSnapshot.getValue(Upload.class);
-                                        if (Objects.requireNonNull(upload).getType() == 1) {
-                                            upload1.add(upload);
-                                        } else if (upload.getType() == 2) {
-                                            upload2.add(upload);
-                                        }
-                                    }
-
-                                    Log.i(TAG, "onDataChange: Uploads" + upload1.size());
-                                    if (upload1.size() > 0) {
-                                        uploads.addAll(upload1);
-                                    }
-                                    Log.i(TAG, "onDataChange: Uploads" + upload2.size());
-                                    if (upload2.size() > 0) {
-                                        uploads.addAll(upload2);
-                                    }
-
-
-                                    Log.i(TAG, "onDataChange: Uploads" + uploads.size());
-                                    if (uploads.size() > 0) {
-                                        adapter = new CustomAdapter(ProfileActivity.this, uid, uploads);
-                                        viewPager.setAdapter(adapter);
-
-                                        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                                            @Override
-                                            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                                                int i = position + 1;
-                                                tvCount.setText(i + " / " + uploads.size());
-                                            }
-
-                                            @Override
-                                            public void onPageSelected(int position) {
-
-                                            }
-
-                                            @Override
-                                            public void onPageScrollStateChanged(int state) {
-
-                                            }
-                                        });
-                                    }
-
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                }
-                            });
-                        }*/
-//                    }
                 } else {
                     PicturesInstance.child(uid).addValueEventListener(new ValueEventListener() {
                         @Override
@@ -666,11 +554,10 @@ public class ProfileActivity extends BaseActivity {
                                 }
                             }
 
-                            Log.i(TAG, "onDataChange: Uploads" + upload1.size());
                             if (upload1.size() > 0) {
                                 uploads.addAll(upload1);
                             }
-                            Log.i(TAG, "onDataChange: Uploads" + upload2.size());
+
                             if (upload2.size() > 0) {
                                 uploads.addAll(upload2);
                             }
@@ -678,7 +565,6 @@ public class ProfileActivity extends BaseActivity {
                             privateValue = 0;
 
 
-                            Log.i(TAG, "onDataChange: Uploads" + uploads.size());
                             if (uploads.size() > 0) {
                                 adapter = new CustomAdapter(ProfileActivity.this, uid, uploads, gender);
                                 viewPager.setAdapter(adapter);
@@ -715,55 +601,12 @@ public class ProfileActivity extends BaseActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.i(TAG, "onCancelled: " + databaseError.getMessage());
+
             }
         });
-
-//
 
     }
 
-  /*  public void getAllImages(String uid) {
-        PicturesInstance.child(uid).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                uploads = new ArrayList<>();
-
-                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                    Upload upload = postSnapshot.getValue(Upload.class);
-                    if (upload.getType() != 3) {
-                        uploads.add(upload);
-                    }
-                }
-
-                adapter = new CustomAdapter(ProfileActivity.this, uid, uploads);
-                viewPager.setAdapter(adapter);
-
-                viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                    @Override
-                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                        int i = position + 1;
-                        textView.setText(i + " / " + uploads.size());
-                    }
-
-                    @Override
-                    public void onPageSelected(int position) {
-
-                    }
-
-                    @Override
-                    public void onPageScrollStateChanged(int state) {
-
-                    }
-                });
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }*/
 
     public void showMenu(View view) {
         PopupMenu popup = new PopupMenu(ProfileActivity.this, view);
@@ -788,24 +631,19 @@ public class ProfileActivity extends BaseActivity {
                     } else {
                         alertDialogHideProfile2();
                     }
-//                    alertDialogHideProfile(account_type);
-//                    Toast.makeText(ProfileActivity.this, "Add to fav", Toast.LENGTH_SHORT).show();
-                    //  holder.ic_action_fav_remove.setVisibility(View.VISIBLE);
-//                            listener.chatFavorite(user.getId());
+
                     return true;
                 }
                 if (id == R.id.two) {
                     alertDialogAccountRemove();
-//                    Toast.makeText(ProfileActivity.this, "add to delete", Toast.LENGTH_LONG).show();
+
                     return true;
                 }
 
-
-//                        Toast.makeText(mContext,"You Clicked : " + item.getTitle(), Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
-        popup.show();//showing popup menu
+        popup.show();
     }
 
     private void alertDialogAccountRemove() {
@@ -819,8 +657,7 @@ public class ProfileActivity extends BaseActivity {
                         active_hide_delete_Profile(fuser.getUid(), 3);
                         fuser.delete();
 
-                        Toast.makeText(ProfileActivity.this, "Account remove successfully", Toast.LENGTH_LONG).show();
-
+                        snackBar(clMain, "Account remove successfully");
                         FirebaseAuth.getInstance().signOut();
                         LoginManager.getInstance().logOut();
                         finish();
@@ -830,7 +667,7 @@ public class ProfileActivity extends BaseActivity {
         dialog.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(ProfileActivity.this, "cancel is clicked", Toast.LENGTH_LONG).show();
+                snackBar(clMain, "cancel is clicked");
             }
         });
         AlertDialog alertDialog = dialog.create();
@@ -847,7 +684,7 @@ public class ProfileActivity extends BaseActivity {
                     public void onClick(DialogInterface dialog,
                                         int which) {
                         active_hide_delete_Profile(fuser.getUid(), account_type);
-                        Toast.makeText(ProfileActivity.this, "Hide My Profile is clicked", Toast.LENGTH_LONG).show();
+                        snackBar(clMain, "Hide My Profile is clicked");
                     }
                 });
 
@@ -865,8 +702,7 @@ public class ProfileActivity extends BaseActivity {
                     public void onClick(DialogInterface dialog,
                                         int which) {
                         active_hide_delete_Profile(fuser.getUid(), account_type);
-
-                        Toast.makeText(ProfileActivity.this, "unhide My Profile is clicked", Toast.LENGTH_LONG).show();
+                        snackBar(clMain, "unhide My Profile is clicked");
                     }
                 });
 
@@ -874,23 +710,6 @@ public class ProfileActivity extends BaseActivity {
         alertDialog.show();
     }
 
-    /*private void alertDialogHideProfile(int account_type) {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setMessage("Are you sure you want to hide your profile? Users won't be able to find you through the site in any way."
-        );
-        dialog.setTitle("Profile visibility");
-        dialog.setPositiveButton("Hide My Profile",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,
-                                        int which) {
-                        active_hide_delete_Profile(fuser.getUid(), account_type);
-                        Toast.makeText(ProfileActivity.this, "Hide My Profile is clicked", Toast.LENGTH_LONG).show();
-                    }
-                });
-
-        AlertDialog alertDialog = dialog.create();
-        alertDialog.show();
-    }*/
 
     private void alertDialogRequestPermission() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
@@ -907,7 +726,7 @@ public class ProfileActivity extends BaseActivity {
         dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(ProfileActivity.this, "cancel is clicked", Toast.LENGTH_LONG).show();
+                snackBar(clMain, "cancel is clicked");
             }
         });
         AlertDialog alertDialog = dialog.create();
@@ -921,7 +740,6 @@ public class ProfileActivity extends BaseActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,
                                         int which) {
-
                     }
                 });
 
@@ -964,25 +782,17 @@ public class ProfileActivity extends BaseActivity {
                 break;
 
             case R.id.floatingActionButton2:
-
                 Intent intent = new Intent(this, MessageActivity.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("userid", profileId);
                 startActivity(intent);
-
 
                 break;
 
             case R.id.fab_backFromProfile:
                 finish();
-               /* Intent intent = new Intent();
-                intent.putExtra("editTextValue", "value_here")
-                setResult(RESULT_OK, intent);
-                finish();*/
                 break;
 
             case R.id.iv_fav_user:
-                Log.i(TAG, "onViewClicked: " + fav_int);
                 if (tripL != null) {
                     if (tripL.getFavid() == 1) {
                         removeFav(fuser.getUid(), tripL.getId());
@@ -1005,22 +815,11 @@ public class ProfileActivity extends BaseActivity {
                     }
                 }
 
-
-               /* if (iv_fav.getTag().toString().equalsIgnoreCase("ic_action_fav_add")) {
-                    setFav(fuser.getUid(), tripL.getId());
-                    iv_fav.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_fav_remove));
-                    iv_fav.setTag("ic_action_fav_remove");
-                } else if (iv_fav.getTag().toString().equalsIgnoreCase("ic_action_fav_remove")) {
-                    removeFav(fuser.getUid(), tripL.getId());
-                    iv_fav.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_fav_add));
-                    iv_fav.setTag("ic_action_fav_add");
-                }*/
                 break;
 
             case R.id.iv_menu:
                 showMenu(view);
                 break;
-
 
         }
     }

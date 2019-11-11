@@ -1,18 +1,28 @@
 package com.example.tgapplication.fragment.account.profile.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.account.profile.ui.FacebookImageActivity;
 
@@ -26,11 +36,13 @@ public class FB_Adapter extends RecyclerView.Adapter<FB_Adapter.ImageViewHolder>
     private String TAG = "AdapterClass";
     int count=0;
     String uid;
+    String gender;
 
 
-    public FB_Adapter(Context context, String uid, List<FacebookImageActivity.Images> uploads, FbInterface fbInterface) {
+    public FB_Adapter(Context context, String uid, String gender, List<FacebookImageActivity.Images> uploads, FbInterface fbInterface) {
         this.uid=uid;
         mcontext =context;
+        this.gender=gender;
         mUploads =uploads;
         this.fbInterface=fbInterface;
     }
@@ -49,8 +61,6 @@ public class FB_Adapter extends RecyclerView.Adapter<FB_Adapter.ImageViewHolder>
 
         count=0;
 
-//        holder.textViewName.setText(uploadCurrent.getName());
-//          holder.below_opt.setVisibility(View.VISIBLE);
 
         for(int j=0;j<mUploads.get(position).getImage_Url().size();j++)
         {
@@ -60,9 +70,7 @@ public class FB_Adapter extends RecyclerView.Adapter<FB_Adapter.ImageViewHolder>
             }
         }
 
-        Log.i(TAG, "onBindViewHolder: "+mUploads.get(position).getName()+" - "+mUploads.get(position).getImage_Url().size());
             holder.imageView.setAdjustViewBounds(true);
-//          holder.imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             holder.imageView.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT));
 
             holder.txt_title.setText(mUploads.get(position).getName());
@@ -76,15 +84,53 @@ public class FB_Adapter extends RecyclerView.Adapter<FB_Adapter.ImageViewHolder>
                 }
             });
 
-        Log.i(TAG, "onBindViewHolder: Glide"+mUploads.get(position).getImage_Url().get(0).getUrl());
-//            if(mUploads.get(position).getImage_Url().size()>0)
-            Glide.with(mcontext)
-                    .load(mUploads.get(position).getImage_Url().get(0).getUrl())
-                    .placeholder(R.drawable.ic_broken_image_primary_24dp)
+
+        if(gender.equalsIgnoreCase("Female"))
+        {
+
+            Glide.with(mcontext).load(mUploads.get(position).getImage_Url().get(0).getUrl())
+                    .centerCrop()
+                    .override(450,600)
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            holder.progressBar.setVisibility(View.GONE);
+                            holder.imageView.setImageResource(R.drawable.no_photo_female);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            holder.progressBar.setVisibility(View.GONE);
+                            return false;
+                        }
+                    })
                     .into(holder.imageView);
 
-    }
+        }
+        else {
+            Glide.with(mcontext).load(mUploads.get(position).getImage_Url().get(0).getUrl())
+                    .centerCrop()
+                    .override(450, 600)
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            holder.progressBar.setVisibility(View.GONE);
+                            holder.imageView.setImageResource(R.drawable.no_photo_male);
+                            return false;
+                        }
 
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            holder.progressBar.setVisibility(View.GONE);
+                            return false;
+                        }
+
+                    })
+                    .into(holder.imageView);
+        }
+
+    }
 
 
     @Override
@@ -95,23 +141,17 @@ public class FB_Adapter extends RecyclerView.Adapter<FB_Adapter.ImageViewHolder>
     public class ImageViewHolder extends RecyclerView.ViewHolder{
         public ImageView imageView;
         ConstraintLayout cl_image;
+        ProgressBar progressBar;
         TextView txt_title, txt_body;
-//        public LinearLayout below_opt;
 
         public ImageViewHolder(@NonNull View itemView) {
             super(itemView);
 
-//            below_opt=itemView.findViewById(R.id.below_opt);
+            progressBar=itemView.findViewById(R.id.progressBar);
             imageView = itemView.findViewById(R.id.imageView);
             txt_title=itemView.findViewById(R.id.txt_title);
             txt_body=itemView.findViewById(R.id.txt_body);
             cl_image=itemView.findViewById(R.id.cl_image);
-           /* ivTitle=itemView.findViewById(R.id.ivTitle);
-
-            flipView=itemView.findViewById(R.id.flipView);
-            set_main=itemView.findViewById(R.id.set_main);
-            pp_eye=itemView.findViewById(R.id.pp_eye);
-            delete=itemView.findViewById(R.id.delete);*/
 
         }
     }

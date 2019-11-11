@@ -5,12 +5,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.chaos.view.PinView;
+import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,12 +21,17 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-public class VerifyPhoneActivity extends AppCompatActivity {
+
+public class VerifyPhoneActivity extends BaseActivity {
 
 
     PinView pinView;
     Button buttonSignIn;
+    @BindView(R.id.cl_verify)
+    ConstraintLayout clVerify;
     private FirebaseAuth mAuth;
     ProgressBar progressBar;
 
@@ -34,21 +39,19 @@ public class VerifyPhoneActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verify_phone);
+        ButterKnife.bind(this);
 
         pinView = findViewById(R.id.pinView);
 
-        buttonSignIn=findViewById(R.id.buttonSignIn);
+        buttonSignIn = findViewById(R.id.buttonSignIn);
 
         mAuth = FirebaseAuth.getInstance();
         Intent intent = getIntent();
         String mVerificationId = intent.getStringExtra("mVerificationId");
-//        String code = intent.getStringExtra("code");
-
 
         buttonSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
 
 
                 String code = pinView.getText().toString().trim();
@@ -59,8 +62,7 @@ public class VerifyPhoneActivity extends AppCompatActivity {
                     return;
                 }
 
-                //verifying the code entered manually
-                verifyVerificationCode(mVerificationId,code);
+                verifyVerificationCode(mVerificationId, code);
 
             }
         });
@@ -68,14 +70,10 @@ public class VerifyPhoneActivity extends AppCompatActivity {
     }
 
 
+    private void verifyVerificationCode(String mVerificationId, String code) {
 
-
-
-    private void verifyVerificationCode(String mVerificationId,String code) {
-        //creating the credential
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, code);
 
-        //signing the user
         signInWithPhoneAuthCredential(credential);
     }
 
@@ -85,30 +83,20 @@ public class VerifyPhoneActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            //verification successful we will start the profile activity
                             Intent intent = new Intent(VerifyPhoneActivity.this, MainActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);
 
                         } else {
 
-                            //verification unsuccessful.. display an error message
 
                             String message = "Somthing is wrong, we will fix it soon...";
 
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                                 message = "Invalid code entered...";
                             }
+                            snackBar(clVerify,""+message);
 
-                            Toast.makeText(VerifyPhoneActivity.this, ""+message, Toast.LENGTH_SHORT).show();
-                     /*       Snackbar snackbar = Snackbar.make(findViewById(R.id.parent), message, Snackbar.LENGTH_LONG);
-                            snackbar.setAction("Dismiss", new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-
-                                }
-                            });
-                            snackbar.show();*/
                         }
                     }
                 });

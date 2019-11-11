@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -86,7 +85,6 @@ public class MembersActivity extends BaseActivity {
     }
 
     public void tripList(FirebaseUser fuser, String look_user, int ageFrom, int ageTo) {
-        // any way you managed to go the node that has the 'grp_key'
 
         UsersInstance.addValueEventListener(
                 new ValueEventListener() {
@@ -97,8 +95,7 @@ public class MembersActivity extends BaseActivity {
 
                             User user = snapshot.getValue(User.class);
                             if (!Objects.requireNonNull(user).getId().equalsIgnoreCase(fuser.getUid()) && user.getAccount_type()==1) {
-//                                getFav(fuser.getUid(),user.getId());
-                                // HERE WHAT CORRESPONDS TO JOIN
+
                                 if(look_user.contains(user.getGender())&& Integer.parseInt(user.getAge())>=ageFrom && Integer.parseInt(user.getAge())<=ageTo)
                                 {
                                     FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -108,7 +105,6 @@ public class MembersActivity extends BaseActivity {
                                             if (snapshot.hasChild(user.getId()))
                                                 fav = 1;
 
-                                            Log.i(TAG, "onDataChange: " + user.getName() + " " + fav);
 
                                             PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                                                 @Override
@@ -121,7 +117,6 @@ public class MembersActivity extends BaseActivity {
                                                         if (Objects.requireNonNull(mainPhoto).type == 1)
                                                             pictureUrl = mainPhoto.getUrl();
 
-                                                        Log.i(TAG, "onDataChangeMy: " + fav + " ==> " + pictureUrl);
                                                     }
 
 
@@ -129,10 +124,8 @@ public class MembersActivity extends BaseActivity {
 
 
                                                     for (int k = 0; k < tripList.size(); k++) {
-                                                        Log.i(TAG, "onDataChange: TripList " + tripList.get(k).getFavid());
                                                     }
-//                                                tripAdapter = new MembersAdapter(this, fuser.getUid(), favArray, tripList);
-//                                                recyclerview.setAdapter(tripAdapter);
+
                                                     membersAdapter = new MembersAdapter(MembersActivity.this, fuser.getUid(), tripList, new MembersAdapter.ProfileData() {
                                                         @Override
                                                         public void setData(TripList tList, int position) {
@@ -165,7 +158,7 @@ public class MembersActivity extends BaseActivity {
 
                                         @Override
                                         public void onCancelled(@NonNull DatabaseError databaseError) {
-                                            Log.i(TAG, "DatabaseError2: " + databaseError);
+
                                         }
                                     });
                                 }
@@ -176,20 +169,10 @@ public class MembersActivity extends BaseActivity {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Log.i(TAG, "DatabaseError3: "+databaseError);
+
                     }
                 }
         );
     }
 
- /*   @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
-            if(resultCode == RESULT_OK) {
-                TripList strEditText = (TripList) Objects.requireNonNull(data.getExtras()).getSerializable("MyObj");
-
-            }
-        }
-    }*/
 }

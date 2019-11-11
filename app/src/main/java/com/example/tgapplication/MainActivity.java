@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -108,13 +107,11 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     }
 
     private boolean loadFragment(Fragment fragment) {
-        //switching fragment
+
         if (fragment != null) {
-            Log.i(TAG, "loadFragment: " + fragment);
 
             getSupportFragmentManager()
                     .beginTransaction()
-//                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
                     .replace(R.id.fragment_main_screen, fragment)
                     .commit();
             return true;
@@ -170,7 +167,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         }
 
         this.doubleBackToExitPressedOnce = true;
-//        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
         snackBar(container, "Please click Back again to exit");
 
         new Handler().postDelayed(new Runnable() {

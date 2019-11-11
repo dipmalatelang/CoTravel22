@@ -5,11 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.util.Log;
+
 import android.view.View;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -57,9 +55,6 @@ public abstract class BaseFragment extends Fragment {
     Boolean textType;
 
 
-
-
-
     public List<TripList> findClosestDate(List<Date> dates, UserImg userImg) {
 
         User user = userImg.getUser();
@@ -79,13 +74,10 @@ public abstract class BaseFragment extends Fragment {
         String dateOutput = simpleDateFormat.format(closest);
         String dateOutput1 = simpleDateFormat1.format(closest);
         int visit_id = getVisit(visitArray, user.getId());
-        Log.i("closest Date", " " + closest + " " + dateOutput + " " + dateOutput1);
+
         for (int i = 0; i < from_to_dates.size(); i++) {
-            Log.i("This data", from_to_dates.get(i).getDate_from() + " " + dateOutput1);
-//            int fav_id= getFav(favArray,user.getId());
-//            Log.i("TAG", "onBindViewHolder: Visitor "+user.getId()+" - "+userImg.getPictureUrl());
+
             if (from_to_dates.get(i).getDate_from().contains(dateOutput1)) {
-//                String ageValue= getBirthday(user.getDob());
                 String dateFromTo = from_to_dates.get(i).getDate_from() + " - " + from_to_dates.get(i).getDate_to();
 
                 TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getAge(), user.getGender(), user.getAbout_me(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLooking_for(), user.getTravel_with(), user.getVisit(), from_to_dates.get(i).getLocation(), tripNote, dateFromTo, user.getAccount_type(),userImg.getFav(), visit_id);
@@ -110,7 +102,8 @@ public abstract class BaseFragment extends Fragment {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,
                                         int which) {
-                        Toast.makeText(getActivity(), "ok is clicked", Toast.LENGTH_LONG).show();
+
+                       snackBar(getView(),"ok is clicked");
                     }
                 });
 
@@ -164,21 +157,16 @@ public abstract class BaseFragment extends Fragment {
 
 
     public void snackBar(View constrainlayout, String s) {
-        Snackbar snackbar = Snackbar.make(constrainlayout, s, Snackbar.LENGTH_LONG).setAction("Retry", new View.OnClickListener() {
+        Snackbar snackbar = Snackbar.make(constrainlayout, s, Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("Action Button", "onClick triggered");
-//                new MainActivity().loadFragment()
             }
         });
-        View snackbarLayout = snackbar.getView();
-        TextView textView = snackbarLayout.findViewById(R.id.snackbar_text);
-        textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_android_green_24dp, 0, 0, 0);
-        textView.setCompoundDrawablePadding(20);
+
         snackbar.show();
     }
 
-    //Progress Bar
+
     public void showProgressDialog() {
         if (!Objects.requireNonNull(getActivity()).isFinishing()) {
             ProgressActivity.showDialog(getActivity());
@@ -191,32 +179,7 @@ public abstract class BaseFragment extends Fragment {
         }
     }
 
- /*   //show new message arrival
-    public void highlightNewMessage(String userid)
-    {
-        ChatsInstance.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds : dataSnapshot.getChildren())
-                {
-                    Chat chat=ds.getValue(Chat.class);
-//                    chat.isIsseen();
-                    if(chat.getSender().equals(userid) && !chat.isIsseen())
-                    {
-                        Log.i("TAG", "onDataChange: HighLight "+userid+" "+chat.isIsseen());
-                    }
 
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.i("TAG", "onDataChange: HighLight Not "+userid+" "+databaseError.getMessage());
-            }
-        });
-    }*/
-
-    //check for last message
     public void checkForLastMsg(Context mContext, final String userid, TextView last_msg, TextView last_msg_time, ConstraintLayout rl_chat) {
 
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -232,7 +195,7 @@ public abstract class BaseFragment extends Fragment {
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Chat chat = snapshot.getValue(Chat.class);
-                    Log.i("Snap", " " + snapshot);
+
                     if (firebaseUser != null && chat != null) {
                         if (chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userid) ||
                                 chat.getReceiver().equals(userid) && chat.getSender().equals(firebaseUser.getUid())) {
@@ -243,30 +206,11 @@ public abstract class BaseFragment extends Fragment {
                     }
 
                     if (Objects.requireNonNull(chat).getSender().equals(userid) && !chat.isIsseen()) {
-                        Log.i("TAG", "onDataChange: HighLight " + userid + " " + chat.isIsseen());
+
                         textType = chat.isIsseen();
                     }
 
-                  /*  if (chat.getReceiver().equals(firebaseUser.getUid()) && !chat.isIsseen()){
-                        unread++;
-                    }*/
-
                 }
-
-      /*          if (!textType)
-                {
-//                    rl_chat.setBackgroundColor(Color.GRAY);
-                    last_msg.setTextColor(mContext.getResources().getColor(R.color.black));
-
-                }
-                else
-                {
-//                    rl_chat.setBackgroundColor(Color.LTGRAY);
-                    last_msg.setTextColor(mContext.getResources().getColor(R.color.gray));
-                }*/
-
-            /*    DateFormat dateFormat2 = new SimpleDateFormat("MM/dd/yyyy");
-                String str_date = dateFormat2.format(new Date()).toString();*/
 
                 if ("default".equals(theLastMessage)) {
                     last_msg.setText("No Message");
@@ -277,7 +221,6 @@ public abstract class BaseFragment extends Fragment {
                     last_msg_time.setText(theLastMsgTime);
                 }
 
-//                theLastMessage = "default";
             }
 
             @Override
@@ -286,21 +229,5 @@ public abstract class BaseFragment extends Fragment {
             }
         });
     }
-
-/*    public void appDetails(String key, String value) {
-        SharedPreferences sharedPreferences = Objects.requireNonNull(getActivity()).getSharedPreferences("AppDetails", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(key, value);
-        editor.apply();
-    }
-
-    public String getAppDetails(String key) {
-        String name = "";
-        SharedPreferences sharedPreferences = Objects.requireNonNull(getActivity()).getSharedPreferences("AppDetails", Context.MODE_PRIVATE);
-        if (sharedPreferences.contains(key)) {
-            name = sharedPreferences.getString(key, "");
-        }
-        return name;
-    }*/
 
 }

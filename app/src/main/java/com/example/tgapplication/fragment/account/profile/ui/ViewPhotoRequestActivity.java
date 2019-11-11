@@ -1,8 +1,6 @@
 package com.example.tgapplication.fragment.account.profile.ui;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,7 +38,6 @@ public class ViewPhotoRequestActivity extends BaseActivity {
     private FirebaseUser fuser;
     String pictureUrl;
     int fav;
-    String intentType;
     ViewPhotoRequestAdapter viewPhotoRequestAdapter;
     ArrayList<UserImg> userList=new ArrayList<>();
 
@@ -55,7 +52,7 @@ public class ViewPhotoRequestActivity extends BaseActivity {
         rvViewPhotoRequest.setLayoutManager(linearLayoutManager);
 
         String intentType=getIntent().getStringExtra("intentType");
-        Log.i(TAG, "onCreate: "+intentType);
+
         if(intentType.equalsIgnoreCase("request"))
         {
             viewPhotoRequest();
@@ -69,8 +66,6 @@ public class ViewPhotoRequestActivity extends BaseActivity {
             PhotoPermits();
         }
 
-     /*  viewPhotoRequest();
-       givenPermitsActivity();*/
     }
 
     private void PhotoPermits() {
@@ -104,13 +99,11 @@ public class ViewPhotoRequestActivity extends BaseActivity {
                                             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                                                 if (snapshot.hasChild(user.getId())) {
-                                                    // run some code
                                                     fav = 1;
                                                 } else {
                                                     fav = 0;
                                                 }
                                                 userList.add(new UserImg(user,pictureUrl,fav));
-                                                Log.i(TAG, "onDataChange:  "+user.getName()+" "+user.getAge());
 
                                                 viewPhotoRequestAdapter= new ViewPhotoRequestAdapter(ViewPhotoRequestActivity.this, userList,2, new ViewPhotoRequestAdapter.ViewPhotoRequestInterface() {
                                                     @Override
@@ -118,11 +111,7 @@ public class ViewPhotoRequestActivity extends BaseActivity {
                                                         acceptPhotoRequest(id,1);
                                                         userList.remove(pos);
                                                         viewPhotoRequestAdapter.notifyDataSetChanged();
-
-                                                       /* acceptPhotoRequest(fuser.getUid(),id);
-                                                        userList.remove(pos);
-                                                        viewPhotoRequestAdapter.notifyDataSetChanged();*/
-                                                        Toast.makeText(ViewPhotoRequestActivity.this, "Accept", Toast.LENGTH_SHORT).show();
+                                                        snackBar(rvViewPhotoRequest,"Accept");
                                                     }
 
                                                     @Override
@@ -130,10 +119,7 @@ public class ViewPhotoRequestActivity extends BaseActivity {
                                                         acceptPhotoRequest(id,2);
                                                         userList.remove(pos);
                                                         viewPhotoRequestAdapter.notifyDataSetChanged();
-                                                       /* PrivatePhotoAccessInstance.child(fuser.getUid()).child(id).child("status").setValue(2);
-                                                        userList.remove(pos);
-                                                        viewPhotoRequestAdapter.notifyDataSetChanged();*/
-                                                        Toast.makeText(ViewPhotoRequestActivity.this, "Deny", Toast.LENGTH_SHORT).show();
+                                                        snackBar(rvViewPhotoRequest,"Deny");
                                                     }
 
                                                     @Override
@@ -141,9 +127,7 @@ public class ViewPhotoRequestActivity extends BaseActivity {
                                                         removePhotoRequest(id);
                                                         userList.remove(pos);
                                                         viewPhotoRequestAdapter.notifyDataSetChanged();
-                                                       /* PrivatePhotoAccessInstance.child(fuser.getUid()).child(id).child("status").setValue(0);
-                                                        userList.remove(pos);
-                                                        viewPhotoRequestAdapter.notifyDataSetChanged();*/
+
                                                     }
                                                 });
 
@@ -183,36 +167,6 @@ public class ViewPhotoRequestActivity extends BaseActivity {
         });
     }
 
-  /*  private void PhotoPermits(){
-        PrivatePhotoAccessInstance.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.i(TAG, "onDataChange: "+dataSnapshot);
-                for(DataSnapshot ds: dataSnapshot.getChildren())
-                {
-                    Permit permit= ds.getValue(Permit.class);
-                   *//* if(Objects.requireNonNull(permit).getId().equalsIgnoreCase(fuser.getUid()))
-                    {*//*
-                        Log.i(TAG, "onDataChange: "+permit.getId());
-//                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-
-
-
-
-    private void acceptPhotoRequest(String uid, String id) {
-        PrivatePhotoAccessInstance.child(uid).child(id).child("status").setValue(1);
-    }*/
-
     private void givenPermits() {
         PhotoRequestInstance.addValueEventListener(new ValueEventListener() {
             @Override
@@ -244,13 +198,11 @@ public class ViewPhotoRequestActivity extends BaseActivity {
                                             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                                                 if (snapshot.hasChild(user.getId())) {
-                                                    // run some code
                                                     fav = 1;
                                                 } else {
                                                     fav = 0;
                                                 }
                                                 userList.add(new UserImg(user,pictureUrl,fav));
-                                                Log.i(TAG, "onDataChange:  "+user.getName()+" "+user.getAge());
 
                                                 viewPhotoRequestAdapter= new ViewPhotoRequestAdapter(ViewPhotoRequestActivity.this, userList,3, new ViewPhotoRequestAdapter.ViewPhotoRequestInterface() {
                                                     @Override
@@ -258,11 +210,7 @@ public class ViewPhotoRequestActivity extends BaseActivity {
                                                         acceptPhotoRequest(id,1);
                                                         userList.remove(pos);
                                                         viewPhotoRequestAdapter.notifyDataSetChanged();
-
-                                                       /* acceptPhotoRequest(fuser.getUid(),id);
-                                                        userList.remove(pos);
-                                                        viewPhotoRequestAdapter.notifyDataSetChanged();*/
-                                                        Toast.makeText(ViewPhotoRequestActivity.this, "Accept", Toast.LENGTH_SHORT).show();
+                                                        snackBar(rvViewPhotoRequest,"Accept");
                                                     }
 
                                                     @Override
@@ -270,10 +218,7 @@ public class ViewPhotoRequestActivity extends BaseActivity {
                                                         acceptPhotoRequest(id,2);
                                                         userList.remove(pos);
                                                         viewPhotoRequestAdapter.notifyDataSetChanged();
-                                                       /* PrivatePhotoAccessInstance.child(fuser.getUid()).child(id).child("status").setValue(2);
-                                                        userList.remove(pos);
-                                                        viewPhotoRequestAdapter.notifyDataSetChanged();*/
-                                                        Toast.makeText(ViewPhotoRequestActivity.this, "Deny", Toast.LENGTH_SHORT).show();
+                                                        snackBar(rvViewPhotoRequest,"Deny");
                                                     }
 
                                                     @Override
@@ -281,9 +226,7 @@ public class ViewPhotoRequestActivity extends BaseActivity {
                                                         removePhotoRequest(id);
                                                         userList.remove(pos);
                                                         viewPhotoRequestAdapter.notifyDataSetChanged();
-                                                       /* PrivatePhotoAccessInstance.child(fuser.getUid()).child(id).child("status").setValue(0);
-                                                        userList.remove(pos);
-                                                        viewPhotoRequestAdapter.notifyDataSetChanged();*/
+
                                                     }
                                                 });
 
@@ -353,9 +296,7 @@ public class ViewPhotoRequestActivity extends BaseActivity {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Permit permit = snapshot.getValue(Permit.class);
                     if (Objects.requireNonNull(permit).getReceiver().equals(fuser.getUid()) && permit.getSender().equals(userid)) {
-                       /* HashMap<String, Object> hashMap = new HashMap<>();
-                        hashMap.put("status", i);
-                        snapshot.getRef().updateChildren(hashMap);*/
+
                         snapshot.getRef().removeValue();
                     }
                 }
@@ -400,13 +341,11 @@ public class ViewPhotoRequestActivity extends BaseActivity {
                                             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                                                 if (snapshot.hasChild(user.getId())) {
-                                                    // run some code
                                                     fav = 1;
                                                 } else {
                                                     fav = 0;
                                                 }
                                                 userList.add(new UserImg(user,pictureUrl,fav));
-                                                Log.i(TAG, "onDataChange:  "+user.getName()+" "+user.getAge());
 
                                                 viewPhotoRequestAdapter= new ViewPhotoRequestAdapter(ViewPhotoRequestActivity.this, userList,1, new ViewPhotoRequestAdapter.ViewPhotoRequestInterface() {
                                                     @Override
@@ -414,11 +353,7 @@ public class ViewPhotoRequestActivity extends BaseActivity {
                                                         acceptPhotoRequest(id,1);
                                                         userList.remove(pos);
                                                         viewPhotoRequestAdapter.notifyDataSetChanged();
-
-                                                       /* acceptPhotoRequest(fuser.getUid(),id);
-                                                        userList.remove(pos);
-                                                        viewPhotoRequestAdapter.notifyDataSetChanged();*/
-                                                        Toast.makeText(ViewPhotoRequestActivity.this, "Accept", Toast.LENGTH_SHORT).show();
+                                                        snackBar(rvViewPhotoRequest,"Accept");
                                                     }
 
                                                     @Override
@@ -426,10 +361,7 @@ public class ViewPhotoRequestActivity extends BaseActivity {
                                                         acceptPhotoRequest(id,2);
                                                         userList.remove(pos);
                                                         viewPhotoRequestAdapter.notifyDataSetChanged();
-                                                       /* PrivatePhotoAccessInstance.child(fuser.getUid()).child(id).child("status").setValue(2);
-                                                        userList.remove(pos);
-                                                        viewPhotoRequestAdapter.notifyDataSetChanged();*/
-                                                        Toast.makeText(ViewPhotoRequestActivity.this, "Deny", Toast.LENGTH_SHORT).show();
+                                                        snackBar(rvViewPhotoRequest,"Deny");
                                                     }
 
                                                     @Override
@@ -437,9 +369,7 @@ public class ViewPhotoRequestActivity extends BaseActivity {
                                                         removePhotoRequest(id);
                                                         userList.remove(pos);
                                                         viewPhotoRequestAdapter.notifyDataSetChanged();
-                                                       /* PrivatePhotoAccessInstance.child(fuser.getUid()).child(id).child("status").setValue(0);
-                                                        userList.remove(pos);
-                                                        viewPhotoRequestAdapter.notifyDataSetChanged();*/
+
                                                     }
                                                 });
 

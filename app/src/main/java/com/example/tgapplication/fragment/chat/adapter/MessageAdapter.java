@@ -73,16 +73,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                     .listener(new RequestListener<Bitmap>() {
                         @Override
                         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-//                            holder.progressBar.setVisibility(View.GONE);
+
                             holder.profile_image.setImageResource(R.drawable.no_photo_female);
-                           /* ClipDrawable mImageDrawable = (ClipDrawable) holder.profile_image.getDrawable();
-                            mImageDrawable.setLevel(5000);*/
+
                             return false;
                         }
 
                         @Override
                         public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-//                            holder.progressBar.setVisibility(View.GONE);
+
                             return false;
                         }
                     })
@@ -101,14 +100,14 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                     .listener(new RequestListener<Bitmap>() {
                         @Override
                         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-//                            holder.progressBar.setVisibility(View.GONE);
+
                             holder.profile_image.setImageResource(R.drawable.no_photo_male);
                             return false;
                         }
 
                         @Override
                         public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-//                            holder.progressBar.setVisibility(View.GONE);
+
                             return false;
                         }
                     })
@@ -119,8 +118,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                         }
                     });
         }
-
-
 
 
         if (position == mChat.size()-1){

@@ -1,6 +1,8 @@
 package com.example.tgapplication.fragment.account.profile.ui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -45,8 +47,6 @@ public class FacebookImageActivity extends BaseActivity {
 
     @BindView(R.id.fb_recyclerview)
     RecyclerView fbRecyclerview;
-    @BindView(R.id.detail_recyclerview)
-    RecyclerView detailRecyclerview;
     @BindView(R.id.login_button)
     LoginButton loginButton;
     private ArrayList<FbImage> lstFBImages;
@@ -54,8 +54,8 @@ public class FacebookImageActivity extends BaseActivity {
     FB_Adapter fb_adapter;
     private FirebaseUser fuser;
     private CallbackManager mCallbackManager;
-//    private FirebaseAuth mAuth;
-
+    String gender;
+    SharedPreferences sharedPreferences;
     String TAG = this.getClass().getSimpleName();
 
     @Override
@@ -66,50 +66,41 @@ public class FacebookImageActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
-        //mAuth = FirebaseAuth.getInstance();
 
         mCallbackManager = CallbackManager.Factory.create();
 
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(this, 3);
         fbRecyclerview.setLayoutManager(mGridLayoutManager);
 
-        GridLayoutManager mGridLayoutManager1 = new GridLayoutManager(this, 3);
-        detailRecyclerview.setLayoutManager(mGridLayoutManager1);
+        sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        if (sharedPreferences.contains("Gender")) {
+            gender = (sharedPreferences.getString("Gender", ""));
+
+        }
 
         loginButton.setReadPermissions("email", "public_profile");
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Log.d("Tiger", "facebook:onSuccess:" + loginResult);
-                Log.d("Tiger", "facebook:token:" + loginResult.getAccessToken());
-//                handleFacebookAccessToken(loginResult.getAccessToken().getToken());
 
-//                  //your fb AccessToken
                 new GraphRequest(
                         loginResult.getAccessToken(),
-                        "/" + AccessToken.getCurrentAccessToken().getUserId() + "/albums",//user id of login user
+                        "/" + AccessToken.getCurrentAccessToken().getUserId() + "/albums",
                         null,
                         HttpMethod.GET,
                         new GraphRequest.Callback() {
                             public void onCompleted(GraphResponse response) {
-                                Log.d("TAG", "Facebook Albums: " + response.toString());
                                 try {
                                     if (response.getError() == null) {
-                                        JSONObject joMain = response.getJSONObject(); //convert GraphResponse response to JSONObject
+                                        JSONObject joMain = response.getJSONObject();
                                         if (joMain.has("data")) {
-                                            JSONArray jaData = joMain.optJSONArray("data"); //find JSONArray from JSONObject
-                                            Log.i(TAG, "onCompleted: " + Objects.requireNonNull(jaData).length());
-                                            for (int i = 0; i < jaData.length(); i++) {//find no. of album using jaData.length()
-                                                JSONObject joAlbum = jaData.getJSONObject(i); //convert perticular album into JSONObject
-                                                Log.i(TAG, "onCompleted: " + joAlbum.optString("name"));
+                                            JSONArray jaData = joMain.optJSONArray("data");
+                                            for (int i = 0; i < jaData.length(); i++) {
+                                                JSONObject joAlbum = jaData.getJSONObject(i);
                                                 GetFacebookImages(joAlbum.optString("id"), joAlbum.optString("name"));
-//                                            Log.i(TAG, "onCompleted: "+joAlbum.optString("id"));
-
                                             }
-                                            //find Album ID and get All Images from album
                                         }
                                     } else {
-                                        Log.d("Test", response.getError().toString());
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -121,81 +112,49 @@ public class FacebookImageActivity extends BaseActivity {
 
             @Override
             public void onCancel() {
-                Log.d("Tiger", "facebook:onCancel");
-                // ...
+
             }
 
             @Override
             public void onError(FacebookException error) {
-                Log.d("Tiger", "facebook:onError", error);
-                // ...
+
             }
         });
 
         getAlbum();
     }
 
- /*   private void handleFacebookAccessToken(String token) {
-        showProgressDialog();
-        AuthCredential credential = FacebookAuthProvider.getCredential(token);
-        Log.d("Tiger", "" + credential);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d("Tiger", "handleFacebookAccessToken:" + task.isSuccessful());
-                        if (task.isSuccessful()) {
-
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("Tiger", "signInWithCredential:success");
-                            dismissProgressDialog();
-
-                            getAlbum();
-
-
-                        }
-
-                    }
-                });
-    }*/
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Pass the activity result back to the Facebook SDK
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     private void getAlbum() {
 
         if (AccessToken.getCurrentAccessToken() != null) {
-            /*make API call*/
+
             new GraphRequest(
-                    AccessToken.getCurrentAccessToken(),  //your fb AccessToken
-                    "/" + AccessToken.getCurrentAccessToken().getUserId() + "/albums",//user id of login user
+                    AccessToken.getCurrentAccessToken(),
+                    "/" + AccessToken.getCurrentAccessToken().getUserId() + "/albums",
                     null,
                     HttpMethod.GET,
                     new GraphRequest.Callback() {
                         public void onCompleted(GraphResponse response) {
-                            Log.d("TAG", "Facebook Albums: " + response.toString());
                             try {
                                 if (response.getError() == null) {
-                                    JSONObject joMain = response.getJSONObject(); //convert GraphResponse response to JSONObject
+                                    JSONObject joMain = response.getJSONObject();
                                     if (joMain.has("data")) {
-                                        JSONArray jaData = joMain.optJSONArray("data"); //find JSONArray from JSONObject
-                                        Log.i(TAG, "onCompleted: " + Objects.requireNonNull(jaData).length());
-                                        for (int i = 0; i < jaData.length(); i++) {//find no. of album using jaData.length()
-                                            JSONObject joAlbum = jaData.getJSONObject(i); //convert perticular album into JSONObject
-                                            Log.i(TAG, "onCompleted: " + joAlbum.optString("name"));
+                                        JSONArray jaData = joMain.optJSONArray("data");
+                                        for (int i = 0; i < jaData.length(); i++) {
+                                            JSONObject joAlbum = jaData.getJSONObject(i);
                                             GetFacebookImages(joAlbum.optString("id"), joAlbum.optString("name"));
-//                                            Log.i(TAG, "onCompleted: "+joAlbum.optString("id"));
 
                                         }
-                                        //find Album ID and get All Images from album
                                     }
                                 } else {
-                                    Log.d("Test", response.getError().toString());
+
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -205,17 +164,15 @@ public class FacebookImageActivity extends BaseActivity {
             ).executeAsync();
 
         } else {
-//            Toast.makeText(this, "First login with facebook", Toast.LENGTH_SHORT).show();
             loginButton.performClick();
         }
     }
 
 
     public void GetFacebookImages(String albumId, String name) {
-//        String url = "https://graph.facebook.com/" + "me" + "/"+albumId+"/photos?access_token=" + AccessToken.getCurrentAccessToken() + "&fields=images";
         Bundle parameters = new Bundle();
         parameters.putString("fields", "images");
-        /* make the API call */
+
         new GraphRequest(
                 AccessToken.getCurrentAccessToken(),
                 "/" + albumId + "/photos",
@@ -223,16 +180,13 @@ public class FacebookImageActivity extends BaseActivity {
                 HttpMethod.GET,
                 new GraphRequest.Callback() {
                     public void onCompleted(GraphResponse response) {
-                        /* handle the result */
-                        Log.v("TAG", "Facebook Photos response: " + response);
-//                        tvTitle.setText("Facebook Images");
+
                         try {
                             if (response.getError() == null) {
 
                                 JSONObject joMain = response.getJSONObject();
                                 if (joMain.has("data")) {
                                     JSONArray jaData = joMain.optJSONArray("data");
-//                                    Log.i("TAG", "onCompleted: " + jaData.getJSONObject(0).getJSONArray("images").getJSONObject(0).getString("source"));
                                     lstFBImages = new ArrayList<>();
                                     for (int i = 0; i < Objects.requireNonNull(jaData).length(); i++)//Get no. of images
                                     {
@@ -244,23 +198,17 @@ public class FacebookImageActivity extends BaseActivity {
                                             lstFBImages.add(new FbImage(jaImages.getJSONObject(0).getString("source"), 0));//lstFBImages is Images object array
                                         }
                                     }
-                                  /*  Log.i("TAG", "onCompleted: " + lstFBImages.size());
-                                    for (int j = 0; j < lstFBImages.size(); j++) {
-                                        Log.i("TAG", "onCompleted: " + lstFBImages.get(j).getImage_Url());
-                                    }*/
 
-                                    Log.i("TAG", "onCompleted: " + name + " " + lstFBImages.size());
                                     if (lstFBImages.size() > 0) {
                                         PicturesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                                                     Upload upload = ds.getValue(Upload.class);
-                                                    Log.i(TAG, "onDataChange: " + Objects.requireNonNull(upload).getUrl());
+
                                                     if (upload.getName().equalsIgnoreCase("FB_Image")) {
                                                         for (int k = 0; k < lstFBImages.size(); k++) {
                                                             if (upload.getUrl().equals(lstFBImages.get(k).getUrl())) {
-                                                                Log.i(TAG, "onDataChange working: " + 1);
                                                                 lstFBImages.get(k).setStatus(1);
                                                             }
                                                         }
@@ -281,17 +229,12 @@ public class FacebookImageActivity extends BaseActivity {
 
                                 }
 
-                                fb_adapter = new FB_Adapter(FacebookImageActivity.this, fuser.getUid(), photoAlbums, new FB_Adapter.FbInterface() {
+                                Log.i(TAG, "onCompleted: photoAlbums "+photoAlbums.size());
+                                fb_adapter = new FB_Adapter(FacebookImageActivity.this, fuser.getUid(), gender, photoAlbums, new FB_Adapter.FbInterface() {
                                     @Override
                                     public void proceed(ArrayList<FbImage> image_url) {
-                                        fbRecyclerview.setVisibility(View.GONE);
-                                        detailRecyclerview.setVisibility(View.VISIBLE);
-//                                        Intent intent = new Intent(FacebookImageActivity.this, DetailFBImage.class);
-//                                        intent.putExtra("detailFb", new Gson().toJson(image_url));
-//                                        startActivity(intent);
 
-                                        //creating adapter
-                                        DetailFBAdapter fbadapter = new DetailFBAdapter(FacebookImageActivity.this, image_url, new DetailFBAdapter.DetailFbInterface() {
+                                        DetailFBAdapter fbadapter = new DetailFBAdapter(FacebookImageActivity.this, image_url, gender, new DetailFBAdapter.DetailFbInterface() {
                                             @Override
                                             public void fetchFbImage(String imgUrl) {
                                                 String uploadId = PicturesInstance.child(fuser.getUid()).push().getKey();
@@ -300,13 +243,12 @@ public class FacebookImageActivity extends BaseActivity {
                                             }
                                         });
 
-                                        detailRecyclerview.setAdapter(fbadapter);
+                                        fbRecyclerview.setAdapter(fbadapter);
                                     }
                                 });
 
-//adding adapter to recyclerview
                                 fbRecyclerview.setAdapter(fb_adapter);
-                                //set your adapter here
+
                             } else {
                                 Log.v("TAG", response.getError().toString());
                             }

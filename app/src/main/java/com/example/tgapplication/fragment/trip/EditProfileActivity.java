@@ -3,7 +3,6 @@ package com.example.tgapplication.fragment.trip;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -59,26 +58,14 @@ import static com.example.tgapplication.Constants.UsersInstance;
 
 public class EditProfileActivity extends BaseActivity {
 
-    /* Button btn_regi;
-     EditText et_name, et_location, et_visit;
-     RadioGroup rg_gender;
-
-     TextView TV_dob;*/
     int day, month, year;
     RadioButton rb_gender;
 
-    /* CheckBox cb_girl, cb_men;
-     CoordinatorLayout activity_profile_coordinatelayout;*/
     FirebaseUser fuser;
     User prevUser;
     ArrayList<String> travel_with = new ArrayList<>();
     ArrayList<String> looking_for = new ArrayList<>();
 
-/*
-    AutoCompleteTextView suggestion_nationality, suggestion_height;
-    MultiAutoCompleteTextView suggestion_lang;*/
-
-    /*Spinner Sp_bodytype, Sp_hairs, Sp_eyes;*/
 
     Calendar mcalendar = Calendar.getInstance();
 
@@ -146,25 +133,6 @@ public class EditProfileActivity extends BaseActivity {
         ButterKnife.bind(this);
         Places.initialize(getApplicationContext(), BuildConfig.map_api_key);
 
-       /* btn_regi = findViewById(R.id.btn_regi);
-        et_name = findViewById(R.id.et_name);
-        et_location = findViewById(R.id.et_location);
-        et_visit = findViewById(R.id.et_visit);
-        rg_gender = findViewById(R.id.rg_gender);
-        TV_dob = findViewById(R.id.tv_dob);
-        activity_profile_coordinatelayout = findViewById(R.id.activity_profile_coordinatelayout);*/
-
-     /*   Sp_bodytype = findViewById(R.id.sp_body_type);
-        Sp_hairs = findViewById(R.id.sp_hair);
-        Sp_eyes = findViewById(R.id.sp_eyes);
-
-        suggestion_nationality = findViewById(R.id.Nationality_suggestion);
-        suggestion_lang = findViewById(R.id.Lang_suggestion);
-        suggestion_height = findViewById(R.id.Height_suggestion);*/
-
-     /*   cb_girl = findViewById(R.id.cb_girl);
-        cb_men = findViewById(R.id.cb_men);*/
-
 
         day = mcalendar.get(Calendar.DAY_OF_MONTH);
         month = mcalendar.get(Calendar.MONTH);
@@ -176,7 +144,6 @@ public class EditProfileActivity extends BaseActivity {
         String dateTostr = simpleDateFormat.format(today);
         tvDob.setText(dateTostr);
 
-        // Initialize Firebase Auth
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
         myList(fuser);
@@ -251,13 +218,11 @@ public class EditProfileActivity extends BaseActivity {
                             sDay = String.valueOf(dayOfMonth);
                         }
 
-//                        view.setMinDate(System.currentTimeMillis());
                         tvDob.setText(new StringBuilder().append(sDay).append("/").append(sMonth).append("/").append(year).append(" "));
                     }
                 };
 
                 DatePickerDialog dobDialog = new DatePickerDialog(EditProfileActivity.this, dob, year, month, day);
-//               Date datenew= new DateTime().minusYears(14);
                 dobDialog.getDatePicker().setMaxDate(mcalendar.getTimeInMillis());
                 dobDialog.show();
             }
@@ -270,7 +235,7 @@ public class EditProfileActivity extends BaseActivity {
     }
 
     public void myList(FirebaseUser fuser) {
-        // any way you managed to go the node that has the 'grp_key'
+
 
         UsersInstance.addValueEventListener(
                 new ValueEventListener() {
@@ -317,7 +282,7 @@ public class EditProfileActivity extends BaseActivity {
         spEyes.setSelection(Eyesadapter.getPosition(eyes));
         spBodyType.setSelection(Bodyadapter.getPosition(body_type));
 
-        Log.i(TAG, "setDefaultVal: Gender" + gender);
+
         if (gender.equalsIgnoreCase("Female")) {
             rbFemale.setChecked(true);
         } else if (gender.equalsIgnoreCase("Male")) {
@@ -328,7 +293,7 @@ public class EditProfileActivity extends BaseActivity {
         if(travel_with!=null) {
             if (travel_with.size() > 0) {
                 for (int i = 0; i < travel_with.size(); i++) {
-                    Log.i("TAG", "setDefaultVal: " + travel_with.get(i));
+
                     if (travel_with.get(i).equalsIgnoreCase("Female")) {
                         cbGirl.setChecked(true);
                     } else if (travel_with.get(i).equalsIgnoreCase("Male")) {
@@ -375,17 +340,17 @@ public class EditProfileActivity extends BaseActivity {
             popup = AutoCompleteTextView.class.getDeclaredField("mPopup");
             popup.setAccessible(true);
 
-            // Get private mPopup member variable and try cast to ListPopupWindow
+
             ListPopupWindow NationalitypopupWindow = (ListPopupWindow) popup.get(NationalitySuggestion);
             ListPopupWindow LanguagepopupWindow = (ListPopupWindow) popup.get(LangSuggestion);
             ListPopupWindow HeightpopupWindow = (ListPopupWindow) popup.get(HeightSuggestion);
 
-            // Set popupWindow height to 500px
+
             Objects.requireNonNull(NationalitypopupWindow).setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
             Objects.requireNonNull(LanguagepopupWindow).setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
             Objects.requireNonNull(HeightpopupWindow).setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
         } catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {
-            // silently fail...
+
         }
     }
 
@@ -395,24 +360,23 @@ public class EditProfileActivity extends BaseActivity {
             popup1 = Spinner.class.getDeclaredField("mPopup");
             popup1.setAccessible(true);
 
-            // Get private mPopup member variable and try cast to ListPopupWindow
             ListPopupWindow BodypopupWindow = (ListPopupWindow) popup1.get(spBodyType);
             ListPopupWindow HairpopupWindow = (ListPopupWindow) popup1.get(spHair);
             ListPopupWindow EyespopupWindow = (ListPopupWindow) popup1.get(spEyes);
 
-            // Set popupWindow height to 500px
+
             Objects.requireNonNull(BodypopupWindow).setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
             Objects.requireNonNull(HairpopupWindow).setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
             Objects.requireNonNull(EyespopupWindow).setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
         } catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {
-            // silently fail...
+
         }
     }
 
 
     private void register(FirebaseUser fuser, String str_name, String str_dob, String str_gender, String str_about_me, String age, String str_location, String str_nationality, String str_lang, ArrayList<String> looking_for, ArrayList<String> travel_with, String str_height, String str_body_type, String str_eyes, String str_hair, String str_visit) {
 
-        //uncomment this below lines later don't forget
+
 
         User userClass = new User(fuser.getUid(), prevUserList.get(0).getUsername(), "offline", prevUserList.get(0).getSearch(), str_gender, age, prevUserList.get(0).getEmail(),
                 fuser.getProviderId(), str_body_type, str_dob, str_eyes, str_hair, str_height, str_lang,
@@ -422,55 +386,7 @@ public class EditProfileActivity extends BaseActivity {
 
         snackBar(activityProfileCoordinatelayout, "Your profile has been successfully updated");
         finish();
-//        updateUI(user);
 
-//            hashMap=new HashMap<>();
-//        hashMap.put("id",user.getUid());
-//        hashMap.put("username",user.getDisplayName());
-//        hashMap.put("name",);
-//        hashMap.put("dob",);
-//        hashMap.put("gender",);
-//        hashMap.put("location",);
-//        hashMap.put("nationality",);
-//        hashMap.put("lang",);
-////        hashMap.put("travel_with",);
-//        hashMap.put("height",);
-//        hashMap.put("body_type",);
-//        hashMap.put("eyes",);
-//        hashMap.put("hair",);
-//        hashMap.put("visit",);
-//        hashMap.put("email",);
-//        hashMap.put("social_media",);
-//        hashMap.put("phone_number",);
-//        hashMap.put("imageURL",.toString());
-//        hashMap.put("status", );
-//        hashMap.put("search", );
-//
-//        hashMap1 = new HashMap<>();
-//        final DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference("Addis_Ababa/Users").child(user.getUid());
-//
-//        databaseReference1.child("travel_with");
-//        for (int i = 0; i < travel_with.size(); i++) {
-//            hashMap1.put( databaseReference1.push().getKey(),travel_with.get(i));
-//        }
-//
-////        databaseReference1.updateChildren(hashMap1);
-//
-//        databaseReference.setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-//            @Override
-//            public void onComplete(@NonNull Task<Void> task) {
-//                if(task.isSuccessful())
-//                {
-//                    databaseReference1.setValue(hashMap1).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<Void> task) {
-//                            updateUI(user);
-//                        }
-//                    });
-//
-//                }
-//            }
-//        });
     }
 
     @OnClick({R.id.imgv_location, R.id.imgv_dream_location})
@@ -497,38 +413,37 @@ public class EditProfileActivity extends BaseActivity {
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
-                Log.i(TAG, "Placeq: " + place.getName() + ", " + place.getId() + ", " + place.getAddress());
+
                 etLocation.setText(place.getName());
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
-                // TODO: Handle the error.
+
                 Status status = Autocomplete.getStatusFromIntent(data);
-                Log.i(TAG, Objects.requireNonNull(status.getStatusMessage()));
+
             } else if (resultCode == RESULT_CANCELED) {
-                // The user canceled the operation.
+
             }
         } else if (requestCode == AUTOCOMPLETE_REQUEST_CODE_DREAM) {
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
-                Log.i(TAG, "Placeq: " + place.getName() + ", " + place.getId() + ", " + place.getAddress());
+
                 etVisit.setText(place.getName());
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
-                // TODO: Handle the error.
+
                 Status status = Autocomplete.getStatusFromIntent(data);
-                Log.i(TAG, Objects.requireNonNull(status.getStatusMessage()));
+
             } else if (resultCode == RESULT_CANCELED) {
-                // The user canceled the operation.
+
             }
         }
     }
 
     private void manageBlinkEffect() {
-        Animation animation = new AlphaAnimation((float) 1.0, (float) 0.1); // Change alpha from fully visible to invisible
-        animation.setDuration(500); // duration - half a second
-        animation.setInterpolator(new LinearInterpolator()); // do not alter
-        // animation
-        // rate
-        animation.setRepeatCount(Animation.INFINITE); // Repeat animation
-        // infinitely
+        Animation animation = new AlphaAnimation((float) 1.0, (float) 0.1);
+        animation.setDuration(500);
+        animation.setInterpolator(new LinearInterpolator());
+
+        animation.setRepeatCount(Animation.INFINITE);
+
         animation.setRepeatMode(Animation.REVERSE);
         imgv_location.startAnimation(animation);
         imgv_dream_location.startAnimation(animation);
@@ -544,7 +459,7 @@ public class EditProfileActivity extends BaseActivity {
                 } else {
                     travel_with.remove("Male");
                 }
-                Log.i("TAG", "onClick: 2" + travel_with.size());
+
                 break;
             case R.id.cb_girl:
                 boolean checked = ((CheckBox) view).isChecked();
@@ -553,7 +468,7 @@ public class EditProfileActivity extends BaseActivity {
                 } else {
                     travel_with.remove("Female");
                 }
-                Log.i("TAG", "onClick: 1" + travel_with.size());
+
                 break;
             case R.id.cb_frnd:
                 boolean checkedfrnd = ((CheckBox) view).isChecked();
@@ -562,7 +477,7 @@ public class EditProfileActivity extends BaseActivity {
                 } else {
                     looking_for.remove("Friend");
                 }
-                Log.i("TAG", "Friend" + looking_for.size());
+
                 break;
 
             case R.id.cb_adventure:
@@ -572,7 +487,7 @@ public class EditProfileActivity extends BaseActivity {
                 } else {
                     looking_for.remove("Adventure");
                 }
-                Log.i("TAG", "Adventure" + looking_for.size());
+
                 break;
             case R.id.cb_soulmate:
                 boolean checkedsoulmate = ((CheckBox) view).isChecked();
@@ -608,7 +523,7 @@ public class EditProfileActivity extends BaseActivity {
                     if (selectedGender < 0) {
                         snackBar(activityProfileCoordinatelayout, "Select Gender");
                     } else {
-                        Log.i(TAG, "onClick: " + selectedGender);
+
                         rb_gender = findViewById(selectedGender);
 
                         String str_name = etName.getText().toString();
@@ -626,8 +541,6 @@ public class EditProfileActivity extends BaseActivity {
                         String str_gender = rb_gender.getText().toString();
                         String age = "18";
 
-
-                        Log.i("Simu", " Got value " + travel_with.size() + " " + looking_for.size());
 
                         register(fuser, str_name, str_dob, str_gender,str_about_me, age, str_location, str_nationality, str_lang, looking_for, travel_with, str_height, str_body_type, str_eyes, str_hair, str_visit);
 

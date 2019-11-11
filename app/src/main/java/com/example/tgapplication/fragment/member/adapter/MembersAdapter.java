@@ -1,10 +1,9 @@
 package com.example.tgapplication.fragment.member.adapter;
 
-import android.annotation.SuppressLint;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,9 +28,6 @@ import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.TripList;
 
 import java.util.List;
-
-import static com.example.tgapplication.R.color.color8;
-import static com.example.tgapplication.R.color.color9;
 
 public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.TripViewHolder > {
 
@@ -59,14 +55,6 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.TripView
     public void onBindViewHolder(@NonNull TripViewHolder holder, int position) {
 
         TripList tList = mTrip.get(position);
-     /*   if(tList.getImageUrl().equalsIgnoreCase("default")||tList.getImageUrl().equalsIgnoreCase(""))
-        {
-            Glide.with(mContext).load(R.drawable.ic_broken_image_primary_24dp).into(holder.mImage);
-        }
-        else {*/
-//        Log.i("TAG", "onBindViewHolder: "+tList.getImageUrl());
-//            Glide.with(mContext).load(tList.getImageUrl()).placeholder(R.drawable.ic_broken_image_primary_24dp).centerCrop().into(holder.mImage);
-//        }
 
         if(tList.getGender().equalsIgnoreCase("Female"))
         {
@@ -190,7 +178,6 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.TripView
                 listener.setData(tList,position);
                 listener.setProfileVisit(uid,tList.getId());
 
-               Log.i("Got Needed Value"," "+tList.getFavid());
             }
         });
     }
@@ -204,7 +191,7 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.TripView
 
     @Override
     public int getItemCount() {
-        Log.i("TAGtrip", "getItemCount: "+mTrip.size());
+
         return mTrip.size();
     }
 

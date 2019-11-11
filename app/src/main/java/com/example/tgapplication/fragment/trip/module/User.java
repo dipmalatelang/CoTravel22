@@ -30,16 +30,6 @@ public class User implements Serializable{
     public User() {
     }
 
-    //    public User(String id, String username, String imageURL, String status, String search,String email, String social_media) {
-//        this.id = id;
-//        this.username = username;
-//        this.imageURL = imageURL;
-//        this.status = status;
-//        this.search = search;
-//        this.email=email;
-//        this.social_media=social_media;
-//    }
-
 
 
     public User(String id, String username, String status, String search, String gender, String age, String email, String social_media, String body_type, String dob, String eyes, String hair, String height, String lang,ArrayList<String> travel_with, ArrayList<String> looking_for, ArrayList<String> range_age, String location, String name, String phone, String nationality, String visit,int account_type, String about_me) {

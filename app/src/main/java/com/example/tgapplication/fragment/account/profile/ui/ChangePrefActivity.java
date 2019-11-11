@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -56,9 +55,8 @@ public class ChangePrefActivity extends BaseActivity {
 
         sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
 
-        if (sharedPreferences.contains("travel_withingFor")) {
-            travel_with = new Gson().fromJson((sharedPreferences.getString("travel_withingFor", "")), new TypeToken<ArrayList<String>>() {}.getType());
-
+        if (sharedPreferences.contains("TravelWith")) {
+            travel_with = new Gson().fromJson((sharedPreferences.getString("TravelWith", "")), new TypeToken<ArrayList<String>>() {}.getType());
         }
         if (sharedPreferences.contains("AgeRange")) {
             range_age = new Gson().fromJson((sharedPreferences.getString("AgeRange", "")), new TypeToken<ArrayList<String>>() {}.getType());
@@ -70,15 +68,22 @@ public class ChangePrefActivity extends BaseActivity {
 
     private void setSpinner() {
 
-        Log.i(TAG, "travel_with_RangeAge: " + travel_with.size() + " " + range_age.size());
-        for (int i = 0; i < travel_with.size(); i++) {
-            if (travel_with.get(i).equalsIgnoreCase("Female")) {
-                cbRegiGirl.setChecked(true);
-            }
-            else if (travel_with.get(i).equalsIgnoreCase("Male")) {
-                cbRegiMen.setChecked(true);
+        if(travel_with!=null)
+        {
+            if(travel_with.size()>0)
+            {
+                for (int i = 0; i < travel_with.size(); i++) {
+                    if (travel_with.get(i).equalsIgnoreCase("Female")) {
+                        cbRegiGirl.setChecked(true);
+                    }
+                    else if (travel_with.get(i).equalsIgnoreCase("Male")) {
+                        cbRegiMen.setChecked(true);
+                    }
+                }
             }
         }
+
+
 
         array_age = new ArrayList<>(Arrays.asList("18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30",
                 "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50",
@@ -121,11 +126,15 @@ public class ChangePrefActivity extends BaseActivity {
             }
         });
 
-        if(range_age.size()>0)
+        if(range_age!=null)
         {
-            spAgeFrom.setSelection(adapter_age_from.getPosition(range_age.get(0)));
-            spAgeTo.setSelection(adapter_age_to.getPosition(range_age.get(1)));
+            if(range_age.size()>0)
+            {
+                spAgeFrom.setSelection(adapter_age_from.getPosition(range_age.get(0)));
+                spAgeTo.setSelection(adapter_age_to.getPosition(range_age.get(1)));
+            }
         }
+
     }
 
     private void setPopup() {
@@ -133,15 +142,13 @@ public class ChangePrefActivity extends BaseActivity {
             Field popup = Spinner.class.getDeclaredField("mPopup");
             popup.setAccessible(true);
 
-            // Get private mPopup member variable and try cast to ListPopupWindow
             ListPopupWindow AgeFrompopupWindow = (ListPopupWindow) popup.get(spAgeFrom);
             ListPopupWindow AgeTopopupWindow = (ListPopupWindow) popup.get(spAgeTo);
-            // Set popupWindow height to 500px
+
             Objects.requireNonNull(AgeFrompopupWindow).setHeight(500);
             Objects.requireNonNull(AgeTopopupWindow).setHeight(500);
 
         } catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {
-            // silently fail...
         }
     }
 
@@ -168,7 +175,6 @@ public class ChangePrefActivity extends BaseActivity {
                 break;
 
             case R.id.btn_save_register:
-//                travel_with;
                 range_age.clear();
                 String str_age_from = spAgeFrom.getSelectedItem().toString();
                 String str_age_to = spAgeTo.getSelectedItem().toString();

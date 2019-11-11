@@ -6,17 +6,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -48,9 +45,6 @@ import static com.example.tgapplication.Constants.TokensInstance;
 import static com.example.tgapplication.Constants.TrashInstance;
 import static com.example.tgapplication.Constants.UsersInstance;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class ChatFragment extends BaseFragment {
 
 
@@ -67,12 +61,11 @@ public class ChatFragment extends BaseFragment {
     FloatingActionButton floatingActionButton;
 
 
-//    private FloatingActionButton floatingActionButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
 
         setHasOptionsMenu(false);
@@ -100,8 +93,7 @@ public class ChatFragment extends BaseFragment {
                     Chatlist chatlist = snapshot.getValue(Chatlist.class);
                     usersList.add(chatlist);
                 }
-//                Log.i("ChatFrag",""+dataSnapshot.getChildren());
-                Log.i("Size", "onDataChange: " + usersList.size());
+
                 chatList(usersList);
             }
 
@@ -112,7 +104,6 @@ public class ChatFragment extends BaseFragment {
         });
 
         updateToken(FirebaseInstanceId.getInstance().getToken());
-
 
         search_users.addTextChangedListener(new TextWatcher() {
             @Override
@@ -143,7 +134,7 @@ public class ChatFragment extends BaseFragment {
             {
                 mUser.add(userImg);
             }
-            //something here
+
         }
                 userAdapter = new UserAdapter(getContext(), mUser, true, new UserAdapter.UserInterface() {
                     @Override
@@ -212,7 +203,7 @@ public class ChatFragment extends BaseFragment {
                                             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                                                 if (snapshot.hasChild(user.getId())) {
-                                                    // run some code
+
                                                     fav = 1;
                                                 } else {
                                                     fav = 0;
@@ -231,10 +222,9 @@ public class ChatFragment extends BaseFragment {
                                                     }
                                                 }
 
-                                                        Log.i("TAG", "onDataChange: Picture "+pictureUrl);
                                                         mUsers.add(new UserImg(user, pictureUrl, fav));
 
-                                                        Log.i("TAG", "onDataChange: chat" + mUsers.size());
+
                                                         userAdapter = new UserAdapter(getContext(), mUsers, true, new UserAdapter.UserInterface() {
                                                             @Override
                                                             public void lastMessage(Context mContext, String userid, TextView last_msg, TextView last_msg_time,ConstraintLayout chat) {

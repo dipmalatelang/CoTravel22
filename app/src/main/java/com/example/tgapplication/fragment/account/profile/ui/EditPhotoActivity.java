@@ -11,8 +11,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.MimeTypeMap;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -51,6 +52,12 @@ public class EditPhotoActivity extends BaseActivity {
     RecyclerView publicRecyclerView;
     @BindView(R.id.private_recyclerView)
     RecyclerView privateRecyclerView;
+    @BindView(R.id.ll_select_image)
+    LinearLayout llSelectImage;
+    @BindView(R.id.ll_public_photos)
+    LinearLayout llPublicPhotos;
+    @BindView(R.id.ll_private_photos)
+    LinearLayout llPrivatePhotos;
     private FirebaseUser fuser;
     private ArrayList<Upload> public_uploads, private_uploads, upload1, upload2;
     private MyAdapter public_adapter, private_adapter;
@@ -87,23 +94,20 @@ public class EditPhotoActivity extends BaseActivity {
         PicturesInstance.child(fuser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-//dismissing the progress dialog
+
                 dismissProgressDialog();
                 upload1 = new ArrayList<>();
                 upload2 = new ArrayList<>();
                 public_uploads = new ArrayList<>();
                 private_uploads = new ArrayList<>();
 
-//iterating through all the values in database
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                     Upload upload = postSnapshot.getValue(Upload.class);
                     if (Objects.requireNonNull(upload).getType() == 3) {
                         private_uploads.add(upload);
-                    }
-                    else if(upload.getType()==1) {
+                    } else if (upload.getType() == 1) {
                         upload1.add(upload);
-                    }
-                    else if(upload.getType()==2) {
+                    } else if (upload.getType() == 2) {
                         upload2.add(upload);
                     }
 
@@ -117,10 +121,8 @@ public class EditPhotoActivity extends BaseActivity {
                 }
 
                 if (public_uploads.size() > 0) {
-
-
-//creating adapter
-                    public_adapter = new MyAdapter(EditPhotoActivity.this, fuser.getUid(), gender,public_uploads, new MyAdapter.PhotoInterface() {
+                    llPublicPhotos.setVisibility(View.VISIBLE);
+                    public_adapter = new MyAdapter(EditPhotoActivity.this, fuser.getUid(), gender, public_uploads, new MyAdapter.PhotoInterface() {
 
                         @Override
                         public void setProfilePhoto(String id, String previousValue, int pos) {
@@ -128,9 +130,9 @@ public class EditPhotoActivity extends BaseActivity {
                                     .child(fuser.getUid())
                                     .child(id).child("type").setValue(1);
 
-                            if(!previousValue.equals("") && !previousValue.equals(id))
+                            if (!previousValue.equals("") && !previousValue.equals(id))
                                 PicturesInstance.child(fuser.getUid()).child(previousValue).child("type").setValue(2);
-                            Log.i(TAG, "setProfilePhoto: "+public_uploads.get(pos).getUrl());
+                            Log.i(TAG, "setProfilePhoto: " + public_uploads.get(pos).getUrl());
                             profilePhotoDetails(public_uploads.get(pos).getUrl());
                         }
 
@@ -144,39 +146,49 @@ public class EditPhotoActivity extends BaseActivity {
                             PicturesInstance
                                     .child(fuser.getUid())
                                     .child(id).child("type").setValue(3);
+                            public_adapter.notifyDataSetChanged();
                         }
                     });
+
+                    publicRecyclerView.setAdapter(public_adapter);
+                }
+                else {
+                    llPublicPhotos.setVisibility(View.GONE);
                 }
 
-                private_adapter = new MyAdapter(EditPhotoActivity.this, fuser.getUid(),gender, private_uploads, new MyAdapter.PhotoInterface() {
+                if (private_uploads.size() > 0) {
+                    llPrivatePhotos.setVisibility(View.VISIBLE);
+                    private_adapter = new MyAdapter(EditPhotoActivity.this, fuser.getUid(), gender, private_uploads, new MyAdapter.PhotoInterface() {
 
-                    @Override
-                    public void setProfilePhoto(String id, String previousValue, int pos) {
-                        PicturesInstance
-                                .child(fuser.getUid())
-                                .child(id).child("type").setValue(1);
+                        @Override
+                        public void setProfilePhoto(String id, String previousValue, int pos) {
+                            PicturesInstance
+                                    .child(fuser.getUid())
+                                    .child(id).child("type").setValue(1);
 
-                        if(!previousValue.equals("") && !previousValue.equals(id))
-                            PicturesInstance.child(fuser.getUid()).child(previousValue).child("type").setValue(2);
-                        profilePhotoDetails(private_uploads.get(pos).getUrl());
-                    }
+                            if (!previousValue.equals("") && !previousValue.equals(id))
+                                PicturesInstance.child(fuser.getUid()).child(previousValue).child("type").setValue(2);
+                            profilePhotoDetails(private_uploads.get(pos).getUrl());
+                        }
 
-                    @Override
-                    public void removePhoto(String id) {
-                        PicturesInstance.child(fuser.getUid()).child(id).removeValue();
-                    }
+                        @Override
+                        public void removePhoto(String id) {
+                            PicturesInstance.child(fuser.getUid()).child(id).removeValue();
+                        }
 
-                    @Override
-                    public void setPhotoAsPrivate(String id) {
-                        PicturesInstance
-                                .child(fuser.getUid())
-                                .child(id).child("type").setValue(2);
-                    }
-                });
-
-//adding adapter to recyclerview
-                publicRecyclerView.setAdapter(public_adapter);
-                privateRecyclerView.setAdapter(private_adapter);
+                        @Override
+                        public void setPhotoAsPrivate(String id) {
+                            PicturesInstance
+                                    .child(fuser.getUid())
+                                    .child(id).child("type").setValue(2);
+                            private_adapter.notifyDataSetChanged();
+                        }
+                    });
+                    privateRecyclerView.setAdapter(private_adapter);
+                }
+                else {
+                    llPrivatePhotos.setVisibility(View.GONE);
+                }
 
             }
 
@@ -186,92 +198,12 @@ public class EditPhotoActivity extends BaseActivity {
             }
         });
 
-    /*    PicturesInstance.child(fuser.getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-//dismissing the progress dialog
-                dismissProgressDialog();
-                public_uploads = new ArrayList<>();
-                private_uploads = new ArrayList<>();
-
-//iterating through all the values in database
-                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                    Upload upload = postSnapshot.getValue(Upload.class);
-                    if (upload.getType() == 3) {
-                        private_uploads.add(upload);
-                    } else {
-                        public_uploads.add(upload);
-                    }
-
-                }
-//creating adapter
-                public_adapter = new MyAdapter(EditPhotoActivity.this, fuser.getUid(), public_uploads, new MyAdapter.PhotoInterface() {
-                    @Override
-                    public void setProfilePhoto(String id, String previousValue, int pos) {
-                        PicturesInstance
-                                .child(fuser.getUid())
-                                .child(id).child("type").setValue(1);
-
-                        if(!previousValue.equals("") && !previousValue.equals(id))
-                        PicturesInstance.child(fuser.getUid()).child(previousValue).child("type").setValue(2);
-                        profilePhotoDetails(public_uploads.get(pos).getUrl());
-                    }
-
-                    @Override
-                    public void removePhoto(String id) {
-                        PicturesInstance.child(fuser.getUid()).child(id).removeValue();
-                    }
-
-                    @Override
-                    public void setPhotoAsPrivate(String id) {
-                        PicturesInstance
-                                .child(fuser.getUid())
-                                .child(id).child("type").setValue(3);
-                    }
-                });
-
-                private_adapter = new MyAdapter(EditPhotoActivity.this, fuser.getUid(), private_uploads, new MyAdapter.PhotoInterface() {
-                    @Override
-                    public void setProfilePhoto(String id, String previousValue,int pos) {
-                        PicturesInstance
-                                .child(fuser.getUid())
-                                .child(id).child("type").setValue(1);
-
-                        if(!previousValue.equals("") && !previousValue.equals(id))
-                        PicturesInstance.child(fuser.getUid()).child(previousValue).child("type").setValue(2);
-                        profilePhotoDetails(private_uploads.get(pos).getUrl());
-                    }
-
-                    @Override
-                    public void removePhoto(String id) {
-                        PicturesInstance.child(fuser.getUid()).child(id).removeValue();
-                    }
-
-                    @Override
-                    public void setPhotoAsPrivate(String id) {
-                        PicturesInstance
-                                .child(fuser.getUid())
-                                .child(id).child("type").setValue(2);
-                    }
-                });
-
-//adding adapter to recyclerview
-                publicRecyclerView.setAdapter(public_adapter);
-                privateRecyclerView.setAdapter(private_adapter);
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                dismissProgressDialog();
-            }
-        });*/
-
 
     }
+
     private void profilePhotoDetails(String imageUrl) {
-//        Log.i(TAG, "profilePhotoDetails: "+imageUrl);
-       SharedPreferences sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("ImageUrl", imageUrl);
         editor.apply();
@@ -294,7 +226,6 @@ public class EditPhotoActivity extends BaseActivity {
             case R.id.facebook:
 
                 startActivity(new Intent(this, FacebookImageActivity.class));
-//                Toast.makeText(this, "Facebook", Toast.LENGTH_SHORT).show();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -323,29 +254,23 @@ public class EditPhotoActivity extends BaseActivity {
     }
 
     private void uploadFile(Uri filePath) {
-//checking if file is available
-        Log.i("Result", "" + filePath);
+
         if (filePath != null) {
-//displaying progress dialog while image is uploading
+
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setTitle("Uploading");
             progressDialog.show();
 
-//getting the storage reference
             final StorageReference sRef = storageReference.child("uploads/" + System.currentTimeMillis() + "." + getFileExtension(filePath));
 
-//adding the file to reference
             sRef.putFile(filePath)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
-//dismissing the progress dialog
+
                             progressDialog.dismiss();
 
-
-//displaying success toast
-//                            snackBar(fragment_acc_constraintLayout,"File Uploaded ");
-                            Toast.makeText(EditPhotoActivity.this, "File Uploaded", Toast.LENGTH_SHORT).show();
+                            snackBar(llSelectImage, "File Uploaded ");
 
                             String uploadId = PicturesInstance.child(fuser.getUid()).push().getKey();
 
@@ -356,7 +281,6 @@ public class EditPhotoActivity extends BaseActivity {
                                         getDownloadImageUrl = Objects.requireNonNull(task.getResult()).toString();
                                         Log.i("FirebaseImages", getDownloadImageUrl);
 
-//creating the upload object to store uploaded image details
                                         Upload upload;
                                         if (public_uploads.size() == 0) {
                                             upload = new Upload(uploadId, "Image", getDownloadImageUrl, 1);
@@ -364,13 +288,10 @@ public class EditPhotoActivity extends BaseActivity {
                                             upload = new Upload(uploadId, "Image", getDownloadImageUrl, 2);
                                         }
 
-//adding an upload to firebase database
-                                        Log.i(TAG, "onComplete: " + PicturesInstance.child(fuser.getUid()).getKey());
 
                                         PicturesInstance.child(fuser.getUid()).child(Objects.requireNonNull(uploadId)).setValue(upload);
                                     } else {
-                                        Toast.makeText(EditPhotoActivity.this, Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
-//                                        snackBar(fragment_acc_constraintLayout,task.getException().getMessage());
+                                        snackBar(llSelectImage, task.getException().getMessage());
                                     }
                                 }
                             });
@@ -382,17 +303,15 @@ public class EditPhotoActivity extends BaseActivity {
                         @Override
                         public void onFailure(@NonNull Exception exception) {
                             progressDialog.dismiss();
-                            Log.i("Failure", Objects.requireNonNull(exception.getMessage()));
                         }
                     })
                     .addOnProgressListener(taskSnapshot -> {
-                        //displaying the upload progress
+
                         double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
                         progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
                     });
         } else {
-            Toast.makeText(this, "Please Select a Image", Toast.LENGTH_SHORT).show();
-//            snackBar(fragment_acc_constraintLayout,"Please Select a Image");
+            snackBar(llSelectImage, "Please Select a Image");
         }
     }
 }

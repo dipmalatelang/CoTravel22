@@ -1,10 +1,9 @@
 package com.example.tgapplication.fragment.trip.adapter;
 
-import android.annotation.SuppressLint;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +56,6 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
     public void onBindViewHolder(@NonNull TripViewHolder holder, int position) {
 
          TripList tList = mTrip.get(position);
-        Log.i("TAGrecyclerview", "onBindViewHolder: "+tList.getAccount_type());
 
 
         if(tList.getGender().equalsIgnoreCase("Female"))
@@ -161,7 +159,6 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
         holder.mCity.setText(tList.getPlanLocation());
         holder.mDate.setText(tList.getFrom_to_date());
 
-        Log.i("TAG", "onBindViewHolder: "+position);
 
         if (position%2==0) holder.linearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.color8));
         else if(position%3==0){
@@ -188,7 +185,6 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
                 listener.setData(tList,position);
                 listener.setProfileVisit(uid,tList.getId());
 
-               Log.i("Got Needed Value"," "+tList.getFavid());
             }
         });
     }

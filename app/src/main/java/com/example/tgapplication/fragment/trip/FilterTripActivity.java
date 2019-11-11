@@ -52,11 +52,7 @@ public class FilterTripActivity extends BaseActivity implements View.OnClickList
         setContentView(R.layout.activity_filter_trip);
 
 
-
-
         activity_filter_trip_coodinatelayout = findViewById(R.id.activity_filter_trip_coodinatelayout);
-
-
 
         initComponent();
 
@@ -90,13 +86,12 @@ public class FilterTripActivity extends BaseActivity implements View.OnClickList
                 rg_trip.check(R.id.rb_from);
             else
                 rg_trip.check(R.id.rb_visit);
-//           int selectedId= rg_trip.getCheckedRadioButtonId();
-//            rb_visit=findViewById(selectedId);
+
 
         }
 
-        assert getSupportActionBar() != null; //null check
-        //    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        assert getSupportActionBar() != null;
+
     }
 
     private void setSupportActionBar(Toolbar toolbar) {
@@ -191,7 +186,6 @@ public class FilterTripActivity extends BaseActivity implements View.OnClickList
         });
 
         rg_trip=findViewById(R.id.rg_trip);
-//        rb_visit=findViewById(R.id.rb_visit);
         et_city=findViewById(R.id.et_city);
 
         adapter_sort = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, array_sort);
@@ -243,7 +237,7 @@ public class FilterTripActivity extends BaseActivity implements View.OnClickList
             Field popup = Spinner.class.getDeclaredField("mPopup");
             popup.setAccessible(true);
 
-            // Get private mPopup member variable and try cast to ListPopupWindow
+
             android.widget.ListPopupWindow TopopupWindow = (android.widget.ListPopupWindow) popup.get(spinner_to);
             android.widget.ListPopupWindow FrompopupWindow = (android.widget.ListPopupWindow) popup.get(spinner_from);
             android.widget.ListPopupWindow LanguagepopupWindow = (android.widget.ListPopupWindow) popup.get(spinner_lang);
@@ -252,7 +246,7 @@ public class FilterTripActivity extends BaseActivity implements View.OnClickList
             android.widget.ListPopupWindow HairpopupWindow = (android.widget.ListPopupWindow) popup.get(spinner_hairs);
             android.widget.ListPopupWindow EyespopupWindow = (android.widget.ListPopupWindow) popup.get(spinner_eyes);
 
-            // Set popupWindow height to 500px
+
             Objects.requireNonNull(TopopupWindow).setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
             Objects.requireNonNull(FrompopupWindow).setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
             Objects.requireNonNull(LanguagepopupWindow).setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -262,7 +256,7 @@ public class FilterTripActivity extends BaseActivity implements View.OnClickList
             Objects.requireNonNull(EyespopupWindow).setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
         }
         catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {
-            // silently fail...
+
         }
     }
 

@@ -1,7 +1,6 @@
 package com.example.tgapplication.fragment.account.profile.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +30,6 @@ public class PlanTripsAdapter extends RecyclerView.Adapter<PlanTripsAdapter.Plan
         holder.txt_place.setText(tripData.getLocation());
         holder.txt_note.setText(tripData.getTrip_note());
         holder.txt_date.setText(tripData.getFrom_date()+" - "+tripData.getTo_date());
-        Log.i("TAG", "onBindViewHolder: Trip Note"+tripData.getTrip_note());
 
 
     }

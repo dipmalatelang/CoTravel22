@@ -12,7 +12,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".fragment.trip.MyTripsActivity"/>
         <activity android:name=".login.LoginActivity"
             android:theme="@style/noToolbar">
             <intent-filter>
@@ -27,14 +26,9 @@
             android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".fragment.member.MembersActivity"
             android:label="Members"/>
-       <!-- <activity
-            android:name=".fragment.trip.DetailActivity"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />-->
-
-<!--        <activity android:name=".fragment.account.profile.DetailFBImage"/>-->
 
         <activity android:name=".fragment.account.profile.ui.TrashActivity"
+            android:label="Trash"
             android:windowSoftInputMode="stateHidden"/>
 
         <activity android:name=".fragment.account.profile.ui.PhotoRequestActivity"/>
@@ -61,7 +55,6 @@
             android:parentActivityName=".MainActivity"
             android:theme="@style/noToolbar"/>
 
-<!--        <activity android:name=".trips.ProfileVisitorActivity" />-->
         <activity
             android:name=".fragment.chat.MessageActivity"
             android:parentActivityName=".MainActivity"
@@ -99,17 +92,14 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-<!--        <activity android:name=".fragment.account.profile.cropphoto.Main2Activity">-->
 
-
-<!--        </activity>-->
-<!--        <activity android:name=".fragment.account.profile.cropphoto.CropImageActivity"/>-->
 
         <activity android:name=".fragment.account.profile.ui.ProfileActivity"
             android:theme="@style/noToolbar" >
 
         </activity>
-        <activity android:name=".fragment.account.profile.ui.EditPhotoActivity"/>
+        <activity android:name=".fragment.account.profile.ui.EditPhotoActivity"
+            android:label="Edit Photo"/>
         <activity android:name=".fragment.account.profile.ui.ChangePasswordActivity"
             android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".fragment.account.profile.ui.ChangePrefActivity"
