@@ -4,11 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
 import com.google.android.gms.tasks.TaskExecutors;
 import com.google.firebase.FirebaseException;
@@ -21,13 +21,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class EditPhoneActivity extends AppCompatActivity {
+public class EditPhoneActivity extends BaseActivity {
 
 
     @BindView(R.id.ed_number)
     EditText edNumber;
     @BindView(R.id.btn_sub)
     Button btnSub;
+    @BindView(R.id.cl_phone)
+    ConstraintLayout clPhone;
     private String mVerificationId, code;
 
     @Override
@@ -36,25 +38,19 @@ public class EditPhoneActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_phone);
         ButterKnife.bind(this);
 
-
-
     }
-
-
-
 
     @OnClick(R.id.btn_sub)
     public void onViewClicked() {
         String mobile = edNumber.getText().toString().trim();
 
-                if (mobile.isEmpty()) {
-                    edNumber.setError("Enter a valid mobile Number");
-                    edNumber.requestFocus();
-                    return;
-                }
+        if (mobile.isEmpty()) {
+            edNumber.setError("Enter a valid mobile Number");
+            edNumber.requestFocus();
+            return;
+        }
 
         sendVerificationCode(mobile);
-
     }
 
     private void sendVerificationCode(String mobile) {
@@ -66,45 +62,32 @@ public class EditPhoneActivity extends AppCompatActivity {
                 mCallbacks);
     }
 
-    //the callback to detect the verification status
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
         @Override
         public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
 
-            //Getting the code sent by SMS
             code = phoneAuthCredential.getSmsCode();
-
-            //sometime the code is not detected automatically
-            //in this case the code will be null
-            //so user has to manually enter the code
-
-          /*  if (code != null) {
-                editTextCode.setText(code);
-                //verifying the code
-                verifyVerificationCode(code);
-            }*/
-
 
         }
 
         @Override
         public void onVerificationFailed(FirebaseException e) {
-            Toast.makeText(EditPhoneActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+
+            snackBar(clPhone,""+e.getMessage());
+
         }
 
         @Override
         public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
             super.onCodeSent(s, forceResendingToken);
 
-            //storing the verification id that is sent to the user
             mVerificationId = s;
             Intent intent = new Intent(EditPhoneActivity.this, VerifyPhoneActivity.class);
-        intent.putExtra("mVerificationId", mVerificationId);
-        intent.putExtra("code",code);
-        startActivity(intent);
+            intent.putExtra("mVerificationId", mVerificationId);
+            intent.putExtra("code", code);
+            startActivity(intent);
 
         }
     };
-
 
 }

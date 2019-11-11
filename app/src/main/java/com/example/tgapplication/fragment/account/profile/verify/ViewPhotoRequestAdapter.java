@@ -1,6 +1,7 @@
 package com.example.tgapplication.fragment.account.profile.verify;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +10,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.visitor.UserImg;
 
@@ -42,8 +50,55 @@ public class ViewPhotoRequestAdapter extends RecyclerView.Adapter<ViewPhotoReque
     public void onBindViewHolder(@NonNull ViewPhotoRequestAdapter.ViewPhotoRequestHolder holder, int position) {
         String userInfo=userList.get(position).getUser().getName()+", "+userList.get(position).getUser().getAge();
         holder.tvName.setText(userInfo);
-        Glide.with(context).load(userList.get(position).getPictureUrl()).centerCrop().placeholder(R.drawable.ic_broken_image_primary_24dp)
-                .into(holder.ivImage);
+        if(userList.get(position).getUser().getGender().equalsIgnoreCase("Female"))
+        {
+            Glide.with(context).asBitmap().load(userList.get(position).getPictureUrl())
+                    .centerCrop()
+                    .override(450,600)
+                    .listener(new RequestListener<Bitmap>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                            holder.ivImage.setImageResource(R.drawable.no_photo_female);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                            return false;
+                        }
+                    })
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                            holder.ivImage.setImageBitmap(resource);
+                        }
+                    });
+
+        }
+        else {
+            Glide.with(context).asBitmap().load(userList.get(position).getPictureUrl())
+                    .centerCrop()
+                    .override(450, 600)
+                    .listener(new RequestListener<Bitmap>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                            holder.ivImage.setImageResource(R.drawable.no_photo_male);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                            return false;
+                        }
+                    })
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                            holder.ivImage.setImageBitmap(resource);
+                        }
+                    });
+        }
+
 
         if(type==3)
         {

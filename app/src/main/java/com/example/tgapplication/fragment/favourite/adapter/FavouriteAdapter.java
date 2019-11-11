@@ -1,6 +1,6 @@
 package com.example.tgapplication.fragment.favourite.adapter;
 
-import android.annotation.SuppressLint;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -45,7 +45,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
         this.mContext = mContext;
         this.mTrip = mTrip;
         this.listener = listener;
-//        this.favArray=favArray;
+
     }
 
 
@@ -158,39 +158,21 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
                         }).into(holder.mImage);
             }
         }
-//        Glide.with(mContext).load(mTrip.get(position).getPictureUrl()).centerCrop().placeholder(R.drawable.ic_broken_image_primary_24dp).into(holder.mImage);
+
 
         holder.mTitle.setText(tList.getName());
-//        holder.mCity.setVisibility(View.GONE);
-        //holder.mDate.setVisibility(View.GONE);
-        holder.mCity.setText(tList.getLocation());
-////        holder.mDate.setText(tList.getFrom_to_date());
 
-        /*holder.mCardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setProfileVisit(uid,tList.getId());
-//                int fav_id= getFav(favArray,tList.getId());
-//                Log.i("Got Needed Value"," "+fav_id);
-                Intent mIntent = new Intent(mContext, DetailActivity.class);
-                mIntent.putExtra("MyObj", tList);
-//                mIntent.putExtra("FavId",fav_id);
-                mContext.startActivity(mIntent);
-            }
-        });*/
+        holder.mCity.setText(tList.getLocation());
+
 
         holder.mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 listener.setProfileVisit(uid,tList.getId());
-//                int fav_id= getFav(favArray,tList.getId());
-//                Log.i("Got Needed Value"," "+fav_id);
+
                 listener.sendFavourite(tList.getId());
                 listener.setData(tList,position);
-//                Intent mIntent = new Intent(mContext, DetailActivity.class);
-//                mIntent.putExtra("MyObj", tList);
-////                mIntent.putExtra("FavId",fav_id);
-//                mContext.startActivity(mIntent);
+
 
             }
 
@@ -247,7 +229,6 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Prof
             ivTitle=itemView.findViewById(R.id.ivTitle);
             mTitle = itemView.findViewById(R.id.tvTitle);
             mCity = itemView.findViewById(R.id.tvCity);
-            // mDate = itemView.findViewById(R.id.tvDate);
             mCardView = itemView.findViewById(R.id.cardview);
             cllist =itemView.findViewById(R.id.cllist);
             linearLayout =itemView.findViewById(R.id.linearLayout);

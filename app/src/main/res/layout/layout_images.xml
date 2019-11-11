@@ -77,7 +77,6 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="135dp"
-            android:background="@color/dark_cyan"
             android:id="@+id/rl_image">
 
             <ImageView

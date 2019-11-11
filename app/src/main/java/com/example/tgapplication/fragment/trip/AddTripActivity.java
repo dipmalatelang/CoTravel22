@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -20,7 +19,6 @@ import com.example.tgapplication.BuildConfig;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.adapter.TripListAdapter;
 import com.example.tgapplication.fragment.trip.module.TripData;
-import com.example.tgapplication.fragment.trip.module.TripList;
 import com.google.android.gms.common.api.Status;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -50,7 +48,9 @@ import butterknife.ButterKnife;
 
 import static com.example.tgapplication.Constants.TripsInstance;
 
-public class AddTripActivity extends BaseActivity implements View.OnClickListener {
+public class
+
+AddTripActivity extends BaseActivity implements View.OnClickListener {
 
     FirebaseUser fuser;
     Button btn_add_trip;
@@ -84,10 +84,8 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
         tv_from_date = findViewById(R.id.tv_from_date1);
         tv_to_date = findViewById(R.id.tv_to_date1);
         et_note = findViewById(R.id.et_note);
-//        toolbar = findViewById(R.id.toolbar);
 
         appbar = findViewById(R.id.appbar);
-
 
         tv_from_date.setOnClickListener(this);
         tv_to_date.setOnClickListener(this);
@@ -103,8 +101,6 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
         Date today = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String dateTostr = simpleDateFormat.format(today);
-        //tv_from_date.setText(dateTostr);
-        //tv_to_date.setText(dateTostr);
 
         recyclerView = findViewById(R.id.recyclerview_trips);
 
@@ -113,43 +109,6 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
 
         displayTripList(fuser.getUid());
 
-        /*tv_from_date.setOnTouchListener((v, event) -> {
-            v.onTouchEvent(event);   // handle the event first
-            InputMethodManager imm = (InputMethodManager)v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (imm != null) {
-                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);  // hide the soft keyboard
-                DatePickerDialog.OnDateSetListener fromlistener = new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        String sMonth, sDay;
-                        month = monthOfYear + 1;
-                        day = dayOfMonth;
-
-                        if (month < 10) {
-                            sMonth = "0" + month;
-                        } else {
-                            sMonth = String.valueOf(month);
-                        }
-
-                        if (day < 10) {
-                            sDay = "0" + day;
-                        } else {
-                            sDay = String.valueOf(day);
-                        }
-
-                        tv_from_date.setText(new StringBuilder().append(sDay)
-                                .append("/").append(sMonth).append("/").append(year)
-                                .append(" "));
-
-                    }
-                };
-
-                DatePickerDialog fromdpDialog = new DatePickerDialog(AddTripActivity.this, fromlistener, year, month, day);
-                fromdpDialog.getDatePicker().setMinDate(System.currentTimeMillis());
-                fromdpDialog.show();
-            }
-            return true;
-        });*/
 
     }
 
@@ -179,12 +138,12 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
                                     }
                                 }
                                 for (int j = 0; j < trips.size(); j++) {
-                                    Log.i("List now", "" + trips.get(j).getLocation());
+
                                 }
-                                // add code here of adapter
                                 mtripAdapter = new TripListAdapter(AddTripActivity.this, uid, trips, new TripListAdapter.TripListInterface() {
                                     @Override
                                     public void sendTripLiist(List<TripData> tripDataList, int position) {
+                                        snackBar(tripRelativelayout,"Edit");
                                         et_location.setText(tripDataList.get(position).getLocation());
                                         et_note.setText(tripDataList.get(position).getTrip_note());
                                         tv_from_date.setText(tripDataList.get(position).getFrom_date());
@@ -230,7 +189,6 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
         displayTripList(fuser.getUid());
         clearText();
 
-
     }
 
     private void clearText() {
@@ -274,7 +232,6 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
                         if(!new Date(tv_from_dates).after(new Date(tv_to_dates))) {
                             for(int i=0;i<trips.size();i++)
                             {
-                                Log.i(TAG, "onClick: "+new Date(tv_to_dates));
                                 try {
                                     Date listDateFrom = new SimpleDateFormat("dd/MM/yyyy").parse(trips.get(i).getFrom_date());
                                     Date listDateTo=new SimpleDateFormat("dd/MM/yyyy").parse(trips.get(i).getTo_date());
@@ -390,14 +347,14 @@ public class AddTripActivity extends BaseActivity implements View.OnClickListene
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
-                Log.i(TAG, "Placeq: " + place.getName() + ", " + place.getId() + ", " + place.getAddress());
+
                 et_location.setText(place.getName());
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
-                // TODO: Handle the error.
+
                 Status status = Autocomplete.getStatusFromIntent(data);
-                Log.i(TAG, Objects.requireNonNull(status.getStatusMessage()));
+
             } else if (resultCode == RESULT_CANCELED) {
-                // The user canceled the operation.
+
             }
         }
     }

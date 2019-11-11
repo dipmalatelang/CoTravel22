@@ -5,12 +5,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
+
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
+
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -53,29 +53,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     SharedPreferences.Editor editor;
     String theLastMessage, theLastMsgTime;
     Boolean textType;
-    //Global Method and Variable
-//    String fUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-
-/*
-    public List<TripList> getMyFav() {
-        for (int i = 0; i < tripList.size(); i++) {
-            for (int j = 0; j < favArray.size(); j++) {
-                Log.i("Compare", tripList.get(i).getId() + " ==> " + favArray.get(j));
-                if (tripList.get(i).getId().equalsIgnoreCase(favArray.get(j))) {
-                    myFavArray.add(tripList.get(i));
-                    Log.i("Got In Here ", tripList.get(i).getId());
-                }
-            }
-
-        }
-//        Log.i("Checking Size",myFavArray.size()+" "+favArray.size());
-//        Intent mIntent = new Intent(this, ProfileVisitorActivity.class);
-//        mIntent.putExtra("myFav", (Serializable) myFavArray);
-//        mIntent.putExtra("ListFav",(Serializable) favArray);
-//        startActivity(mIntent);
-        return myFavArray;
-    }*/
 
 
     public List<TripList> findAllMembers(UserImg userImg) {
@@ -116,125 +93,18 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
 
-   /* private void filterTripList(final String str_city, final String str_lang, final String str_eyes, final String str_hairs, final String str_height, final String str_bodytype, final String str_look,
-                                final String str_from, final String str_to, final String str_visit) {
-        tripList = new ArrayList<>();
-        myDetail = new ArrayList<>();
-        // any way you managed to go the node that has the 'grp_key'
-        DatabaseReference MembersRef = FirebaseDatabase.getInstance()
-                .getReference()
-                .child("Users");
-        MembersRef.addValueEventListener(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        tripList.clear();
-                        myDetail.clear();
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-
-                            final User user = snapshot.getValue(User.class);
-                            if (!user.getId().equalsIgnoreCase(fUserId)) {
-
-                                // HERE WHAT CORRESPONDS TO JOIN
-                                DatabaseReference reference1 = FirebaseDatabase.getInstance()
-                                        .getReference()
-                                        .child("Trips");
-                                reference1.orderByKey().equalTo(user.getId())
-                                        .addValueEventListener(
-                                                new ValueEventListener() {
-                                                    @Override
-                                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                                            String city = "";
-                                                            String tripNote = "";
-                                                            String date = "";
-
-                                                            for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-                                                                TripData tripData = snapshot1.getValue(TripData.class);
-                                                                Log.i("VishalD", "" + user.getUsername() + " , " + tripData.getLocation());
-
-                                                                city += tripData.getLocation();
-                                                                tripNote += tripData.getTrip_note();
-                                                                date += tripData.getFrom_date() + " - " + tripData.getTo_date();
-
-                                                                DateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
-                                                                try {
-                                                                    Date date1 = format.parse(tripData.getFrom_date());
-                                                                    dates.add(date1);
-                                                                    PlanTrip planTrip = new PlanTrip(tripData.getLocation(), tripData.getFrom_date(), tripData.getTo_date());
-                                                                    from_to_dates.add(planTrip);
-//                                                                from_to_dates.add(tripData.getFrom_date()+" - "+tripData.getTo_date());
-                                                                    Log.i("Dates", tripData.getFrom_date() + " " + date1);
-                                                                } catch (ParseException e) {
-                                                                    e.printStackTrace();
-                                                                }
-                                                                Log.i("Janu", str_city + " " + str_lang + " " + str_eyes + " " + str_hairs + " " + str_height + " " + str_bodytype + " " + str_look + " " + str_visit);
-                                                                Log.i("Komu", city + " " + user.getLang() + " " + user.getEyes() + " " + user.getHair() + " " + user.getHeight() + " " + user.getBody_type() + " " + user.getLook()
-                                                                        + user.getVisit());
-
-                                                                if (city.toLowerCase().contains(str_city.toLowerCase()) && user.getEyes().contains(str_eyes) && user.getHair().contains(str_hairs) && user.getHeight().contains(str_height) && user.getBody_type().contains(str_bodytype)
-                                                                    *//* && user.getLook().contains(str_look)*//*) {
-                                                                    Log.i("FilterFromTo", "" + from_to_dates.size());
-                                                                    getDataForDisplay(dates, user);
-                                                                    List<String> lang_item = Arrays.asList(user.getLang().split("\\s*,\\s*"));
-                                                                    Log.i("Getting Count", lang_item.size() + " ");
-                                                                    int count = 0;
-//                                                            for(int j=0;j<lang_item.size();j++)
-//                                                            {
-//                                                                Log.i("Got data"," "+lang_item.get(j)+" " +user.getLang());
-//                                                                if(lang_item.get(j).contains(str_lang))
-//                                                                {
-//                                                                    count++;
-//                                                                    Log.i("Got Count",lang_item.size()+" "+count);
-//                                                                }
-//                                                            }
-//                                                            if(lang_item.size()==count)
-//                                                            {
-//                                                                getDataForDisplay(dateOutput1,user);
-//                                                            }
-                                                                }
-                                                            }
-                                                        }
-//                                                        tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), favArray, tripList);
-//                                                        recyclerview.setAdapter(tripAdapter);
-                                                    }
-
-                                                    @Override
-                                                    public void onCancelled(DatabaseError databaseError) {
-
-                                                    }
-                                                });
-                            } else {
-                                myDetail.add(user);
-                            }
-                        }
-                    }
-
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                }
-        );
-    }*/
 
 
     public void snackBar(View constrainlayout, String s) {
         Snackbar snackbar = Snackbar.make(constrainlayout, s, Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("Action Button", "onClick triggered");
             }
         });
-//        View snackbarLayout = snackbar.getView();
-//        TextView textView = (TextView)snackbarLayout.findViewById(R.id.snackbar_text);
-//        textView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_android_green_24dp, 0, 0, 0);
-//        textView.setCompoundDrawablePadding(20);
+
         snackbar.show();
     }
 
-    //Progress Bar
     public void showProgressDialog() {
         if (!isFinishing()) {
             ProgressActivity.showDialog(this);
@@ -247,7 +117,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         editor.putString("Name", name);
         editor.putString("Age", age);
         editor.putString("Gender",gender);
-        Log.i(TAG, "saveDetailsLater: Travel with size"+travel_with.size());
         editor.putString("TravelWith",new Gson().toJson(travel_with));
         editor.putString("AgeRange",new Gson().toJson(range_age));
 
@@ -300,7 +169,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void saveDetailsLater(ArrayList<String> travel_with, ArrayList<String> range_age) {
         sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        Log.i(TAG, "saveDetailsLater: Travel with size"+travel_with.size());
         editor.putString("TravelWith",new Gson().toJson(travel_with));
         editor.putString("AgeRange",new Gson().toJson(range_age));
         editor.apply();
@@ -309,7 +177,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public void updateRegister(final ArrayList<String> travel_with, ArrayList<String> age) {
 
-//        User userClass=new User(travel_with,age);
         UsersInstance.child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).child("travel_with").setValue(travel_with);
         UsersInstance.child(mAuth.getCurrentUser().getUid()).child("range_age").setValue(age);
 
@@ -322,30 +189,28 @@ public abstract class BaseActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                Log.i(TAG, "onDataChange User: " + Objects.requireNonNull(user).getName() + " " + user.getAge() + " " + user.getId()+" "+user.getTravel_with().size());
                 PicturesInstance.child(fUser.getUid()).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Log.i(TAG, "onDataChange Pictures: ");
+
 
                         for (DataSnapshot ds : dataSnapshot.getChildren()) {
                             Upload upload = ds.getValue(Upload.class);
-//                    if (Objects.requireNonNull(upload).getType() == 1) {
-//                        Log.i(TAG, "onDataChange Pictures: " + upload.getUrl());
+
                             if(Objects.requireNonNull(upload).getType()==1)
                                 profilePhotoDetails(upload.getUrl());
-//                    }
+
                         }
 
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Log.i(TAG, "onCancelled: Sarita " + databaseError.getMessage());
+
                     }
                 });
 
-                saveDetailsLater(user.getId(), user.getName(), user.getAge(), user.getGender(), user.getTravel_with(),user.getRange_age());
+                saveDetailsLater(user.getId(), user.getName(), user.getAge(), user.getGender(), user.getTravel_with(), user.getRange_age());
             }
 
             @Override
@@ -357,7 +222,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 
     private void profilePhotoDetails(String imageUrl) {
-        Log.i(TAG, "profilePhotoDetails: "+imageUrl);
+
         sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.putString("ImageUrl", imageUrl);
@@ -376,7 +241,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
 
-    //check for last message
+
     public void checkForLastMsg(Context mContext, final String userid, TextView last_msg, TextView last_msg_time, ConstraintLayout rl_chat) {
 
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -391,7 +256,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Chat chat = snapshot.getValue(Chat.class);
-                    Log.i("Snap", " " + snapshot);
+
                     if (firebaseUser != null && chat != null) {
                         if (chat.getReceiver().equals(firebaseUser.getUid()) && chat.getSender().equals(userid) ||
                                 chat.getReceiver().equals(userid) && chat.getSender().equals(firebaseUser.getUid())) {
@@ -401,27 +266,14 @@ public abstract class BaseActivity extends AppCompatActivity {
                     }
 
                     if (Objects.requireNonNull(chat).getSender().equals(userid) && !chat.isIsseen()) {
-                        Log.i("TAG", "onDataChange: HighLight " + userid + " " + chat.isIsseen());
+
                         textType = chat.isIsseen();
                     }
 
-                  /*  if (chat.getReceiver().equals(firebaseUser.getUid()) && !chat.isIsseen()){
-                        unread++;
-                    }*/
+
 
                 }
 
-      /*          if (!textType)
-                {
-//                    rl_chat.setBackgroundColor(Color.GRAY);
-                    last_msg.setTextColor(mContext.getResources().getColor(R.color.black));
-
-                }
-                else
-                {
-//                    rl_chat.setBackgroundColor(Color.LTGRAY);
-                    last_msg.setTextColor(mContext.getResources().getColor(R.color.gray));
-                }*/
 
                 if ("default".equals(theLastMessage)) {
                     last_msg.setText("No Message");
@@ -431,7 +283,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                     last_msg_time.setText(theLastMsgTime);
                 }
 
-//                theLastMessage = "default";
+
             }
 
             @Override
@@ -447,7 +299,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         if (event.getAction() == MotionEvent.ACTION_UP) {
             if (event.getRawX() >= (input_password.getRight() - input_password.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                // your action here
+
 
                 if (!input_password.getTransformationMethod().toString().contains("Password")) {
                     input_password.setTransformationMethod(new PasswordTransformationMethod());
@@ -466,50 +318,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
 
-/*
-    public static class CheckNetwork {
 
-
-        private final String TAG = CheckNetwork.class.getSimpleName();
-
-
-        public static boolean isInternetAvailable(Context context) {
-            NetworkInfo info = ((ConnectivityManager)
-                    Objects.requireNonNull(context.getSystemService(Context.CONNECTIVITY_SERVICE))).getActiveNetworkInfo();
-
-            if (info == null) {
-                Log.d("", "no internet connection");
-                return false;
-            } else {
-                if (info.isConnected()) {
-                    Log.d("", " internet connection available...");
-                    return true;
-                } else {
-                    Log.d("", " internet connection");
-                    return true;
-                }
-
-            }
-        }
-    }
-*/
-
-
-/*    private void updateProfilePic(String picUrl) {
-
-        UsersInstance.child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).child("imageURL").setValue(picUrl);
-    }*/
-
-/*    public void hideKeyboard(View view) {
-        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
-//        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
-
-            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-
-    }*/
 
     public void hideKeyboard() {
-        // Check if no view has focus:
+
         View view = this.getCurrentFocus();
         if (view != null) {
             InputMethodManager inputManager = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -517,21 +329,5 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
-  /*  public String firstletterCap(String myString) {
-        return myString.substring(0, 1).toUpperCase() + myString.substring(1);
-    }*/
 
-
-
-
-/*    private void getDataToFilter() {
-        if (str_lang == "All") {
-            str_lang = "Arabic,Danish,German,Belorussian,Dutch,Greek,Japanese,Portuguese,Italian,Polish,Spanish,Swedish,Bulgarian,English,Hebrew,Korean,Romanian,Thai,Catalan,Estonian,Hindi,Latvian,Russian,Turkish,Chinese,Filipino,Hungarian,Lithuanian,Serbian,Ukrainian,Croatian,Finnish,Icelandic,Norwegian,Slovak,Urdu,Czech,French,Indonesian,Persian,Slovenian,Vietnamese,Nepali,Armenian,Kurdish";
-        }
-
-        if (str_look == "All") {
-            str_look = "Girls,Male";
-        }
-        filterTripList(str_city, str_lang, str_eyes, str_hairs, str_height, str_bodytype, str_look, str_from, str_to, str_visit);
-    }*/
 }

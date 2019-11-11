@@ -2,7 +2,6 @@ package com.example.tgapplication.fragment.account.profile.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +29,6 @@ import com.wajahatkarim3.easyflipview.EasyFlipView;
 
 import java.util.List;
 
-
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
     private Context mcontext;
     private List<Upload> mUploads;
@@ -39,7 +37,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
     String previousValue="";
     String gender;
 
-
     public MyAdapter(Context context, String uid, String gender, List<Upload> uploads, PhotoInterface listener) {
         this.uid=uid;
         mcontext =context;
@@ -47,7 +44,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
         this.gender=gender;
         this.listener=listener;
     }
-
 
     @NonNull
     @Override
@@ -61,15 +57,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
 
         Upload uploadCurrent = mUploads.get(position);
-//        holder.textViewName.setText(uploadCurrent.getName());
-
-
-//          holder.below_opt.setVisibility(View.VISIBLE);
 
             holder.imageView.setAdjustViewBounds(true);
-//          holder.imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             holder.imageView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
-
 
         if(gender.equalsIgnoreCase("Female"))
         {
@@ -137,17 +127,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
         else if(uploadCurrent.getType()==1){
             holder.ivTitle.setVisibility(View.VISIBLE);
             holder.pp_eye.setText("Make Private");
-//            previousValue=uploadCurrent.getId();
+
             ((EditPhotoActivity)mcontext).appDetails("CurProfilePhoto",uploadCurrent.getId());
         }
-
-//        Log.i(TAG, "onBindViewHolder: " + uploadCurrent.getUrl());
-
-           /* HashMap<String, Object> map = new HashMap<>();
-            map.put("imageURL", ""+uploadCurrent.getUrl());
-            UsersInstance.child(uid).updateChildren(map);
-
-            holder.ivTitle.setImageDrawable(mcontext.getResources().getDrawable(R.drawable.ic_action_fav_remove));*/
 
         holder.flipView.setOnFlipListener(new EasyFlipView.OnFlipAnimationListener() {
             @Override
@@ -157,7 +139,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
                     @Override
                     public void onClick(View view) {
 
-                        Log.i(TAG, "onClick: Set Main "+mUploads.get(position).getUrl()+" previous "+((EditPhotoActivity)mcontext).getAppDetails("CurProfilePhoto"));
                         listener.setProfilePhoto(mUploads.get(position).getId(),((EditPhotoActivity)mcontext).getAppDetails("CurProfilePhoto"),position);
                         holder.ivTitle.setVisibility(View.VISIBLE);
 
@@ -167,7 +148,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
                 holder.pp_eye.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Log.i(TAG, "onClick: Make Private "+position+" previous "+previousValue);
                         listener.setPhotoAsPrivate(mUploads.get(position).getId());
                     }
                 });
@@ -176,7 +156,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
                     @Override
                     public void onClick(View view) {
                         listener.removePhoto(mUploads.get(position).getId());
-                        Log.i(TAG, "onClick: Remove Photo "+position+" previous "+previousValue);
                     }
                 });
             }
@@ -195,12 +174,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
         TextView set_main, pp_eye, delete;
         EasyFlipView flipView;
         ProgressBar progressBar;
-//        public LinearLayout below_opt;
 
         public ImageViewHolder(@NonNull View itemView) {
             super(itemView);
 
-//            below_opt=itemView.findViewById(R.id.below_opt);
             imageView = itemView.findViewById(R.id.imageView);
             ivTitle=itemView.findViewById(R.id.ivTitle);
 

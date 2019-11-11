@@ -4,11 +4,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -56,7 +56,6 @@ import java.util.Objects;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -70,9 +69,9 @@ import static com.example.tgapplication.Constants.UsersInstance;
 
 public class MessageActivity extends BaseActivity {
 
-    CircleImageView profile_image;
+    ImageView profile_image;
     TextView username;
-int fav;
+    int fav;
     FirebaseUser fuser;
 
     ImageButton btn_send;
@@ -102,20 +101,6 @@ int fav;
         setContentView(R.layout.activity_message);
         ButterKnife.bind(this);
 
-//        Toolbar toolbar = findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//        getSupportActionBar().setTitle("");
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        getSupportActionBar().setDisplayShowHomeEnabled(true);
-//
-//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                // and this
-//                startActivity(new Intent(MessageActivity.this, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-//            }
-//        });
-
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
 
         recyclerView = findViewById(R.id.recycler_view);
@@ -132,12 +117,8 @@ int fav;
 
         intent = getIntent();
         userid = intent.getStringExtra("userid");
-        Log.i("Shaila", "" + userid);
+
         fuser = FirebaseAuth.getInstance().getCurrentUser();
-
-     /*   btn_send.setOnClickListener(view -> {
-
-        });*/
 
 
         UsersInstance.child(userid).addValueEventListener(new ValueEventListener() {
@@ -158,8 +139,7 @@ int fav;
                                 pictureUrl = mainPhoto.getUrl();
 
                         }
-//                        Log.i("TAG", "onDataChangeMy: "+pictureUrl);
-                        //and this
+
                         if(user.getGender().equalsIgnoreCase("Female"))
                         {
                             Glide.with(getApplicationContext()).asBitmap().load(pictureUrl)
@@ -168,16 +148,13 @@ int fav;
                                     .listener(new RequestListener<Bitmap>() {
                                         @Override
                                         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-//                            holder.progressBar.setVisibility(View.GONE);
-                                            profile_image.setImageResource(R.drawable.no_photo_female);
-                           /* ClipDrawable mImageDrawable = (ClipDrawable) holder.profile_image.getDrawable();
-                            mImageDrawable.setLevel(5000);*/
+
                                             return false;
                                         }
 
                                         @Override
                                         public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-//                            holder.progressBar.setVisibility(View.GONE);
+
                                             return false;
                                         }
                                     })
@@ -196,14 +173,14 @@ int fav;
                                     .listener(new RequestListener<Bitmap>() {
                                         @Override
                                         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-//                            holder.progressBar.setVisibility(View.GONE);
+
                                             profile_image.setImageResource(R.drawable.no_photo_male);
                                             return false;
                                         }
 
                                         @Override
                                         public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-//                            holder.progressBar.setVisibility(View.GONE);
+
                                             return false;
                                         }
                                     })
@@ -219,7 +196,7 @@ int fav;
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                                 if (snapshot.hasChild(user.getId())) {
-                                    // run some code
+
                                     fav = 1;
                                 } else {
                                     fav = 0;
@@ -287,8 +264,6 @@ int fav;
 
         ChatsInstance.push().setValue(hashMap);
 
-
-        // add user to chat fragment
 
         ChatListInstance.child(fuser.getUid()).child(userid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -445,7 +420,7 @@ int fav;
 
                 notify = true;
                 String msg = text_send.getText().toString();
-                Log.i("Message", msg);
+
                 if (!msg.equals("")) {
                     DateFormat dateFormat = new SimpleDateFormat("hh:mm aa");
                     String str_time = dateFormat.format(new Date());
@@ -453,14 +428,12 @@ int fav;
                     DateFormat dateFormat2 = new SimpleDateFormat("MM/dd/yyyy");
                     String str_date = dateFormat2.format(new Date());
 
-                    Log.i(TAG, "onViewClicked: Date working "+str_date);
-                    Log.i(TAG, "onViewClicked: Time working "+str_time);
 
                     sendMessage(fuser.getUid(), userid, msg, str_date, str_time);
                 } else {
                     snackBar(message_realtivelayout, "You can't send empty message");
                 }
-//                text_send.setText("");
+
                 text_send.getText().clear();
 
                 break;

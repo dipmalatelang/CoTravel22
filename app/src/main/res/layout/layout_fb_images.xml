@@ -18,9 +18,17 @@
             android:layout_centerInParent="true"
             android:id="@+id/imageView"
             android:layout_width="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
             android:layout_height="match_parent"
             android:contentDescription="TODO"
-            android:src="@drawable/ic_gallery" />
+            android:src="@drawable/whitewallpapar" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressBar"
+            android:layout_centerInParent="true"/>
 
         <ImageView
             android:id="@+id/ivTitle"

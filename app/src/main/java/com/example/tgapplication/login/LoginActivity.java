@@ -139,7 +139,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     if(!dataSnapshot.exists())
                                     {
-//                                        Toast.makeText(LoginActivity.this, "First Register", Toast.LENGTH_SHORT).show();
                                         registerFromLogin();
                                     }
                                     else {

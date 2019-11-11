@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,7 +30,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class ChangePasswordActivity extends BaseActivity {
-
 
     @BindView(R.id.etCurrentPassword)
     EditText etCurrentPassword;
@@ -70,7 +68,7 @@ public class ChangePasswordActivity extends BaseActivity {
             Confirmpassword = etConfirmpassword.getText().toString();
 
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-// Get auth credentials from the user for re-authentication. The example below shows
+
             sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
             if (sharedPreferences.contains("Email")) {
                 email_id = (sharedPreferences.getString("Email", ""));
@@ -79,9 +77,7 @@ public class ChangePasswordActivity extends BaseActivity {
                 txt_password = (sharedPreferences.getString("Password", ""));
 
             }
-//                currentpasword.equals(txt_password);
 
-            Log.d(TAG, "onViewClicked: " + txt_password + " " + currentpasword + " " + newPass + " " + Confirmpassword + " " + email_id);
             if (currentpasword.equalsIgnoreCase("")) {
                 etCurrentPassword.setError("Enter Current Password");
             } else if (newPass.equalsIgnoreCase("")) {
@@ -90,31 +86,27 @@ public class ChangePasswordActivity extends BaseActivity {
                 etConfirmpassword.setError("Enter Confirm Password");
             } else if (!newPass.equals(Confirmpassword)) {
                 snackBar(clChangepwd, "Current and Confirm Password Not Match");
-//                    DataHolder.alertDialog("Error","",Settings_ChangePassword_Activity.this);
             } else if (newPass.length() < 8) {
                 snackBar(clChangepwd, "password must be at least 8 characters");
             } else {
                 AuthCredential credential = EmailAuthProvider
                         .getCredential(email_id, txt_password);
-                Log.d(TAG, "onViewClicked:" + txt_password);
                 Objects.requireNonNull(user).reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Log.d(TAG, "onComplete: " + newPass);
                             user.updatePassword(newPass).addOnCompleteListener(new OnCompleteListener<Void>() {
 
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
 
                                     if (task.isSuccessful()) {
-                                        Log.d(TAG, "Password updated");
                                         snackBar(clChangepwd, "Password updated");
                                         new Handler().postDelayed(new Runnable() {
 
                                             @Override
                                             public void run() {
-                                                // change image
+
                                                 FirebaseAuth.getInstance().signOut();
                                                 LoginManager.getInstance().logOut();
                                                 finish();
@@ -124,13 +116,11 @@ public class ChangePasswordActivity extends BaseActivity {
                                         }, 900);
 
                                     } else {
-                                        Log.d(TAG, "Error password not updated");
                                         snackBar(clChangepwd, "Error password not updated");
                                     }
                                 }
                             });
                         } else {
-                            Log.d(TAG, "Error auth failed");
                             snackBar(clChangepwd, "Enter valid Password");
                         }
 
@@ -139,9 +129,6 @@ public class ChangePasswordActivity extends BaseActivity {
 
             }
         }
-// Prompt the user to re-provide their sign-in credentials
-
-
 
     }
 }

@@ -16,7 +16,7 @@
         android:background="@color/gray_bg">
 
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <com.pkmmte.view.CircularImageView
             android:id="@+id/ivImage"
             android:layout_width="50dp"
             android:layout_height="50dp"

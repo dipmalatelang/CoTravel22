@@ -13,18 +13,19 @@
     android:layout_height="wrap_content"
     tools:context=".MyProfileFragment">
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <com.pkmmte.view.CircularImageView
         android:id="@+id/iv_Image"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="24dp"
-        android:src="@drawable/whitewallpapar"
+        android:src="@drawable/no_photo_female"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteY="8dp"
         android:contentDescription="TODO" />
+
 
     <TextView
         android:id="@+id/tv_Profile_Name"

@@ -29,7 +29,6 @@ import java.util.List;
 
 public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorViewHolder >
 {
-
     private Context mContext;
     private List<UserImg> mTrip;
     private String uid;
@@ -41,7 +40,7 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
         this.mContext = mContext;
         this.mTrip = mTrip;
         this.listener=listener;
-//        this.favArray=favArray;
+
     }
 
 
@@ -58,40 +57,21 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
     {
 
         final UserImg tList = mTrip.get(position);
-  /*      if(tList.getUser().getImageURL().equalsIgnoreCase("default"))
-        {
-            Glide.with(mContext).load(R.drawable.ic_broken_image_primary_24dp).placeholder(R.drawable.ic_broken_image_primary_24dp).apply(new RequestOptions().override(200, 300)).into(holder.mImage);
-        }
-        else
-        {*/
-          /*  for(int i=0;i<mTrip.size();i++)
-            {
-                Log.i("TAG", "onBindViewHolder: "+mTrip.get(i).getUser().getId()+" "+mTrip.get(i).getUser().getName()+" "+"default");
-            }
-            Glide.with(mContext).load("default").placeholder(R.drawable.ic_broken_image_primary_24dp).apply(new RequestOptions().override(200, 300)).into(holder.mImage);
-*/
-         /*   Log.i("TAGnnnn", "onBindViewHolder: "+tList.getUser().getImageURL());
-            new BitmapAsync(holder.mImage,mContext).execute(tList.getUser().getImageURL());*/
-//            Glide.with(mContext).load(getBitmapFromURL(tList.getUser().getImageURL())).into(holder.mImage);
-//        }
 
         if(tList.getUser().getGender().equalsIgnoreCase("Female"))
         {
             if (tList.getUser().getAccount_type() == 1) {
                 Glide.with(mContext).asBitmap().load(mTrip.get(position).getPictureUrl())
-                        .centerCrop()
                         .override(450, 600)
                         .listener(new RequestListener<Bitmap>() {
                             @Override
                             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-//                            holder.progressBar.setVisibility(View.GONE);
                                 holder.mImage.setImageResource(R.drawable.no_photo_female);
                                 return false;
                             }
 
                             @Override
                             public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-//                            holder.progressBar.setVisibility(View.GONE);
                                 return false;
                             }
                         })
@@ -104,19 +84,19 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
             }
             else {
                 Glide.with(mContext).load(R.drawable.hidden_photo_female_thumb)
-                        .centerCrop()
                         .override(450, 600)
                         .listener(new RequestListener<Drawable>() {
                             @Override
                             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-//                                holder.progressBar.setVisibility(View.GONE);
+
+
                                 holder.mImage.setImageResource(R.drawable.hidden_photo_female_thumb);
                                 return false;
                             }
 
                             @Override
                             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-//                                holder.progressBar.setVisibility(View.GONE);
+
                                 return false;
                             }
                         }).into(holder.mImage);
@@ -125,19 +105,18 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
         else {
             if (tList.getUser().getAccount_type() == 1) {
                 Glide.with(mContext).asBitmap().load(mTrip.get(position).getPictureUrl())
-                        .centerCrop()
                         .override(450, 600)
                         .listener(new RequestListener<Bitmap>() {
                             @Override
                             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-//                            holder.progressBar.setVisibility(View.GONE);
+
                                 holder.mImage.setImageResource(R.drawable.no_photo_male);
                                 return false;
                             }
 
                             @Override
                             public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-//                            holder.progressBar.setVisibility(View.GONE);
+
                                 return false;
                             }
                         })
@@ -150,46 +129,37 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
             }
             else {
                 Glide.with(mContext).load(R.drawable.hidden_photo_male_thumb)
-                        .centerCrop()
                         .override(450, 600)
                         .listener(new RequestListener<Drawable>() {
                             @Override
                             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-//                                holder.progressBar.setVisibility(View.GONE);
+
                                 holder.mImage.setImageResource(R.drawable.hidden_photo_male_thumb);
                                 return false;
                             }
 
                             @Override
                             public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-//                                holder.progressBar.setVisibility(View.GONE);
+
                                 return false;
                             }
                         }).into(holder.mImage);
             }
         }
 
-//        Glide.with(mContext).load(tList.getPictureUrl()).placeholder(R.drawable.ic_broken_image_primary_24dp).centerCrop().into(holder.mImage);
-//        holder.mImage.setImageResource(tList.getPictureUrl());
+
+
         holder.mTitle.setText(tList.getUser().getName());
 
         holder.mCity.setVisibility(View.GONE);
-//        holder.mDate.setVisibility(View.GONE);
 
-//        holder.mCity.setText(tList.getUser().getPlanLocation());
-//        holder.mDate.setText(tList.getUser().getFrom_to_date());
 
         holder.mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 listener.setProfileVisit(uid,tList.getUser().getId());
                 listener.setData(tList,position);
-//                int fav_id= getFav(favArray,tList.getUser().getId());
-//                Log.i("Got Needed Value"," "+fav_id);
-                /*Intent mIntent = new Intent(mContext, DetailActivity.class);
-                mIntent.putExtra("MyObj", tList);
-//                mIntent.putExtra("FavId",fav_id);
-                mContext.startActivity(mIntent);*/
+
             }
         });
 
@@ -200,7 +170,6 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
             @Override
             public void onClick(View view) {
                 ((MainActivity)mContext).removeVisit(uid, mTrip.get(position).getUser().getId());
-//                mTrip.get(position).setFavid(0);
                 mTrip.remove(position);
                 notifyDataSetChanged();
             }
@@ -219,7 +188,8 @@ public class VisitorAdapter extends RecyclerView.Adapter<VisitorAdapter.VisitorV
     class VisitorViewHolder extends RecyclerView.ViewHolder
     {
 
-        ImageView mImage, ivTitle;
+        ImageView mImage;
+        ImageView ivTitle;
         TextView mTitle, mCity;
         CardView mCardView;
 

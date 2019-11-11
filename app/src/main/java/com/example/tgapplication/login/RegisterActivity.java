@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.MotionEvent;
 import android.view.View;
@@ -77,7 +76,6 @@ public class RegisterActivity extends BaseActivity implements View.OnTouchListen
     EditText regiEtLocation;
     @BindView(R.id.sp_age)
     Spinner spAge;
-//    @BindView(R.id.regi_rg)
     RadioGroup regiRg;
     @BindView(R.id.login_button)
     LoginButton loginButton;
@@ -103,7 +101,6 @@ public class RegisterActivity extends BaseActivity implements View.OnTouchListen
         ButterKnife.bind(this);
         Places.initialize(getApplicationContext(), BuildConfig.map_api_key);
 
-        // Initialize Facebook Login button
         mCallbackManager = CallbackManager.Factory.create();
 
 
@@ -111,7 +108,6 @@ public class RegisterActivity extends BaseActivity implements View.OnTouchListen
         tvTitleText.setPaintFlags(tvTitleText.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         tvTitleText.setText(getResources().getString(R.string.register));
 
-        // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
         initAge();
@@ -123,28 +119,25 @@ public class RegisterActivity extends BaseActivity implements View.OnTouchListen
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Log.d("Tiger", "facebook:onSuccess:" + loginResult);
-                Log.d("Tiger", "facebook:token:" + loginResult.getAccessToken());
+
                 handleFacebookAccessToken(loginResult.getAccessToken().getToken());
             }
 
             @Override
             public void onCancel() {
-                Log.d("Tiger", "facebook:onCancel");
 
             }
 
             @Override
             public void onError(FacebookException error) {
-                Log.d("Tiger", "facebook:onError", error);
+
 
             }
         });
 
         setPopup();
 
-        assert getSupportActionBar() != null; //null check
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        assert getSupportActionBar() != null;
     }
 
     private void initAge() {
@@ -180,15 +173,12 @@ public class RegisterActivity extends BaseActivity implements View.OnTouchListen
             Field popup = Spinner.class.getDeclaredField("mPopup");
             popup.setAccessible(true);
 
-            // Get private mPopup member variable and try cast to ListPopupWindow
             ListPopupWindow AgepopupWindow = (ListPopupWindow) popup.get(spAge);
 
-            // Set popupWindow height to 500px
             Objects.requireNonNull(AgepopupWindow).setHeight(500);
 
 
         } catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {
-            // silently fail...
         }
     }
 
@@ -202,15 +192,14 @@ public class RegisterActivity extends BaseActivity implements View.OnTouchListen
     private void handleFacebookAccessToken(String token) {
         showProgressDialog();
         AuthCredential credential = FacebookAuthProvider.getCredential(token);
-        Log.d("Tiger", "" + credential);
+
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d("Tiger", "handleFacebookAccessToken:" + task.isSuccessful());
+
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("Tiger", "signInWithCredential:success");
+
                             dismissProgressDialog();
 
                             FirebaseUser user = mAuth.getCurrentUser();
@@ -238,7 +227,7 @@ public class RegisterActivity extends BaseActivity implements View.OnTouchListen
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
+
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
     }
@@ -256,19 +245,17 @@ public class RegisterActivity extends BaseActivity implements View.OnTouchListen
                             assert firebaseUser != null;
                             String userid = firebaseUser.getUid();
 
-                            Log.i("Done", "gothere");
+
                             User userClass = new User(userid, username, "offline", username.toLowerCase(), str_gender, str_age, email, firebaseUser.getProviderId(), "", "", "",
                                     "", "", "", travel_with, looking_for, range_age, location, username, "", "", "", 1, "");
                             UsersInstance.child(userid).setValue(userClass);
-                            Log.i("Done", "gotin");
 
                             range_age.clear();
                             travel_with.clear();
                             startActivity(new Intent(RegisterActivity.this, ChangePrefActivity.class));
 
                         } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure" + Objects.requireNonNull(task.getException()).getMessage());
+
                             snackBar(relativelayout, task.getException().getMessage());
                             dismissProgressDialog();
                             updateUI(null);
@@ -285,7 +272,7 @@ public class RegisterActivity extends BaseActivity implements View.OnTouchListen
 
         if (event.getAction() == MotionEvent.ACTION_UP) {
             if (event.getRawX() >= (regiEtPass.getRight() - regiEtPass.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                // your action here
+
                 if (!regiEtPass.getTransformationMethod().toString().contains("Password")) {
                     regiEtPass.setTransformationMethod(new PasswordTransformationMethod());
                     regiEtPass.setSelection(regiEtPass.getText().length());
@@ -310,17 +297,17 @@ public class RegisterActivity extends BaseActivity implements View.OnTouchListen
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
-                Log.i(TAG, "Placeq: " + place.getName() + ", " + place.getId() + ", " + place.getAddress());
+
                 regiEtLocation.setText(place.getName());
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
-                // TODO: Handle the error.
+
                 Status status = Autocomplete.getStatusFromIntent(data);
-                Log.i(TAG, Objects.requireNonNull(status.getStatusMessage()));
+
             } else if (resultCode == RESULT_CANCELED) {
-                // The user canceled the operation.
+
             }
         } else {
-            // Pass the activity result back to the Facebook SDK
+
             mCallbackManager.onActivityResult(requestCode, resultCode, data);
         }
     }
@@ -337,7 +324,7 @@ public class RegisterActivity extends BaseActivity implements View.OnTouchListen
             case R.id.btn_register:
 
                 int selectedId = regiRg.getCheckedRadioButtonId();
-                Log.i(TAG, "onClick: " + selectedId);
+
                 rb_gender = findViewById(selectedId);
 
                 String str_gender = null;
@@ -384,7 +371,7 @@ public class RegisterActivity extends BaseActivity implements View.OnTouchListen
                         travel_with.add("Male");
                     }
 
-                    Log.i(TAG, "onClick: " + txt_location);
+
                     register(txt_username, txt_email, txt_password, str_gender, str_age, txt_location, travel_with, range_age);
                     snackBar(relativelayout, "Register Successfully..!");
                 }

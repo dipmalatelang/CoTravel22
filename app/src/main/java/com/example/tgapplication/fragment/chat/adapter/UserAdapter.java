@@ -3,14 +3,11 @@ package com.example.tgapplication.fragment.chat.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -60,20 +57,16 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.layout_user_chat, parent, false);
-        return new UserAdapter.ViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         final User user = mUsers.get(position).getUser();
-        Log.i("TAG", "onBindViewHolder: proper"+mUsers.get(position).getUser());
-        holder.username.setText(user.getUsername());
-    /*    if (user.getImageURL().equals("default")){
-            holder.profile_image.setImageResource(R.mipmap.ic_launcher);
-        } else {*/
 
-        Log.i("TAG", "onBindViewHolder: Fav "+mUsers.get(position).getFav());
+        holder.username.setText(user.getUsername());
+
         if(mUsers.get(position).getFav()==1)
         {
             holder.ic_action_fav_remove.setVisibility(View.VISIBLE);
@@ -91,17 +84,16 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                     .listener(new RequestListener<Bitmap>() {
                         @Override
                         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-//                            holder.progressBar.setVisibility(View.GONE);
+
                             holder.profile_image.setImageResource(R.drawable.no_photo_female);
                             holder.profile_image.setImageLevel(50);
-                           /* ClipDrawable mImageDrawable = (ClipDrawable) holder.profile_image.getDrawable();
-                            mImageDrawable.setLevel(5000);*/
+
                             return false;
                         }
 
                         @Override
                         public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-//                            holder.progressBar.setVisibility(View.GONE);
+
                             return false;
                         }
                     })
@@ -120,14 +112,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                     .listener(new RequestListener<Bitmap>() {
                         @Override
                         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-//                            holder.progressBar.setVisibility(View.GONE);
+
                             holder.profile_image.setImageResource(R.drawable.no_photo_male);
                             return false;
                         }
 
                         @Override
                         public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-//                            holder.progressBar.setVisibility(View.GONE);
+
                             return false;
                         }
                     })
@@ -138,44 +130,11 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
                         }
                     });
         }
-//        Glide.with(mContext).load(mUsers.get(position).getPictureUrl()).centerCrop().placeholder(R.drawable.ic_broken_image_primary_24dp).into(holder.profile_image);
-//        }
+
 
         viewBinderHelper.bind(holder.swipe_layout_1, user.getId());
-      /*  holder.chat.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                PopupMenu popup = new PopupMenu(mContext, v);
-                popup.getMenuInflater().inflate(R.menu.profile_menu, popup.getMenu());
 
 
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        int id=item.getItemId();
-
-                        if (id == R.id.one) {
-                            Toast.makeText(mContext, "Add to fav", Toast.LENGTH_SHORT).show();
-                            holder.ic_action_fav_remove.setVisibility(View.VISIBLE);
-//                            listener.chatFavorite(user.getId());
-                            return true;
-                        }
-                        if (id == R.id.two) {
-                            Toast.makeText(mContext, "add to delete", Toast.LENGTH_LONG).show();
-                            return true;
-                        }
-
-
-//                        Toast.makeText(mContext,"You Clicked : " + item.getTitle(), Toast.LENGTH_SHORT).show();
-                        return true;
-                    }
-                });
-                popup.show();//showing popup menu
-                return false;
-            }
-
-        });*/
-
-//      listener.highlightMsg(user.getId(),holder.last_msg);
 
         if(istrash)
         {
@@ -195,25 +154,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             holder.last_msg_time.setVisibility(View.GONE);
         }
 
-   /*     if (ischat){
-            if (user.getStatus().equals("online")){
-                holder.img_on.setVisibility(View.VISIBLE);
-                holder.img_off.setVisibility(View.GONE);
-            } else {
-                holder.img_on.setVisibility(View.GONE);
-                holder.img_off.setVisibility(View.VISIBLE);
-            }
-        } else {
-            holder.img_on.setVisibility(View.GONE);
-            holder.img_off.setVisibility(View.GONE);
-        }*/
+
 
         holder.chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, MessageActivity.class);
                 intent.putExtra("userid", user.getId());
-//                Toast.makeText(mContext, "u click one", Toast.LENGTH_SHORT).show();
+
                 mContext.startActivity(intent);
             }
         });
@@ -223,7 +171,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             public void onClick(View v) {
                 holder.swipe_layout_1.close(true);
                 listener.restoreFromTrash(user.getId(),position);
-                Toast.makeText(mContext, "Restore", Toast.LENGTH_SHORT).show();
+
             }
         });
         holder.tvdelete.setOnClickListener(new View.OnClickListener() {
@@ -231,9 +179,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             public void onClick(View v) {
                 holder.swipe_layout_1.close(true);
                 listener.addToTrash(user.getId(), position);
-                Toast.makeText(mContext, "Delete", Toast.LENGTH_SHORT).show();
-         /*       mUsers.remove(position);
-                notifyDataSetChanged();*/
+
             }
         });
         holder.tvfavourite.setOnClickListener(new View.OnClickListener() {
@@ -241,7 +187,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             public void onClick(View v) {
                 holder.swipe_layout_1.close(true);
                 listener.addToFav(user.getId(),position);
-                Toast.makeText(mContext, "Favourite", Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -266,9 +212,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
         public TextView username;
         public ImageView profile_image;
-//        private ImageView img_on;
+
         SwipeRevealLayout swipe_layout_1;
-//        private ImageView img_off;
+
         TextView tvdelete, tvfavourite, tvrestore;
         private TextView last_msg,last_msg_time;
                 private ConstraintLayout chat;
@@ -280,8 +226,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
             username = itemView.findViewById(R.id.username);
             profile_image = itemView.findViewById(R.id.profile_image);
-//            img_on = itemView.findViewById(R.id.img_on);
-//            img_off = itemView.findViewById(R.id.img_off);
+
             last_msg = itemView.findViewById(R.id.last_msg);
             last_msg_time=itemView.findViewById(R.id.last_msg_time);
             swipe_layout_1=itemView.findViewById(R.id.swipe_layout_1);
@@ -301,7 +246,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         void addToTrash(String userid, int position);
         void restoreFromTrash(String userid, int position);
         void removeFromFav(String userid, int position);
-//        void chatFavorite(String id );
     }
 
 
