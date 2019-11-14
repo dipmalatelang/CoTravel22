@@ -147,14 +147,16 @@ public class FacebookImageActivity extends BaseActivity {
                                     JSONObject joMain = response.getJSONObject();
                                     if (joMain.has("data")) {
                                         JSONArray jaData = joMain.optJSONArray("data");
+                                        Log.i(TAG, "onCompleted: "+jaData.length());
                                         for (int i = 0; i < jaData.length(); i++) {
                                             JSONObject joAlbum = jaData.getJSONObject(i);
                                             GetFacebookImages(joAlbum.optString("id"), joAlbum.optString("name"));
 
                                         }
                                     }
-                                } else {
-
+                                }
+                                else {
+                                    Log.i(TAG, "onCompleted: else "+response.getError().getErrorMessage());
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -216,6 +218,7 @@ public class FacebookImageActivity extends BaseActivity {
                                                     }
 
                                                 }
+                                                Log.i(TAG, "onCompleted: Album Id "+albumId);
                                                 photoAlbums.add(new Images(albumId, name, lstFBImages));
                                             }
 
@@ -229,7 +232,7 @@ public class FacebookImageActivity extends BaseActivity {
 
                                 }
 
-                                Log.i(TAG, "onCompleted: photoAlbums "+photoAlbums.size());
+                                Log.i(TAG, "onCompleted: photoAlbums " + photoAlbums.size());
                                 fb_adapter = new FB_Adapter(FacebookImageActivity.this, fuser.getUid(), gender, photoAlbums, new FB_Adapter.FbInterface() {
                                     @Override
                                     public void proceed(ArrayList<FbImage> image_url) {
@@ -250,7 +253,7 @@ public class FacebookImageActivity extends BaseActivity {
                                 fbRecyclerview.setAdapter(fb_adapter);
 
                             } else {
-                                Log.v("TAG", response.getError().toString());
+                                Log.i(TAG, "onCompleted: else "+response.getError().getErrorMessage());
                             }
                         } catch (Exception e) {
                             e.printStackTrace();

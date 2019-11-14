@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,7 +99,6 @@ public class MyProfileFragment extends BaseFragment {
 
         if (sharedPreferences.contains("Gender")) {
             gender = (sharedPreferences.getString("Gender", ""));
-
         }
 
         setProfileValue(name, age, imageUrl,gender);
@@ -109,62 +110,112 @@ public class MyProfileFragment extends BaseFragment {
         tvProfileName.setText(name);
         tvProfileAge.setText(age);
 
-        if(gender!=null && !gender.equalsIgnoreCase(""))
+        Log.i("TAG", "setProfileValue: url"+imageUrl);
+        if(imageUrl!=null)
         {
-            if(gender.equalsIgnoreCase("Female"))
+            if(gender!=null && !gender.equalsIgnoreCase(""))
             {
-                Glide.with(getActivity()).asBitmap().load(imageUrl)
+                if(gender.equalsIgnoreCase("Female"))
+                {
+                    Glide.with(getActivity()).load(imageUrl)
+                            .override(450,600)
+                            .listener(new RequestListener<Drawable>() {
+                                @Override
+                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                    ivImage.setImageResource(R.drawable.no_photo_female);
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                    return false;
+                                }
+                            })
+                            .into(ivImage);
+                }
+                else {
+                    Log.i("TAG", "setProfileValue: Gender working "+gender);
+                    Glide.with(getActivity()).load(imageUrl)
+                            .override(450,600)
+                            .listener(new RequestListener<Drawable>() {
+                                @Override
+                                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                    ivImage.setImageResource(R.drawable.no_photo_male);
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                    return false;
+                                }
+
+                            })
+                            .into(ivImage);
+                }
+            }
+            else {
+                Glide.with(getActivity()).load(imageUrl)
                         .override(450,600)
-                        .listener(new RequestListener<Bitmap>() {
+                        .listener(new RequestListener<Drawable>() {
                             @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-//                            holder.progressBar.setVisibility(View.GONE);
-                                ivImage.setImageResource(R.drawable.no_photo_female);
-                           /* ClipDrawable mImageDrawable = (ClipDrawable) holder.profile_image.getDrawable();
-                            mImageDrawable.setLevel(5000);*/
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                ivImage.setImageResource(R.drawable.no_photo_male);
                                 return false;
                             }
 
                             @Override
-                            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-//                            holder.progressBar.setVisibility(View.GONE);
+                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                                 return false;
                             }
+
                         })
-                        .into(new SimpleTarget<Bitmap>() {
-                            @Override
-                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-
-                                ivImage.setImageBitmap(resource);
-                            }
-                        });
+                        .into(ivImage);
             }
         }
         else {
-            Glide.with(getActivity()).asBitmap().load(imageUrl)
-                    .override(450,600)
-                    .listener(new RequestListener<Bitmap>() {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-//                            holder.progressBar.setVisibility(View.GONE);
-                            ivImage.setImageResource(R.drawable.no_photo_male);
-                            return false;
-                        }
 
-                        @Override
-                        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-//                            holder.progressBar.setVisibility(View.GONE);
-                            return false;
-                        }
-                    })
-                    .into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                            ivImage.setImageBitmap(resource);
-                        }
-                    });
+            //No image then load default image as per gender
+            if(gender.equalsIgnoreCase("Female"))
+            {
+                Glide.with(getActivity()).load(R.drawable.no_photo_female)
+                        .override(450,600)
+                        .listener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                ivImage.setImageResource(R.drawable.no_photo_female);
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                return false;
+                            }
+                        })
+                        .into(ivImage);
+            }
+            else {
+                Log.i("TAG", "setProfileValue: Gender working "+gender);
+                Glide.with(getActivity()).load(R.drawable.no_photo_male)
+                        .override(450,600)
+                        .listener(new RequestListener<Drawable>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                                ivImage.setImageResource(R.drawable.no_photo_male);
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                                return false;
+                            }
+
+                        })
+                        .into(ivImage);
+            }
         }
+
     }
+
 
 
     @OnClick({R.id.tv_Setting,R.id.tv_my_profile, R.id.tv_Logout, R.id.iv_Image, R.id.tv_Change_Password, R.id.tv_verify_acc, R.id.tv_Change_Preferences, R.id.tv_Trash, R.id.tv_photo_request})

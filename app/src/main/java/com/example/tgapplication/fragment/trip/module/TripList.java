@@ -50,7 +50,7 @@ public class TripList implements Serializable {
         this.visit_id=visit_id;
     }
 
-    public TripList(String id, String username, String imageURL, String age, String gender, String about_me, String location, String nationality, String lang, String height, String body_type, String eyes, String hair, ArrayList<String> looking_for, ArrayList<String> travel_with, String visit, String tripNote, int account_type, int fav_id, int visit_id) {
+    public TripList(String id, String username, String imageURL, String age,String gender, String about_me, String location, String nationality, String lang, String height, String body_type, String eyes, String hair, ArrayList<String> looking_for, ArrayList<String> travel_with, String visit, String tripNote, int account_type, int fav_id, int visit_id) {
         this.id=id;
         this.name=username;
         this.imageUrl=imageURL;

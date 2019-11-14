@@ -9,31 +9,62 @@
 
         <TextView
             android:id="@+id/btn_photo_rqst"
+            style="@style/text_view_style1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/Photo_request"
-            style="@style/text_view_style1"
-            android:gravity="center"
             android:background="@color/gray_bg"
+            android:gravity="center"
+            android:text="@string/Photo_request"
             android:textColor="@color/purple"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+
+        <TextView
+            android:id="@+id/photo_rqst_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/badge_circle"
+            android:visibility="gone"
+            android:textColor="#FFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_photo_rqst"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btn_photo_rqst"
+            app:layout_constraintVertical_bias="1.0" />
+
         <TextView
             android:id="@+id/btn_photo_permits"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp" android:text="@string/Photo_permits"
+            android:layout_marginTop="10dp"
+            android:text="@string/Photo_permits"
             style="@style/text_view_style1"
             android:gravity="center"
             android:textColor="@color/purple"
             android:background="@color/gray_bg"
-
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_photo_rqst" />
+
+        <TextView
+            android:id="@+id/photo_permits_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintVertical_bias="1.0"
+            android:background="@drawable/badge_circle"
+            android:visibility="gone"
+            android:textColor="#FFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_photo_permits"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btn_photo_permits" />
 
         <TextView
             android:id="@+id/btn_given_permits"
@@ -44,10 +75,24 @@
             android:gravity="center"
             android:textColor="@color/purple"
             android:background="@color/gray_bg"
-
             android:text="@string/given_permits"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_photo_permits" />
+
+        <TextView
+            android:id="@+id/given_permits_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintVertical_bias="1.0"
+            android:background="@drawable/badge_circle"
+            android:visibility="gone"
+            android:textColor="#FFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_given_permits"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btn_given_permits" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
