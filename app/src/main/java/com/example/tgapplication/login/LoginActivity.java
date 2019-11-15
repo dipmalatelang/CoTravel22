@@ -5,6 +5,7 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -16,8 +17,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
-import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.fragment.account.profile.module.Upload;
+import com.example.tgapplication.fragment.trip.module.User;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -37,6 +38,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.example.tgapplication.Constants.PicturesInstance;
@@ -46,14 +48,23 @@ import static com.example.tgapplication.Constants.UsersInstance;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener, View.OnKeyListener {
 
+    @BindView(R.id.login_button)
     LoginButton loginButton;
-    Button btn_login;
+    @BindView(R.id.tv_register)
+    TextView tvRegister;
+    @BindView(R.id.constrainlayout)
+    ConstraintLayout constrainlayout;
+    @BindView(R.id.btn_login)
+    Button btnLogin;
+    @BindView(R.id.link_signup)
+    TextView linkSignup;
+    @BindView(R.id.input_email)
+    EditText inputEmail;
+    @BindView(R.id.input_password)
+    EditText inputPassword;
     private CallbackManager mCallbackManager;
     private FirebaseAuth mAuth;
     String value;
-    TextView tv_register, link_signup;
-    EditText input_email, input_password;
-    ConstraintLayout constrainlayout;
 
 
     @Override
@@ -68,29 +79,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
-        loginButton = findViewById(R.id.login_button);
-        tv_register = findViewById(R.id.tv_register);
+
+        tvRegister.setPaintFlags(tvRegister.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        tvRegister.setText(getResources().getString(R.string.register));
 
 
-        constrainlayout = findViewById(R.id.constrainlayout);
+        linkSignup.setOnClickListener(this);
+        btnLogin.setOnClickListener(this);
 
 
-        tv_register.setPaintFlags(tv_register.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        tv_register.setText(getResources().getString(R.string.register));
 
-        link_signup = findViewById(R.id.link_signup);
-        link_signup.setOnClickListener(this);
-        btn_login = findViewById(R.id.btn_login);
-        btn_login.setOnClickListener(this);
+        inputPassword.setOnTouchListener((view, motionEvent) -> showOrHidePwd(motionEvent, inputPassword));
+        inputPassword.setOnKeyListener(this);
 
-
-        input_email = findViewById(R.id.input_email);
-        input_password = findViewById(R.id.input_password);
-
-        input_password.setOnTouchListener((view, motionEvent) -> showOrHidePwd(motionEvent,input_password));
-        input_password.setOnKeyListener(this);
-
-        tv_register.setOnClickListener(this);
+        tvRegister.setOnClickListener(this);
 
 
 //        value = getIntent().getExtras().getString("nextActivity");
@@ -137,11 +139,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                             UsersInstance.child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    if(!dataSnapshot.exists())
-                                    {
+                                    if (!dataSnapshot.exists()) {
                                         registerFromLogin();
-                                    }
-                                    else {
+                                    } else {
                                         updateUI(mAuth.getCurrentUser());
                                     }
                                 }
@@ -153,11 +153,17 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                             });
 
 
-
                         }
 
                     }
                 });
+    }
+
+    private void updateUI(FirebaseUser currentUser) {
+        if (currentUser != null) {
+            retrieveUserDetail(currentUser);
+
+        }
     }
 
     private void registerFromLogin() {
@@ -165,7 +171,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         FirebaseUser user = mAuth.getCurrentUser();
         ArrayList<String> travel_with = new ArrayList<>();
         ArrayList<String> looking_for = new ArrayList<>();
-        ArrayList<String> range_age=new ArrayList<>();
+        ArrayList<String> range_age = new ArrayList<>();
 
         travel_with.add("Female");
         travel_with.add("Male");
@@ -173,12 +179,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         range_age.add("18");
         range_age.add("55");
 
-        User userClass=new User(Objects.requireNonNull(user).getUid(), user.getDisplayName(), "offline", Objects.requireNonNull(user.getDisplayName()).toLowerCase(), "", "18",  user.getEmail(), user.getProviderId(), "", "", "", "", "", "",travel_with,looking_for, range_age, "",  user.getDisplayName().toLowerCase(), user.getPhoneNumber(), "", "",1,"");
+        User userClass = new User(Objects.requireNonNull(user).getUid(), user.getDisplayName(), "offline", Objects.requireNonNull(user.getDisplayName()).toLowerCase(), "", "18", user.getEmail(), user.getProviderId(), "", "", "", "", "", "", travel_with, looking_for, range_age, "", user.getDisplayName().toLowerCase(), user.getPhoneNumber(), "", "", 1, "");
         UsersInstance.child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).setValue(userClass);
 
         String uploadId = PicturesInstance.child(user.getUid()).push().getKey();
-        PicturesInstance.child(user.getUid()).child(Objects.requireNonNull(uploadId)).setValue(new Upload(uploadId,"Image", Objects.requireNonNull(user.getPhotoUrl()).toString()+"?type=large",1));
+        PicturesInstance.child(user.getUid()).child(Objects.requireNonNull(uploadId)).setValue(new Upload(uploadId, "Image", Objects.requireNonNull(user.getPhotoUrl()).toString() + "?type=large", 1));
 
+        if(mAuth!=null)
         updateUI(mAuth.getCurrentUser());
     }
 
@@ -186,16 +193,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
-    }
-
-
-/*    private void updateUI(FirebaseUser account) {
-        if (account != null) {
-            startActivity(new Intent(this, MainActivity.class));
+        if(mAuth!=null)
+        {
+            FirebaseUser currentUser = mAuth.getCurrentUser();
+            updateUI(currentUser);
         }
-    }*/
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -216,20 +219,18 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 break;
             case R.id.btn_login:
                 showProgressDialog();
-                String txt_email = input_email.getText().toString().trim();
-                String txt_password = input_password.getText().toString();
+                String txt_email = inputEmail.getText().toString().trim();
+                String txt_password = inputPassword.getText().toString();
 
                 if (TextUtils.isEmpty(txt_email) || TextUtils.isEmpty(txt_password)) {
                     dismissProgressDialog();
-                    snackBar(constrainlayout,"All fileds are required !");
+                    snackBar(constrainlayout, "All fileds are required !");
 
-                }else if(!android.util.Patterns.EMAIL_ADDRESS.matcher(txt_email).matches())
-                {
+                } else if (!Patterns.EMAIL_ADDRESS.matcher(txt_email).matches()) {
                     dismissProgressDialog();
                     snackBar(constrainlayout, "please enter valid email address");
-                }
-               else {
-                    Log.d(TAG, "onComplete1: "+txt_email+" "+txt_password);
+                } else {
+                    Log.d(TAG, "onComplete1: " + txt_email + " " + txt_password);
 //                    hideKeyboard(this);
                     mAuth.signInWithEmailAndPassword(txt_email, txt_password)
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -239,8 +240,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                                         dismissProgressDialog();
                                         updateUI(mAuth.getCurrentUser());
 
-                                        Log.d(TAG, "onComplete: "+txt_email+" "+txt_password);
-                                        saveLoginDetails(txt_email,txt_password);
+                                        Log.d(TAG, "onComplete: " + txt_email + " " + txt_password);
+                                        saveLoginDetails(txt_email, txt_password);
 
 //                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 //                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -280,7 +281,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     @Override
     public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
         if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-            btn_login.performClick();
+            btnLogin.performClick();
             return true;
         }
         return false;

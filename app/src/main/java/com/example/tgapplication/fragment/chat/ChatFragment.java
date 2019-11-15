@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -57,6 +58,7 @@ public class ChatFragment extends BaseFragment {
 
     String pictureUrl = "";
     int fav;
+    TextView txtNoData;
     FirebaseUser fuser;
     FloatingActionButton floatingActionButton;
 
@@ -71,6 +73,7 @@ public class ChatFragment extends BaseFragment {
         setHasOptionsMenu(false);
         recyclerView = view.findViewById(R.id.recycler_view);
         search_users=view.findViewById(R.id.search_users);
+        txtNoData=view.findViewById(R.id.txtNoData);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -88,13 +91,22 @@ public class ChatFragment extends BaseFragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<Chatlist> usersList = new ArrayList<>();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                if(dataSnapshot.getChildrenCount()>0)
+                {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                    Chatlist chatlist = snapshot.getValue(Chatlist.class);
-                    usersList.add(chatlist);
+                        Chatlist chatlist = snapshot.getValue(Chatlist.class);
+                        usersList.add(chatlist);
+                    }
+
+                    chatList(usersList);
+                    txtNoData.setVisibility(View.GONE);
+
+                }
+                else {
+                    txtNoData.setVisibility(View.VISIBLE);
                 }
 
-                chatList(usersList);
             }
 
             @Override

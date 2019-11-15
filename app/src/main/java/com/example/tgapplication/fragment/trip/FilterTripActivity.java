@@ -7,16 +7,15 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListPopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toolbar;
+import android.widget.Toast;
 
+import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.example.tgapplication.BaseActivity;
@@ -31,36 +30,63 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
-
 public class FilterTripActivity extends BaseActivity implements View.OnClickListener {
 
-    Spinner spinner_lang, spinner_look, spinner_from, spinner_to, spinner_eyes, spinner_hairs, spinner_height, spinner_bodytype, spinner_sort;
     ArrayList<String> array_lang, array_look, array_sort, array_from, array_to, array_eyes, array_hairs, array_height, array_bodytype;
     ArrayAdapter<String> adapter_lang, adapter_look, adapter_sort, adapter_from, adapter_to, adapter_eyes, adapter_hairs, adapter_height, adapter_bodytype;
-    Button btn_add_trip;
     RadioButton rb_visit;
-    RadioGroup rg_trip;
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
-    CoordinatorLayout activity_filter_trip_coodinatelayout;
-    TextView tv_girl, tv_men;
-    LinearLayout linearLayoutfilter, linearLayoutradiobutton;
-    CheckBox checkbox;
     @BindView(R.id.et_name)
     EditText etName;
     @BindView(R.id.et_city)
     EditText etCity;
+    @BindView(R.id.spinner_lang)
+    Spinner spinnerLang;
+    @BindView(R.id.spinner_eyes)
+    Spinner spinnerEyes;
+    @BindView(R.id.spinner_hairs)
+    Spinner spinnerHairs;
+    @BindView(R.id.spinner_height)
+    Spinner spinnerHeight;
+    @BindView(R.id.spinner_bodytype)
+    Spinner spinnerBodytype;
+    @BindView(R.id.spinner_look)
+    Spinner spinnerLook;
+    @BindView(R.id.spinner_sort)
+    Spinner spinnerSort;
+    @BindView(R.id.spinner_from)
+    Spinner spinnerFrom;
+    @BindView(R.id.spinner_to)
+    Spinner spinnerTo;
+    /*  @BindView(R.id.tv_girl)
+      TextView tvGirl;
+      @BindView(R.id.tv_men)
+      TextView tvMen;*/
+    @BindView(R.id.btn_add_trip)
+    Button btnAddTrip;
+    @BindView(R.id.linearLayoutradiobutton)
+    LinearLayout linearLayoutradiobutton;
+    @BindView(R.id.checkbox)
+    AppCompatCheckBox checkbox;
+    @BindView(R.id.linearLayoutfilter)
+    LinearLayout linearLayoutfilter;
+    @BindView(R.id.activity_filter_trip_coodinatelayout)
+    CoordinatorLayout activityFilterTripCoodinatelayout;
+    @BindView(R.id.rg_trip)
+    RadioGroup rgTrip;
+    RadioButton rb_trip;
+    @BindView(R.id.rb_from)
+    RadioButton rbFrom;
+    @BindView(R.id.rb_visit)
+    RadioButton rbVisit;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter_trip);
         ButterKnife.bind(this);
-
-
-        activity_filter_trip_coodinatelayout = findViewById(R.id.activity_filter_trip_coodinatelayout);
 
         initComponent();
 
@@ -74,88 +100,64 @@ public class FilterTripActivity extends BaseActivity implements View.OnClickList
                     etName.setText(str_name);
                 }
 
-                if(prefs.contains("str_city"))
-                {
+                if (prefs.contains("str_city")) {
                     String str_city = prefs.getString("str_city", "");
                     etCity.setText(str_city);
                 }
 
-                if(prefs.contains("str_eyes"))
-                {
+                if (prefs.contains("str_trip")) {
+                    String str_trip = prefs.getString("str_trip", "");
+                    if (str_trip.equalsIgnoreCase("from")) {
+                        rbFrom.setChecked(true);
+                    } else {
+                        rbVisit.setChecked(true);
+                    }
+                }
+
+                if (prefs.contains("str_eyes")) {
                     String str_eyes = prefs.getString("str_eyes", "");
-                    spinner_lang.setSelection(adapter_eyes.getPosition(str_eyes));
+                    spinnerLang.setSelection(adapter_eyes.getPosition(str_eyes));
                 }
 
-                if(prefs.contains("str_hairs"))
-                {
+                if (prefs.contains("str_hairs")) {
                     String str_hairs = prefs.getString("str_hairs", "");
-                    spinner_hairs.setSelection(adapter_hairs.getPosition(str_hairs));
+                    spinnerHairs.setSelection(adapter_hairs.getPosition(str_hairs));
                 }
 
-                if(prefs.contains("str_bodytype"))
-                {
+                if (prefs.contains("str_lang")) {
+                    String str_lang = prefs.getString("str_lang", "");
+                    spinnerLang.setSelection(adapter_lang.getPosition(str_lang));
+                }
+
+                if (prefs.contains("str_looking_for")) {
+                    String str_looking_for = prefs.getString("str_looking_for", "");
+                    spinnerLook.setSelection(adapter_look.getPosition(str_looking_for));
+                }
+
+                if (prefs.contains("str_bodytype")) {
                     String str_bodytype = prefs.getString("str_bodytype", "");
-                    spinner_bodytype.setSelection(adapter_bodytype.getPosition(str_bodytype));
+                    spinnerBodytype.setSelection(adapter_bodytype.getPosition(str_bodytype));
                 }
 
-                if(prefs.contains("str_height"))
-                {
+                if (prefs.contains("str_height")) {
                     String str_height = prefs.getString("str_height", "");
-                    spinner_height.setSelection(adapter_height.getPosition(str_height));
+                    spinnerHeight.setSelection(adapter_height.getPosition(str_height));
                 }
 
-                if(prefs.contains("str_from"))
-                {
-                    int str_from=prefs.getInt("str_from",18);
-                    spinner_from.setSelection(adapter_from.getPosition(String.valueOf(str_from)));
+                if (prefs.contains("str_from")) {
+                    int str_from = prefs.getInt("str_from", 18);
+                    spinnerFrom.setSelection(adapter_from.getPosition(String.valueOf(str_from)));
                 }
 
-                if(prefs.contains("str_to"))
-                {
-                    int str_to=prefs.getInt("str_to",99);
-                    spinner_to.setSelection(adapter_to.getPosition(String.valueOf(str_to)));
+                if (prefs.contains("str_to")) {
+                    int str_to = prefs.getInt("str_to", 99);
+                    spinnerTo.setSelection(adapter_to.getPosition(String.valueOf(str_to)));
                 }
             }
         }
 
-
-       /* if (prefs.contains("str_city")) {
-            String str_city = prefs.getString("str_city", "not_defined");//"No name defined" is the default value.
-            String str_lang = prefs.getString("str_lang", "not_defined"); //0 is the default value.
-            String str_eyes = prefs.getString("str_eyes","not_defined");
-            String str_hairs = prefs.getString("str_hairs","not_defined");
-            String str_height=prefs.getString("str_height","not_defined");
-            String str_bodytype=prefs.getString("str_bodytype","not_defined");
-
-            String str_travel_with = prefs.getString("str_travel_with","not_defined");
-            String str_from= prefs.getString("str_from","not_defined");
-            String str_to= prefs.getString("str_to","not_defined");
-            String str_visit= prefs.getString("str_visit","not_defined");
-
-            et_city.setText(str_city);
-            spinner_lang.setSelection(adapter_lang.getPosition(str_lang));
-            spinner_eyes.setSelection(adapter_eyes.getPosition(str_eyes));
-            spinner_hairs.setSelection(adapter_hairs.getPosition(str_hairs));
-            spinner_height.setSelection(adapter_height.getPosition(str_height));
-            spinner_bodytype.setSelection(adapter_bodytype.getPosition(str_bodytype));
-
-            spinner_look.setSelection(adapter_look.getPosition(str_travel_with));
-            spinner_from.setSelection(adapter_from.getPosition(str_from));
-            spinner_to.setSelection(adapter_to.getPosition(str_to));
-
-            if(str_visit.equalsIgnoreCase("From"))
-                rg_trip.check(R.id.rb_from);
-            else
-                rg_trip.check(R.id.rb_visit);
-
-
-        }*/
-
         assert getSupportActionBar() != null;
 
-    }
-
-    private void setSupportActionBar(Toolbar toolbar) {
     }
 
     @Override
@@ -209,24 +211,7 @@ public class FilterTripActivity extends BaseActivity implements View.OnClickList
 
         array_bodytype = new ArrayList<>(Arrays.asList("All", "Slim", "Athletic", "Average", "Curvy", "Heavy"));
 
-        spinner_lang = findViewById(R.id.spinner_lang);
-        spinner_look = findViewById(R.id.spinner_look);
-        spinner_from = findViewById(R.id.spinner_from);
-        spinner_to = findViewById(R.id.spinner_to);
-        spinner_eyes = findViewById(R.id.spinner_eyes);
-        spinner_hairs = findViewById(R.id.spinner_hairs);
-        spinner_height = findViewById(R.id.spinner_height);
-        spinner_bodytype = findViewById(R.id.spinner_bodytype);
-        btn_add_trip = findViewById(R.id.btn_add_trip);
-        spinner_sort = findViewById(R.id.spinner_sort);
-        tv_girl = findViewById(R.id.tv_girl);
-        tv_men = findViewById(R.id.tv_men);
-        linearLayoutfilter = findViewById(R.id.linearLayoutfilter);
-        linearLayoutradiobutton = findViewById(R.id.linearLayoutradiobutton);
-        checkbox = findViewById(R.id.checkbox);
-
-
-        tv_girl.setOnClickListener(new View.OnClickListener() {
+    /*    tvGirl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 linearLayoutfilter.setVisibility(VISIBLE);
@@ -235,7 +220,7 @@ public class FilterTripActivity extends BaseActivity implements View.OnClickList
 
             }
         });
-        tv_men.setOnClickListener(new View.OnClickListener() {
+        tvMen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 linearLayoutradiobutton.setVisibility(GONE);
@@ -243,50 +228,48 @@ public class FilterTripActivity extends BaseActivity implements View.OnClickList
                 checkbox.setVisibility(GONE);
 
             }
-        });
-
-        rg_trip = findViewById(R.id.rg_trip);
+        });*/
 
         adapter_sort = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, array_sort);
         adapter_sort.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_sort.setAdapter(adapter_sort);
+        spinnerSort.setAdapter(adapter_sort);
 
 
         adapter_lang = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, array_lang);
         adapter_lang.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_lang.setAdapter(adapter_lang);
+        spinnerLang.setAdapter(adapter_lang);
 
         adapter_look = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, array_look);
         adapter_look.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_look.setAdapter(adapter_look);
+        spinnerLook.setAdapter(adapter_look);
 
         adapter_eyes = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, array_eyes);
         adapter_eyes.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_eyes.setAdapter(adapter_eyes);
+        spinnerEyes.setAdapter(adapter_eyes);
 
         adapter_hairs = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, array_hairs);
         adapter_hairs.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_hairs.setAdapter(adapter_hairs);
+        spinnerHairs.setAdapter(adapter_hairs);
 
         adapter_height = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, array_height);
         adapter_height.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_height.setAdapter(adapter_height);
+        spinnerHeight.setAdapter(adapter_height);
 
         adapter_bodytype = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, array_bodytype);
         adapter_bodytype.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_bodytype.setAdapter(adapter_bodytype);
+        spinnerBodytype.setAdapter(adapter_bodytype);
 
         adapter_from = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, array_from);
         adapter_from.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_from.setAdapter(adapter_from);
+        spinnerFrom.setAdapter(adapter_from);
 
         adapter_to = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, array_to);
         adapter_to.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_to.setAdapter(adapter_to);
+        spinnerTo.setAdapter(adapter_to);
 
-        spinner_to.setSelection(adapter_to.getPosition("99"));
+        spinnerTo.setSelection(adapter_to.getPosition("99"));
 
-        btn_add_trip.setOnClickListener(this);
+        btnAddTrip.setOnClickListener(this);
 
         setPopup();
     }
@@ -297,13 +280,13 @@ public class FilterTripActivity extends BaseActivity implements View.OnClickList
             popup.setAccessible(true);
 
 
-            ListPopupWindow TopopupWindow = (ListPopupWindow) popup.get(spinner_to);
-            ListPopupWindow FrompopupWindow = (ListPopupWindow) popup.get(spinner_from);
-            ListPopupWindow LanguagepopupWindow = (ListPopupWindow) popup.get(spinner_lang);
-            ListPopupWindow HeightpopupWindow = (ListPopupWindow) popup.get(spinner_height);
-            ListPopupWindow BodypopupWindow = (ListPopupWindow) popup.get(spinner_bodytype);
-            ListPopupWindow HairpopupWindow = (ListPopupWindow) popup.get(spinner_hairs);
-            ListPopupWindow EyespopupWindow = (ListPopupWindow) popup.get(spinner_eyes);
+            ListPopupWindow TopopupWindow = (ListPopupWindow) popup.get(spinnerTo);
+            ListPopupWindow FrompopupWindow = (ListPopupWindow) popup.get(spinnerFrom);
+            ListPopupWindow LanguagepopupWindow = (ListPopupWindow) popup.get(spinnerLang);
+            ListPopupWindow HeightpopupWindow = (ListPopupWindow) popup.get(spinnerHeight);
+            ListPopupWindow BodypopupWindow = (ListPopupWindow) popup.get(spinnerBodytype);
+            ListPopupWindow HairpopupWindow = (ListPopupWindow) popup.get(spinnerHairs);
+            ListPopupWindow EyespopupWindow = (ListPopupWindow) popup.get(spinnerEyes);
 
 
             Objects.requireNonNull(TopopupWindow).setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -325,15 +308,28 @@ public class FilterTripActivity extends BaseActivity implements View.OnClickList
             editor.putInt("FilterFlag", 1);
             String str_name = etName.getText().toString();
             String str_city = etCity.getText().toString();
-            String str_eyes = spinner_eyes.getSelectedItem().toString();
-            String str_hairs = spinner_hairs.getSelectedItem().toString();
-            String str_height = spinner_height.getSelectedItem().toString();
-            String str_bodytype = spinner_bodytype.getSelectedItem().toString();
-            int str_from = Integer.parseInt(spinner_from.getSelectedItem().toString());
-            int str_to = Integer.parseInt(spinner_to.getSelectedItem().toString());
+            String str_eyes = spinnerEyes.getSelectedItem().toString();
+            String str_hairs = spinnerHairs.getSelectedItem().toString();
+            String str_height = spinnerHeight.getSelectedItem().toString();
+            String str_bodytype = spinnerBodytype.getSelectedItem().toString();
+            int str_from = Integer.parseInt(spinnerFrom.getSelectedItem().toString());
+            int str_to = Integer.parseInt(spinnerTo.getSelectedItem().toString());
+            String str_lang = spinnerLang.getSelectedItem().toString();
+            String str_looking_for = spinnerLook.getSelectedItem().toString();
 
-                editor.putInt("str_from", str_from);
-                editor.putInt("str_to", str_to);
+            int selectedGender = rgTrip.getCheckedRadioButtonId();
+            if (selectedGender < 0)
+                Toast.makeText(this, "Select Gender", Toast.LENGTH_SHORT).show();
+            else
+                rb_trip = findViewById(selectedGender);
+
+            String str_trip = rb_trip.getText().toString();
+
+            Toast.makeText(this, str_trip, Toast.LENGTH_SHORT).show();
+
+            editor.putString("str_trip", str_trip);
+            editor.putInt("str_from", str_from);
+            editor.putInt("str_to", str_to);
 
 
             if (!TextUtils.isEmpty(str_name)) {
@@ -360,42 +356,18 @@ public class FilterTripActivity extends BaseActivity implements View.OnClickList
                 editor.putString("str_bodytype", str_bodytype);
             }
 
+            if (!TextUtils.isEmpty(str_lang)) {
+                editor.putString("str_lang", str_lang);
+            }
+
+            if (!TextUtils.isEmpty(str_looking_for)) {
+                editor.putString("str_looking_for", str_looking_for);
+            }
+
 
             startActivity(new Intent(FilterTripActivity.this, MainActivity.class));
             editor.apply();
-            /*if (et_city.getText().toString().length() <= 0) {
-                snackBar(activity_filter_trip_coodinatelayout, "Please enter city name");
-            } else {
 
-                int selectedId = rg_trip.getCheckedRadioButtonId();
-                rb_visit = findViewById(selectedId);
-
-                String str_city = et_city.getText().toString();
-                String str_lang = spinner_lang.getSelectedItem().toString();
-                String str_eyes = spinner_eyes.getSelectedItem().toString();
-                String str_hairs = spinner_hairs.getSelectedItem().toString();
-                String str_height = spinner_height.getSelectedItem().toString();
-                String str_bodytype = spinner_bodytype.getSelectedItem().toString();
-                String str_travel_with = spinner_look.getSelectedItem().toString();
-                String str_from = spinner_from.getSelectedItem().toString();
-                String str_to = spinner_to.getSelectedItem().toString();
-                String str_visit = rb_visit.getText().toString();
-
-                editor = prefs.edit();
-                editor.putString("str_city", str_city);
-                editor.putString("str_lang", str_lang);
-                editor.putString("str_eyes", str_eyes);
-                editor.putString("str_hairs", str_hairs);
-                editor.putString("str_height", str_height);
-                editor.putString("str_bodytype", str_bodytype);
-                editor.putString("str_travel_with", str_travel_with);
-                editor.putString("str_from", str_from);
-                editor.putString("str_to", str_to);
-                editor.putString("str_visit", str_visit);
-                editor.apply();
-
-                startActivity(new Intent(FilterTripActivity.this, MainActivity.class));
-            }*/
         }
     }
 }

@@ -13,7 +13,7 @@
     android:layout_height="wrap_content"
     tools:context=".MyProfileFragment">
 
-    <com.pkmmte.view.CircularImageView
+    <ImageView
         android:id="@+id/iv_Image"
         android:layout_width="100dp"
         android:layout_height="100dp"

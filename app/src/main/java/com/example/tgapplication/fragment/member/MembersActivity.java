@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -96,15 +97,16 @@ public class MembersActivity extends BaseActivity {
                             User user = snapshot.getValue(User.class);
                             if (!Objects.requireNonNull(user).getId().equalsIgnoreCase(fuser.getUid()) && user.getAccount_type()==1) {
 
+
                                 if(look_user.contains(user.getGender())&& Integer.parseInt(user.getAge())>=ageFrom && Integer.parseInt(user.getAge())<=ageTo)
                                 {
+                                    Log.i(TAG, "onDataChange: Got in");
                                     FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
                                             fav = 0;
                                             if (snapshot.hasChild(user.getId()))
                                                 fav = 1;
-
 
                                             PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                                                 @Override
@@ -121,10 +123,6 @@ public class MembersActivity extends BaseActivity {
 
 
                                                     tripList = findAllMembers(new UserImg(user, pictureUrl, fav));
-
-
-                                                    for (int k = 0; k < tripList.size(); k++) {
-                                                    }
 
                                                     membersAdapter = new MembersAdapter(MembersActivity.this, fuser.getUid(), tripList, new MembersAdapter.ProfileData() {
                                                         @Override

@@ -181,6 +181,11 @@ public class ProfileActivity extends BaseActivity {
         LinearLayoutManager ll_manager = new LinearLayoutManager(ProfileActivity.this);
         rvTripValue.setLayoutManager(ll_manager);
 
+        setDataToProfile();
+
+    }
+
+    private void setDataToProfile() {
         if (getIntent().getSerializableExtra("MyObj") == null && getIntent().getSerializableExtra("MyUserObj") == null) {
             ivEditProfile.setVisibility(View.VISIBLE);
             textProfile.setVisibility(View.VISIBLE);
@@ -234,10 +239,7 @@ public class ProfileActivity extends BaseActivity {
                     userL.getUser().getLang(), userL.getUser().getHeight(), userL.getUser().getBody_type(), userL.getUser().getEyes(), userL.getUser().getHair(), userL.getUser().getVisit(), "", "", "");
 
         }
-
-
     }
-
 
     private void setDetails(String name, String gender, String about_me, String age, ArrayList<String> looking_for, ArrayList<String> travel_with, String userLocation, String nationality, String lang, String height, String body_type, String eyes, String hair, String visit, String planLocation, String from_to_date, String imageUrl) {
 
@@ -409,7 +411,7 @@ public class ProfileActivity extends BaseActivity {
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
                         Permit permit = ds.getValue(Permit.class);
-
+                        if(permit!=null)
                         if (permit.getSender().equals(fuser.getUid()) && permit.getReceiver().equals(uid) && permit.getStatus() == 1) {
                             PicturesInstance.child(uid).addValueEventListener(new ValueEventListener() {
                                 @Override

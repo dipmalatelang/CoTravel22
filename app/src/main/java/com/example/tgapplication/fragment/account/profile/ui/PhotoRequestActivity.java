@@ -115,6 +115,7 @@ public class PhotoRequestActivity extends BaseActivity {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 User user = dataSnapshot.getValue(User.class);
+                                if(user!=null)
                                 PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -184,7 +185,7 @@ public class PhotoRequestActivity extends BaseActivity {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 User user = dataSnapshot.getValue(User.class);
-
+                                if(user!=null)
                                 PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -258,7 +259,7 @@ public class PhotoRequestActivity extends BaseActivity {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 User user = dataSnapshot.getValue(User.class);
-
+                                if(user!=null)
                                 PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

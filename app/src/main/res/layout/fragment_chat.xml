@@ -41,6 +41,17 @@
 
     </ScrollView>
 
+    <TextView
+        android:id="@+id/txtNoData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No Chats"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
         style="@style/Widget.MaterialComponents.FloatingActionButton"

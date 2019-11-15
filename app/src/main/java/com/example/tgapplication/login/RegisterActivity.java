@@ -224,6 +224,13 @@ public class RegisterActivity extends BaseActivity implements View.OnTouchListen
                 });
     }
 
+    private void updateUI(FirebaseUser currentUser) {
+        if (currentUser != null) {
+            retrieveUserDetail(currentUser);
+
+        }
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -256,7 +263,7 @@ public class RegisterActivity extends BaseActivity implements View.OnTouchListen
 
                         } else {
 
-                            snackBar(relativelayout, task.getException().getMessage());
+                            snackBar(relativelayout, Objects.requireNonNull(task.getException()).getMessage());
                             dismissProgressDialog();
                             updateUI(null);
                         }
@@ -362,15 +369,17 @@ public class RegisterActivity extends BaseActivity implements View.OnTouchListen
                         str_gender = "Male";
                     }
 
-                    if (str_gender.equalsIgnoreCase("Female")) {
-                        travel_with.add("Male");
-                    } else if (str_gender.equalsIgnoreCase("Male")) {
-                        travel_with.add("Female");
-                    } else {
-                        travel_with.add("Female");
-                        travel_with.add("Male");
+                    if(str_gender!=null)
+                    {
+                        if (str_gender.equalsIgnoreCase("Female")) {
+                            travel_with.add("Male");
+                        } else if (str_gender.equalsIgnoreCase("Male")) {
+                            travel_with.add("Female");
+                        } else {
+                            travel_with.add("Female");
+                            travel_with.add("Male");
+                        }
                     }
-
 
                     register(txt_username, txt_email, txt_password, str_gender, str_age, txt_location, travel_with, range_age);
                     snackBar(relativelayout, "Register Successfully..!");

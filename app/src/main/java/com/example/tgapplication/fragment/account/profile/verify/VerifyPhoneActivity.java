@@ -28,10 +28,11 @@ import butterknife.ButterKnife;
 public class VerifyPhoneActivity extends BaseActivity {
 
 
-    PinView pinView;
     Button buttonSignIn;
     @BindView(R.id.cl_verify)
     ConstraintLayout clVerify;
+    @BindView(R.id.pinView)
+    PinView pinView;
     private FirebaseAuth mAuth;
     ProgressBar progressBar;
 
@@ -40,8 +41,6 @@ public class VerifyPhoneActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verify_phone);
         ButterKnife.bind(this);
-
-        pinView = findViewById(R.id.pinView);
 
         buttonSignIn = findViewById(R.id.buttonSignIn);
 
@@ -52,7 +51,6 @@ public class VerifyPhoneActivity extends BaseActivity {
         buttonSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
 
                 String code = pinView.getText().toString().trim();
                 progressBar.setVisibility(View.GONE);
@@ -95,7 +93,7 @@ public class VerifyPhoneActivity extends BaseActivity {
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                                 message = "Invalid code entered...";
                             }
-                            snackBar(clVerify,""+message);
+                            snackBar(clVerify, "" + message);
 
                         }
                     }

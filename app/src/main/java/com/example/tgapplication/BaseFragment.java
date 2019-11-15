@@ -95,7 +95,7 @@ public abstract class BaseFragment extends Fragment {
     }
 
     public void hiddenProfileDialog() {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder dialog = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
         dialog.setMessage("You can't view hidden profile.");
         dialog.setTitle("Profile is hidden");
         dialog.setPositiveButton("Ok",

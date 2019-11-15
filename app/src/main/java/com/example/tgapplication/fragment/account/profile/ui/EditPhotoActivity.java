@@ -291,7 +291,7 @@ public class EditPhotoActivity extends BaseActivity {
 
                                         PicturesInstance.child(fuser.getUid()).child(Objects.requireNonNull(uploadId)).setValue(upload);
                                     } else {
-                                        snackBar(llSelectImage, task.getException().getMessage());
+                                        snackBar(llSelectImage, Objects.requireNonNull(task.getException()).getMessage());
                                     }
                                 }
                             });

@@ -95,6 +95,7 @@ public class FacebookImageActivity extends BaseActivity {
                                         JSONObject joMain = response.getJSONObject();
                                         if (joMain.has("data")) {
                                             JSONArray jaData = joMain.optJSONArray("data");
+                                            if(jaData!=null)
                                             for (int i = 0; i < jaData.length(); i++) {
                                                 JSONObject joAlbum = jaData.getJSONObject(i);
                                                 GetFacebookImages(joAlbum.optString("id"), joAlbum.optString("name"));
@@ -147,7 +148,7 @@ public class FacebookImageActivity extends BaseActivity {
                                     JSONObject joMain = response.getJSONObject();
                                     if (joMain.has("data")) {
                                         JSONArray jaData = joMain.optJSONArray("data");
-                                        Log.i(TAG, "onCompleted: "+jaData.length());
+                                        if(jaData!=null)
                                         for (int i = 0; i < jaData.length(); i++) {
                                             JSONObject joAlbum = jaData.getJSONObject(i);
                                             GetFacebookImages(joAlbum.optString("id"), joAlbum.optString("name"));
@@ -208,6 +209,7 @@ public class FacebookImageActivity extends BaseActivity {
                                                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                                                     Upload upload = ds.getValue(Upload.class);
 
+                                                    if(upload!=null)
                                                     if (upload.getName().equalsIgnoreCase("FB_Image")) {
                                                         for (int k = 0; k < lstFBImages.size(); k++) {
                                                             if (upload.getUrl().equals(lstFBImages.get(k).getUrl())) {

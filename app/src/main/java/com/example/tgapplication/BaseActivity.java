@@ -159,13 +159,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         TrashInstance.child(uid).child(id).child("id").setValue(id);
     }
 
-    public void updateUI(FirebaseUser account) {
-        if (account != null) {
-            retrieveUserDetail(account);
-
-        }
-    }
-
     public void saveDetailsLater(ArrayList<String> travel_with, ArrayList<String> range_age) {
         sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
@@ -184,7 +177,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     }
 
-    private void retrieveUserDetail(FirebaseUser fUser) {
+    public void retrieveUserDetail(FirebaseUser fUser) {
         UsersInstance.child(fUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -210,6 +203,8 @@ public abstract class BaseActivity extends AppCompatActivity {
                     }
                 });
 
+
+                if(user!=null)
                 saveDetailsLater(user.getId(), user.getName(), user.getAge(), user.getGender(), user.getTravel_with(), user.getRange_age());
             }
 

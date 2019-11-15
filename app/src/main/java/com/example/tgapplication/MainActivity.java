@@ -20,6 +20,7 @@ import com.example.tgapplication.fragment.trip.TripFragment;
 import com.example.tgapplication.fragment.visitor.VisitorFragment;
 import com.example.tgapplication.login.LoginActivity;
 import com.facebook.login.LoginManager;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

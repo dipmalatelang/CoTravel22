@@ -61,7 +61,7 @@ public class ViewPhotoRequestActivity extends BaseActivity {
             @Override
             public void acceptRequest(String id, int pos) {
                 acceptPhotoRequest(id, 1);
-                userList.remove(pos);
+                Objects.requireNonNull(userList).remove(pos);
                 viewPhotoRequestAdapter.notifyDataSetChanged();
                 snackBar(rvViewPhotoRequest, "Accept");
             }
@@ -69,7 +69,7 @@ public class ViewPhotoRequestActivity extends BaseActivity {
             @Override
             public void denyRequest(String id, int pos) {
                 acceptPhotoRequest(id, 2);
-                userList.remove(pos);
+                Objects.requireNonNull(userList).remove(pos);
                 viewPhotoRequestAdapter.notifyDataSetChanged();
                 snackBar(rvViewPhotoRequest, "Deny");
             }
@@ -77,7 +77,7 @@ public class ViewPhotoRequestActivity extends BaseActivity {
             @Override
             public void hidePhotoRequest(String id, int pos) {
                 removePhotoRequest(id);
-                userList.remove(pos);
+                Objects.requireNonNull(userList).remove(pos);
                 viewPhotoRequestAdapter.notifyDataSetChanged();
 
             }
