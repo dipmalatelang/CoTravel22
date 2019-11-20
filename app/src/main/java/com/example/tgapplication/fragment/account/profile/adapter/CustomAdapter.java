@@ -2,11 +2,13 @@ package com.example.tgapplication.fragment.account.profile.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -55,58 +57,71 @@ public class CustomAdapter extends PagerAdapter {
         inflater = (LayoutInflater)ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = Objects.requireNonNull(inflater).inflate(R.layout.swipe,container,false);
         ImageView img = v.findViewById(R.id.imageView);
-        ProgressBar progressBar=v.findViewById(R.id.progressBar);
-        if(gender.equalsIgnoreCase("Female"))
-        {
-            Glide.with(ctx).asBitmap().load(mUploads.get(position).getUrl())
-                    .centerCrop()
-                    .override(450,600)
-                    .listener(new RequestListener<Bitmap>() {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                            progressBar.setVisibility(View.GONE);
-                            img.setImageResource(R.drawable.no_photo_female);
-                            return false;
-                        }
+        VideoView videoView=v.findViewById(R.id.videoView);
 
-                        @Override
-                        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                            progressBar.setVisibility(View.GONE);
-                            return false;
-                        }
-                    })
-                    .into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                            img.setImageBitmap(resource);
-                        }
-                    });
+        ProgressBar progressBar=v.findViewById(R.id.progressBar);
+        if(mUploads.get(position).getName().equalsIgnoreCase("Video"))
+        {
+            img.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);
+            videoView.setVisibility(View.VISIBLE);
+            videoView.setVideoURI(Uri.parse(mUploads.get(position).getUrl()));
+            videoView.start();
         }
         else {
-            Glide.with(ctx).asBitmap().load(mUploads.get(position).getUrl())
-                    .centerCrop()
-                    .override(450,600)
-                    .listener(new RequestListener<Bitmap>() {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-                            progressBar.setVisibility(View.GONE);
-                            img.setImageResource(R.drawable.no_photo_male);
-                            return false;
-                        }
+            if(gender.equalsIgnoreCase("Female"))
+            {
+                Glide.with(ctx).asBitmap().load(mUploads.get(position).getUrl())
+                        .centerCrop()
+                        .override(450,600)
+                        .listener(new RequestListener<Bitmap>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                                progressBar.setVisibility(View.GONE);
+                                img.setImageResource(R.drawable.no_photo_female);
+                                return false;
+                            }
 
-                        @Override
-                        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-                            progressBar.setVisibility(View.GONE);
-                            return false;
-                        }
-                    })
-                    .into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                            img.setImageBitmap(resource);
-                        }
-                    });
+                            @Override
+                            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                                progressBar.setVisibility(View.GONE);
+                                return false;
+                            }
+                        })
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                img.setImageBitmap(resource);
+                            }
+                        });
+            }
+            else {
+                Glide.with(ctx).asBitmap().load(mUploads.get(position).getUrl())
+                        .centerCrop()
+                        .override(450,600)
+                        .listener(new RequestListener<Bitmap>() {
+                            @Override
+                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                                progressBar.setVisibility(View.GONE);
+                                img.setImageResource(R.drawable.no_photo_male);
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                                progressBar.setVisibility(View.GONE);
+                                return false;
+                            }
+                        })
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                img.setImageBitmap(resource);
+                            }
+                        });
+            }
         }
+
 
         container.addView(v);
         return v;

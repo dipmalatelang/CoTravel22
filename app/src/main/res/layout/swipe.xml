@@ -12,6 +12,14 @@
         android:src="@drawable/whitewallpapar"
         android:contentDescription="TODO" />
 
+
+    <VideoView
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/videoView"/>
+
+
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"

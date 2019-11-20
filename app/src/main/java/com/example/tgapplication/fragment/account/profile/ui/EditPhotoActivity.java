@@ -63,7 +63,10 @@ public class EditPhotoActivity extends BaseActivity {
     private ArrayList<Upload> public_uploads, private_uploads, upload1, upload2;
     private MyAdapter public_adapter, private_adapter;
     private Uri filePath;
+    private Uri videoPath;
     private static final int PICK_IMAGE_REQUEST = 234;
+    private static final int PICK_VIDEO_REQUEST = 123;
+
     private StorageReference storageReference;
     private String getDownloadImageUrl;
     SharedPreferences sharedPreferences;
@@ -220,8 +223,11 @@ public class EditPhotoActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.video:
+                showVideoChooser();
+                break;
             case R.id.gallery:
-                showFileChooser();
+                showImageChooser();
                 break;
 
             case R.id.facebook:
@@ -232,7 +238,14 @@ public class EditPhotoActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void showFileChooser() {
+    public void showVideoChooser() {
+        Intent intent = new Intent();
+        intent.setType("video/*");
+        intent.setAction(Intent.ACTION_PICK);
+        startActivityForResult(Intent.createChooser(intent, "Select Video"), PICK_VIDEO_REQUEST);
+    }
+
+    public void showImageChooser() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_PICK);
@@ -246,6 +259,11 @@ public class EditPhotoActivity extends BaseActivity {
             filePath = data.getData();
             uploadFile(filePath);
         }
+        else if(requestCode == PICK_VIDEO_REQUEST && data!=null && data.getData() !=null)
+        {
+            videoPath=data.getData();
+            uploadVideo(videoPath);
+        }
     }
 
     public String getFileExtension(Uri uri) {
@@ -254,6 +272,64 @@ public class EditPhotoActivity extends BaseActivity {
         return mime.getExtensionFromMimeType(cR.getType(uri));
     }
 
+    private void uploadVideo(Uri videoPath){
+        if (videoPath != null) {
+
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading");
+            progressDialog.show();
+
+            final StorageReference sRef = storageReference.child("uploads/" + System.currentTimeMillis() + "." + getFileExtension(videoPath));
+
+            sRef.putFile(videoPath)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
+
+                            progressDialog.dismiss();
+
+                            snackBar(llSelectImage, "File Uploaded ");
+
+                            String uploadId = PicturesInstance.child(fuser.getUid()).push().getKey();
+
+                            sRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Uri> task) {
+                                    if (task.isSuccessful()) {
+                                        getDownloadImageUrl = Objects.requireNonNull(task.getResult()).toString();
+                                        Log.i("FirebaseImages", getDownloadImageUrl);
+
+                                        Upload upload;
+                                        if (public_uploads.size() == 0) {
+                                            upload = new Upload(uploadId, "Video", getDownloadImageUrl, 1);
+                                        } else {
+                                            upload = new Upload(uploadId, "Video", getDownloadImageUrl, 2);
+                                        }
+
+                                        PicturesInstance.child(fuser.getUid()).child(Objects.requireNonNull(uploadId)).setValue(upload);
+                                    } else {
+                                        snackBar(llSelectImage, Objects.requireNonNull(task.getException()).getMessage());
+                                    }
+                                }
+                            });
+                        }
+                    })
+
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+                            progressDialog.dismiss();
+                        }
+                    })
+                    .addOnProgressListener(taskSnapshot -> {
+
+                        double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                        progressDialog.setMessage("Uploaded " + ((int) progress) + "%...");
+                    });
+        } else {
+            snackBar(llSelectImage, "Please Select a Video");
+        }
+    }
     private void uploadFile(Uri filePath) {
 
         if (filePath != null) {
