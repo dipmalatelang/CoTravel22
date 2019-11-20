@@ -18,6 +18,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.account.profile.module.Upload;
+import com.example.tgapplication.fragment.account.profile.verify.EditPhoneActivity;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -40,13 +41,14 @@ import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.example.tgapplication.Constants.PicturesInstance;
 import static com.example.tgapplication.Constants.UsersInstance;
 
 //import com.example.tgapplication.trips.TripActivity;
 
-public class LoginActivity extends BaseActivity implements View.OnClickListener, View.OnKeyListener {
+public class LoginActivity extends BaseActivity implements  View.OnKeyListener {
 
     @BindView(R.id.login_button)
     LoginButton loginButton;
@@ -84,15 +86,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         tvRegister.setText(getResources().getString(R.string.register));
 
 
-        linkSignup.setOnClickListener(this);
-        btnLogin.setOnClickListener(this);
-
-
-
         inputPassword.setOnTouchListener((view, motionEvent) -> showOrHidePwd(motionEvent, inputPassword));
         inputPassword.setOnKeyListener(this);
 
-        tvRegister.setOnClickListener(this);
 
 
 //        value = getIntent().getExtras().getString("nextActivity");
@@ -185,16 +181,15 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         String uploadId = PicturesInstance.child(user.getUid()).push().getKey();
         PicturesInstance.child(user.getUid()).child(Objects.requireNonNull(uploadId)).setValue(new Upload(uploadId, "Image", Objects.requireNonNull(user.getPhotoUrl()).toString() + "?type=large", 1));
 
-        if(mAuth!=null)
-        updateUI(mAuth.getCurrentUser());
+        if (mAuth != null)
+            updateUI(mAuth.getCurrentUser());
     }
 
     @Override
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        if(mAuth!=null)
-        {
+        if (mAuth != null) {
             FirebaseUser currentUser = mAuth.getCurrentUser();
             updateUI(currentUser);
         }
@@ -209,14 +204,63 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     }
 
 
+    private void phoneLogin() {
+
+    }
+
+
+    private void emailLogin(String txt_email, String txt_password) {
+        mAuth.signInWithEmailAndPassword(txt_email, txt_password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            dismissProgressDialog();
+                            updateUI(mAuth.getCurrentUser());
+
+                            Log.d(TAG, "onComplete: " + txt_email + " " + txt_password);
+                            saveLoginDetails(txt_email, txt_password);
+
+//                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                                        startActivity(intent);
+//                                        finish();
+//
+
+                        } else {
+                            snackBar(constrainlayout, Objects.requireNonNull(task.getException()).getMessage());
+                            dismissProgressDialog();
+                        }
+                    }
+                });
+    }
+
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
+    public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+        if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+            btnLogin.performClick();
+            return true;
+        }
+        return false;
+    }
+
+    @OnClick({R.id.btn_login, R.id.btn_phone_login, R.id.link_signup, R.id.tv_register})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.tv_register:
+                //                Log.i("Send while Login", value);
+                Intent loginIntent = new Intent(LoginActivity.this, RegisterActivity.class);
+//                loginIntent.putExtra("nextActivity", value);
+                startActivity(loginIntent);
+
+                break;
             case R.id.link_signup:
                 Intent resetIntent = new Intent(LoginActivity.this, ResetPasswordActivity.class);
                 resetIntent.putExtra("nextActivity", value);
                 startActivity(resetIntent);
                 break;
+
+
             case R.id.btn_login:
                 showProgressDialog();
                 String txt_email = inputEmail.getText().toString().trim();
@@ -232,29 +276,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 } else {
                     Log.d(TAG, "onComplete1: " + txt_email + " " + txt_password);
 //                    hideKeyboard(this);
-                    mAuth.signInWithEmailAndPassword(txt_email, txt_password)
-                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                @Override
-                                public void onComplete(@NonNull Task<AuthResult> task) {
-                                    if (task.isSuccessful()) {
-                                        dismissProgressDialog();
-                                        updateUI(mAuth.getCurrentUser());
+                    emailLogin(txt_email, txt_password);
 
-                                        Log.d(TAG, "onComplete: " + txt_email + " " + txt_password);
-                                        saveLoginDetails(txt_email, txt_password);
-
-//                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-//                                        startActivity(intent);
-//                                        finish();
-//
-
-                                    } else {
-                                        snackBar(constrainlayout, Objects.requireNonNull(task.getException()).getMessage());
-                                        dismissProgressDialog();
-                                    }
-                                }
-                            });
                 }
 
            /*     if(CheckNetwork.isInternetAvailable(this)) //returns true if internet available
@@ -268,23 +291,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                     snackBar(constrainlayout, "no internet connection");
                 }*/
                 break;
-            case R.id.tv_register:
-//                Log.i("Send while Login", value);
-                Intent loginIntent = new Intent(LoginActivity.this, RegisterActivity.class);
-//                loginIntent.putExtra("nextActivity", value);
-                startActivity(loginIntent);
+            case R.id.btn_phone_login:
+                startActivity(new Intent(this,EditPhoneActivity.class));
                 break;
         }
-
-    }
-
-    @Override
-    public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
-        if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-            btnLogin.performClick();
-            return true;
-        }
-        return false;
     }
 //    private boolean isNetworkConnected() {
 //        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);

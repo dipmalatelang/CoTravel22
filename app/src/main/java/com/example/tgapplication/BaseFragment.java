@@ -15,6 +15,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
+import com.example.tgapplication.fragment.chat.adapter.UserAdapter;
 import com.example.tgapplication.fragment.chat.module.Chat;
 import com.example.tgapplication.fragment.trip.module.PlanTrip;
 import com.example.tgapplication.fragment.trip.module.TripList;
@@ -184,7 +185,7 @@ public abstract class BaseFragment extends Fragment {
 
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        ChatsInstance.addListenerForSingleValueEvent(new ValueEventListener() {
+        ChatsInstance.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 theLastMessage = "default";
@@ -215,10 +216,15 @@ public abstract class BaseFragment extends Fragment {
                 if ("default".equals(theLastMessage)) {
                     last_msg.setText("No Message");
                     last_msg_time.setText("No Time");
+
                 } else {
                     last_msg.setText(theLastMessage);
-
                     last_msg_time.setText(theLastMsgTime);
+                }
+
+                if(!textType)
+                {
+                    last_msg.setTextColor(getResources().getColor(R.color.black));
                 }
 
             }

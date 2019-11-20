@@ -99,6 +99,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         Snackbar snackbar = Snackbar.make(constrainlayout, s, Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
             }
         });
 
@@ -111,6 +112,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
     public void saveDetailsLater(String id, String name, String age, String gender, ArrayList<String> travel_with, ArrayList<String> range_age) {
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
         sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         editor.putString("Id", id);
@@ -122,7 +125,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         editor.apply();
 
-        startActivity(new Intent(this, MainActivity.class));
+
     }
     public void saveLoginDetails(String email, String password) {
         sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
@@ -235,13 +238,18 @@ public abstract class BaseActivity extends AppCompatActivity {
                 .child(id).child("id").setValue(id);
     }
 
+    public void setPhoneNumber(String id, String mobile)
+    {
+        UsersInstance.child(id).child("phone").setValue(mobile);
+    }
+
 
 
     public void checkForLastMsg(Context mContext, final String userid, TextView last_msg, TextView last_msg_time, ConstraintLayout rl_chat) {
 
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        ChatsInstance.addListenerForSingleValueEvent(new ValueEventListener() {
+        ChatsInstance.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 theLastMessage = "default";

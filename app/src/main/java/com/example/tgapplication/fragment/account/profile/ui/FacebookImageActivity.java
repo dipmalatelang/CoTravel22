@@ -25,6 +25,11 @@ import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -42,6 +47,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.example.tgapplication.Constants.PicturesInstance;
+import static com.example.tgapplication.Constants.UsersInstance;
 
 public class FacebookImageActivity extends BaseActivity {
 
@@ -82,7 +88,7 @@ public class FacebookImageActivity extends BaseActivity {
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-
+                handleFacebookAccessToken(loginResult.getAccessToken().getToken());
                 new GraphRequest(
                         loginResult.getAccessToken(),
                         "/" + AccessToken.getCurrentAccessToken().getUserId() + "/albums",
@@ -109,6 +115,8 @@ public class FacebookImageActivity extends BaseActivity {
                             }
                         }
                 ).executeAsync();
+
+
             }
 
             @Override
@@ -123,6 +131,26 @@ public class FacebookImageActivity extends BaseActivity {
         });
 
         getAlbum();
+    }
+
+    private void handleFacebookAccessToken(String token) {
+        showProgressDialog();
+        AuthCredential credential = FacebookAuthProvider.getCredential(token);
+        Log.d("Tiger", "" + credential);
+        fuser.linkWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d("Tiger", "handleFacebookAccessToken:" + task.isSuccessful());
+                        if (task.isSuccessful()) {
+
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d("Tiger", "signInWithCredential:success");
+                            dismissProgressDialog();
+                        }
+
+                    }
+                });
     }
 
     @Override
@@ -170,6 +198,8 @@ public class FacebookImageActivity extends BaseActivity {
             loginButton.performClick();
         }
     }
+
+
 
 
     public void GetFacebookImages(String albumId, String name) {

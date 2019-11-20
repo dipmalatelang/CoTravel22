@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -40,6 +41,7 @@ public class VisitorFragment extends BaseFragment {
     private FirebaseUser fuser;
     View view;
     TextView txtNoData;
+    ProgressBar progressBar;
     String pictureUrl;
     private List<UserImg> myFavArray=new ArrayList<>();
 
@@ -49,6 +51,7 @@ public class VisitorFragment extends BaseFragment {
 
         view = inflater.inflate(R.layout.fragment_visitor, container, false);
 
+        progressBar=view.findViewById(R.id.progressBar);
         txtNoData=view.findViewById(R.id.txtNoData);
         myVisitRV = view.findViewById(R.id.myVisitRV);
         RecyclerView.LayoutManager nLayoutManager = new LinearLayoutManager(getActivity());
@@ -158,9 +161,11 @@ public class VisitorFragment extends BaseFragment {
 
                                                                                                             });
                                                                                                 }
+                                                                                                progressBar.setVisibility(View.GONE);
                                                                                                 txtNoData.setVisibility(View.GONE);
                                                                                             }
                                                                                             else {
+                                                                                                progressBar.setVisibility(View.GONE);
                                                                                                 txtNoData.setVisibility(View.VISIBLE);
                                                                                             }
                                                                                         }

@@ -91,7 +91,6 @@ public class TripFragment extends BaseFragment {
 
         setHasOptionsMenu(true);
 
-
         floatingActionButton = view.findViewById(R.id.floatingActionButton);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,19 +130,6 @@ public class TripFragment extends BaseFragment {
             ageFrom = Integer.parseInt(ageRange.get(0));
             ageTo = Integer.parseInt(ageRange.get(1));
         }
-/*
-
-        if (str_city.equalsIgnoreCase("not_defined")) {
-
-            tripList(fuser,travel_with_user, ageFrom, ageTo);
-            tripFilter.setText("Filter");
-
-        } else {
-            tripFilter.setText("Clear Filter");
-
-            getDataToFilter();
-        }
-*/
 
         prefs = Objects.requireNonNull(getActivity()).getSharedPreferences("Filter_TripList", 0);
 
@@ -236,18 +222,6 @@ public class TripFragment extends BaseFragment {
 
         return view;
     }
-
- /*   private void getDataToFilter() {
-
-           if (str_lang.equals("All")) {
-                        str_lang = "Arabic,Danish,German,Belorussian,Dutch,Greek,Japanese,Portuguese,Italian,Polish,Spanish,Swedish,Bulgarian,English,Hebrew,Korean,Romanian,Thai,Catalan,Estonian,Hindi,Latvian,Russian,Turkish,Chinese,Filipino,Hungarian,Lithuanian,Serbian,Ukrainian,Croatian,Finnish,Icelandic,Norwegian,Slovak,Urdu,Czech,French,Indonesian,Persian,Slovenian,Vietnamese,Nepali,Armenian,Kurdish";
-                    }
-
-        if (str_travel_with.equals("All")) {
-            str_travel_with = "Female,Male";
-        }
-        filterTripList(str_name,str_city, str_lang, str_eyes, str_hairs, str_height, str_bodytype, str_travel_with, str_from, str_to, str_visit);
-    }*/
 
     private void filterTripList(String str_name, String str_city, String str_lang, String str_eyes, String str_hairs, String str_height, String str_bodytype, String str_looking_for,
                                 int num_from, int num_to, String str_trip) {
@@ -592,6 +566,7 @@ public class TripFragment extends BaseFragment {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
                             final User user = snapshot.getValue(User.class);
+                            Log.i(TAG, "onDataChange: "+user.getId());
                             if (!Objects.requireNonNull(user).getId().equalsIgnoreCase(fuser.getUid())) {
 
                                 if (travel_with_user.contains(user.getGender()) && Integer.parseInt(user.getAge()) >= ageFrom && Integer.parseInt(user.getAge()) <= ageTo) {

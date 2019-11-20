@@ -170,6 +170,8 @@ public class ProfileActivity extends BaseActivity {
     ArrayList<TripData> planTripsList = new ArrayList<>();
     int privateValue = 0;
 
+    StringBuilder str_user;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -263,8 +265,11 @@ public class ProfileActivity extends BaseActivity {
             cardLanguage.setVisibility(View.GONE);
         }
 
-        if (name != null && !name.equalsIgnoreCase("") || age != null && !age.equalsIgnoreCase("")) {
-            tvUser.setText(name + " , " + age);
+        if ((name != null && !name.equalsIgnoreCase("")) || (age != null && !age.equalsIgnoreCase(""))) {
+            str_user = new StringBuilder(name);
+            str_user.append(" , ");
+            str_user.append(age);
+            tvUser.setText(str_user);
         }
 
 
@@ -302,20 +307,20 @@ public class ProfileActivity extends BaseActivity {
         }
 
 
-        if (body_type != null && !body_type.equalsIgnoreCase("")) {
+        if (body_type != null && !body_type.equalsIgnoreCase("") && !body_type.equalsIgnoreCase("select")) {
             tvBodyTypeValue.setText(body_type);
         } else {
             cardBodyType.setVisibility(View.GONE);
         }
 
 
-        if (eyes != null && !eyes.equalsIgnoreCase("")) {
+        if (eyes != null && !eyes.equalsIgnoreCase("") && !eyes.equalsIgnoreCase("select")) {
             tvEyeValue.setText(eyes);
         } else {
             cardEye.setVisibility(View.GONE);
         }
 
-        if (hair != null && !hair.equalsIgnoreCase("")) {
+        if (hair != null && !hair.equalsIgnoreCase("") && !hair.equalsIgnoreCase("select")) {
             tvHairValue.setText(hair);
         } else {
             cardHair.setVisibility(View.GONE);

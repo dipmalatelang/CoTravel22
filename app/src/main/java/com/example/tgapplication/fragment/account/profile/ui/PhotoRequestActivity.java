@@ -107,7 +107,7 @@ public class PhotoRequestActivity extends BaseActivity {
         PhotoRequestInstance.orderByChild("receiver").equalTo(fuser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                viewPhotoRequestList.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Permit permit = ds.getValue(Permit.class);
                     if (Objects.requireNonNull(permit).getStatus() == 0) {
@@ -177,7 +177,7 @@ public class PhotoRequestActivity extends BaseActivity {
         PhotoRequestInstance.orderByChild("sender").equalTo(fuser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                photoPermitsList.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Permit permit = ds.getValue(Permit.class);
                     if (Objects.requireNonNull(permit).getStatus() == 1) {
@@ -251,7 +251,7 @@ public class PhotoRequestActivity extends BaseActivity {
         PhotoRequestInstance.orderByChild("receiver").equalTo(fuser.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                givenPermitsList.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Permit permit = ds.getValue(Permit.class);
                     if (Objects.requireNonNull(permit).getStatus() == 1) {

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.pnikosis.materialishprogress.ProgressWheel;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -47,6 +49,7 @@ public class FavouriteFragment extends BaseFragment {
 
 
     TextView txtNoData;
+    ProgressBar progressBar;
     private RecyclerView myFavRV;
     private FirebaseUser fuser;
     View view;
@@ -61,6 +64,7 @@ public class FavouriteFragment extends BaseFragment {
 
         view = inflater.inflate(R.layout.fragment_favourite, container, false);
 
+        progressBar=view.findViewById(R.id.progressBar);
         txtNoData=view.findViewById(R.id.txtNoData);
         myFavRV = view.findViewById(R.id.myFavRV);
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(getActivity(), 2);
@@ -158,8 +162,10 @@ public class FavouriteFragment extends BaseFragment {
 
 
                     }
+                    progressBar.setVisibility(View.GONE);
                     txtNoData.setVisibility(View.GONE);
                 } else {
+                    progressBar.setVisibility(View.GONE);
                     txtNoData.setVisibility(View.VISIBLE);
 //                    Toast.makeText(getActivity(), "No data", Toast.LENGTH_SHORT).show();
                 }

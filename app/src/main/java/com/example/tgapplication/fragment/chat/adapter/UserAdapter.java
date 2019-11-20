@@ -147,7 +147,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
         }
 
         if (ischat){
-            listener.lastMessage(mContext,user.getId(), holder.last_msg, holder.last_msg_time, holder.chat);
+            listener.lastMessage(mContext,user.getId(), position,holder.last_msg, holder.last_msg_time, holder.chat);
 
         } else {
             holder.last_msg.setVisibility(View.GONE);
@@ -161,7 +161,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, MessageActivity.class);
                 intent.putExtra("userid", user.getId());
-
                 mContext.startActivity(intent);
             }
         });
@@ -241,7 +240,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ViewHolder> {
     UserInterface listener;
     public interface UserInterface
     {
-        void lastMessage(Context mContext, String userid, TextView last_msg, TextView last_msg_time, ConstraintLayout chat);
+        void lastMessage(Context mContext, String userid, int position, TextView last_msg, TextView last_msg_time, ConstraintLayout chat);
         void addToFav(String userid, int position);
         void addToTrash(String userid, int position);
         void restoreFromTrash(String userid, int position);
