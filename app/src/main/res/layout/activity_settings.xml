@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -39,7 +38,7 @@
         tools:layout_editor_absoluteX="5dp">
 
         <Switch
-            android:id="@+id/switch4"
+            android:id="@+id/switchDisplayNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text=" Display my phone number on my profile"
@@ -55,7 +54,7 @@
             android:layout_height="1dp"
             android:layout_margin="8dp"
             android:background="@color/colorPrimaryDark"
-            app:layout_constraintTop_toBottomOf="@+id/switch4" />
+            app:layout_constraintTop_toBottomOf="@+id/switchDisplayNumber" />
 
         <TextView
             android:id="@+id/tv_notification"
@@ -96,7 +95,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Switch
-            android:id="@+id/switch1"
+            android:id="@+id/switchEmailAllNotify"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
@@ -110,13 +109,13 @@
         </Switch>
 
         <Switch
-            android:id="@+id/switch2"
+            android:id="@+id/switchEmailMsgNotify"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:text=" Only notifications about new messages"
             android:textColor="@color/purple"
-            app:layout_constraintTop_toBottomOf="@+id/switch1"
+            app:layout_constraintTop_toBottomOf="@+id/switchEmailAllNotify"
             tools:layout_editor_absoluteX="8dp">
 
         </Switch>
@@ -128,7 +127,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:theme="@style/TextInputLayoutAppearance"
-            app:layout_constraintTop_toBottomOf="@+id/switch2"
+            app:layout_constraintTop_toBottomOf="@+id/switchEmailMsgNotify"
             tools:layout_editor_absoluteX="2dp">
 
 
@@ -150,6 +149,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Switch
+            android:id="@+id/switchSmsMsgNotify"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text=" SMS notifications about new messages"

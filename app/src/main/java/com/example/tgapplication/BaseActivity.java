@@ -111,21 +111,39 @@ public abstract class BaseActivity extends AppCompatActivity {
             ProgressActivity.showDialog(this);
         }
     }
-    public void saveDetailsLater(String id, String name, String age, String gender, ArrayList<String> travel_with, ArrayList<String> range_age) {
+    public void saveDetailsLater(User user) {
         startActivity(new Intent(this, MainActivity.class));
         finish();
+
         sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        editor.putString("Id", id);
-        editor.putString("Name", name);
-        editor.putString("Age", age);
-        editor.putString("Gender",gender);
-        editor.putString("TravelWith",new Gson().toJson(travel_with));
-        editor.putString("AgeRange",new Gson().toJson(range_age));
+        editor.putString("Id", user.getId());
+        editor.putString("Name",  user.getName());
+        editor.putString("Age", user.getAge());
+        editor.putString("Gender",user.getGender());
+        editor.putString("Phone",user.getPhone());
+        editor.putString("TravelWith",new Gson().toJson(user.getTravel_with()));
+        editor.putString("AgeRange",new Gson().toJson(user.getRange_age()));
 
         editor.apply();
 
 
+    }
+
+    public void saveSettingInfo(String b, boolean isChecked)
+    {
+        sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putBoolean(b, isChecked);
+        editor.apply();
+    }
+
+    public void saveDisplayName(String name)
+    {
+        sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString("Name", name);
+        editor.apply();
     }
     public void saveLoginDetails(String email, String password) {
         sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
@@ -208,7 +226,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 
                 if(user!=null)
-                saveDetailsLater(user.getId(), user.getName(), user.getAge(), user.getGender(), user.getTravel_with(), user.getRange_age());
+                saveDetailsLater(user);
             }
 
             @Override

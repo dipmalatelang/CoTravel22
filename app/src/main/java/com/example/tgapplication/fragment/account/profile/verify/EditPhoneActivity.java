@@ -1,7 +1,10 @@
 package com.example.tgapplication.fragment.account.profile.verify;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -34,6 +37,26 @@ public class EditPhoneActivity extends BaseActivity {
         setContentView(R.layout.activity_edit_phone);
         ButterKnife.bind(this);
 
+        SharedPreferences sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+
+        if (sharedPreferences.contains("Phone")) {
+            mobile = (sharedPreferences.getString("Phone", ""));
+            Log.i(TAG, "onCreate: Checking Phone "+mobile);
+            if(!mobile.equalsIgnoreCase(""))
+            {
+                edNumber.setEnabled(false);
+                btnSub.setClickable(false);
+                edNumber.setText(mobile);
+
+            }
+            else {
+                edNumber.setEnabled(true);
+                btnSub.setClickable(true);
+            }
+
+        }
+
+
     }
 
     @OnClick(R.id.btn_sub)
@@ -49,5 +72,6 @@ public class EditPhoneActivity extends BaseActivity {
         Intent intent = new Intent(EditPhoneActivity.this, VerifyPhoneActivity.class);
         intent.putExtra("mobile", mobile);
         startActivity(intent);
+        finish();
     }
 }

@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:id="@+id/cl_show_message"
-    android:layout_width="300dp"
+<RelativeLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp"
-    android:layout_gravity="end"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+<RelativeLayout
+android:id="@+id/cl_show_message"
+    android:layout_width="300dp"
+   android:layout_alignParentEnd="true"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
 
     <com.pkmmte.view.CircularImageView
         android:id="@+id/profile_image"
@@ -14,14 +18,15 @@
         android:src="@drawable/avatar_girl_32" />
 
     <LinearLayout
-        android:layout_toRightOf="@+id/profile_image"
         android:id="@+id/constraintLayout3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+       android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@+id/profile_image"
         android:background="@drawable/background_right"
-        android:padding="10dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="10dp">
 
         <TextView
             android:id="@+id/show_message"
@@ -35,8 +40,8 @@
             android:id="@+id/right_msg_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_gravity="end"
+            android:layout_marginTop="8dp"
             android:text="welcome"
             android:textColor="@color/white"
             android:textSize="12sp" />
@@ -53,4 +58,5 @@
         android:layout_alignParentEnd="true"
         android:text="seen"
         android:textColor="@color/black" />
+</RelativeLayout>
 </RelativeLayout>
