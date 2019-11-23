@@ -1,8 +1,8 @@
 package com.example.tgapplication.fragment.account.profile.ui;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,9 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.account.profile.module.Permit;
-import com.example.tgapplication.fragment.account.profile.module.Upload;
 import com.example.tgapplication.fragment.account.profile.verify.ViewPhotoRequestAdapter;
-import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.fragment.visitor.UserImg;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -31,14 +29,13 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.example.tgapplication.Constants.FavoritesInstance;
 import static com.example.tgapplication.Constants.PhotoRequestInstance;
-import static com.example.tgapplication.Constants.PicturesInstance;
-import static com.example.tgapplication.Constants.UsersInstance;
 
 public class ViewPhotoRequestActivity extends BaseActivity {
     @BindView(R.id.rv_view_photo_request)
     RecyclerView rvViewPhotoRequest;
+    @BindView(R.id.txtNoData)
+    TextView txtNoData;
     private FirebaseUser fuser;
     ViewPhotoRequestAdapter viewPhotoRequestAdapter;
     ValueEventListener requestSeenListener, photoRequestListener, removePhotoRequestListener;
@@ -71,6 +68,9 @@ public class ViewPhotoRequestActivity extends BaseActivity {
                 Objects.requireNonNull(userList).remove(pos);
                 viewPhotoRequestAdapter.notifyDataSetChanged();
                 snackBar(rvViewPhotoRequest, "Accept");
+                if (userList.size() <= 0) {
+                    txtNoData.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -79,6 +79,9 @@ public class ViewPhotoRequestActivity extends BaseActivity {
                 Objects.requireNonNull(userList).remove(pos);
                 viewPhotoRequestAdapter.notifyDataSetChanged();
                 snackBar(rvViewPhotoRequest, "Deny");
+                if (userList.size() <= 0) {
+                    txtNoData.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -86,6 +89,9 @@ public class ViewPhotoRequestActivity extends BaseActivity {
                 removePhotoRequest(id);
                 Objects.requireNonNull(userList).remove(pos);
                 viewPhotoRequestAdapter.notifyDataSetChanged();
+                if (userList.size() <= 0) {
+                    txtNoData.setVisibility(View.VISIBLE);
+                }
 
             }
         });
@@ -96,7 +102,7 @@ public class ViewPhotoRequestActivity extends BaseActivity {
     }
 
     private void acceptPhotoRequest(String userid, int i) {
-        photoRequestListener= PhotoRequestInstance.addValueEventListener(new ValueEventListener() {
+        photoRequestListener = PhotoRequestInstance.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -151,22 +157,19 @@ public class ViewPhotoRequestActivity extends BaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if(removePhotoRequestListener!=null)
-        {
+        if (removePhotoRequestListener != null) {
             PhotoRequestInstance.removeEventListener(removePhotoRequestListener);
         }
-        if(requestSeenListener!=null)
-        {
+        if (requestSeenListener != null) {
             PhotoRequestInstance.removeEventListener(requestSeenListener);
         }
-        if(photoRequestListener!=null)
-        {
+        if (photoRequestListener != null) {
             PhotoRequestInstance.removeEventListener(photoRequestListener);
         }
     }
 
     private void removePhotoRequest(String userid) {
-        removePhotoRequestListener=PhotoRequestInstance.addValueEventListener(new ValueEventListener() {
+        removePhotoRequestListener = PhotoRequestInstance.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {

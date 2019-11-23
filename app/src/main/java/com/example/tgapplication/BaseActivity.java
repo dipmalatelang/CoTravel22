@@ -11,13 +11,20 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.example.tgapplication.fragment.chat.module.APIService;
 import com.example.tgapplication.fragment.chat.module.Chat;
+import com.example.tgapplication.fragment.chat.module.Client;
+import com.example.tgapplication.fragment.chat.module.Data;
+import com.example.tgapplication.fragment.chat.module.MyResponse;
+import com.example.tgapplication.fragment.chat.module.Sender;
+import com.example.tgapplication.fragment.chat.module.Token;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.fragment.visitor.UserImg;
@@ -27,6 +34,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
@@ -34,10 +42,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import static com.example.tgapplication.Constants.ChatsInstance;
 import static com.example.tgapplication.Constants.FavoritesInstance;
 import static com.example.tgapplication.Constants.PicturesInstance;
 import static com.example.tgapplication.Constants.ProfileVisitorInstance;
+import static com.example.tgapplication.Constants.TokensInstance;
 import static com.example.tgapplication.Constants.TrashInstance;
 import static com.example.tgapplication.Constants.UsersInstance;
 
@@ -53,6 +66,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     SharedPreferences.Editor editor;
     String theLastMessage, theLastMsgTime;
     Boolean textType;
+
+    APIService apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService .class);
+
 
 
     public List<TripList> findAllMembers(UserImg userImg) {
@@ -196,6 +212,82 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         saveDetailsLater(travel_with,age);
 
+    }
+
+    public void sendNotifiaction(String uid, String userid, final String username, final String message) {
+        Query query = TokensInstance.orderByKey().equalTo(userid);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Token token = snapshot.getValue(Token.class);
+                    Data data = new Data(uid, R.mipmap.ic_launcher, username + " " + message, "Notification",
+                            userid);
+
+                    Sender sender = new Sender(data, Objects.requireNonNull(token).getToken());
+
+                    apiService.sendNotification(sender)
+                            .enqueue(new Callback<MyResponse>() {
+                                @Override
+                                public void onResponse(@NonNull Call<MyResponse> call, @NonNull Response<MyResponse> response) {
+                                    if (response.code() == 200) {
+                                        if (Objects.requireNonNull(response.body()).success != 1) {
+//                                            snackBar(message_realtivelayout, "Failed!");
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(@NonNull Call<MyResponse> call, @NonNull Throwable t) {
+
+                                }
+                            });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void sendMsgNotifiaction(String uid, String userid, String receiver, final String username, final String message) {
+        Query query = TokensInstance.orderByKey().equalTo(receiver);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Token token = snapshot.getValue(Token.class);
+                    Data data = new Data(uid, R.mipmap.ic_launcher, username + ": " + message, "New Message",
+                            userid);
+
+                    Sender sender = new Sender(data, Objects.requireNonNull(token).getToken());
+
+                    apiService.sendNotification(sender)
+                            .enqueue(new Callback<MyResponse>() {
+                                @Override
+                                public void onResponse(@NonNull Call<MyResponse> call, @NonNull Response<MyResponse> response) {
+                                    if (response.code() == 200) {
+                                        if (Objects.requireNonNull(response.body()).success != 1) {
+//                                            snackBar(message_realtivelayout, "Failed!");
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(@NonNull Call<MyResponse> call, @NonNull Throwable t) {
+
+                                }
+                            });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void retrieveUserDetail(FirebaseUser fUser) {

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -121,6 +122,8 @@ public class VisitorFragment extends BaseFragment {
 
                                                                                                                                             ProfileVisitorInstance.child(id)
                                                                                                                                                     .child(uid).child("id").setValue(uid);
+
+                                                                                                                                            Toast.makeText(getActivity(), "Visited", Toast.LENGTH_SHORT).show();
                                                                                                                                         }
 
                                                                                                                                         @Override

@@ -38,6 +38,7 @@
             android:launchMode="singleTask"/>
 
         <activity android:name=".fragment.account.profile.ui.ViewPhotoRequestActivity"
+            android:parentActivityName=".fragment.account.profile.ui.PhotoRequestActivity"
             android:launchMode="singleTask"/>
 
         <activity android:name=".fragment.account.profile.ui.SettingsActivity"

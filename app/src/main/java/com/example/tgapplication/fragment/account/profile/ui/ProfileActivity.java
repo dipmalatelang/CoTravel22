@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -158,6 +159,7 @@ public class ProfileActivity extends BaseActivity {
     private ArrayList<Upload> uploads = new ArrayList<>();
     ArrayList<User> userList = new ArrayList<>();
     int account_type = 1;
+    boolean notify = false;
 
     private FirebaseUser fuser;
     TripList tripL;
@@ -450,7 +452,7 @@ public class ProfileActivity extends BaseActivity {
 
 //                                        privateValue = 1;
 
-
+                                        Log.i(TAG, "onDataChange: "+uploads.size());
                                         if (uploads.size() > 0) {
                                             adapter = new CustomAdapter(ProfileActivity.this, uid, uploads, gender);
                                             viewPager.setAdapter(adapter);
@@ -510,6 +512,7 @@ public class ProfileActivity extends BaseActivity {
 
 //                                        privateValue = 0;
 
+                                        Log.i(TAG, "onDataChange: "+uploads.size());
                                         if (uploads.size() > 0) {
                                             adapter = new CustomAdapter(ProfileActivity.this, uid, uploads, gender);
                                             viewPager.setAdapter(adapter);
@@ -541,6 +544,65 @@ public class ProfileActivity extends BaseActivity {
                                     }
                                 });
                             }
+                        }
+                        else {
+                            PicturesInstance.child(uid).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    upload1 = new ArrayList<>();
+                                    upload2 = new ArrayList<>();
+                                    uploads = new ArrayList<>();
+
+                                    for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                                        Upload upload = postSnapshot.getValue(Upload.class);
+                                        if (Objects.requireNonNull(upload).getType() == 1) {
+                                            upload1.add(upload);
+                                        } else if (upload.getType() == 2) {
+                                            upload2.add(upload);
+                                        }
+                                    }
+
+                                    if (upload1.size() > 0) {
+                                        uploads.addAll(upload1);
+                                    }
+
+                                    if (upload2.size() > 0) {
+                                        uploads.addAll(upload2);
+                                    }
+
+//                                        privateValue = 0;
+
+                                    Log.i(TAG, "onDataChange: "+uploads.size());
+                                    if (uploads.size() > 0) {
+                                        adapter = new CustomAdapter(ProfileActivity.this, uid, uploads, gender);
+                                        viewPager.setAdapter(adapter);
+
+                                        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                                            @Override
+                                            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                                                int i = position + 1;
+                                                tvCount.setText(i + " / " + uploads.size());
+                                            }
+
+                                            @Override
+                                            public void onPageSelected(int position) {
+
+                                            }
+
+                                            @Override
+                                            public void onPageScrollStateChanged(int state) {
+
+                                            }
+                                        });
+                                    }
+
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
                         }
                         if (permit.getReceiver().equals(uid)) {
                             break;
@@ -574,7 +636,7 @@ public class ProfileActivity extends BaseActivity {
 
 //                            privateValue = 0;
 
-
+                            Log.i(TAG, "onDataChange: "+uploads.size());
                             if (uploads.size() > 0) {
                                 adapter = new CustomAdapter(ProfileActivity.this, uid, uploads, gender);
                                 viewPager.setAdapter(adapter);
@@ -816,9 +878,14 @@ public class ProfileActivity extends BaseActivity {
                         tripL.setFavid(0);
                         ivFavUser.setImageResource(R.drawable.ic_action_fav_add);
                     } else {
+                        notify = true;
                         setFav(fuser.getUid(), tripL.getId());
                         tripL.setFavid(1);
                         ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
+                        if (notify) {
+                            sendNotifiaction(fuser.getUid(),tripL.getId(), tripL.getName(), "has added you to Favourite");
+                        }
+                        notify = false;
                     }
                 } else if (userL != null) {
                     if (userL.getFav() == 1) {
@@ -826,9 +893,14 @@ public class ProfileActivity extends BaseActivity {
                         userL.setFav(0);
                         ivFavUser.setImageResource(R.drawable.ic_action_fav_add);
                     } else {
+                        notify = true;
                         setFav(fuser.getUid(), userL.getUser().getId());
                         userL.setFav(1);
                         ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
+                        if (notify) {
+                            sendNotifiaction(fuser.getUid(),userL.getUser().getId(), userL.getUser().getName(), "has added you to Favourite");
+                        }
+                        notify = false;
                     }
                 }
 
