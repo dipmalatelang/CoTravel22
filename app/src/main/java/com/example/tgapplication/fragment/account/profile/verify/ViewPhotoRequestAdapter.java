@@ -50,6 +50,9 @@ public class ViewPhotoRequestAdapter extends RecyclerView.Adapter<ViewPhotoReque
     public void onBindViewHolder(@NonNull ViewPhotoRequestAdapter.ViewPhotoRequestHolder holder, int position) {
         String userInfo=userList.get(position).getUser().getName()+", "+userList.get(position).getUser().getAge();
         holder.tvName.setText(userInfo);
+
+        viewPhotoRequestInterface.seenRequest(userList.get(position).getUser().getId());
+
         if(userList.get(position).getUser().getGender().equalsIgnoreCase("Female"))
         {
             Glide.with(context).asBitmap().load(userList.get(position).getPictureUrl())
@@ -165,6 +168,7 @@ public class ViewPhotoRequestAdapter extends RecyclerView.Adapter<ViewPhotoReque
     }
 
     public interface ViewPhotoRequestInterface{
+        void seenRequest(String id);
         void acceptRequest(String id, int pos);
         void denyRequest(String id, int pos);
         void hidePhotoRequest(String id, int pos);

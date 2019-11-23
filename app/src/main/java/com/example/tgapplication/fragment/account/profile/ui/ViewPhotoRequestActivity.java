@@ -41,6 +41,7 @@ public class ViewPhotoRequestActivity extends BaseActivity {
     RecyclerView rvViewPhotoRequest;
     private FirebaseUser fuser;
     ViewPhotoRequestAdapter viewPhotoRequestAdapter;
+    ValueEventListener requestSeenListener, photoRequestListener, removePhotoRequestListener;
 
 
     @Override
@@ -49,15 +50,21 @@ public class ViewPhotoRequestActivity extends BaseActivity {
         setContentView(R.layout.activity_view_photo_request);
         ButterKnife.bind(this);
 
-        fuser= FirebaseAuth.getInstance().getCurrentUser();
+        fuser = FirebaseAuth.getInstance().getCurrentUser();
 
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rvViewPhotoRequest.setLayoutManager(linearLayoutManager);
 
-        int type=getIntent().getIntExtra("intentType",0);
-        ArrayList<UserImg> userList=new Gson().fromJson(getIntent().getStringExtra("userList"), new TypeToken<ArrayList<UserImg>>() {}.getType());
+        int type = getIntent().getIntExtra("intentType", 0);
+        ArrayList<UserImg> userList = new Gson().fromJson(getIntent().getStringExtra("userList"), new TypeToken<ArrayList<UserImg>>() {
+        }.getType());
 
         viewPhotoRequestAdapter = new ViewPhotoRequestAdapter(this, userList, type, new ViewPhotoRequestAdapter.ViewPhotoRequestInterface() {
+            @Override
+            public void seenRequest(String id) {
+                requestSeen(id, type);
+            }
+
             @Override
             public void acceptRequest(String id, int pos) {
                 acceptPhotoRequest(id, 1);
@@ -88,32 +95,78 @@ public class ViewPhotoRequestActivity extends BaseActivity {
 
     }
 
-      private void acceptPhotoRequest(String userid, int i)
-  {
-      PhotoRequestInstance.addValueEventListener(new ValueEventListener() {
-          @Override
-          public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-              for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                  Permit permit = snapshot.getValue(Permit.class);
-                  if (Objects.requireNonNull(permit).getReceiver().equals(fuser.getUid()) && permit.getSender().equals(userid)) {
-                      HashMap<String, Object> hashMap = new HashMap<>();
-                      hashMap.put("status", i);
-                      snapshot.getRef().updateChildren(hashMap);
-                  }
-              }
-          }
+    private void acceptPhotoRequest(String userid, int i) {
+        photoRequestListener= PhotoRequestInstance.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Permit permit = snapshot.getValue(Permit.class);
+                    if (Objects.requireNonNull(permit).getReceiver().equals(fuser.getUid()) && permit.getSender().equals(userid)) {
+                        HashMap<String, Object> hashMap = new HashMap<>();
+                        hashMap.put("status", i);
+                        snapshot.getRef().updateChildren(hashMap);
+                    }
+                }
+            }
 
-          @Override
-          public void onCancelled(@NonNull DatabaseError databaseError) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-          }
-      });
+            }
+        });
 
-  }
+    }
 
-      private void removePhotoRequest(String userid)
-    {
-        PhotoRequestInstance.addValueEventListener(new ValueEventListener() {
+    private void requestSeen(String userid, int type) {
+        requestSeenListener = PhotoRequestInstance.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Permit permit = snapshot.getValue(Permit.class);
+                    if (type == 3 || type == 1) {
+                        if (Objects.requireNonNull(permit).getReceiver().equals(fuser.getUid()) && permit.getSender().equals(userid)) {
+                            HashMap<String, Object> hashMap = new HashMap<>();
+                            hashMap.put("receiverCheck", true);
+                            snapshot.getRef().updateChildren(hashMap);
+                        }
+                    } else if (type == 2) {
+                        if (Objects.requireNonNull(permit).getSender().equals(fuser.getUid()) && permit.getReceiver().equals(userid)) {
+                            HashMap<String, Object> hashMap = new HashMap<>();
+                            hashMap.put("senderCheck", true);
+                            snapshot.getRef().updateChildren(hashMap);
+                        }
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(removePhotoRequestListener!=null)
+        {
+            PhotoRequestInstance.removeEventListener(removePhotoRequestListener);
+        }
+        if(requestSeenListener!=null)
+        {
+            PhotoRequestInstance.removeEventListener(requestSeenListener);
+        }
+        if(photoRequestListener!=null)
+        {
+            PhotoRequestInstance.removeEventListener(photoRequestListener);
+        }
+    }
+
+    private void removePhotoRequest(String userid) {
+        removePhotoRequestListener=PhotoRequestInstance.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {

@@ -51,6 +51,7 @@ public class PhotoRequestActivity extends BaseActivity {
     ArrayList<UserImg> photoPermitsList = new ArrayList<>();
     ArrayList<UserImg> givenPermitsList = new ArrayList<>();
     int fav;
+    int prcount, ppcount, gpcount;
 
 
     @Override
@@ -60,7 +61,12 @@ public class PhotoRequestActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
+        showProgressDialog();
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         viewPhotoRequest();
         photoPermits();
         givenPermits();
@@ -108,6 +114,7 @@ public class PhotoRequestActivity extends BaseActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 viewPhotoRequestList.clear();
+                prcount=0;
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Permit permit = ds.getValue(Permit.class);
                     if (Objects.requireNonNull(permit).getStatus() == 0) {
@@ -139,12 +146,17 @@ public class PhotoRequestActivity extends BaseActivity {
                                                 }
                                                 viewPhotoRequestList.add(new UserImg(user, pictureUrl, fav));
 
-                                                String prcount=""+viewPhotoRequestList.size();
-                                                Log.i(TAG, "onCompleted: givenPermitsList " + prcount);
+                                                if(!permit.isReceiverCheck())
+                                                {
+                                                    prcount++;
+                                                }
 
-                                                photoRqstCount.setVisibility(View.VISIBLE);
-                                                photoRqstCount.setText(prcount);
-
+                                                if(prcount>0)
+                                                {
+                                                    Log.i(TAG, "onCompleted: givenPermitsList " + prcount);
+                                                    photoRqstCount.setVisibility(View.VISIBLE);
+                                                    photoRqstCount.setText(String.valueOf(prcount));
+                                                }
                                             }
 
                                             @Override
@@ -178,6 +190,7 @@ public class PhotoRequestActivity extends BaseActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 photoPermitsList.clear();
+                ppcount=0;
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Permit permit = ds.getValue(Permit.class);
                     if (Objects.requireNonNull(permit).getStatus() == 1) {
@@ -208,11 +221,19 @@ public class PhotoRequestActivity extends BaseActivity {
                                                     fav = 0;
                                                 }
                                                 photoPermitsList.add(new UserImg(user, pictureUrl, fav));
-                                                String ppcount=""+photoPermitsList.size();
-                                                Log.i(TAG, "onCompleted: photoPermitsList " + ppcount);
 
-                                                photoPermitsCount.setVisibility(View.VISIBLE);
-                                                photoPermitsCount.setText(ppcount);
+                                                if(!permit.isSenderCheck())
+                                                {
+                                                    ppcount++;
+                                                }
+
+                                                if(ppcount>0)
+                                                {
+                                                    Log.i(TAG, "onCompleted: photoPermitsList " + ppcount);
+                                                    photoPermitsCount.setVisibility(View.VISIBLE);
+                                                    photoPermitsCount.setText(String.valueOf(ppcount));
+                                                }
+
 
                                             }
 
@@ -252,6 +273,7 @@ public class PhotoRequestActivity extends BaseActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 givenPermitsList.clear();
+                gpcount=0;
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Permit permit = ds.getValue(Permit.class);
                     if (Objects.requireNonNull(permit).getStatus() == 1) {
@@ -283,12 +305,17 @@ public class PhotoRequestActivity extends BaseActivity {
                                                 }
                                                 givenPermitsList.add(new UserImg(user, pictureUrl, fav));
 
-                                                String gpcount=""+givenPermitsList.size();
-                                                Log.i(TAG, "onCompleted: givenPermitsList " + gpcount);
+                                                if(!permit.isReceiverCheck())
+                                                {
+                                                    gpcount++;
+                                                }
 
-                                                givenPermitsCount.setVisibility(View.VISIBLE);
-                                                givenPermitsCount.setText(gpcount);
-
+                                                if(gpcount>0)
+                                                {
+                                                    Log.i(TAG, "onCompleted: givenPermitsList " + gpcount);
+                                                    givenPermitsCount.setVisibility(View.VISIBLE);
+                                                    givenPermitsCount.setText(String.valueOf(gpcount));
+                                                }
                                             }
 
                                             @Override
@@ -320,6 +347,7 @@ public class PhotoRequestActivity extends BaseActivity {
 
             }
         });
+        dismissProgressDialog();
     }
 
 

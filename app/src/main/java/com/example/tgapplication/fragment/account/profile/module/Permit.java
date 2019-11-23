@@ -1,16 +1,36 @@
 package com.example.tgapplication.fragment.account.profile.module;
 
 public class Permit{
+
     String sender, receiver;
+    boolean senderCheck, receiverCheck;
     int status;
 
     public Permit() {
     }
 
-    public Permit(String sender, String receiver, int status) {
+    public Permit(String sender, String receiver, int status, boolean senderCheck, boolean receiverCheck) {
         this.sender = sender;
         this.receiver=receiver;
         this.status = status;
+        this.senderCheck=senderCheck;
+        this.receiverCheck=receiverCheck;
+    }
+
+    public boolean isSenderCheck() {
+        return senderCheck;
+    }
+
+    public void setSenderCheck(boolean senderCheck) {
+        this.senderCheck = senderCheck;
+    }
+
+    public boolean isReceiverCheck() {
+        return receiverCheck;
+    }
+
+    public void setReceiverCheck(boolean receiverCheck) {
+        this.receiverCheck = receiverCheck;
     }
 
     public String getSender() {

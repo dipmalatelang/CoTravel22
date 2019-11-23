@@ -417,127 +417,130 @@ public class ProfileActivity extends BaseActivity {
 
                         Permit permit = ds.getValue(Permit.class);
                         if(permit!=null)
-                        if (permit.getSender().equals(fuser.getUid()) && permit.getReceiver().equals(uid) && permit.getStatus() == 1) {
-                            PicturesInstance.child(uid).addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (permit.getSender().equals(fuser.getUid()) && permit.getReceiver().equals(uid)) {
+                            privateValue=1;
+                            if (permit.getStatus() == 1) {
+                                PicturesInstance.child(uid).addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
 
 
-                                    for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                                        Upload upload = postSnapshot.getValue(Upload.class);
-                                        if (Objects.requireNonNull(upload).getType() == 1) {
-                                            upload1.add(upload);
-                                        } else if (upload.getType() == 2) {
-                                            upload2.add(upload);
-                                        } else if (upload.getType() == 3) {
-                                            upload3.add(upload);
+                                        for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                                            Upload upload = postSnapshot.getValue(Upload.class);
+                                            if (Objects.requireNonNull(upload).getType() == 1) {
+                                                upload1.add(upload);
+                                            } else if (upload.getType() == 2) {
+                                                upload2.add(upload);
+                                            } else if (upload.getType() == 3) {
+                                                upload3.add(upload);
+                                            }
                                         }
-                                    }
 
-                                    if (upload1.size() > 0) {
-                                        uploads.addAll(upload1);
-                                    }
-
-                                    if (upload2.size() > 0) {
-                                        uploads.addAll(upload2);
-                                    }
-
-                                    if (upload3.size() > 0) {
-                                        uploads.addAll(upload3);
-                                    }
-
-                                    privateValue = 1;
-
-
-                                    if (uploads.size() > 0) {
-                                        adapter = new CustomAdapter(ProfileActivity.this, uid, uploads, gender);
-                                        viewPager.setAdapter(adapter);
-                                        adapter.notifyDataSetChanged();
-
-                                        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                                            @Override
-                                            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                                                int i = position + 1;
-                                                tvCount.setText(i + " / " + uploads.size());
-                                                tvGenderValue.setText(gender);
-                                            }
-
-                                            @Override
-                                            public void onPageSelected(int position) {
-
-                                            }
-
-                                            @Override
-                                            public void onPageScrollStateChanged(int state) {
-
-                                            }
-                                        });
-                                    }
-
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                }
-                            });
-                        } else {
-                            PicturesInstance.child(uid).addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    upload1 = new ArrayList<>();
-                                    upload2 = new ArrayList<>();
-                                    uploads = new ArrayList<>();
-
-                                    for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                                        Upload upload = postSnapshot.getValue(Upload.class);
-                                        if (Objects.requireNonNull(upload).getType() == 1) {
-                                            upload1.add(upload);
-                                        } else if (upload.getType() == 2) {
-                                            upload2.add(upload);
+                                        if (upload1.size() > 0) {
+                                            uploads.addAll(upload1);
                                         }
+
+                                        if (upload2.size() > 0) {
+                                            uploads.addAll(upload2);
+                                        }
+
+                                        if (upload3.size() > 0) {
+                                            uploads.addAll(upload3);
+                                        }
+
+//                                        privateValue = 1;
+
+
+                                        if (uploads.size() > 0) {
+                                            adapter = new CustomAdapter(ProfileActivity.this, uid, uploads, gender);
+                                            viewPager.setAdapter(adapter);
+                                            adapter.notifyDataSetChanged();
+
+                                            viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                                                @Override
+                                                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                                                    int i = position + 1;
+                                                    tvCount.setText(i + " / " + uploads.size());
+                                                    tvGenderValue.setText(gender);
+                                                }
+
+                                                @Override
+                                                public void onPageSelected(int position) {
+
+                                                }
+
+                                                @Override
+                                                public void onPageScrollStateChanged(int state) {
+
+                                                }
+                                            });
+                                        }
+
                                     }
 
-                                    if (upload1.size() > 0) {
-                                        uploads.addAll(upload1);
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
                                     }
+                                });
+                            } else {
+                                PicturesInstance.child(uid).addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        upload1 = new ArrayList<>();
+                                        upload2 = new ArrayList<>();
+                                        uploads = new ArrayList<>();
 
-                                    if (upload2.size() > 0) {
-                                        uploads.addAll(upload2);
-                                    }
-
-                                    privateValue = 0;
-
-                                    if (uploads.size() > 0) {
-                                        adapter = new CustomAdapter(ProfileActivity.this, uid, uploads, gender);
-                                        viewPager.setAdapter(adapter);
-
-                                        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                                            @Override
-                                            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                                                int i = position + 1;
-                                                tvCount.setText(i + " / " + uploads.size());
+                                        for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                                            Upload upload = postSnapshot.getValue(Upload.class);
+                                            if (Objects.requireNonNull(upload).getType() == 1) {
+                                                upload1.add(upload);
+                                            } else if (upload.getType() == 2) {
+                                                upload2.add(upload);
                                             }
+                                        }
 
-                                            @Override
-                                            public void onPageSelected(int position) {
+                                        if (upload1.size() > 0) {
+                                            uploads.addAll(upload1);
+                                        }
 
-                                            }
+                                        if (upload2.size() > 0) {
+                                            uploads.addAll(upload2);
+                                        }
 
-                                            @Override
-                                            public void onPageScrollStateChanged(int state) {
+//                                        privateValue = 0;
 
-                                            }
-                                        });
+                                        if (uploads.size() > 0) {
+                                            adapter = new CustomAdapter(ProfileActivity.this, uid, uploads, gender);
+                                            viewPager.setAdapter(adapter);
+
+                                            viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                                                @Override
+                                                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                                                    int i = position + 1;
+                                                    tvCount.setText(i + " / " + uploads.size());
+                                                }
+
+                                                @Override
+                                                public void onPageSelected(int position) {
+
+                                                }
+
+                                                @Override
+                                                public void onPageScrollStateChanged(int state) {
+
+                                                }
+                                            });
+                                        }
+
                                     }
 
-                                }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                }
-                            });
+                                    }
+                                });
+                            }
                         }
                         if (permit.getReceiver().equals(uid)) {
                             break;
@@ -569,7 +572,7 @@ public class ProfileActivity extends BaseActivity {
                                 uploads.addAll(upload2);
                             }
 
-                            privateValue = 0;
+//                            privateValue = 0;
 
 
                             if (uploads.size() > 0) {
@@ -726,7 +729,13 @@ public class ProfileActivity extends BaseActivity {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,
                                         int which) {
-                        PhotoRequestInstance.push().setValue(new Permit(fuser.getUid(), tripL.getId(), 0));
+                        if(tripL!=null)
+                        {
+                            PhotoRequestInstance.push().setValue(new Permit(fuser.getUid(), tripL.getId(), 0,false,false));
+                        }
+                        else if(userL!=null){
+                            PhotoRequestInstance.push().setValue(new Permit(fuser.getUid(), userL.getUser().getId(), 0,false,false));
+                        }
                         alertDialogRP();
                     }
                 });
