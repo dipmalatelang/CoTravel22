@@ -40,8 +40,6 @@ public class MembersActivity extends BaseActivity {
     private RecyclerView recyclerView;
 
     private MembersAdapter membersAdapter;
-    int fav=0;
-    String pictureUrl;
     SharedPreferences sharedPreferences;
     String look_user;
     int ageTo, ageFrom;
@@ -106,28 +104,27 @@ public class MembersActivity extends BaseActivity {
                                 if(look_user.contains(user.getGender())&& Integer.parseInt(user.getAge())>=ageFrom && Integer.parseInt(user.getAge())<=ageTo)
                                 {
                                     Log.i(TAG, "onDataChange: Got in");
+                                    UserImg userImg=new UserImg(user, "",0);
                                     FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull @NotNull DataSnapshot snapshot) {
-                                            fav = 0;
                                             if (snapshot.hasChild(user.getId()))
-                                                fav = 1;
+                                                userImg.setFav(1);
 
                                             PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                                                 @Override
                                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                                    pictureUrl = "";
                                                     for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
 
                                                         Upload mainPhoto = snapshot1.getValue(Upload.class);
                                                         if (Objects.requireNonNull(mainPhoto).type == 1)
-                                                            pictureUrl = mainPhoto.getUrl();
+                                                            userImg.setPictureUrl(mainPhoto.getUrl());
 
                                                     }
 
 
-                                                    tripList = findAllMembers(new UserImg(user, pictureUrl, fav));
+                                                    tripList = findAllMembers(userImg);
 
                                                     membersAdapter = new MembersAdapter(MembersActivity.this, fuser.getUid(), tripList, new MembersAdapter.ProfileData() {
                                                         @Override

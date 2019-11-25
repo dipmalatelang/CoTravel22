@@ -59,7 +59,6 @@ public class FavouriteFragment extends BaseFragment {
     private RecyclerView myFavRV;
     private FirebaseUser fuser;
     View view;
-    String pictureUrl;
     private List<UserImg> myFavArray = new ArrayList<>();
 SharedPreferences sharedPreferences;
 String fusername;
@@ -118,30 +117,26 @@ String fusername;
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
                         String userKey = dataSnapshot.getKey();
-                        fav = 1;
                         UsersInstance.child(Objects.requireNonNull(userKey)).addValueEventListener(
                                 new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         User user = dataSnapshot.getValue(User.class);
 
-
+                                        UserImg userImg=new UserImg(user, "", 1);
                                         PicturesInstance.child(Objects.requireNonNull(user).getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                                pictureUrl = "";
                                                 for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
 
                                                     Upload mainPhoto = snapshot1.getValue(Upload.class);
                                                     if (Objects.requireNonNull(mainPhoto).type == 1)
-                                                        pictureUrl = mainPhoto.getUrl();
+                                                        userImg.setPictureUrl(mainPhoto.getUrl());
 
                                                 }
 
-
-                                                myFavArray.add(new UserImg(user, pictureUrl, fav));
-
+                                                myFavArray.add(userImg);
 
                                                 FavouriteAdapter tripAdapter = new FavouriteAdapter(getActivity(), fuser.getUid(), myFavArray, new FavouriteAdapter.FavouriteInterface() {
                                                     @Override
@@ -206,8 +201,6 @@ String fusername;
     }
 
 
-    int fav;
-
     private void getData(String id) {
 
         UsersInstance.addValueEventListener(
@@ -222,25 +215,23 @@ String fusername;
 
 
                             if (Objects.requireNonNull(user).getId().equalsIgnoreCase(id)) {
+
+                                UserImg userImg=new UserImg(user, "", 0);
                                 FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                                         if (snapshot.hasChild(user.getId())) {
-
-                                            fav = 1;
-                                        } else {
-                                            fav = 0;
+                                           userImg.setFav(1);
                                         }
 
                                         PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                pictureUrl = "";
                                                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                                                     Upload upload = ds.getValue(Upload.class);
                                                     if (Objects.requireNonNull(upload).getType() == 1) {
-                                                        pictureUrl = upload.getUrl();
+                                                        userImg.setPictureUrl(upload.getUrl());
                                                     }
                                                 }
 
@@ -279,7 +270,7 @@ String fusername;
                                                                     }
 
 
-                                                                    tripList = findClosestDate(dates, new UserImg(user, pictureUrl, fav));
+                                                                    tripList = findClosestDate(dates, userImg);
 
                                                                 }
 
