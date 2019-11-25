@@ -177,6 +177,8 @@ public class ProfileActivity extends BaseActivity {
     int privateValue = 0;
 
     StringBuilder str_user;
+    SharedPreferences sharedPreferences;
+    String fusername;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -185,6 +187,8 @@ public class ProfileActivity extends BaseActivity {
 
         ButterKnife.bind(this);
         fuser = FirebaseAuth.getInstance().getCurrentUser();
+
+        sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
 
         LinearLayoutManager ll_manager = new LinearLayoutManager(ProfileActivity.this);
         rvTripValue.setLayoutManager(ll_manager);
@@ -201,7 +205,6 @@ public class ProfileActivity extends BaseActivity {
             ivFavUser.setVisibility(View.GONE);
             floatingActionButton2.hide();
             profileId = fuser.getUid();
-            SharedPreferences sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
 
             if (sharedPreferences.contains("Gender")) {
                 String gender = (sharedPreferences.getString("Gender", ""));
@@ -799,7 +802,7 @@ public class ProfileActivity extends BaseActivity {
     }
 
 
-    private void alertDialogRequestPermission() {
+    private void alertDialogRequestPermission(String fusername) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setMessage("Do you want to request permission to see private photo?");
         dialog.setTitle("Request Permission");
@@ -809,9 +812,20 @@ public class ProfileActivity extends BaseActivity {
                                         int which) {
                         if (tripL != null) {
                             PhotoRequestInstance.push().setValue(new Permit(fuser.getUid(), tripL.getUser().getId(), 0, false, false));
+                            notify = true;
+                            if (notify) {
+                                sendNotifiaction(fuser.getUid(), tripL.getUser().getId(), fusername , "has requested for private photo");
+                            }
+                            notify=false;
                         } else if (userL != null) {
                             PhotoRequestInstance.push().setValue(new Permit(fuser.getUid(), userL.getUser().getId(), 0, false, false));
+                            notify = true;
+                            if (notify) {
+                                sendNotifiaction(fuser.getUid(), userL.getUser().getId(), fusername , "has requested for private photo");
+                            }
+                            notify=false;
                         }
+
                         alertDialogRP();
                     }
                 });
@@ -864,7 +878,10 @@ public class ProfileActivity extends BaseActivity {
                 if (textProfile.getText().toString().equalsIgnoreCase("Request Private photos") && privateValue == 1) {
                     alertDialogAlreadyRequest();
                 } else if (textProfile.getText().toString().equalsIgnoreCase("Request Private photos")) {
-                    alertDialogRequestPermission();
+                    if (sharedPreferences.contains("Name")) {
+                        fusername = (sharedPreferences.getString("Name", ""));
+                    }
+                    alertDialogRequestPermission(fusername);
                 } else {
                     startActivity(new Intent(this, EditPhotoActivity.class));
                 }

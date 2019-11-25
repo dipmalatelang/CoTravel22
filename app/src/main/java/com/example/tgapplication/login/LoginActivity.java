@@ -1,8 +1,10 @@
 package com.example.tgapplication.login;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
@@ -67,6 +69,7 @@ public class LoginActivity extends BaseActivity implements  View.OnKeyListener {
     private CallbackManager mCallbackManager;
     private FirebaseAuth mAuth;
     String value;
+    boolean notify = false;
 
 
     @Override
@@ -80,6 +83,18 @@ public class LoginActivity extends BaseActivity implements  View.OnKeyListener {
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(this);
+        // Check if we need to display our OnboardingFragment
+        if (!sharedPreferences.getBoolean("UserFirst", false)) {
+            // The user hasn't seen the OnboardingFragment yet, so show it
+        /*    notify = true;
+            if (notify) {
+                sendNotifiaction(fuser.getUid(), tripL.getUser().getId(), fusername , "has requested for private photo");
+            }
+            notify=false;*/
+        }
 
 
         tvRegister.setPaintFlags(tvRegister.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
@@ -116,6 +131,15 @@ public class LoginActivity extends BaseActivity implements  View.OnKeyListener {
         });
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SharedPreferences.Editor sharedPreferencesEditor =
+                PreferenceManager.getDefaultSharedPreferences(this).edit();
+        sharedPreferencesEditor.putBoolean(
+                "UserFirst", true);
+        sharedPreferencesEditor.apply();
+    }
 
     private void handleFacebookAccessToken(String token) {
         showProgressDialog();
