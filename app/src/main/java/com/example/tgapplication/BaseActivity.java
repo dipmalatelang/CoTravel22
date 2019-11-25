@@ -138,6 +138,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         editor.putString("Name",  user.getName());
         editor.putString("Age", user.getAge());
         editor.putString("Gender",user.getGender());
+        editor.putBoolean("DisplayPhone",user.isShow_number());
         editor.putString("Phone",user.getPhone());
         editor.putString("TravelWith",new Gson().toJson(user.getTravel_with()));
         editor.putString("AgeRange",new Gson().toJson(user.getRange_age()));
