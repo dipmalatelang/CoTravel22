@@ -1,6 +1,8 @@
 package com.example.tgapplication.fragment.account.profile.ui;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -10,15 +12,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.account.profile.module.Permit;
-import com.example.tgapplication.fragment.account.profile.module.Upload;
 import com.example.tgapplication.fragment.account.profile.verify.ViewPhotoRequestAdapter;
-import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.fragment.visitor.UserImg;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,19 +29,17 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.example.tgapplication.Constants.FavoritesInstance;
 import static com.example.tgapplication.Constants.PhotoRequestInstance;
-import static com.example.tgapplication.Constants.PicturesInstance;
-import static com.example.tgapplication.Constants.UsersInstance;
 
 public class ViewPhotoRequestActivity extends BaseActivity {
     @BindView(R.id.rv_view_photo_request)
     RecyclerView rvViewPhotoRequest;
+    @BindView(R.id.txtNoData)
+    TextView txtNoData;
     private FirebaseUser fuser;
-    String pictureUrl;
-    int fav;
     ViewPhotoRequestAdapter viewPhotoRequestAdapter;
-    ArrayList<UserImg> userList=new ArrayList<>();
+    ValueEventListener requestSeenListener, photoRequestListener, removePhotoRequestListener;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,227 +47,62 @@ public class ViewPhotoRequestActivity extends BaseActivity {
         setContentView(R.layout.activity_view_photo_request);
         ButterKnife.bind(this);
 
-        fuser=FirebaseAuth.getInstance().getCurrentUser();
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
+        fuser = FirebaseAuth.getInstance().getCurrentUser();
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rvViewPhotoRequest.setLayoutManager(linearLayoutManager);
 
-        String intentType=getIntent().getStringExtra("intentType");
+        int type = getIntent().getIntExtra("intentType", 0);
+        ArrayList<UserImg> userList = new Gson().fromJson(getIntent().getStringExtra("userList"), new TypeToken<ArrayList<UserImg>>() {
+        }.getType());
 
-        if(intentType.equalsIgnoreCase("request"))
-        {
-            viewPhotoRequest();
-        }
-        else if(intentType.equalsIgnoreCase("givenPermits"))
-        {
-            givenPermits();
-        }
-        else if(intentType.equalsIgnoreCase("photoPermits"))
-        {
-            PhotoPermits();
-        }
-
-    }
-
-    private void PhotoPermits() {
-        PhotoRequestInstance.addValueEventListener(new ValueEventListener() {
+        viewPhotoRequestAdapter = new ViewPhotoRequestAdapter(this, userList, type, new ViewPhotoRequestAdapter.ViewPhotoRequestInterface() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds: dataSnapshot.getChildren())
-                {
-                    Permit permit= ds.getValue(Permit.class);
-                    if(Objects.requireNonNull(permit).getSender().equals(fuser.getUid()) && Objects.requireNonNull(permit).getStatus()==1)
-                    {
-                        UsersInstance.child(permit.getReceiver()).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                User user= dataSnapshot.getValue(User.class);
+            public void seenRequest(String id) {
+                requestSeen(id, type);
+            }
 
-                                PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            @Override
+            public void acceptRequest(String id, int pos) {
+                acceptPhotoRequest(id, 1);
+                Objects.requireNonNull(userList).remove(pos);
+                viewPhotoRequestAdapter.notifyDataSetChanged();
+                snackBar(rvViewPhotoRequest, "Accept");
+                if (userList.size() <= 0) {
+                    txtNoData.setVisibility(View.VISIBLE);
+                }
+            }
 
-                                        pictureUrl = "";
-                                        for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
+            @Override
+            public void denyRequest(String id, int pos) {
+                acceptPhotoRequest(id, 2);
+                Objects.requireNonNull(userList).remove(pos);
+                viewPhotoRequestAdapter.notifyDataSetChanged();
+                snackBar(rvViewPhotoRequest, "Deny");
+                if (userList.size() <= 0) {
+                    txtNoData.setVisibility(View.VISIBLE);
+                }
+            }
 
-                                            Upload mainPhoto = snapshot1.getValue(Upload.class);
-                                            if (Objects.requireNonNull(mainPhoto).type == 1)
-                                                pictureUrl = mainPhoto.getUrl();
-
-                                        }
-                                        FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                                                if (snapshot.hasChild(user.getId())) {
-                                                    fav = 1;
-                                                } else {
-                                                    fav = 0;
-                                                }
-                                                userList.add(new UserImg(user,pictureUrl,fav));
-
-                                                viewPhotoRequestAdapter= new ViewPhotoRequestAdapter(ViewPhotoRequestActivity.this, userList,2, new ViewPhotoRequestAdapter.ViewPhotoRequestInterface() {
-                                                    @Override
-                                                    public void acceptRequest(String id, int pos) {
-                                                        acceptPhotoRequest(id,1);
-                                                        userList.remove(pos);
-                                                        viewPhotoRequestAdapter.notifyDataSetChanged();
-                                                        snackBar(rvViewPhotoRequest,"Accept");
-                                                    }
-
-                                                    @Override
-                                                    public void denyRequest(String id, int pos) {
-                                                        acceptPhotoRequest(id,2);
-                                                        userList.remove(pos);
-                                                        viewPhotoRequestAdapter.notifyDataSetChanged();
-                                                        snackBar(rvViewPhotoRequest,"Deny");
-                                                    }
-
-                                                    @Override
-                                                    public void hidePhotoRequest(String id, int pos) {
-                                                        removePhotoRequest(id);
-                                                        userList.remove(pos);
-                                                        viewPhotoRequestAdapter.notifyDataSetChanged();
-
-                                                    }
-                                                });
-
-                                                rvViewPhotoRequest.setAdapter(viewPhotoRequestAdapter);
-                                                viewPhotoRequestAdapter.notifyDataSetChanged();
-                                            }
-
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
-                    }
-
+            @Override
+            public void hidePhotoRequest(String id, int pos) {
+                removePhotoRequest(id);
+                Objects.requireNonNull(userList).remove(pos);
+                viewPhotoRequestAdapter.notifyDataSetChanged();
+                if (userList.size() <= 0) {
+                    txtNoData.setVisibility(View.VISIBLE);
                 }
 
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
         });
+
+        rvViewPhotoRequest.setAdapter(viewPhotoRequestAdapter);
+        viewPhotoRequestAdapter.notifyDataSetChanged();
+
     }
 
-    private void givenPermits() {
-        PhotoRequestInstance.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds: dataSnapshot.getChildren())
-                {
-                    Permit permit= ds.getValue(Permit.class);
-                    if(Objects.requireNonNull(permit).getReceiver().equals(fuser.getUid()) && Objects.requireNonNull(permit).getStatus()==1)
-                    {
-                        UsersInstance.child(permit.getSender()).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                User user= dataSnapshot.getValue(User.class);
-
-                                PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                                        pictureUrl = "";
-                                        for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
-
-                                            Upload mainPhoto = snapshot1.getValue(Upload.class);
-                                            if (Objects.requireNonNull(mainPhoto).type == 1)
-                                                pictureUrl = mainPhoto.getUrl();
-
-                                        }
-                                        FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                                                if (snapshot.hasChild(user.getId())) {
-                                                    fav = 1;
-                                                } else {
-                                                    fav = 0;
-                                                }
-                                                userList.add(new UserImg(user,pictureUrl,fav));
-
-                                                viewPhotoRequestAdapter= new ViewPhotoRequestAdapter(ViewPhotoRequestActivity.this, userList,3, new ViewPhotoRequestAdapter.ViewPhotoRequestInterface() {
-                                                    @Override
-                                                    public void acceptRequest(String id, int pos) {
-                                                        acceptPhotoRequest(id,1);
-                                                        userList.remove(pos);
-                                                        viewPhotoRequestAdapter.notifyDataSetChanged();
-                                                        snackBar(rvViewPhotoRequest,"Accept");
-                                                    }
-
-                                                    @Override
-                                                    public void denyRequest(String id, int pos) {
-                                                        acceptPhotoRequest(id,2);
-                                                        userList.remove(pos);
-                                                        viewPhotoRequestAdapter.notifyDataSetChanged();
-                                                        snackBar(rvViewPhotoRequest,"Deny");
-                                                    }
-
-                                                    @Override
-                                                    public void hidePhotoRequest(String id, int pos) {
-                                                        removePhotoRequest(id);
-                                                        userList.remove(pos);
-                                                        viewPhotoRequestAdapter.notifyDataSetChanged();
-
-                                                    }
-                                                });
-
-                                                rvViewPhotoRequest.setAdapter(viewPhotoRequestAdapter);
-                                                viewPhotoRequestAdapter.notifyDataSetChanged();
-                                            }
-
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
-                    }
-
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-    private void acceptPhotoRequest(String userid, int i)
-    {
-        PhotoRequestInstance.addValueEventListener(new ValueEventListener() {
+    private void acceptPhotoRequest(String userid, int i) {
+        photoRequestListener = PhotoRequestInstance.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -288,9 +123,53 @@ public class ViewPhotoRequestActivity extends BaseActivity {
 
     }
 
-    private void removePhotoRequest(String userid)
-    {
-        PhotoRequestInstance.addValueEventListener(new ValueEventListener() {
+    private void requestSeen(String userid, int type) {
+        requestSeenListener = PhotoRequestInstance.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Permit permit = snapshot.getValue(Permit.class);
+                    if (type == 3 || type == 1) {
+                        if (Objects.requireNonNull(permit).getReceiver().equals(fuser.getUid()) && permit.getSender().equals(userid)) {
+                            HashMap<String, Object> hashMap = new HashMap<>();
+                            hashMap.put("receiverCheck", true);
+                            snapshot.getRef().updateChildren(hashMap);
+                        }
+                    } else if (type == 2) {
+                        if (Objects.requireNonNull(permit).getSender().equals(fuser.getUid()) && permit.getReceiver().equals(userid)) {
+                            HashMap<String, Object> hashMap = new HashMap<>();
+                            hashMap.put("senderCheck", true);
+                            snapshot.getRef().updateChildren(hashMap);
+                        }
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (removePhotoRequestListener != null) {
+            PhotoRequestInstance.removeEventListener(removePhotoRequestListener);
+        }
+        if (requestSeenListener != null) {
+            PhotoRequestInstance.removeEventListener(requestSeenListener);
+        }
+        if (photoRequestListener != null) {
+            PhotoRequestInstance.removeEventListener(photoRequestListener);
+        }
+    }
+
+    private void removePhotoRequest(String userid) {
+        removePhotoRequestListener = PhotoRequestInstance.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -310,102 +189,5 @@ public class ViewPhotoRequestActivity extends BaseActivity {
 
     }
 
-    private void viewPhotoRequest() {
-        PhotoRequestInstance.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds: dataSnapshot.getChildren())
-                {
-                    Permit permit= ds.getValue(Permit.class);
-                    if(Objects.requireNonNull(permit).getReceiver().equals(fuser.getUid()) && Objects.requireNonNull(permit).getStatus()==0)
-                    {
-                        UsersInstance.child(permit.getSender()).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                User user= dataSnapshot.getValue(User.class);
 
-                                PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                                        pictureUrl = "";
-                                        for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
-
-                                            Upload mainPhoto = snapshot1.getValue(Upload.class);
-                                            if (Objects.requireNonNull(mainPhoto).type == 1)
-                                                pictureUrl = mainPhoto.getUrl();
-
-                                        }
-                                        FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                                                if (snapshot.hasChild(user.getId())) {
-                                                    fav = 1;
-                                                } else {
-                                                    fav = 0;
-                                                }
-                                                userList.add(new UserImg(user,pictureUrl,fav));
-
-                                                viewPhotoRequestAdapter= new ViewPhotoRequestAdapter(ViewPhotoRequestActivity.this, userList,1, new ViewPhotoRequestAdapter.ViewPhotoRequestInterface() {
-                                                    @Override
-                                                    public void acceptRequest(String id, int pos) {
-                                                        acceptPhotoRequest(id,1);
-                                                        userList.remove(pos);
-                                                        viewPhotoRequestAdapter.notifyDataSetChanged();
-                                                        snackBar(rvViewPhotoRequest,"Accept");
-                                                    }
-
-                                                    @Override
-                                                    public void denyRequest(String id, int pos) {
-                                                        acceptPhotoRequest(id,2);
-                                                        userList.remove(pos);
-                                                        viewPhotoRequestAdapter.notifyDataSetChanged();
-                                                        snackBar(rvViewPhotoRequest,"Deny");
-                                                    }
-
-                                                    @Override
-                                                    public void hidePhotoRequest(String id, int pos) {
-                                                        removePhotoRequest(id);
-                                                        userList.remove(pos);
-                                                        viewPhotoRequestAdapter.notifyDataSetChanged();
-
-                                                    }
-                                                });
-
-                                                rvViewPhotoRequest.setAdapter(viewPhotoRequestAdapter);
-                                                viewPhotoRequestAdapter.notifyDataSetChanged();
-                                            }
-
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                    }
-                                });
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
-                    }
-
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
 }

@@ -11,13 +11,20 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.example.tgapplication.fragment.chat.module.APIService;
 import com.example.tgapplication.fragment.chat.module.Chat;
+import com.example.tgapplication.fragment.chat.module.Client;
+import com.example.tgapplication.fragment.chat.module.Data;
+import com.example.tgapplication.fragment.chat.module.MyResponse;
+import com.example.tgapplication.fragment.chat.module.Sender;
+import com.example.tgapplication.fragment.chat.module.Token;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.fragment.visitor.UserImg;
@@ -27,6 +34,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
@@ -34,10 +42,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import static com.example.tgapplication.Constants.ChatsInstance;
 import static com.example.tgapplication.Constants.FavoritesInstance;
 import static com.example.tgapplication.Constants.PicturesInstance;
 import static com.example.tgapplication.Constants.ProfileVisitorInstance;
+import static com.example.tgapplication.Constants.TokensInstance;
 import static com.example.tgapplication.Constants.TrashInstance;
 import static com.example.tgapplication.Constants.UsersInstance;
 
@@ -54,11 +67,15 @@ public abstract class BaseActivity extends AppCompatActivity {
     String theLastMessage, theLastMsgTime;
     Boolean textType;
 
+    APIService apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService .class);
+
+
 
     public List<TripList> findAllMembers(UserImg userImg) {
         User user=userImg.getUser();
         int visit_id = getVisit(visitArray, user.getId());
-        TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getAge(), user.getGender(), user.getAbout_me(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLooking_for(),user.getTravel_with(), user.getVisit(), tripNote, user.getAccount_type(), userImg.getFav(), visit_id);
+//        TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getPhone(),user.getAge(), user.getGender(), user.getAbout_me(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLooking_for(),user.getTravel_with(), user.getVisit(), tripNote, user.getAccount_type(), userImg.getFav(), visit_id);
+        TripList tripListClass = new TripList(user, userImg, tripNote, visit_id);
         tripList.add(tripListClass);
 
         return tripList;
@@ -99,6 +116,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         Snackbar snackbar = Snackbar.make(constrainlayout, s, Snackbar.LENGTH_LONG).setAction("Undo", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
             }
         });
 
@@ -110,19 +128,39 @@ public abstract class BaseActivity extends AppCompatActivity {
             ProgressActivity.showDialog(this);
         }
     }
-    public void saveDetailsLater(String id, String name, String age, String gender, ArrayList<String> travel_with, ArrayList<String> range_age) {
+    public void saveDetailsLater(User user) {
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
+
         sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        editor.putString("Id", id);
-        editor.putString("Name", name);
-        editor.putString("Age", age);
-        editor.putString("Gender",gender);
-        editor.putString("TravelWith",new Gson().toJson(travel_with));
-        editor.putString("AgeRange",new Gson().toJson(range_age));
+        editor.putString("Id", user.getId());
+        editor.putString("Name",  user.getName());
+        editor.putString("Age", user.getAge());
+        editor.putString("Gender",user.getGender());
+        editor.putString("Phone",user.getPhone());
+        editor.putString("TravelWith",new Gson().toJson(user.getTravel_with()));
+        editor.putString("AgeRange",new Gson().toJson(user.getRange_age()));
 
         editor.apply();
 
-        startActivity(new Intent(this, MainActivity.class));
+
+    }
+
+    public void saveSettingInfo(String b, boolean isChecked)
+    {
+        sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putBoolean(b, isChecked);
+        editor.apply();
+    }
+
+    public void saveDisplayName(String name)
+    {
+        sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString("Name", name);
+        editor.apply();
     }
     public void saveLoginDetails(String email, String password) {
         sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
@@ -159,13 +197,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         TrashInstance.child(uid).child(id).child("id").setValue(id);
     }
 
-    public void updateUI(FirebaseUser account) {
-        if (account != null) {
-            retrieveUserDetail(account);
-
-        }
-    }
-
     public void saveDetailsLater(ArrayList<String> travel_with, ArrayList<String> range_age) {
         sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
@@ -184,7 +215,83 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     }
 
-    private void retrieveUserDetail(FirebaseUser fUser) {
+    public void sendNotifiaction(String uid, String userid, final String username, final String message) {
+        Query query = TokensInstance.orderByKey().equalTo(userid);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Token token = snapshot.getValue(Token.class);
+                    Data data = new Data(uid, R.mipmap.ic_launcher, username + " " + message, "Notification",
+                            userid);
+
+                    Sender sender = new Sender(data, Objects.requireNonNull(token).getToken());
+
+                    apiService.sendNotification(sender)
+                            .enqueue(new Callback<MyResponse>() {
+                                @Override
+                                public void onResponse(@NonNull Call<MyResponse> call, @NonNull Response<MyResponse> response) {
+                                    if (response.code() == 200) {
+                                        if (Objects.requireNonNull(response.body()).success != 1) {
+//                                            snackBar(message_realtivelayout, "Failed!");
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(@NonNull Call<MyResponse> call, @NonNull Throwable t) {
+
+                                }
+                            });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void sendMsgNotifiaction(String uid, String userid, String receiver, final String username, final String message) {
+        Query query = TokensInstance.orderByKey().equalTo(receiver);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Token token = snapshot.getValue(Token.class);
+                    Data data = new Data(uid, R.mipmap.ic_launcher, username + ": " + message, "New Message",
+                            userid);
+
+                    Sender sender = new Sender(data, Objects.requireNonNull(token).getToken());
+
+                    apiService.sendNotification(sender)
+                            .enqueue(new Callback<MyResponse>() {
+                                @Override
+                                public void onResponse(@NonNull Call<MyResponse> call, @NonNull Response<MyResponse> response) {
+                                    if (response.code() == 200) {
+                                        if (Objects.requireNonNull(response.body()).success != 1) {
+//                                            snackBar(message_realtivelayout, "Failed!");
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(@NonNull Call<MyResponse> call, @NonNull Throwable t) {
+
+                                }
+                            });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void retrieveUserDetail(FirebaseUser fUser) {
         UsersInstance.child(fUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -210,7 +317,9 @@ public abstract class BaseActivity extends AppCompatActivity {
                     }
                 });
 
-                saveDetailsLater(user.getId(), user.getName(), user.getAge(), user.getGender(), user.getTravel_with(), user.getRange_age());
+
+                if(user!=null)
+                saveDetailsLater(user);
             }
 
             @Override
@@ -240,13 +349,21 @@ public abstract class BaseActivity extends AppCompatActivity {
                 .child(id).child("id").setValue(id);
     }
 
+    public void setPhoneNumber(String id, String mobile)
+    {
+        UsersInstance.child(id).child("phone").setValue(mobile);
+    }
 
+    public void setShowNumber(String id, boolean show_number)
+    {
+        UsersInstance.child(id).child("show_number").setValue(show_number);
+    }
 
     public void checkForLastMsg(Context mContext, final String userid, TextView last_msg, TextView last_msg_time, ConstraintLayout rl_chat) {
 
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        ChatsInstance.addListenerForSingleValueEvent(new ValueEventListener() {
+        ChatsInstance.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 theLastMessage = "default";

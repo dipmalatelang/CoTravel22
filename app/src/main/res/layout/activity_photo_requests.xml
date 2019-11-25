@@ -1,53 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/cl_Photo_Request"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_Photo_Request"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.account.profile.ui.PhotoRequestActivity">
 
         <TextView
             android:id="@+id/btn_photo_rqst"
+            style="@style/text_view_style1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/Photo_request"
-            style="@style/text_view_style1"
-            android:gravity="center"
             android:background="@color/gray_bg"
+            android:gravity="center"
+            android:text="@string/Photo_request"
             android:textColor="@color/purple"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+
+        <TextView
+            android:id="@+id/photo_rqst_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/badge_circle"
+            android:textColor="#FFF"
+            android:textSize="12sp"
+            android:textAlignment="center"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_photo_rqst"
+            app:layout_constraintEnd_toEndOf="@+id/btn_photo_rqst"
+            app:layout_constraintTop_toTopOf="@+id/btn_photo_rqst" />
+
         <TextView
             android:id="@+id/btn_photo_permits"
+            style="@style/text_view_style1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp" android:text="@string/Photo_permits"
-            style="@style/text_view_style1"
-            android:gravity="center"
-            android:textColor="@color/purple"
+            android:layout_marginTop="10dp"
             android:background="@color/gray_bg"
-
+            android:gravity="center"
+            android:text="@string/Photo_permits"
+            android:textColor="@color/purple"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_photo_rqst" />
 
         <TextView
+            android:id="@+id/photo_permits_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/badge_circle"
+            android:textColor="#FFF"
+            android:textSize="12sp"
+            android:textAlignment="center"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_photo_permits"
+            app:layout_constraintEnd_toEndOf="@+id/btn_photo_permits"
+            app:layout_constraintTop_toTopOf="@+id/btn_photo_permits" />
+
+        <TextView
             android:id="@+id/btn_given_permits"
+            style="@style/text_view_style1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            style="@style/text_view_style1"
-            android:gravity="center"
-            android:textColor="@color/purple"
             android:background="@color/gray_bg"
-
+            android:gravity="center"
             android:text="@string/given_permits"
+            android:textColor="@color/purple"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_photo_permits" />
+
+        <TextView
+            android:id="@+id/given_permits_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/badge_circle"
+            android:textColor="#FFF"
+            android:textAlignment="center"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_given_permits"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btn_given_permits" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

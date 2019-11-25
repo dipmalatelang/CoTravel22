@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,8 +25,8 @@ import com.example.tgapplication.fragment.chat.module.Token;
 import com.example.tgapplication.fragment.chat.adapter.UserAdapter;
 import com.example.tgapplication.fragment.member.MembersActivity;
 import com.example.tgapplication.fragment.trip.module.User;
-import com.example.tgapplication.fragment.visitor.UserImg;
 import com.example.tgapplication.fragment.account.profile.module.Upload;
+import com.example.tgapplication.fragment.visitor.UserImg;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -53,11 +54,13 @@ public class ChatFragment extends BaseFragment {
     private RecyclerView recyclerView;
 
     private UserAdapter userAdapter;
-    List<UserImg> mUsers = new ArrayList<>();
+    ArrayList<UserImg> mUsers = new ArrayList<>();
 
     String pictureUrl = "";
     int fav;
+    TextView txtNoData;
     FirebaseUser fuser;
+    ProgressBar progressBar;
     FloatingActionButton floatingActionButton;
 
 
@@ -71,6 +74,8 @@ public class ChatFragment extends BaseFragment {
         setHasOptionsMenu(false);
         recyclerView = view.findViewById(R.id.recycler_view);
         search_users=view.findViewById(R.id.search_users);
+        progressBar=view.findViewById(R.id.progressBar);
+        txtNoData=view.findViewById(R.id.txtNoData);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -88,13 +93,24 @@ public class ChatFragment extends BaseFragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<Chatlist> usersList = new ArrayList<>();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                if(dataSnapshot.getChildrenCount()>0)
+                {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
 
-                    Chatlist chatlist = snapshot.getValue(Chatlist.class);
-                    usersList.add(chatlist);
+                        Chatlist chatlist = snapshot.getValue(Chatlist.class);
+                        usersList.add(chatlist);
+                    }
+
+                    chatList(usersList);
+                    progressBar.setVisibility(View.GONE);
+                    txtNoData.setVisibility(View.GONE);
+
+                }
+                else {
+                    progressBar.setVisibility(View.GONE);
+                    txtNoData.setVisibility(View.VISIBLE);
                 }
 
-                chatList(usersList);
             }
 
             @Override
@@ -138,7 +154,7 @@ public class ChatFragment extends BaseFragment {
         }
                 userAdapter = new UserAdapter(getContext(), mUser, true, new UserAdapter.UserInterface() {
                     @Override
-                    public void lastMessage(Context mContext, String userid, TextView last_msg, TextView last_msg_time, ConstraintLayout chat) {
+                    public void lastMessage(Context mContext, String userid, int position, TextView last_msg, TextView last_msg_time, ConstraintLayout chat) {
                         checkForLastMsg(mContext, userid, last_msg,last_msg_time,chat);
                     }
 
@@ -227,7 +243,7 @@ public class ChatFragment extends BaseFragment {
 
                                                         userAdapter = new UserAdapter(getContext(), mUsers, true, new UserAdapter.UserInterface() {
                                                             @Override
-                                                            public void lastMessage(Context mContext, String userid, TextView last_msg, TextView last_msg_time,ConstraintLayout chat) {
+                                                            public void lastMessage(Context mContext, String userid, int position, TextView last_msg, TextView last_msg_time, ConstraintLayout chat) {
                                                                 checkForLastMsg(mContext, userid, last_msg, last_msg_time,chat);
                                                             }
 

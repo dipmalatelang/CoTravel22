@@ -13,60 +13,75 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".login.LoginActivity"
+            android:launchMode="singleTask"
             android:theme="@style/noToolbar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".MainActivity"
             android:theme="@style/noToolbar"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".fragment.member.MembersActivity"
+            android:launchMode="singleTask"
             android:label="Members"/>
 
         <activity android:name=".fragment.account.profile.ui.TrashActivity"
             android:label="Trash"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden"/>
 
-        <activity android:name=".fragment.account.profile.ui.PhotoRequestActivity"/>
+        <activity android:name=".fragment.account.profile.ui.PhotoRequestActivity"
+            android:launchMode="singleTask"/>
 
-        <activity android:name=".fragment.account.profile.ui.ViewPhotoRequestActivity"/>
+        <activity android:name=".fragment.account.profile.ui.ViewPhotoRequestActivity"
+            android:parentActivityName=".fragment.account.profile.ui.PhotoRequestActivity"
+            android:launchMode="singleTask"/>
 
         <activity android:name=".fragment.account.profile.ui.SettingsActivity"
+            android:launchMode="singleTask"
             android:theme="@style/noToolbar"
             android:parentActivityName=".MainActivity"/>
 
         <activity
             android:name=".fragment.trip.FilterTripActivity"
             android:parentActivityName=".MainActivity"
+            android:launchMode="singleTask"
             android:theme="@style/noToolbar" />
 
         <activity android:name=".fragment.account.profile.verify.EditPhoneActivity"
+            android:launchMode="singleTask"
             android:parentActivityName=".MainActivity"/>
 
         <activity android:name=".fragment.account.profile.verify.VerifyPhoneActivity"
+            android:launchMode="singleTask"
             android:parentActivityName=".MainActivity"/>
 
         <activity
             android:name=".fragment.trip.AddTripActivity"
             android:parentActivityName=".MainActivity"
+            android:launchMode="singleTask"
             android:theme="@style/noToolbar"/>
 
         <activity
             android:name=".fragment.chat.MessageActivity"
             android:parentActivityName=".MainActivity"
+            android:launchMode="singleTask"
             android:theme="@style/noToolbar" />
         <activity
             android:name=".fragment.trip.EditProfileActivity"
             android:label="Profile Information"
+            android:launchMode="singleTask"
             android:parentActivityName=".MainActivity"
             android:theme="@style/noToolbar" />
         <activity android:name=".login.RegisterActivity"
+            android:launchMode="singleTask"
             android:theme="@style/noToolbar"/>
-        <activity android:name=".login.ResetPasswordActivity" />
+        <activity android:name=".login.ResetPasswordActivity"
+            android:launchMode="singleTask"/>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -78,10 +93,12 @@
 
         <activity
             android:name="com.facebook.FacebookActivity"
+            android:launchMode="singleTask"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
         <activity
             android:name="com.facebook.CustomTabActivity"
+            android:launchMode="singleTask"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -95,17 +112,22 @@
 
 
         <activity android:name=".fragment.account.profile.ui.ProfileActivity"
+            android:launchMode="singleTask"
             android:theme="@style/noToolbar" >
 
         </activity>
         <activity android:name=".fragment.account.profile.ui.EditPhotoActivity"
+            android:launchMode="singleTask"
             android:label="Edit Photo"/>
         <activity android:name=".fragment.account.profile.ui.ChangePasswordActivity"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".fragment.account.profile.ui.ChangePrefActivity"
+            android:launchMode="singleTask"
             android:theme="@style/noToolbar"/>
 
-        <activity android:name=".fragment.account.profile.ui.FacebookImageActivity"/>
+        <activity android:name=".fragment.account.profile.ui.FacebookImageActivity"
+            android:launchMode="singleTask"/>
 
         <service android:name=".fragment.chat.notification.MyFirebaseIdService"
             android:enabled="true"

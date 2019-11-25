@@ -4,26 +4,28 @@ package com.example.tgapplication.fragment.account;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
-import com.android.volley.toolbox.ImageLoader;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.target.Target;
-import com.bumptech.glide.request.transition.Transition;
 import com.example.tgapplication.BaseFragment;
+import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.account.profile.ui.ChangePasswordActivity;
 import com.example.tgapplication.fragment.account.profile.ui.ChangePrefActivity;
@@ -35,6 +37,7 @@ import com.example.tgapplication.fragment.account.profile.verify.EditPhoneActivi
 import com.example.tgapplication.login.LoginActivity;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
+import com.pkmmte.view.CircularImageView;
 
 import java.util.Objects;
 
@@ -44,8 +47,7 @@ import butterknife.OnClick;
 
 public class MyProfileFragment extends BaseFragment {
 
-    @BindView(R.id.iv_Image)
-    ImageView ivImage;
+
     @BindView(R.id.tv_Profile_Name)
     TextView tvProfileName;
     @BindView(R.id.tv_Profile_Age)
@@ -72,8 +74,22 @@ public class MyProfileFragment extends BaseFragment {
     TextView tvTrash;
     @BindView(R.id.tv_photo_request)
     TextView tvPhotoRequest;
+    @BindView(R.id.iv_Image)
+    ImageView ivImage;
+    @BindView(R.id.tv_Change_Preferences)
+    TextView tvChangePreferences;
+    @BindView(R.id.tv_verify_acc)
+    TextView tvVerifyAcc;
+    @BindView(R.id.view6)
+    View view6;
+    @BindView(R.id.tv_Setting)
+    TextView tvSetting;
+    @BindView(R.id.view7)
+    View view7;
+    @BindView(R.id.scrollView)
+    ScrollView scrollView;
     private SharedPreferences sharedPreferences;
-    String name, imageUrl, age,gender;
+    private String name, imageUrl, age, gender;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -85,89 +101,38 @@ public class MyProfileFragment extends BaseFragment {
         sharedPreferences = Objects.requireNonNull(getActivity()).getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
         if (sharedPreferences.contains("Name")) {
             name = (sharedPreferences.getString("Name", ""));
+            tvProfileName.setText(name);
         }
         if (sharedPreferences.contains("Age")) {
             age = (sharedPreferences.getString("Age", ""));
+            tvProfileAge.setText(age);
 
         }
         if (sharedPreferences.contains("ImageUrl")) {
             imageUrl = (sharedPreferences.getString("ImageUrl", ""));
+            Glide.with(getActivity()).load(imageUrl).placeholder(R.drawable.whitewallpapar).into(ivImage);
 
         }
 
         if (sharedPreferences.contains("Gender")) {
-            gender = (sharedPreferences.getString("Gender", ""));
+            gender = (sharedPreferences.getString("Gender", "Male"));
+
+            if(imageUrl==null || imageUrl.equalsIgnoreCase(""))
+            {
+                if (gender.equalsIgnoreCase("Female")) {
+                    ivImage.setImageResource(R.drawable.no_photo_female);
+
+                } else {
+                    ivImage.setImageResource(R.drawable.no_photo_male);
+                }
+            }
 
         }
-
-        setProfileValue(name, age, imageUrl,gender);
 
         return view;
     }
 
-    private void setProfileValue(String name, String age, String imageUrl, String gender) {
-        tvProfileName.setText(name);
-        tvProfileAge.setText(age);
-
-        if(gender!=null && !gender.equalsIgnoreCase(""))
-        {
-            if(gender.equalsIgnoreCase("Female"))
-            {
-                Glide.with(getActivity()).asBitmap().load(imageUrl)
-                        .override(450,600)
-                        .listener(new RequestListener<Bitmap>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-//                            holder.progressBar.setVisibility(View.GONE);
-                                ivImage.setImageResource(R.drawable.no_photo_female);
-                           /* ClipDrawable mImageDrawable = (ClipDrawable) holder.profile_image.getDrawable();
-                            mImageDrawable.setLevel(5000);*/
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-//                            holder.progressBar.setVisibility(View.GONE);
-                                return false;
-                            }
-                        })
-                        .into(new SimpleTarget<Bitmap>() {
-                            @Override
-                            public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-
-                                ivImage.setImageBitmap(resource);
-                            }
-                        });
-            }
-        }
-        else {
-            Glide.with(getActivity()).asBitmap().load(imageUrl)
-                    .override(450,600)
-                    .listener(new RequestListener<Bitmap>() {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
-//                            holder.progressBar.setVisibility(View.GONE);
-                            ivImage.setImageResource(R.drawable.no_photo_male);
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
-//                            holder.progressBar.setVisibility(View.GONE);
-                            return false;
-                        }
-                    })
-                    .into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                            ivImage.setImageBitmap(resource);
-                        }
-                    });
-        }
-    }
-
-
-    @OnClick({R.id.tv_Setting,R.id.tv_my_profile, R.id.tv_Logout, R.id.iv_Image, R.id.tv_Change_Password, R.id.tv_verify_acc, R.id.tv_Change_Preferences, R.id.tv_Trash, R.id.tv_photo_request})
+    @OnClick({R.id.tv_Setting, R.id.tv_my_profile, R.id.tv_Logout, R.id.iv_Image, R.id.tv_Change_Password, R.id.tv_verify_acc, R.id.tv_Change_Preferences, R.id.tv_Trash, R.id.tv_photo_request})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             //
@@ -195,11 +160,11 @@ public class MyProfileFragment extends BaseFragment {
                 startActivity(new Intent(getActivity(), ChangePasswordActivity.class));
                 break;
             case R.id.tv_Logout:
+                clearSharedPref();
                 FirebaseAuth.getInstance().signOut();
                 LoginManager.getInstance().logOut();
-                clearSharedPref();
-                Objects.requireNonNull(getActivity()).finish();
 
+                Objects.requireNonNull(getActivity()).finish();
                 startActivity(new Intent(getActivity(), LoginActivity.class));
 
                 break;

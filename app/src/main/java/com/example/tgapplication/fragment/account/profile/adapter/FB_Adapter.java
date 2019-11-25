@@ -84,8 +84,9 @@ public class FB_Adapter extends RecyclerView.Adapter<FB_Adapter.ImageViewHolder>
                 }
             });
 
-
-        if(gender.equalsIgnoreCase("Female"))
+        Log.i(TAG, "onBindViewHolder: "+mUploads.size());
+        Log.i(TAG, "onBindViewHolder: "+mUploads.get(position).getImage_Url().size());
+     /*   if(gender.equalsIgnoreCase("Female"))
         {
 
             Glide.with(mcontext).load(mUploads.get(position).getImage_Url().get(0).getUrl())
@@ -128,7 +129,7 @@ public class FB_Adapter extends RecyclerView.Adapter<FB_Adapter.ImageViewHolder>
 
                     })
                     .into(holder.imageView);
-        }
+        }*/
 
     }
 

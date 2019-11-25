@@ -15,6 +15,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
+import com.example.tgapplication.fragment.chat.adapter.UserAdapter;
 import com.example.tgapplication.fragment.chat.module.Chat;
 import com.example.tgapplication.fragment.trip.module.PlanTrip;
 import com.example.tgapplication.fragment.trip.module.TripList;
@@ -80,14 +81,16 @@ public abstract class BaseFragment extends Fragment {
             if (from_to_dates.get(i).getDate_from().contains(dateOutput1)) {
                 String dateFromTo = from_to_dates.get(i).getDate_from() + " - " + from_to_dates.get(i).getDate_to();
 
-                TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getAge(), user.getGender(), user.getAbout_me(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLooking_for(), user.getTravel_with(), user.getVisit(), from_to_dates.get(i).getLocation(), tripNote, dateFromTo, user.getAccount_type(),userImg.getFav(), visit_id);
+                TripList tripListClass = new TripList(user, userImg, from_to_dates.get(i).getLocation(), tripNote, dateFromTo, visit_id);
+//            TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getPhone(), user.getAge(),user.getGender(), user.getAbout_me(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLooking_for(), user.getTravel_with(), user.getVisit(), from_to_dates.get(i).getLocation(), tripNote, dateFromTo, user.getAccount_type(),userImg.getFav(), visit_id);
                 tripList.add(tripListClass);
             }
         }
 
         if (tripList.size() < 1) {
 
-            TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getAge(), user.getGender(), user.getAbout_me(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLooking_for(), user.getTravel_with(), user.getVisit(), "", tripNote, "", user.getAccount_type(), userImg.getFav(), visit_id);
+            TripList tripListClass = new TripList(user, userImg,  "", tripNote, "", visit_id);
+//            TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getPhone(), user.getAge(), user.getGender(), user.getAbout_me(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLooking_for(), user.getTravel_with(), user.getVisit(), "", tripNote, "", user.getAccount_type(), userImg.getFav(), visit_id);
             tripList.add(tripListClass);
         }
 
@@ -95,7 +98,7 @@ public abstract class BaseFragment extends Fragment {
     }
 
     public void hiddenProfileDialog() {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder dialog = new AlertDialog.Builder(Objects.requireNonNull(getActivity()));
         dialog.setMessage("You can't view hidden profile.");
         dialog.setTitle("Profile is hidden");
         dialog.setPositiveButton("Ok",
@@ -184,7 +187,7 @@ public abstract class BaseFragment extends Fragment {
 
         final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        ChatsInstance.addListenerForSingleValueEvent(new ValueEventListener() {
+        ChatsInstance.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 theLastMessage = "default";
@@ -215,10 +218,15 @@ public abstract class BaseFragment extends Fragment {
                 if ("default".equals(theLastMessage)) {
                     last_msg.setText("No Message");
                     last_msg_time.setText("No Time");
+
                 } else {
                     last_msg.setText(theLastMessage);
-
                     last_msg_time.setText(theLastMsgTime);
+                }
+
+                if(!textType)
+                {
+                    last_msg.setTextColor(getResources().getColor(R.color.black));
                 }
 
             }

@@ -210,7 +210,7 @@ public class RegisterActivity extends BaseActivity implements View.OnTouchListen
                             range_age.add("18");
                             range_age.add("55");
 
-                            User userClass = new User(Objects.requireNonNull(user).getUid(), user.getDisplayName(), "offline", Objects.requireNonNull(user.getDisplayName()).toLowerCase(), "", "18", user.getEmail(), user.getProviderId(), "", "", "", "", "", "", travel_with, looking_for, range_age, "", user.getDisplayName().toLowerCase(), user.getPhoneNumber(), "", "", 1, "");
+                            User userClass = new User(Objects.requireNonNull(user).getUid(), user.getDisplayName(), "offline", Objects.requireNonNull(user.getDisplayName()).toLowerCase(), "", "18", user.getEmail(), user.getProviderId(), "", "", "", "", "", "", travel_with, looking_for, range_age, "", user.getDisplayName().toLowerCase(), user.getPhoneNumber(), "", "", 1, false, "");
                             UsersInstance.child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).setValue(userClass);
 
                             String uploadId = PicturesInstance.child(user.getUid()).push().getKey();
@@ -222,6 +222,13 @@ public class RegisterActivity extends BaseActivity implements View.OnTouchListen
 
                     }
                 });
+    }
+
+    private void updateUI(FirebaseUser currentUser) {
+        if (currentUser != null) {
+            retrieveUserDetail(currentUser);
+
+        }
     }
 
     @Override
@@ -247,7 +254,7 @@ public class RegisterActivity extends BaseActivity implements View.OnTouchListen
 
 
                             User userClass = new User(userid, username, "offline", username.toLowerCase(), str_gender, str_age, email, firebaseUser.getProviderId(), "", "", "",
-                                    "", "", "", travel_with, looking_for, range_age, location, username, "", "", "", 1, "");
+                                    "", "", "", travel_with, looking_for, range_age, location, username, "", "", "", 1, false,"");
                             UsersInstance.child(userid).setValue(userClass);
 
                             range_age.clear();
@@ -256,7 +263,7 @@ public class RegisterActivity extends BaseActivity implements View.OnTouchListen
 
                         } else {
 
-                            snackBar(relativelayout, task.getException().getMessage());
+                            snackBar(relativelayout, Objects.requireNonNull(task.getException()).getMessage());
                             dismissProgressDialog();
                             updateUI(null);
                         }
@@ -362,15 +369,17 @@ public class RegisterActivity extends BaseActivity implements View.OnTouchListen
                         str_gender = "Male";
                     }
 
-                    if (str_gender.equalsIgnoreCase("Female")) {
-                        travel_with.add("Male");
-                    } else if (str_gender.equalsIgnoreCase("Male")) {
-                        travel_with.add("Female");
-                    } else {
-                        travel_with.add("Female");
-                        travel_with.add("Male");
+                    if(str_gender!=null)
+                    {
+                        if (str_gender.equalsIgnoreCase("Female")) {
+                            travel_with.add("Male");
+                        } else if (str_gender.equalsIgnoreCase("Male")) {
+                            travel_with.add("Female");
+                        } else {
+                            travel_with.add("Female");
+                            travel_with.add("Male");
+                        }
                     }
-
 
                     register(txt_username, txt_email, txt_password, str_gender, str_age, txt_location, travel_with, range_age);
                     snackBar(relativelayout, "Register Successfully..!");

@@ -22,7 +22,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="135dp"
-            android:background="@color/dark_cyan"
+            android:background="@color/colorAccent"
             android:layout_gravity="center">
 
             <TextView
@@ -88,6 +88,12 @@
                 android:layout_height="match_parent"
                 android:contentDescription="TODO"
                 android:src="@drawable/whitewallpapar" />
+
+            <VideoView
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/videoView"/>
 
             <ProgressBar
                 android:id="@+id/progressBar"

@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -184,6 +185,13 @@ public class ChangePrefActivity extends BaseActivity {
                 updateUI(mAuth.getCurrentUser());
                 break;
 
+
+        }
+    }
+
+    private void updateUI(FirebaseUser currentUser) {
+        if (currentUser != null) {
+            retrieveUserDetail(currentUser);
 
         }
     }

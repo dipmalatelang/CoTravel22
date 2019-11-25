@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -38,6 +41,8 @@ public class VisitorFragment extends BaseFragment {
     private RecyclerView myVisitRV;
     private FirebaseUser fuser;
     View view;
+    TextView txtNoData;
+    ProgressBar progressBar;
     String pictureUrl;
     private List<UserImg> myFavArray=new ArrayList<>();
 
@@ -47,6 +52,8 @@ public class VisitorFragment extends BaseFragment {
 
         view = inflater.inflate(R.layout.fragment_visitor, container, false);
 
+        progressBar=view.findViewById(R.id.progressBar);
+        txtNoData=view.findViewById(R.id.txtNoData);
         myVisitRV = view.findViewById(R.id.myVisitRV);
         RecyclerView.LayoutManager nLayoutManager = new LinearLayoutManager(getActivity());
         myVisitRV.setLayoutManager(nLayoutManager);
@@ -70,90 +77,99 @@ public class VisitorFragment extends BaseFragment {
                                                                                         public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                                                                                             myFavArray.clear();
-                                                                                            for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                                                                            if(snapshot.getChildrenCount()>0) {
+                                                                                                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
-                                                                                                String userKey = dataSnapshot.getKey();
+                                                                                                    String userKey = dataSnapshot.getKey();
 
-                                                                                                UsersInstance.child(Objects.requireNonNull(userKey)).addValueEventListener(
-                                                                                                        new ValueEventListener() {
-                                                                                                            @Override
-                                                                                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                                                    UsersInstance.child(Objects.requireNonNull(userKey)).addValueEventListener(
+                                                                                                            new ValueEventListener() {
+                                                                                                                @Override
+                                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                                                                                                User user = dataSnapshot.getValue(User.class);
+                                                                                                                    User user = dataSnapshot.getValue(User.class);
 
 //
-                                                                                                                FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                                                                                                    @Override
-                                                                                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                                                                                    FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                                        @Override
+                                                                                                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                                                                                                                        if (snapshot.hasChild(Objects.requireNonNull(user).getId())) {
+                                                                                                                            if (snapshot.hasChild(Objects.requireNonNull(user).getId())) {
 
-                                                                                                                            fav = 1;
-                                                                                                                        } else {
-                                                                                                                            fav = 0;
-                                                                                                                        }
-                                                                                                                PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                                                                                                    @Override
-                                                                                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                                                                                fav = 1;
+                                                                                                                            } else {
+                                                                                                                                fav = 0;
+                                                                                                                            }
+                                                                                                                            PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                                                @Override
+                                                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                                                                                                        pictureUrl = "";
-                                                                                                                        for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
+                                                                                                                                    pictureUrl = "";
+                                                                                                                                    for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
 
-                                                                                                                            Upload mainPhoto = snapshot1.getValue(Upload.class);
-                                                                                                                            if (Objects.requireNonNull(mainPhoto).type == 1)
-                                                                                                                                pictureUrl = mainPhoto.getUrl();
+                                                                                                                                        Upload mainPhoto = snapshot1.getValue(Upload.class);
+                                                                                                                                        if (Objects.requireNonNull(mainPhoto).type == 1)
+                                                                                                                                            pictureUrl = mainPhoto.getUrl();
 
-                                                                                                                        }
-
-
-                                                                                                                                myFavArray.add(new UserImg(user, pictureUrl, fav));
-
-                                                                                                                                VisitorAdapter tripAdapter = new VisitorAdapter(getActivity(), fuser.getUid(), myFavArray, new VisitorAdapter.VisitorInterface() {
-                                                                                                                                    @Override
-                                                                                                                                    public void setProfileVisit(String uid, String id) {
-
-                                                                                                                                        ProfileVisitorInstance.child(id)
-                                                                                                                                                .child(uid).child("id").setValue(uid);
                                                                                                                                     }
 
-                                                                                                                                    @Override
-                                                                                                                                    public void setData(UserImg mTrip, int position) {
-                                                                                                                                        if (mTrip.getUser().getAccount_type() == 1) {
-                                                                                                                                            Intent mIntent = new Intent(getActivity(), ProfileActivity.class);
-                                                                                                                                            mIntent.putExtra("MyUserObj", myFavArray.get(position));
-                                                                                                                                            startActivityForResult(mIntent, 1);
+
+                                                                                                                                    myFavArray.add(new UserImg(user, pictureUrl, fav));
+
+                                                                                                                                    VisitorAdapter tripAdapter = new VisitorAdapter(getActivity(), fuser.getUid(), myFavArray, new VisitorAdapter.VisitorInterface() {
+                                                                                                                                        @Override
+                                                                                                                                        public void setProfileVisit(String uid, String id) {
+
+                                                                                                                                            ProfileVisitorInstance.child(id)
+                                                                                                                                                    .child(uid).child("id").setValue(uid);
+
+                                                                                                                                            Toast.makeText(getActivity(), "Visited", Toast.LENGTH_SHORT).show();
                                                                                                                                         }
-                                                                                                                                        else {
-                                                                                                                                            hiddenProfileDialog();
+
+                                                                                                                                        @Override
+                                                                                                                                        public void setData(UserImg mTrip, int position) {
+                                                                                                                                            if (mTrip.getUser().getAccount_type() == 1) {
+                                                                                                                                                Intent mIntent = new Intent(getActivity(), ProfileActivity.class);
+                                                                                                                                                mIntent.putExtra("MyUserObj", myFavArray.get(position));
+                                                                                                                                                startActivityForResult(mIntent, 1);
+                                                                                                                                            } else {
+                                                                                                                                                hiddenProfileDialog();
+                                                                                                                                            }
                                                                                                                                         }
-                                                                                                                                    }
-                                                                                                                                });
-                                                                                                                                myVisitRV.setAdapter(tripAdapter);
+                                                                                                                                    });
+                                                                                                                                    myVisitRV.setAdapter(tripAdapter);
 
-                                                                                                                            }
+                                                                                                                                }
 
-                                                                                                                            @Override
-                                                                                                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                                                                                                @Override
+                                                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                                                                                                            }
+                                                                                                                                }
 
-                                                                                                                        });
+                                                                                                                            });
 
-                                                                                                                    }
+                                                                                                                        }
 
-                                                                                                                    @Override
-                                                                                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                                                                                        @Override
+                                                                                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                                                                                                    }
-                                                                                                                });
-                                                                                                            }
+                                                                                                                        }
+                                                                                                                    });
+                                                                                                                }
 
-                                                                                                            @Override
-                                                                                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                                                                                @Override
+                                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                                                                                            }
+                                                                                                                }
 
-                                                                                                        });
+                                                                                                            });
+                                                                                                }
+                                                                                                progressBar.setVisibility(View.GONE);
+                                                                                                txtNoData.setVisibility(View.GONE);
+                                                                                            }
+                                                                                            else {
+                                                                                                progressBar.setVisibility(View.GONE);
+                                                                                                txtNoData.setVisibility(View.VISIBLE);
                                                                                             }
                                                                                         }
                                                                                         @Override

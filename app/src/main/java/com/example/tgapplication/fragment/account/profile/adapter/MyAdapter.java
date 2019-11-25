@@ -2,6 +2,7 @@ package com.example.tgapplication.fragment.account.profile.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -58,11 +60,22 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
 
         Upload uploadCurrent = mUploads.get(position);
 
+
+        if(mUploads.get(position).getName().equalsIgnoreCase("Video"))
+        {
+            holder.imageView.setVisibility(View.GONE);
+            holder.progressBar.setVisibility(View.GONE);
+            holder.videoView.setVisibility(View.VISIBLE);
+            holder.videoView.setVideoURI(Uri.parse(mUploads.get(position).getUrl()));
+            holder.videoView.start();
+
+        }
+        else {
             holder.imageView.setAdjustViewBounds(true);
             holder.imageView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
 
-        if(gender.equalsIgnoreCase("Female"))
-        {
+            if(gender.equalsIgnoreCase("Female"))
+            {
 
                 Glide.with(mcontext).asBitmap().load(uploadCurrent.getUrl())
                         .centerCrop()
@@ -88,8 +101,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
                             }
                         });
 
-        }
-        else {
+            }
+            else {
                 Glide.with(mcontext).asBitmap().load(uploadCurrent.getUrl())
                         .centerCrop()
                         .override(450, 600)
@@ -113,6 +126,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
                                 holder.imageView.setImageBitmap(resource);
                             }
                         });
+            }
+
         }
 
 
@@ -174,11 +189,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ImageViewHolder> {
         TextView set_main, pp_eye, delete;
         EasyFlipView flipView;
         ProgressBar progressBar;
+        VideoView videoView;
 
         public ImageViewHolder(@NonNull View itemView) {
             super(itemView);
 
             imageView = itemView.findViewById(R.id.imageView);
+            videoView=itemView.findViewById(R.id.videoView);
             ivTitle=itemView.findViewById(R.id.ivTitle);
 
             flipView=itemView.findViewById(R.id.flipView);

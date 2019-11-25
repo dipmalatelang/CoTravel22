@@ -88,7 +88,6 @@ public class MessageActivity extends BaseActivity {
 
     String userid;
     String pictureUrl;
-    APIService apiService;
 
     private List<UserImg> msgArray = new ArrayList<>();
 
@@ -101,7 +100,6 @@ public class MessageActivity extends BaseActivity {
         setContentView(R.layout.activity_message);
         ButterKnife.bind(this);
 
-        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
 
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -288,7 +286,7 @@ public class MessageActivity extends BaseActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 if (notify) {
-                    sendNotifiaction(receiver, Objects.requireNonNull(user).getUsername(), msg);
+                    sendMsgNotifiaction(fuser.getUid(),userid,receiver, Objects.requireNonNull(user).getUsername(), msg);
                 }
                 notify = false;
             }
@@ -300,43 +298,7 @@ public class MessageActivity extends BaseActivity {
         });
     }
 
-    private void sendNotifiaction(String receiver, final String username, final String message) {
-        Query query = TokensInstance.orderByKey().equalTo(receiver);
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Token token = snapshot.getValue(Token.class);
-                    Data data = new Data(fuser.getUid(), R.mipmap.ic_launcher, username + ": " + message, "New Message",
-                            userid);
 
-                    Sender sender = new Sender(data, Objects.requireNonNull(token).getToken());
-
-                    apiService.sendNotification(sender)
-                            .enqueue(new Callback<MyResponse>() {
-                                @Override
-                                public void onResponse(@NonNull Call<MyResponse> call, @NonNull Response<MyResponse> response) {
-                                    if (response.code() == 200) {
-                                        if (Objects.requireNonNull(response.body()).success != 1) {
-                                            snackBar(message_realtivelayout, "Failed!");
-                                        }
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(@NonNull Call<MyResponse> call, @NonNull Throwable t) {
-
-                                }
-                            });
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
 
     private void readMesagges(final String myid, final String userid, final String imageurl, String gender) {
         mchat = new ArrayList<>();

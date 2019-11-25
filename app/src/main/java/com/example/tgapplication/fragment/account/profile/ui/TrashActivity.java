@@ -115,7 +115,7 @@ public class TrashActivity extends BaseActivity {
         }
         userAdapter = new UserAdapter(this, mUser, true, true,new UserAdapter.UserInterface() {
             @Override
-            public void lastMessage(Context mContext, String userid, TextView last_msg, TextView last_msg_time, ConstraintLayout chat) {
+            public void lastMessage(Context mContext, String userid, int position, TextView last_msg, TextView last_msg_time, ConstraintLayout chat) {
                 checkForLastMsg(mContext, userid, last_msg, last_msg_time,chat);
             }
 
@@ -203,7 +203,7 @@ public class TrashActivity extends BaseActivity {
 
                                                         userAdapter = new UserAdapter(TrashActivity.this, mUsers, true, true,new UserAdapter.UserInterface() {
                                                             @Override
-                                                            public void lastMessage(Context mContext, String userid, TextView last_msg, TextView last_msg_time,ConstraintLayout chat) {
+                                                            public void lastMessage(Context mContext, String userid, int position, TextView last_msg, TextView last_msg_time, ConstraintLayout chat) {
                                                                 checkForLastMsg(mContext, userid, last_msg,last_msg_time,chat);
                                                             }
 

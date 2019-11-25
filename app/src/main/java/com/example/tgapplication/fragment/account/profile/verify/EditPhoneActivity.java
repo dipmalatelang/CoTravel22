@@ -1,21 +1,18 @@
 package com.example.tgapplication.fragment.account.profile.verify;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
-import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
-import com.google.android.gms.tasks.TaskExecutors;
-import com.google.firebase.FirebaseException;
-import com.google.firebase.auth.PhoneAuthCredential;
-import com.google.firebase.auth.PhoneAuthProvider;
-
-import java.util.concurrent.TimeUnit;
+import com.google.firebase.auth.FirebaseUser;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,6 +28,8 @@ public class EditPhoneActivity extends BaseActivity {
     @BindView(R.id.cl_phone)
     ConstraintLayout clPhone;
     private String mVerificationId, code;
+    private FirebaseUser fuser;
+    String mobile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,56 +37,41 @@ public class EditPhoneActivity extends BaseActivity {
         setContentView(R.layout.activity_edit_phone);
         ButterKnife.bind(this);
 
+        SharedPreferences sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+
+        if (sharedPreferences.contains("Phone")) {
+            mobile = (sharedPreferences.getString("Phone", ""));
+            Log.i(TAG, "onCreate: Checking Phone "+mobile);
+            if(!mobile.equalsIgnoreCase(""))
+            {
+                edNumber.setEnabled(false);
+                btnSub.setClickable(false);
+                edNumber.setText(mobile);
+
+            }
+            else {
+                edNumber.setEnabled(true);
+                btnSub.setClickable(true);
+            }
+
+        }
+
+
     }
 
     @OnClick(R.id.btn_sub)
     public void onViewClicked() {
         String mobile = edNumber.getText().toString().trim();
 
-        if (mobile.isEmpty()) {
-            edNumber.setError("Enter a valid mobile Number");
+        if (mobile.isEmpty() || mobile.length() < 10) {
+            edNumber.setError("Enter a valid mobile");
             edNumber.requestFocus();
             return;
         }
 
-        sendVerificationCode(mobile);
+        Intent intent = new Intent(EditPhoneActivity.this, VerifyPhoneActivity.class);
+        intent.putExtra("mobile", mobile);
+        startActivity(intent);
+        finish();
     }
-
-    private void sendVerificationCode(String mobile) {
-        PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                "+91" + mobile,
-                60,
-                TimeUnit.SECONDS,
-                TaskExecutors.MAIN_THREAD,
-                mCallbacks);
-    }
-
-    private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-        @Override
-        public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-
-            code = phoneAuthCredential.getSmsCode();
-
-        }
-
-        @Override
-        public void onVerificationFailed(FirebaseException e) {
-
-            snackBar(clPhone,""+e.getMessage());
-
-        }
-
-        @Override
-        public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-            super.onCodeSent(s, forceResendingToken);
-
-            mVerificationId = s;
-            Intent intent = new Intent(EditPhoneActivity.this, VerifyPhoneActivity.class);
-            intent.putExtra("mVerificationId", mVerificationId);
-            intent.putExtra("code", code);
-            startActivity(intent);
-
-        }
-    };
-
 }

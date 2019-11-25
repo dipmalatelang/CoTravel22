@@ -28,6 +28,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.BuildConfig;
 import com.example.tgapplication.R;
+import com.example.tgapplication.fragment.account.profile.ui.ProfileActivity;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.google.android.gms.common.api.Status;
 import com.google.android.libraries.places.api.Places;
@@ -54,6 +55,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.example.tgapplication.Constants.ProfileVisitorInstance;
 import static com.example.tgapplication.Constants.UsersInstance;
 
 public class EditProfileActivity extends BaseActivity {
@@ -376,14 +378,12 @@ public class EditProfileActivity extends BaseActivity {
 
     private void register(FirebaseUser fuser, String str_name, String str_dob, String str_gender, String str_about_me, String age, String str_location, String str_nationality, String str_lang, ArrayList<String> looking_for, ArrayList<String> travel_with, String str_height, String str_body_type, String str_eyes, String str_hair, String str_visit) {
 
-
-
-        User userClass = new User(fuser.getUid(), prevUserList.get(0).getUsername(), "offline", prevUserList.get(0).getSearch(), str_gender, age, prevUserList.get(0).getEmail(),
+        User userClass = new User(fuser.getUid(), str_name, "offline", str_name, str_gender, age, prevUserList.get(0).getEmail(),
                 fuser.getProviderId(), str_body_type, str_dob, str_eyes, str_hair, str_height, str_lang,
-                travel_with, looking_for, prevUserList.get(0).getRange_age(), str_location, str_name, prevUserList.get(0).getPhone(), str_nationality, str_visit, prevUserList.get(0).getAccount_type(), str_about_me);
+                travel_with, looking_for, prevUserList.get(0).getRange_age(), str_location, str_name, prevUserList.get(0).getPhone(), str_nationality, str_visit, prevUserList.get(0).getAccount_type(), prevUserList.get(0).isShow_number(), str_about_me);
 
         UsersInstance.child(fuser.getUid()).setValue(userClass);
-
+        saveDisplayName(str_name);
         snackBar(activityProfileCoordinatelayout, "Your profile has been successfully updated");
         finish();
 

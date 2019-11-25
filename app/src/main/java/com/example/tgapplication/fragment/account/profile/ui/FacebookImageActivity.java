@@ -25,6 +25,11 @@ import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -42,6 +47,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.example.tgapplication.Constants.PicturesInstance;
+import static com.example.tgapplication.Constants.UsersInstance;
 
 public class FacebookImageActivity extends BaseActivity {
 
@@ -82,7 +88,7 @@ public class FacebookImageActivity extends BaseActivity {
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-
+                handleFacebookAccessToken(loginResult.getAccessToken().getToken());
                 new GraphRequest(
                         loginResult.getAccessToken(),
                         "/" + AccessToken.getCurrentAccessToken().getUserId() + "/albums",
@@ -95,6 +101,7 @@ public class FacebookImageActivity extends BaseActivity {
                                         JSONObject joMain = response.getJSONObject();
                                         if (joMain.has("data")) {
                                             JSONArray jaData = joMain.optJSONArray("data");
+                                            if(jaData!=null)
                                             for (int i = 0; i < jaData.length(); i++) {
                                                 JSONObject joAlbum = jaData.getJSONObject(i);
                                                 GetFacebookImages(joAlbum.optString("id"), joAlbum.optString("name"));
@@ -108,6 +115,8 @@ public class FacebookImageActivity extends BaseActivity {
                             }
                         }
                 ).executeAsync();
+
+
             }
 
             @Override
@@ -122,6 +131,26 @@ public class FacebookImageActivity extends BaseActivity {
         });
 
         getAlbum();
+    }
+
+    private void handleFacebookAccessToken(String token) {
+        showProgressDialog();
+        AuthCredential credential = FacebookAuthProvider.getCredential(token);
+        Log.d("Tiger", "" + credential);
+        fuser.linkWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d("Tiger", "handleFacebookAccessToken:" + task.isSuccessful());
+                        if (task.isSuccessful()) {
+
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d("Tiger", "signInWithCredential:success");
+                            dismissProgressDialog();
+                        }
+
+                    }
+                });
     }
 
     @Override
@@ -147,14 +176,16 @@ public class FacebookImageActivity extends BaseActivity {
                                     JSONObject joMain = response.getJSONObject();
                                     if (joMain.has("data")) {
                                         JSONArray jaData = joMain.optJSONArray("data");
+                                        if(jaData!=null)
                                         for (int i = 0; i < jaData.length(); i++) {
                                             JSONObject joAlbum = jaData.getJSONObject(i);
                                             GetFacebookImages(joAlbum.optString("id"), joAlbum.optString("name"));
 
                                         }
                                     }
-                                } else {
-
+                                }
+                                else {
+                                    Log.i(TAG, "onCompleted: else "+response.getError().getErrorMessage());
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -167,6 +198,8 @@ public class FacebookImageActivity extends BaseActivity {
             loginButton.performClick();
         }
     }
+
+
 
 
     public void GetFacebookImages(String albumId, String name) {
@@ -206,6 +239,7 @@ public class FacebookImageActivity extends BaseActivity {
                                                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                                                     Upload upload = ds.getValue(Upload.class);
 
+                                                    if(upload!=null)
                                                     if (upload.getName().equalsIgnoreCase("FB_Image")) {
                                                         for (int k = 0; k < lstFBImages.size(); k++) {
                                                             if (upload.getUrl().equals(lstFBImages.get(k).getUrl())) {
@@ -216,6 +250,7 @@ public class FacebookImageActivity extends BaseActivity {
                                                     }
 
                                                 }
+                                                Log.i(TAG, "onCompleted: Album Id "+albumId);
                                                 photoAlbums.add(new Images(albumId, name, lstFBImages));
                                             }
 
@@ -229,7 +264,7 @@ public class FacebookImageActivity extends BaseActivity {
 
                                 }
 
-                                Log.i(TAG, "onCompleted: photoAlbums "+photoAlbums.size());
+                                Log.i(TAG, "onCompleted: photoAlbums " + photoAlbums.size());
                                 fb_adapter = new FB_Adapter(FacebookImageActivity.this, fuser.getUid(), gender, photoAlbums, new FB_Adapter.FbInterface() {
                                     @Override
                                     public void proceed(ArrayList<FbImage> image_url) {
@@ -250,7 +285,7 @@ public class FacebookImageActivity extends BaseActivity {
                                 fbRecyclerview.setAdapter(fb_adapter);
 
                             } else {
-                                Log.v("TAG", response.getError().toString());
+                                Log.i(TAG, "onCompleted: else "+response.getError().getErrorMessage());
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
