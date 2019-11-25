@@ -35,6 +35,9 @@ import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.fragment.visitor.UserImg;
 import com.example.tgapplication.login.LoginActivity;
 import com.facebook.login.LoginManager;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -179,6 +182,7 @@ public class ProfileActivity extends BaseActivity {
     StringBuilder str_user;
     SharedPreferences sharedPreferences;
     String fusername;
+    AdView mAdmobView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -194,7 +198,20 @@ public class ProfileActivity extends BaseActivity {
         rvTripValue.setLayoutManager(ll_manager);
 
         setDataToProfile();
-
+        initAdmob();
+    }
+    protected void initAdmob() {
+        MobileAds.initialize(this, getString(R.string.app_id));
+        mAdmobView = (AdView) findViewById(R.id.home_admob);
+        if (AppSettings.ENABLE_ADMOB) {
+            mAdmobView.setVisibility(View.VISIBLE);
+            AdRequest.Builder builder = new AdRequest.Builder();
+            AdRequest adRequest = builder.build();
+            // Start loading the ad in the background.
+            mAdmobView.loadAd(adRequest);
+        } else {
+            mAdmobView.setVisibility(View.GONE);
+        }
     }
 
     private void setDataToProfile() {
@@ -364,7 +381,7 @@ public class ProfileActivity extends BaseActivity {
         if (looking_for != null) {
             if (looking_for.size() > 0) {
                 for (int i = 0; i < looking_for.size(); i++) {
-                    strlookingFor += looking_for.get(i);
+                    strlookingFor += " "+ looking_for.get(i);
                 }
                 tvLookingForValue.setText(strlookingFor);
             } else {
