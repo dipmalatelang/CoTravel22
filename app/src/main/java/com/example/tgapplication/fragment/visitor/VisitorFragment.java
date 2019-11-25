@@ -50,7 +50,6 @@ public class VisitorFragment extends BaseFragment {
     View view;
     TextView txtNoData;
     ProgressBar progressBar;
-    String pictureUrl;
     private List<UserImg> myFavArray=new ArrayList<>();
     SharedPreferences sharedPreferences;
     String fusername;
@@ -118,32 +117,28 @@ public class VisitorFragment extends BaseFragment {
 
                                                                                                                     User user = dataSnapshot.getValue(User.class);
 
-//
+                                                                                                                    UserImg userImg= new UserImg(user,"",0);
+
                                                                                                                     FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                                                                                                         @Override
                                                                                                                         public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                                                                                                                             if (snapshot.hasChild(Objects.requireNonNull(user).getId())) {
-
-                                                                                                                                fav = 1;
-                                                                                                                            } else {
-                                                                                                                                fav = 0;
+                                                                                                                                userImg.setFav(1);
                                                                                                                             }
                                                                                                                             PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                                                                                                                                 @Override
                                                                                                                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                                                                                                                    pictureUrl = "";
                                                                                                                                     for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
 
                                                                                                                                         Upload mainPhoto = snapshot1.getValue(Upload.class);
                                                                                                                                         if (Objects.requireNonNull(mainPhoto).type == 1)
-                                                                                                                                            pictureUrl = mainPhoto.getUrl();
+                                                                                                                                        userImg.setPictureUrl(mainPhoto.getUrl());
 
                                                                                                                                     }
 
-
-                                                                                                                                    myFavArray.add(new UserImg(user, pictureUrl, fav));
+                                                                                                                                    myFavArray.add(userImg);
 
                                                                                                                                     VisitorAdapter tripAdapter = new VisitorAdapter(getActivity(), fuser.getUid(), myFavArray, new VisitorAdapter.VisitorInterface() {
                                                                                                                                         @Override
@@ -206,9 +201,4 @@ public class VisitorFragment extends BaseFragment {
         );
         dismissProgressDialog();
     }
-
-
-
-    int fav;
-
 }

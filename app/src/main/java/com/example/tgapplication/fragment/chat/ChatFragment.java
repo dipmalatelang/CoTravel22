@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,8 +57,6 @@ public class ChatFragment extends BaseFragment {
     private UserAdapter userAdapter;
     ArrayList<UserImg> mUsers = new ArrayList<>();
 
-    String pictureUrl = "";
-    int fav;
     TextView txtNoData;
     FirebaseUser fuser;
     ProgressBar progressBar;
@@ -202,7 +201,6 @@ public class ChatFragment extends BaseFragment {
         UsersInstance.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                 mUsers.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     User user = snapshot.getValue(User.class);
@@ -214,32 +212,27 @@ public class ChatFragment extends BaseFragment {
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     if (!dataSnapshot.hasChild(user.getId())) {
 
-                                        FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                                                if (snapshot.hasChild(user.getId())) {
-
-                                                    fav = 1;
-                                                } else {
-                                                    fav = 0;
-                                                }
-
+                                        UserImg userImg=new UserImg(user, "", 0);
                                         PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                pictureUrl="";
                                                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
                                                     Upload upload = ds.getValue(Upload.class);
 
                                                     if (Objects.requireNonNull(upload).getType() == 1) {
-                                                        pictureUrl = upload.getUrl();
+                                                        userImg.setPictureUrl(upload.getUrl());
                                                     }
                                                 }
 
-                                                        mUsers.add(new UserImg(user, pictureUrl, fav));
+                                                FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                        if (snapshot.hasChild(user.getId())) {
+                                                            userImg.setFav(1);
+                                                        }
 
+                                                        mUsers.add(userImg);
 
                                                         userAdapter = new UserAdapter(getContext(), mUsers, true, new UserAdapter.UserInterface() {
                                                             @Override
