@@ -74,7 +74,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     public List<TripList> findAllMembers(UserImg userImg) {
         User user=userImg.getUser();
         int visit_id = getVisit(visitArray, user.getId());
-        TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getAge(), user.getGender(), user.getAbout_me(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLooking_for(),user.getTravel_with(), user.getVisit(), tripNote, user.getAccount_type(), userImg.getFav(), visit_id);
+//        TripList tripListClass = new TripList(user.getId(), user.getUsername(), userImg.getPictureUrl(), user.getPhone(),user.getAge(), user.getGender(), user.getAbout_me(), user.getLocation(), user.getNationality(), user.getLang(), user.getHeight(), user.getBody_type(), user.getEyes(), user.getHair(), user.getLooking_for(),user.getTravel_with(), user.getVisit(), tripNote, user.getAccount_type(), userImg.getFav(), visit_id);
+        TripList tripListClass = new TripList(user, userImg, tripNote, visit_id);
         tripList.add(tripListClass);
 
         return tripList;
@@ -353,7 +354,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         UsersInstance.child(id).child("phone").setValue(mobile);
     }
 
-
+    public void setShowNumber(String id, boolean show_number)
+    {
+        UsersInstance.child(id).child("show_number").setValue(show_number);
+    }
 
     public void checkForLastMsg(Context mContext, final String userid, TextView last_msg, TextView last_msg_time, ConstraintLayout rl_chat) {
 

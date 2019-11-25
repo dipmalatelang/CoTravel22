@@ -380,7 +380,7 @@ public class EditProfileActivity extends BaseActivity {
 
         User userClass = new User(fuser.getUid(), str_name, "offline", str_name, str_gender, age, prevUserList.get(0).getEmail(),
                 fuser.getProviderId(), str_body_type, str_dob, str_eyes, str_hair, str_height, str_lang,
-                travel_with, looking_for, prevUserList.get(0).getRange_age(), str_location, str_name, prevUserList.get(0).getPhone(), str_nationality, str_visit, prevUserList.get(0).getAccount_type(), str_about_me);
+                travel_with, looking_for, prevUserList.get(0).getRange_age(), str_location, str_name, prevUserList.get(0).getPhone(), str_nationality, str_visit, prevUserList.get(0).getAccount_type(), prevUserList.get(0).isShow_number(), str_about_me);
 
         UsersInstance.child(fuser.getUid()).setValue(userClass);
         saveDisplayName(str_name);

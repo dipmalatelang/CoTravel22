@@ -26,6 +26,8 @@ import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.TripList;
+import com.example.tgapplication.fragment.trip.module.User;
+import com.example.tgapplication.fragment.visitor.UserImg;
 
 import java.util.List;
 
@@ -55,12 +57,14 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.TripView
     public void onBindViewHolder(@NonNull TripViewHolder holder, int position) {
 
         TripList tList = mTrip.get(position);
+        User userList = mTrip.get(position).getUser();
+        UserImg userImg = mTrip.get(position).getUserImg();
 
-        if(tList.getGender().equalsIgnoreCase("Female"))
+        if(userList.getGender().equalsIgnoreCase("Female"))
         {
-            if(tList.getAccount_type()==1)
+            if(userList.getAccount_type()==1)
             {
-                Glide.with(mContext).asBitmap().load(tList.getImageUrl())
+                Glide.with(mContext).asBitmap().load(userImg.getPictureUrl())
                         .centerCrop()
                         .override(450,600)
                         .listener(new RequestListener<Bitmap>() {
@@ -105,8 +109,8 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.TripView
             }
         }
         else {
-            if (tList.getAccount_type() == 1) {
-                Glide.with(mContext).asBitmap().load(tList.getImageUrl())
+            if (userList.getAccount_type() == 1) {
+                Glide.with(mContext).asBitmap().load(userImg.getPictureUrl())
                         .centerCrop()
                         .override(450, 600)
                         .listener(new RequestListener<Bitmap>() {
@@ -151,9 +155,9 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.TripView
             }
         }
 
-        holder.mTitle.setText(tList.getName()+" "+tList.getAge());
+        holder.mTitle.setText(userList.getName()+" "+userList.getAge());
 
-        holder.mCity.setText(tList.getUserLocation());
+        holder.mCity.setText(userList.getLocation());
 
         if (position%2==0) holder.linearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.color8));
         else if(position%3==0){
@@ -176,7 +180,7 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.TripView
             @Override
             public void onClick(View view) {
                 listener.setData(tList,position);
-                listener.setProfileVisit(uid,tList.getId());
+                listener.setProfileVisit(uid,userList.getId());
 
             }
         });

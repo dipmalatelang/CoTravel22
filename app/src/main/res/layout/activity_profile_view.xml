@@ -169,13 +169,55 @@
 
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/card_nationality"
+                    android:id="@+id/card_phone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:elevation="2dp"
                     app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="390dp"
+                        android:layout_height="match_parent"
+                        android:padding="8dp">
+
+                        <TextView
+                            android:id="@+id/tv_phone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableStart="@drawable/ic_adjust_grey_8dp"
+                            android:drawablePadding="4dp"
+                            android:fontFamily="@font/montserrat"
+                            android:text="Phone        "
+                            android:textSize="12sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_phone_values"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="24dp"
+                            android:fontFamily="@font/montserrat"
+                            android:text="No data"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="14sp"
+                            app:layout_constraintBaseline_toBaselineOf="@+id/tv_phone"
+                            app:layout_constraintStart_toEndOf="@+id/tv_phone" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card_nationality"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:elevation="2dp"
+                    app:layout_constraintTop_toBottomOf="@+id/card_phone">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="390dp"

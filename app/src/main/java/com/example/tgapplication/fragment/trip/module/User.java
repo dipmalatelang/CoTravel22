@@ -25,6 +25,7 @@ public class User implements Serializable{
     private String visit;
     private String age;
     private int account_type;
+    private boolean show_number;
     private String about_me;
 
     public User() {
@@ -32,7 +33,7 @@ public class User implements Serializable{
 
 
 
-    public User(String id, String username, String status, String search, String gender, String age, String email, String social_media, String body_type, String dob, String eyes, String hair, String height, String lang,ArrayList<String> travel_with, ArrayList<String> looking_for, ArrayList<String> range_age, String location, String name, String phone, String nationality, String visit,int account_type, String about_me) {
+    public User(String id, String username, String status, String search, String gender, String age, String email, String social_media, String body_type, String dob, String eyes, String hair, String height, String lang,ArrayList<String> travel_with, ArrayList<String> looking_for, ArrayList<String> range_age, String location, String name, String phone, String nationality, String visit,int account_type, boolean show_number, String about_me) {
         this.id = id;
         this.username = username;
         this.name = name;
@@ -56,6 +57,7 @@ public class User implements Serializable{
         this.status = status;
         this.search = search;
         this.account_type=account_type;
+        this.show_number=show_number;
         this.about_me=about_me;
     }
 
@@ -218,6 +220,14 @@ public class User implements Serializable{
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public boolean isShow_number() {
+        return show_number;
+    }
+
+    public void setShow_number(boolean show_number) {
+        this.show_number = show_number;
     }
 
     public int getAccount_type() {

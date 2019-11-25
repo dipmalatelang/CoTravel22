@@ -305,7 +305,7 @@ public class TripFragment extends BaseFragment {
                                                                 if (str_name != null && !str_name.equalsIgnoreCase("")) {
                                                                     if (tripList.size() > 0) {
                                                                         for (int i = 0; i < tripList.size(); i++) {
-                                                                            if (!tripList.get(i).getName().equalsIgnoreCase(str_name)) {
+                                                                            if (!tripList.get(i).getUser().getName().equalsIgnoreCase(str_name)) {
                                                                                 tripList.remove(i);
                                                                             }
                                                                         }
@@ -328,7 +328,7 @@ public class TripFragment extends BaseFragment {
                                                                     if (str_city != null && !str_city.equalsIgnoreCase("")) {
                                                                         if (tripList.size() > 0) {
                                                                             for (int i = 0; i < tripList.size(); i++) {
-                                                                                if (!tripList.get(i).getUserLocation().equalsIgnoreCase(str_city)) {
+                                                                                if (!tripList.get(i).getUser().getLocation().equalsIgnoreCase(str_city)) {
                                                                                     tripList.remove(i);
                                                                                 }
                                                                             }
@@ -340,7 +340,7 @@ public class TripFragment extends BaseFragment {
                                                                 if (str_eyes != null && !str_eyes.equalsIgnoreCase("") && !str_eyes.equalsIgnoreCase("All")) {
                                                                     if (tripList.size() > 0) {
                                                                         for (int i = 0; i < tripList.size(); i++) {
-                                                                            if (!tripList.get(i).getEyes().contains(str_eyes)) {
+                                                                            if (!tripList.get(i).getUser().getEyes().contains(str_eyes)) {
                                                                                 tripList.remove(i);
                                                                             }
                                                                         }
@@ -350,7 +350,7 @@ public class TripFragment extends BaseFragment {
                                                                 if (str_hairs != null && !str_hairs.equalsIgnoreCase("") && !str_hairs.equalsIgnoreCase("All")) {
                                                                     if (tripList.size() > 0) {
                                                                         for (int i = 0; i < tripList.size(); i++) {
-                                                                            if (!tripList.get(i).getHair().contains(str_hairs)) {
+                                                                            if (!tripList.get(i).getUser().getHair().contains(str_hairs)) {
                                                                                 tripList.remove(i);
                                                                             }
                                                                         }
@@ -360,7 +360,7 @@ public class TripFragment extends BaseFragment {
                                                                 if (str_height != null && !str_height.equalsIgnoreCase("") && !str_height.equalsIgnoreCase("All")) {
                                                                     if (tripList.size() > 0) {
                                                                         for (int i = 0; i < tripList.size(); i++) {
-                                                                            if (!tripList.get(i).getHeight().contains(str_height)) {
+                                                                            if (!tripList.get(i).getUser().getHeight().contains(str_height)) {
                                                                                 tripList.remove(i);
                                                                             }
                                                                         }
@@ -370,7 +370,7 @@ public class TripFragment extends BaseFragment {
                                                                 if (str_bodytype != null && !str_bodytype.equalsIgnoreCase("") && !str_bodytype.equalsIgnoreCase("All")) {
                                                                     if (tripList.size() > 0) {
                                                                         for (int i = 0; i < tripList.size(); i++) {
-                                                                            if (!tripList.get(i).getBody_type().contains(str_bodytype)) {
+                                                                            if (!tripList.get(i).getUser().getBody_type().contains(str_bodytype)) {
                                                                                 tripList.remove(i);
                                                                             }
                                                                         }
@@ -380,7 +380,7 @@ public class TripFragment extends BaseFragment {
                                                                 if (str_lang != null && !str_lang.equalsIgnoreCase("") && !str_lang.equalsIgnoreCase("All")) {
                                                                     if (tripList.size() > 0) {
                                                                         for (int i = 0; i < tripList.size(); i++) {
-                                                                            if (!tripList.get(i).getLang().contains(str_lang)) {
+                                                                            if (!tripList.get(i).getUser().getLang().contains(str_lang)) {
                                                                                 tripList.remove(i);
                                                                             }
                                                                         }
@@ -390,17 +390,17 @@ public class TripFragment extends BaseFragment {
                                                                 if (str_looking_for != null && !str_looking_for.equalsIgnoreCase("") && !str_looking_for.equalsIgnoreCase("All")) {
                                                                     if (tripList.size() > 0) {
                                                                         for (int i = 0; i < tripList.size(); i++) {
-                                                                            if (tripList.get(i).getLooking_for() != null) {
-                                                                                if (tripList.get(i).getLooking_for().size() > 1) {
-                                                                                    Log.i(TAG, "onDataChange: " + tripList.get(i).getLooking_for().size());
-                                                                                    for (int j = 0; j < tripList.get(i).getLooking_for().size(); j++) {
-                                                                                        Log.i(TAG, "onDataChange: Data " + tripList.get(i).getLooking_for().get(j));
-                                                                                        if (!tripList.get(i).getLooking_for().get(j).equalsIgnoreCase(str_looking_for)) {
+                                                                            if (tripList.get(i).getUser().getLooking_for() != null) {
+                                                                                if (tripList.get(i).getUser().getLooking_for().size() > 1) {
+                                                                                    Log.i(TAG, "onDataChange: " + tripList.get(i).getUser().getLooking_for().size());
+                                                                                    for (int j = 0; j < tripList.get(i).getUser().getLooking_for().size(); j++) {
+                                                                                        Log.i(TAG, "onDataChange: Data " + tripList.get(i).getUser().getLooking_for().get(j));
+                                                                                        if (!tripList.get(i).getUser().getLooking_for().get(j).equalsIgnoreCase(str_looking_for)) {
                                                                                             tripList.remove(i);
                                                                                         }
                                                                                     }
                                                                                 } else {
-                                                                                    if (!tripList.get(i).getLooking_for().get(0).equalsIgnoreCase(str_looking_for)) {
+                                                                                    if (!tripList.get(i).getUser().getLooking_for().get(0).equalsIgnoreCase(str_looking_for)) {
                                                                                         tripList.remove(i);
                                                                                     }
                                                                                 }
@@ -412,9 +412,9 @@ public class TripFragment extends BaseFragment {
 
                                                                 if (tripList.size() > 0) {
                                                                     for (int i = 0; i < tripList.size(); i++) {
-                                                                        Log.i(TAG, "onDataChange: " + num_from + " " + Integer.parseInt(tripList.get(i).getAge()) + " " + num_to);
+                                                                        Log.i(TAG, "onDataChange: " + num_from + " " + Integer.parseInt(tripList.get(i).getUser().getAge()) + " " + num_to);
 
-                                                                        if (num_from > Integer.parseInt(tripList.get(i).getAge()) || Integer.parseInt(tripList.get(i).getAge()) > num_to) {
+                                                                        if (num_from > Integer.parseInt(tripList.get(i).getUser().getAge()) || Integer.parseInt(tripList.get(i).getUser().getAge()) > num_to) {
                                                                             tripList.remove(i);
                                                                         }
                                                                     }
@@ -425,7 +425,7 @@ public class TripFragment extends BaseFragment {
                                                                     tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), tripList, new TripAdapter.ProfileData() {
                                                                         @Override
                                                                         public void setData(TripList tList, int position) {
-                                                                            if (tList.getAccount_type() == 1) {
+                                                                            if (tList.getUser().getAccount_type() == 1) {
                                                                                 Intent mIntent = new Intent(getActivity(), ProfileActivity.class);
                                                                                 mIntent.putExtra("MyObj", tripList.get(position));
                                                                                 startActivity(mIntent);
@@ -638,7 +638,7 @@ public class TripFragment extends BaseFragment {
                                                                         tripAdapter = new TripAdapter(getActivity(), fuser.getUid(), tripList, new TripAdapter.ProfileData() {
                                                                             @Override
                                                                             public void setData(TripList tList, int position) {
-                                                                                if (tList.getAccount_type() == 1) {
+                                                                                if (tList.getUser().getAccount_type() == 1) {
                                                                                     Intent mIntent = new Intent(getActivity(), ProfileActivity.class);
                                                                                     mIntent.putExtra("MyObj", tripList.get(position));
                                                                                     startActivity(mIntent);

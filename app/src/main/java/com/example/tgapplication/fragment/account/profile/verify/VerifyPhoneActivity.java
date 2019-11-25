@@ -177,7 +177,7 @@ public class VerifyPhoneActivity extends BaseActivity {
 
         Log.i(TAG, "registerPhoneNumber: "+user.getUid()+" "+user.getDisplayName()+" "+ user.getEmail()+" "+ user.getProviderId()+" "+ user.getPhoneNumber());
 
-        User userClass = new User(Objects.requireNonNull(user).getUid(), user.getPhoneNumber(), "offline", user.getPhoneNumber(), "", "18","", user.getProviderId(), "", "", "", "", "", "", travel_with, looking_for, range_age, "", user.getPhoneNumber(), user.getPhoneNumber(), "", "", 1, "");
+        User userClass = new User(Objects.requireNonNull(user).getUid(), user.getPhoneNumber(), "offline", user.getPhoneNumber(), "", "18","", user.getProviderId(), "", "", "", "", "", "", travel_with, looking_for, range_age, "", user.getPhoneNumber(), user.getPhoneNumber(), "", "", 1, false, "");
         UsersInstance.child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).setValue(userClass);
     }
 
