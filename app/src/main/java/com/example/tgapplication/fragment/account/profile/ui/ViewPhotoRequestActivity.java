@@ -16,6 +16,9 @@ import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.account.profile.module.Permit;
 import com.example.tgapplication.fragment.account.profile.verify.ViewPhotoRequestAdapter;
 import com.example.tgapplication.fragment.visitor.UserImg;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -44,6 +47,7 @@ public class ViewPhotoRequestActivity extends BaseActivity {
     boolean notify = false;
     String fusername;
     SharedPreferences sharedPreferences;
+    AdView mAdmobView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -113,7 +117,21 @@ public class ViewPhotoRequestActivity extends BaseActivity {
 
         rvViewPhotoRequest.setAdapter(viewPhotoRequestAdapter);
         viewPhotoRequestAdapter.notifyDataSetChanged();
+        initAdmob();
+    }
 
+    protected void initAdmob() {
+        MobileAds.initialize(this, getString(R.string.app_id));
+        mAdmobView = (AdView) findViewById(R.id.home_admob);
+        if (AppSettings.ENABLE_ADMOB) {
+            mAdmobView.setVisibility(View.VISIBLE);
+            AdRequest.Builder builder = new AdRequest.Builder();
+            AdRequest adRequest = builder.build();
+            // Start loading the ad in the background.
+            mAdmobView.loadAd(adRequest);
+        } else {
+            mAdmobView.setVisibility(View.GONE);
+        }
     }
 
     private void acceptPhotoRequest(String userid, int i) {

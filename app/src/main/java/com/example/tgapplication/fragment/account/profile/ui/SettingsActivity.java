@@ -4,11 +4,15 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -28,6 +32,8 @@ public class SettingsActivity extends BaseActivity implements CompoundButton.OnC
     Switch switchSmsMsgNotify;
 
     private FirebaseUser fuser;
+
+    AdView mAdmobView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +81,21 @@ public class SettingsActivity extends BaseActivity implements CompoundButton.OnC
             if (smsMsgNotify) {
                 switchSmsMsgNotify.setChecked(true);
             }
+        }
+        initAdmob();
+    }
+
+    protected void initAdmob() {
+        MobileAds.initialize(this, getString(R.string.app_id));
+        mAdmobView = (AdView) findViewById(R.id.home_admob);
+        if (AppSettings.ENABLE_ADMOB) {
+            mAdmobView.setVisibility(View.VISIBLE);
+            AdRequest.Builder builder = new AdRequest.Builder();
+            AdRequest adRequest = builder.build();
+            // Start loading the ad in the background.
+            mAdmobView.loadAd(adRequest);
+        } else {
+            mAdmobView.setVisibility(View.GONE);
         }
     }
 

@@ -18,10 +18,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tgapplication.BaseFragment;
 import com.example.tgapplication.R;
+import com.example.tgapplication.fragment.account.profile.ui.AppSettings;
 import com.example.tgapplication.fragment.account.profile.ui.ProfileActivity;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.fragment.visitor.adapter.VisitorAdapter;
 import com.example.tgapplication.fragment.account.profile.module.Upload;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -50,7 +54,7 @@ public class VisitorFragment extends BaseFragment {
     private List<UserImg> myFavArray=new ArrayList<>();
     SharedPreferences sharedPreferences;
     String fusername;
-
+    AdView mAdmobView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -60,6 +64,7 @@ public class VisitorFragment extends BaseFragment {
         progressBar=view.findViewById(R.id.progressBar);
         txtNoData=view.findViewById(R.id.txtNoData);
         myVisitRV = view.findViewById(R.id.myVisitRV);
+        mAdmobView=view.findViewById(R.id.home_admob);
         RecyclerView.LayoutManager nLayoutManager = new LinearLayoutManager(getActivity());
         myVisitRV.setLayoutManager(nLayoutManager);
 
@@ -73,8 +78,21 @@ public class VisitorFragment extends BaseFragment {
 
         revVisitList(Objects.requireNonNull(fuser));
 
-
+        initAdmob();
         return view;
+    }
+    protected void initAdmob() {
+        MobileAds.initialize(getContext(), getString(R.string.app_id));
+
+        if (AppSettings.ENABLE_ADMOB) {
+            mAdmobView.setVisibility(View.VISIBLE);
+            AdRequest.Builder builder = new AdRequest.Builder();
+            AdRequest adRequest = builder.build();
+            // Start loading the ad in the background.
+            mAdmobView.loadAd(adRequest);
+        } else {
+            mAdmobView.setVisibility(View.GONE);
+        }
     }
 
 

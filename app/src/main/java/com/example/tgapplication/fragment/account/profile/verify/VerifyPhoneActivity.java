@@ -14,7 +14,11 @@ import com.chaos.view.PinView;
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
+import com.example.tgapplication.fragment.account.profile.ui.AppSettings;
 import com.example.tgapplication.fragment.trip.module.User;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskExecutors;
@@ -52,6 +56,7 @@ public class VerifyPhoneActivity extends BaseActivity {
     private FirebaseUser fuser;
     private String mVerificationId;
 
+    AdView mAdmobView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +70,21 @@ public class VerifyPhoneActivity extends BaseActivity {
         Intent intent = getIntent();
         String mobile = intent.getStringExtra("mobile");
         sendVerificationCode(mobile);
+        initAdmob();
+    }
 
+    protected void initAdmob() {
+        MobileAds.initialize(this, getString(R.string.app_id));
+        mAdmobView = (AdView) findViewById(R.id.home_admob);
+        if (AppSettings.ENABLE_ADMOB) {
+            mAdmobView.setVisibility(View.VISIBLE);
+            AdRequest.Builder builder = new AdRequest.Builder();
+            AdRequest adRequest = builder.build();
+            // Start loading the ad in the background.
+            mAdmobView.loadAd(adRequest);
+        } else {
+            mAdmobView.setVisibility(View.GONE);
+        }
     }
 
     private void sendVerificationCode(String mobile) {

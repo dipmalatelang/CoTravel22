@@ -5,9 +5,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -16,6 +20,9 @@ import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
 import com.example.tgapplication.login.LoginActivity;
 import com.facebook.login.LoginManager;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -42,11 +49,15 @@ public class ChangePasswordActivity extends BaseActivity {
     @BindView(R.id.btnSaveNow)
     Button btnSaveNow;
 
-    String newPass,currentpasword,Confirmpassword;
+    String newPass, currentpasword, Confirmpassword;
     @BindView(R.id.cl_changepwd)
     ConstraintLayout clChangepwd;
     SharedPreferences sharedPreferences;
-    String email_id,txt_password;
+    String email_id, txt_password;
+    @BindView(R.id.tv_title_text)
+    TextView tvTitleText;
+    @BindView(R.id.home_admob)
+    AdView homeAdmob;
 
 
     @Override
@@ -55,9 +66,26 @@ public class ChangePasswordActivity extends BaseActivity {
         setContentView(R.layout.activity_change);
         ButterKnife.bind(this);
 
-        etCurrentPassword.setOnTouchListener((view, motionEvent) -> showOrHidePwd(motionEvent, etCurrentPassword));
-        etNewpassword.setOnTouchListener((view, motionEvent) -> showOrHidePwd(motionEvent, etNewpassword));
-        etConfirmpassword.setOnTouchListener((view, motionEvent) -> showOrHidePwd(motionEvent, etConfirmpassword));
+
+        etCurrentPassword.setOnTouchListener((view, motionEvent) -> ChangeHidePwd(motionEvent, etCurrentPassword));
+        etNewpassword.setOnTouchListener((view, motionEvent) -> ChangeHidePwd(motionEvent, etNewpassword));
+        etConfirmpassword.setOnTouchListener((view, motionEvent) -> ChangeHidePwd(motionEvent, etConfirmpassword));
+
+        initAdmob();
+    }
+
+    protected void initAdmob() {
+        MobileAds.initialize(this, getString(R.string.app_id));
+        homeAdmob = (AdView) findViewById(R.id.home_admob);
+        if (AppSettings.ENABLE_ADMOB) {
+            homeAdmob.setVisibility(View.VISIBLE);
+            AdRequest.Builder builder = new AdRequest.Builder();
+            AdRequest adRequest = builder.build();
+            // Start loading the ad in the background.
+            homeAdmob.loadAd(adRequest);
+        } else {
+            homeAdmob.setVisibility(View.GONE);
+        }
     }
 
     @OnClick({R.id.btnSaveNow})
@@ -130,6 +158,29 @@ public class ChangePasswordActivity extends BaseActivity {
             }
         }
 
+    }
+
+    public boolean ChangeHidePwd(MotionEvent event, EditText input_password) {
+        final int DRAWABLE_RIGHT = 2;
+
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            if (event.getRawX() >= (input_password.getRight() - input_password.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+
+
+                if (!input_password.getTransformationMethod().toString().contains("Password")) {
+                    input_password.setTransformationMethod(new PasswordTransformationMethod());
+                    input_password.setSelection(input_password.getText().length());
+                    input_password.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_visibility_off_purple_24dp, 0);
+
+                } else {
+                    input_password.setTransformationMethod(new HideReturnsTransformationMethod());
+                    input_password.setSelection(input_password.getText().length());
+                    input_password.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_remove_red_eye_black_24dp, 0);
+                }
+                return true;
+            }
+        }
+        return false;
     }
 }
 

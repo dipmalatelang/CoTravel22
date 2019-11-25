@@ -16,6 +16,9 @@ import androidx.annotation.Nullable;
 
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.gson.Gson;
@@ -46,7 +49,7 @@ public class ChangePrefActivity extends BaseActivity {
     CheckBox cbRegiGirl;
     @BindView(R.id.cb_regi_men)
     CheckBox cbRegiMen;
-
+    AdView homeAdmob;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,7 +67,20 @@ public class ChangePrefActivity extends BaseActivity {
         }
         setPopup();
         setSpinner();
-
+        initAdmob();
+    }
+    protected void initAdmob() {
+        MobileAds.initialize(this, getString(R.string.app_id));
+        homeAdmob = (AdView) findViewById(R.id.home_admob);
+        if (AppSettings.ENABLE_ADMOB) {
+            homeAdmob.setVisibility(View.VISIBLE);
+            AdRequest.Builder builder = new AdRequest.Builder();
+            AdRequest adRequest = builder.build();
+            // Start loading the ad in the background.
+            homeAdmob.loadAd(adRequest);
+        } else {
+            homeAdmob.setVisibility(View.GONE);
+        }
     }
 
     private void setSpinner() {
