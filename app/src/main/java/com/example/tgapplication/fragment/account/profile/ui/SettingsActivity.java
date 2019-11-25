@@ -9,6 +9,8 @@ import android.widget.Switch;
 
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,11 +27,15 @@ public class SettingsActivity extends BaseActivity implements CompoundButton.OnC
     @BindView(R.id.switchSmsMsgNotify)
     Switch switchSmsMsgNotify;
 
+    private FirebaseUser fuser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         ButterKnife.bind(this);
+
+        fuser = FirebaseAuth.getInstance().getCurrentUser();
 
         switchDisplayNumber.setOnCheckedChangeListener(this);
         switchEmailAllNotify.setOnCheckedChangeListener(this);
@@ -79,6 +85,7 @@ public class SettingsActivity extends BaseActivity implements CompoundButton.OnC
         {
             case R.id.switchDisplayNumber:
                saveSettingInfo("DisplayPhone",isChecked);
+                setShowNumber(fuser.getUid(),isChecked);
                break;
 
             case R.id.switchEmailMsgNotify:

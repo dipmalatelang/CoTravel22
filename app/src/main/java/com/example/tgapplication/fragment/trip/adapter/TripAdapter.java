@@ -26,6 +26,8 @@ import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.tgapplication.R;
 import com.example.tgapplication.fragment.trip.module.TripList;
+import com.example.tgapplication.fragment.trip.module.User;
+import com.example.tgapplication.fragment.visitor.UserImg;
 
 import java.util.List;
 
@@ -55,14 +57,16 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
     @Override
     public void onBindViewHolder(@NonNull TripViewHolder holder, int position) {
 
-         TripList tList = mTrip.get(position);
+         User userList = mTrip.get(position).getUser();
+        UserImg userImg = mTrip.get(position).getUserImg();
+        TripList tList = mTrip.get(position);
 
 
-        if(tList.getGender().equalsIgnoreCase("Female"))
+        if(userList.getGender().equalsIgnoreCase("Female"))
         {
-            if(tList.getAccount_type()==1)
+            if(userList.getAccount_type()==1)
             {
-                Glide.with(mContext).asBitmap().load(tList.getImageUrl())
+                Glide.with(mContext).asBitmap().load(userImg.getPictureUrl())
                         .centerCrop()
                         .override(450,600)
                         .listener(new RequestListener<Bitmap>() {
@@ -107,8 +111,8 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
                 }
         }
         else {
-            if (tList.getAccount_type() == 1) {
-                Glide.with(mContext).asBitmap().load(tList.getImageUrl())
+            if (userList.getAccount_type() == 1) {
+                Glide.with(mContext).asBitmap().load(userImg.getPictureUrl())
                         .centerCrop()
                         .override(450, 600)
                         .listener(new RequestListener<Bitmap>() {
@@ -154,7 +158,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
         }
 
 
-        holder.mTitle.setText(tList.getName());
+        holder.mTitle.setText(userList.getName());
 
         holder.mCity.setText(tList.getPlanLocation());
         holder.mDate.setText(tList.getFrom_to_date());
@@ -183,7 +187,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripViewHolder
             @Override
             public void onClick(View view) {
                 listener.setData(tList,position);
-                listener.setProfileVisit(uid,tList.getId());
+                listener.setProfileVisit(uid,tList.getUser().getId());
 
             }
         });
