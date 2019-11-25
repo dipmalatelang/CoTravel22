@@ -1,5 +1,7 @@
 package com.example.tgapplication.fragment.account.profile.ui;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -39,7 +41,9 @@ public class ViewPhotoRequestActivity extends BaseActivity {
     private FirebaseUser fuser;
     ViewPhotoRequestAdapter viewPhotoRequestAdapter;
     ValueEventListener requestSeenListener, photoRequestListener, removePhotoRequestListener;
-
+    boolean notify = false;
+    String fusername;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,6 +52,12 @@ public class ViewPhotoRequestActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
+
+        sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+
+        if (sharedPreferences.contains("Name")) {
+            fusername = (sharedPreferences.getString("Name", ""));
+        }
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rvViewPhotoRequest.setLayoutManager(linearLayoutManager);
@@ -65,6 +75,11 @@ public class ViewPhotoRequestActivity extends BaseActivity {
             @Override
             public void acceptRequest(String id, int pos) {
                 acceptPhotoRequest(id, 1);
+                notify = true;
+                if (notify) {
+                    sendNotifiaction(fuser.getUid(), id, fusername, "has accepted your photo request");
+                }
+                notify=false;
                 Objects.requireNonNull(userList).remove(pos);
                 viewPhotoRequestAdapter.notifyDataSetChanged();
                 snackBar(rvViewPhotoRequest, "Accept");

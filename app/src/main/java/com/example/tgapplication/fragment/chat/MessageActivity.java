@@ -1,5 +1,6 @@
 package com.example.tgapplication.fragment.chat;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -94,6 +95,9 @@ public class MessageActivity extends BaseActivity {
     boolean notify = false;
     RelativeLayout message_realtivelayout;
 
+    SharedPreferences sharedPreferences;
+    String fusername;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,6 +122,10 @@ public class MessageActivity extends BaseActivity {
 
         fuser = FirebaseAuth.getInstance().getCurrentUser();
 
+        sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        if (sharedPreferences.contains("Name")) {
+            fusername = (sharedPreferences.getString("Name", ""));
+        }
 
         UsersInstance.child(userid).addValueEventListener(new ValueEventListener() {
             @Override
@@ -372,7 +380,7 @@ public class MessageActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.toolbar:
-
+                setProfile(fuser.getUid(),msgArray.get(0).getUser().getId(),fusername);
                 Intent mIntent = new Intent(this, ProfileActivity.class);
                 mIntent.putExtra("MyUserObj", msgArray.get(0));
                 startActivityForResult(mIntent,1);

@@ -6,8 +6,10 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Build;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -16,7 +18,13 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.example.tgapplication.fragment.chat.adapter.UserAdapter;
+import com.example.tgapplication.fragment.chat.module.APIService;
 import com.example.tgapplication.fragment.chat.module.Chat;
+import com.example.tgapplication.fragment.chat.module.Client;
+import com.example.tgapplication.fragment.chat.module.Data;
+import com.example.tgapplication.fragment.chat.module.MyResponse;
+import com.example.tgapplication.fragment.chat.module.Sender;
+import com.example.tgapplication.fragment.chat.module.Token;
 import com.example.tgapplication.fragment.trip.module.PlanTrip;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
@@ -26,6 +34,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
@@ -36,8 +45,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import static com.example.tgapplication.Constants.ChatsInstance;
 import static com.example.tgapplication.Constants.FavoritesInstance;
+import static com.example.tgapplication.Constants.ProfileVisitorInstance;
+import static com.example.tgapplication.Constants.TokensInstance;
 import static com.example.tgapplication.Constants.TrashInstance;
 
 public abstract class BaseFragment extends Fragment {
@@ -54,6 +69,10 @@ public abstract class BaseFragment extends Fragment {
     String tripNote = "";
     String theLastMessage, theLastMsgTime, theLastMsgDate;
     Boolean textType;
+    boolean notify = false;
+
+    APIService apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService .class);
+
 
 
     public List<TripList> findClosestDate(List<Date> dates, UserImg userImg) {
@@ -95,6 +114,66 @@ public abstract class BaseFragment extends Fragment {
         }
 
         return tripList;
+    }
+
+    public void setProfile(String uid, String id, String name) {
+        ProfileVisitorInstance.child(id).child(uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.i("TAG", "onDataChange: "+dataSnapshot.getChildrenCount());
+                if (!dataSnapshot.exists()) {
+                    ProfileVisitorInstance.child(id).child(uid).child("id").setValue(uid);
+                    notify = true;
+                    if (notify) {
+                        sendNotifiaction(uid, id, name , "has visited your profile");
+                    }
+                    notify=false;
+                    Toast.makeText(getActivity(), "First Visit", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+    public void sendNotifiaction(String uid, String userid, final String username, final String message) {
+        Query query = TokensInstance.orderByKey().equalTo(userid);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Token token = snapshot.getValue(Token.class);
+                    Data data = new Data(uid, R.mipmap.ic_launcher, username + " " + message, "Notification",
+                            userid);
+
+                    Sender sender = new Sender(data, Objects.requireNonNull(token).getToken());
+
+                    apiService.sendNotification(sender)
+                            .enqueue(new Callback<MyResponse>() {
+                                @Override
+                                public void onResponse(@NonNull Call<MyResponse> call, @NonNull Response<MyResponse> response) {
+                                    if (response.code() == 200) {
+                                        if (Objects.requireNonNull(response.body()).success != 1) {
+//                                            snackBar(message_realtivelayout, "Failed!");
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(@NonNull Call<MyResponse> call, @NonNull Throwable t) {
+
+                                }
+                            });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void hiddenProfileDialog() {

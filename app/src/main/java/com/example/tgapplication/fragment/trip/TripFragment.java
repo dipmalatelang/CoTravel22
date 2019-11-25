@@ -76,6 +76,7 @@ public class TripFragment extends BaseFragment {
     SharedPreferences sharedPreferences;
     ArrayList<String> travel_with = new ArrayList<>();
     ArrayList<String> ageRange = new ArrayList<>();
+    String fusername;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -101,6 +102,9 @@ public class TripFragment extends BaseFragment {
 
         sharedPreferences = Objects.requireNonNull(getActivity()).getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
 
+        if (sharedPreferences.contains("Name")) {
+            fusername = (sharedPreferences.getString("Name", ""));
+        }
         Map<String, ?> sharedData = sharedPreferences.getAll();
         for (Map.Entry entry : sharedData.entrySet()) {
         }
@@ -438,9 +442,8 @@ public class TripFragment extends BaseFragment {
                                                                         @Override
                                                                         public void setProfileVisit(String uid, String id) {
 
-                                                                            ProfileVisitorInstance
-                                                                                    .child(id)
-                                                                                    .child(uid).child("id").setValue(uid);
+                                                                            setProfile(uid,id,fusername);
+
                                                                         }
                                                                     });
                                                                     recyclerview.setAdapter(tripAdapter);
@@ -650,8 +653,9 @@ public class TripFragment extends BaseFragment {
 
                                                                             @Override
                                                                             public void setProfileVisit(String uid, String id) {
-                                                                                ProfileVisitorInstance.child(id)
-                                                                                        .child(uid).child("id").setValue(uid);
+
+                                                                                setProfile(uid,id,fusername);
+
                                                                             }
                                                                         });
                                                                         recyclerview.setAdapter(tripAdapter);
