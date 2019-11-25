@@ -46,6 +46,7 @@ public class MembersActivity extends BaseActivity {
     String look_user;
     int ageTo, ageFrom;
     final FirebaseUser fuser = FirebaseAuth.getInstance().getCurrentUser();
+    String fusername;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,6 +60,10 @@ public class MembersActivity extends BaseActivity {
         recyclerView.setLayoutManager(mGridLayoutManager);
 
         sharedPreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+
+        if (sharedPreferences.contains("Name")) {
+            fusername = (sharedPreferences.getString("Name", ""));
+        }
 
         if (sharedPreferences.contains("TravelWith")) {
             ArrayList<String> travel_with = new Gson().fromJson((sharedPreferences.getString("TravelWith", "")), new TypeToken<ArrayList<String>>() {}.getType());
@@ -134,8 +139,8 @@ public class MembersActivity extends BaseActivity {
 
                                                         @Override
                                                         public void setProfileVisit(String uid, String id) {
-                                                            ProfileVisitorInstance.child(id)
-                                                                    .child(uid).child("id").setValue(uid);
+
+                                                            setProfile(uid,id,fusername);
 
                                                         }
 

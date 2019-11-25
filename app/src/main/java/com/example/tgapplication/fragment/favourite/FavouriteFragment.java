@@ -1,7 +1,9 @@
 package com.example.tgapplication.fragment.favourite;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,7 +57,8 @@ public class FavouriteFragment extends BaseFragment {
     View view;
     String pictureUrl;
     private List<UserImg> myFavArray = new ArrayList<>();
-
+SharedPreferences sharedPreferences;
+String fusername;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -72,6 +75,10 @@ public class FavouriteFragment extends BaseFragment {
 
         showProgressDialog();
         fuser = FirebaseAuth.getInstance().getCurrentUser();
+        sharedPreferences = getActivity().getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        if (sharedPreferences.contains("Name")) {
+            fusername = (sharedPreferences.getString("Name", ""));
+        }
         favList(Objects.requireNonNull(fuser));
 
 
@@ -125,8 +132,7 @@ public class FavouriteFragment extends BaseFragment {
                                                     @Override
                                                     public void setProfileVisit(String uid, String id) {
 
-                                                        ProfileVisitorInstance.child(id)
-                                                                .child(uid).child("id").setValue(uid);
+                                                      setProfile(uid,id,fusername);
 
                                                     }
 

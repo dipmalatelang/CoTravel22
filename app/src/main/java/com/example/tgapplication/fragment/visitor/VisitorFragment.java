@@ -1,7 +1,10 @@
 package com.example.tgapplication.fragment.visitor;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +48,8 @@ public class VisitorFragment extends BaseFragment {
     ProgressBar progressBar;
     String pictureUrl;
     private List<UserImg> myFavArray=new ArrayList<>();
+    SharedPreferences sharedPreferences;
+    String fusername;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,6 +65,12 @@ public class VisitorFragment extends BaseFragment {
 
         showProgressDialog();
         fuser = FirebaseAuth.getInstance().getCurrentUser();
+
+        sharedPreferences = getActivity().getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        if (sharedPreferences.contains("Name")) {
+            fusername = (sharedPreferences.getString("Name", ""));
+        }
+
         revVisitList(Objects.requireNonNull(fuser));
 
 
@@ -120,10 +131,7 @@ public class VisitorFragment extends BaseFragment {
                                                                                                                                         @Override
                                                                                                                                         public void setProfileVisit(String uid, String id) {
 
-                                                                                                                                            ProfileVisitorInstance.child(id)
-                                                                                                                                                    .child(uid).child("id").setValue(uid);
-
-                                                                                                                                            Toast.makeText(getActivity(), "Visited", Toast.LENGTH_SHORT).show();
+                                                                                                                                            setProfile(uid,id,fusername);
                                                                                                                                         }
 
                                                                                                                                         @Override
@@ -180,6 +188,8 @@ public class VisitorFragment extends BaseFragment {
         );
         dismissProgressDialog();
     }
+
+
 
     int fav;
 

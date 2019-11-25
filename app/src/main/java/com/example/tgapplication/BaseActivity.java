@@ -5,19 +5,19 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
-
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.example.tgapplication.fragment.account.profile.module.Upload;
 import com.example.tgapplication.fragment.chat.module.APIService;
 import com.example.tgapplication.fragment.chat.module.Chat;
 import com.example.tgapplication.fragment.chat.module.Client;
@@ -28,7 +28,6 @@ import com.example.tgapplication.fragment.chat.module.Token;
 import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.fragment.visitor.UserImg;
-import com.example.tgapplication.fragment.account.profile.module.Upload;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -66,6 +65,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     SharedPreferences.Editor editor;
     String theLastMessage, theLastMsgTime;
     Boolean textType;
+    boolean notify = false;
 
     APIService apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService .class);
 
@@ -213,6 +213,29 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         saveDetailsLater(travel_with,age);
 
+    }
+
+    public void setProfile(String uid, String id, String name) {
+        ProfileVisitorInstance.child(id).child(uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.i("TAG", "onDataChange: "+dataSnapshot.getChildrenCount());
+                if (!dataSnapshot.exists()) {
+                    ProfileVisitorInstance.child(id).child(uid).child("id").setValue(uid);
+                    notify = true;
+                    if (notify) {
+                        sendNotifiaction(uid, id, name , "has visited your profile");
+                    }
+                    notify=false;
+//                    Toast.makeText(getActivity(), "First Visit", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void sendNotifiaction(String uid, String userid, final String username, final String message) {
