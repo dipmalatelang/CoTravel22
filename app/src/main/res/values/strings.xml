@@ -1,7 +1,14 @@
 <resources>
-    <string name="app_name">TGApplication</string>
-    <string name="facebook_app_id">479801342562402</string>
-    <string name="fb_login_protocol_scheme">fb479801342562402</string>
+    <string name="app_name">Cotravel</string>
+    <string name="facebook_app_id">528956501293279</string>
+    <string name="fb_login_protocol_scheme">fb528956501293279</string>
+
+    <string name="admob_id">ca-app-pub-3453270402337037/4417980719</string>
+    <string name="Interstitial">ca-app-pub-3453270402337037/1843788262</string>
+    <string name="app_id">ca-app-pub-3453270402337037~1105421664</string>
+
+    <string name="App_ID">1:180636531836:android:b3986b3e6bc9e4289e1df9</string>
+
 
     <string name="previous">Previous</string>
     <string name="next">Next</string>
