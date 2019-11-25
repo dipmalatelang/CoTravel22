@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
+
 import com.example.tgapplication.fragment.account.profile.adapter.MyAdapter;
 import com.example.tgapplication.fragment.account.profile.module.Upload;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -46,6 +47,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.example.tgapplication.Constants.PicturesInstance;
+
 
 public class EditPhotoActivity extends BaseActivity {
 

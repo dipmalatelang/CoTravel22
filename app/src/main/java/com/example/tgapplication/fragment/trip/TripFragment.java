@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.tgapplication.BaseFragment;
 import com.example.tgapplication.R;
+import com.example.tgapplication.fragment.account.profile.ui.AppSettings;
 import com.example.tgapplication.fragment.account.profile.ui.ProfileActivity;
 import com.example.tgapplication.fragment.trip.adapter.TripAdapter;
 import com.example.tgapplication.fragment.trip.module.FavList;
@@ -27,6 +28,9 @@ import com.example.tgapplication.fragment.trip.module.TripList;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.fragment.visitor.UserImg;
 import com.example.tgapplication.fragment.account.profile.module.Upload;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -77,6 +81,8 @@ public class TripFragment extends BaseFragment {
     ArrayList<String> travel_with = new ArrayList<>();
     ArrayList<String> ageRange = new ArrayList<>();
     String fusername;
+    AdView mAdmobView;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -86,6 +92,7 @@ public class TripFragment extends BaseFragment {
 
 
         tripFilter = view.findViewById(R.id.trip_filter);
+        mAdmobView=view.findViewById(R.id.home_admob);
         GridLayoutManager mGridLayoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerview = view.findViewById(R.id.recyclerview);
         recyclerview.setLayoutManager(mGridLayoutManager);
@@ -223,9 +230,25 @@ public class TripFragment extends BaseFragment {
                 }
             }
         });
-
+        initAdmob();
         return view;
     }
+
+
+    protected void initAdmob() {
+        MobileAds.initialize(getContext(), getString(R.string.app_id));
+
+        if (AppSettings.ENABLE_ADMOB) {
+            mAdmobView.setVisibility(View.VISIBLE);
+            AdRequest.Builder builder = new AdRequest.Builder();
+            AdRequest adRequest = builder.build();
+            // Start loading the ad in the background.
+            mAdmobView.loadAd(adRequest);
+        } else {
+            mAdmobView.setVisibility(View.GONE);
+        }
+    }
+
 
     private void filterTripList(String str_name, String str_city, String str_lang, String str_eyes, String str_hairs, String str_height, String str_bodytype, String str_looking_for,
                                 int num_from, int num_to, String str_trip) {

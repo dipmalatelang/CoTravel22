@@ -13,6 +13,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.R;
+
+
 import com.example.tgapplication.fragment.account.profile.module.Permit;
 import com.example.tgapplication.fragment.account.profile.module.Upload;
 import com.example.tgapplication.fragment.trip.module.User;
@@ -35,6 +37,7 @@ import static com.example.tgapplication.Constants.FavoritesInstance;
 import static com.example.tgapplication.Constants.PhotoRequestInstance;
 import static com.example.tgapplication.Constants.PicturesInstance;
 import static com.example.tgapplication.Constants.UsersInstance;
+
 
 public class PhotoRequestActivity extends BaseActivity {
     @BindView(R.id.cl_Photo_Request)

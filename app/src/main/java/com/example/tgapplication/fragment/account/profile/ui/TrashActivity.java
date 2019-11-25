@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -21,6 +22,9 @@ import com.example.tgapplication.fragment.chat.module.Token;
 import com.example.tgapplication.fragment.chat.adapter.UserAdapter;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.fragment.visitor.UserImg;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -54,6 +58,7 @@ public class TrashActivity extends BaseActivity {
     FirebaseUser fuser;
     private UserAdapter userAdapter;
     List<UserImg> mUsers = new ArrayList<>();
+    AdView mAdmobView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -102,7 +107,20 @@ public class TrashActivity extends BaseActivity {
         });
 
         updateToken(FirebaseInstanceId.getInstance().getToken());
-
+        initAdmob();
+    }
+    protected void initAdmob() {
+        MobileAds.initialize(this, getString(R.string.app_id));
+        mAdmobView = (AdView) findViewById(R.id.home_admob);
+        if (AppSettings.ENABLE_ADMOB) {
+            mAdmobView.setVisibility(View.VISIBLE);
+            AdRequest.Builder builder = new AdRequest.Builder();
+            AdRequest adRequest = builder.build();
+            // Start loading the ad in the background.
+            mAdmobView.loadAd(adRequest);
+        } else {
+            mAdmobView.setVisibility(View.GONE);
+        }
     }
 
     private void searchUsers(String s) {
