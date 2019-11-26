@@ -48,18 +48,16 @@
                     android:id="@+id/photo_rqst_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:background="@drawable/ripple_primary_color1"
-                    android:fontFamily="@font/montserrat"
-                    android:padding="2dp"
-                    android:textColor="#FFF"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
                     android:visibility="gone"
+                    android:layout_marginEnd="40dp"
+                    android:background="@drawable/badge_circle"
+                    android:textColor="#FFF"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/btn_photo_rqst"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/btn_photo_rqst"
-                    app:layout_constraintVertical_bias="1.0" />
+                    app:layout_constraintVertical_bias="0.525" />
 
                 <TextView
                     android:id="@+id/btn_photo_permits"
@@ -85,7 +83,7 @@
                     android:id="@+id/photo_permits_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="40dp"
                     android:background="@drawable/badge_circle"
                     android:textColor="#FFF"
                     android:textSize="14sp"
@@ -94,7 +92,7 @@
                     app:layout_constraintBottom_toBottomOf="@+id/btn_photo_permits"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/btn_photo_permits"
-                    app:layout_constraintVertical_bias="1.0" />
+                    app:layout_constraintVertical_bias="0.285" />
 
                 <TextView
                     android:id="@+id/btn_given_permits"
@@ -118,7 +116,7 @@
                     android:id="@+id/given_permits_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="40dp"
                     android:background="@drawable/badge_circle"
                     android:textColor="#FFF"
                     android:textSize="14sp"
@@ -127,7 +125,7 @@
                     app:layout_constraintBottom_toBottomOf="@+id/btn_given_permits"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/btn_given_permits"
-                    app:layout_constraintVertical_bias="1.0" />
+                    app:layout_constraintVertical_bias="0.714" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -139,7 +137,6 @@
             android:layout_weight="0"
             app:adSize="SMART_BANNER"
             app:adUnitId="@string/app_id"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="w,1:1"
             tools:ignore="MissingConstraints"

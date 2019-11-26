@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -105,8 +105,8 @@
             style="@style/text_view_style1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
             android:textColor="@color/gray_bg"
             android:fontFamily="@font/montserrat"
             android:text=" All activity Notifications "
@@ -122,8 +122,8 @@
             style="@style/text_view_style1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
             android:fontFamily="@font/montserrat"
             android:textColor="@color/gray_bg"
 
@@ -170,8 +170,8 @@
             style="@style/text_view_style1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="52dp"
             android:textColor="@color/gray_bg"
             android:fontFamily="@font/montserrat"
             android:text=" SMS notifications about new messages"
