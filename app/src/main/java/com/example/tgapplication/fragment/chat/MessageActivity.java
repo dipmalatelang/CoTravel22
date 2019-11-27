@@ -28,23 +28,16 @@ import com.bumptech.glide.request.transition.Transition;
 import com.example.tgapplication.BaseActivity;
 import com.example.tgapplication.MainActivity;
 import com.example.tgapplication.R;
-import com.example.tgapplication.fragment.chat.module.APIService;
-import com.example.tgapplication.fragment.chat.module.MyResponse;
+import com.example.tgapplication.fragment.account.profile.module.Upload;
 import com.example.tgapplication.fragment.account.profile.ui.ProfileActivity;
 import com.example.tgapplication.fragment.chat.adapter.MessageAdapter;
 import com.example.tgapplication.fragment.chat.module.Chat;
-import com.example.tgapplication.fragment.chat.module.Client;
-import com.example.tgapplication.fragment.chat.module.Data;
-import com.example.tgapplication.fragment.chat.module.Sender;
-import com.example.tgapplication.fragment.chat.module.Token;
 import com.example.tgapplication.fragment.trip.module.User;
 import com.example.tgapplication.fragment.visitor.UserImg;
-import com.example.tgapplication.fragment.account.profile.module.Upload;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
@@ -57,22 +50,17 @@ import java.util.Objects;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import static com.example.tgapplication.Constants.ChatListInstance;
 import static com.example.tgapplication.Constants.ChatsInstance;
 import static com.example.tgapplication.Constants.FavoritesInstance;
 import static com.example.tgapplication.Constants.PicturesInstance;
-import static com.example.tgapplication.Constants.TokensInstance;
 import static com.example.tgapplication.Constants.UsersInstance;
 
 public class MessageActivity extends BaseActivity {
 
     ImageView profile_image;
     TextView username;
-    int fav;
     FirebaseUser fuser;
 
     ImageButton btn_send;
@@ -88,8 +76,6 @@ public class MessageActivity extends BaseActivity {
     ValueEventListener seenListener;
 
     String userid;
-    String pictureUrl;
-
     private List<UserImg> msgArray = new ArrayList<>();
 
     boolean notify = false;
@@ -133,27 +119,28 @@ public class MessageActivity extends BaseActivity {
                 User user = dataSnapshot.getValue(User.class);
                 username.setText(Objects.requireNonNull(user).getUsername());
 
+                UserImg userImg=new UserImg(user, "", 0);
                 PicturesInstance.child(userid).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         msgArray.clear();
-                        pictureUrl = "";
                         for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
 
                             Upload mainPhoto = snapshot1.getValue(Upload.class);
                             if (Objects.requireNonNull(mainPhoto).type == 1)
-                                pictureUrl = mainPhoto.getUrl();
+                               userImg.setPictureUrl(mainPhoto.getUrl());
 
                         }
 
                         if(user.getGender().equalsIgnoreCase("Female"))
                         {
-                            Glide.with(getApplicationContext()).asBitmap().load(pictureUrl)
+                            Glide.with(getApplicationContext()).asBitmap().load(userImg.getPictureUrl())
                                     .fitCenter()
                                     .override(450,600)
                                     .listener(new RequestListener<Bitmap>() {
                                         @Override
                                         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                                            profile_image.setImageResource(R.drawable.no_photo_female);
 
                                             return false;
                                         }
@@ -173,7 +160,7 @@ public class MessageActivity extends BaseActivity {
                                     });
                         }
                         else {
-                            Glide.with(getApplicationContext()).asBitmap().load(pictureUrl)
+                            Glide.with(getApplicationContext()).asBitmap().load(userImg.getPictureUrl())
                                     .centerCrop()
                                     .override(450,600)
                                     .listener(new RequestListener<Bitmap>() {
@@ -202,13 +189,10 @@ public class MessageActivity extends BaseActivity {
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                                 if (snapshot.hasChild(user.getId())) {
-
-                                    fav = 1;
-                                } else {
-                                    fav = 0;
+                                    userImg.setFav(1);
                                 }
-                        msgArray.add(new UserImg(user, pictureUrl,fav));
-                        readMesagges(fuser.getUid(), userid, pictureUrl, user.getGender());
+                        msgArray.add(userImg);
+                        readMesagges(fuser.getUid(), userid, userImg.getPictureUrl(), user.getGender());
                     }
 
                     @Override

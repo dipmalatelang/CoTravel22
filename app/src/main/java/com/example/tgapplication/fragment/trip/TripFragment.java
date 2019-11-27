@@ -75,8 +75,6 @@ public class TripFragment extends BaseFragment {
     String travel_with_user;
     FloatingActionButton floatingActionButton;
     SharedPreferences.Editor editor;
-    int fav;
-    String pictureUrl="";
     SharedPreferences sharedPreferences;
     ArrayList<String> travel_with = new ArrayList<>();
     ArrayList<String> ageRange = new ArrayList<>();
@@ -263,30 +261,27 @@ public class TripFragment extends BaseFragment {
                             final User user = snapshot.getValue(User.class);
                             if (!Objects.requireNonNull(user).getId().equalsIgnoreCase(fuser.getUid())) {
 
+                                UserImg userImg = new UserImg(user, "", 0);
                                 FavoritesInstance
                                         .child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                                         if (snapshot.hasChild(user.getId())) {
-
-                                            fav = 1;
-                                        } else {
-                                            fav = 0;
+                                            userImg.setFav(1);
                                         }
 
                                         PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                pictureUrl = "";
                                                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                                                     Upload upload = ds.getValue(Upload.class);
                                                     if (Objects.requireNonNull(upload).getType() == 1) {
-                                                        pictureUrl = upload.getUrl();
+                                                        userImg.setPictureUrl(upload.getUrl());
                                                     }
                                                 }
 
-                                                UserImg userImg = new UserImg(user, pictureUrl, fav);
+
                                                 TripsInstance.orderByKey().equalTo(user.getId())
                                                         .addValueEventListener(new ValueEventListener() {
 
@@ -508,7 +503,7 @@ public class TripFragment extends BaseFragment {
     }
 
 
-    private void getFav(String uid, String id) {
+   /* private void getFav(String uid, String id) {
 
         FavoritesInstance
                 .child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -529,10 +524,10 @@ public class TripFragment extends BaseFragment {
         });
 
 
-    }
+    }*/
 
 
-    public void getAllFav(FirebaseUser fuser, String id) {
+  /*  public void getAllFav(FirebaseUser fuser, String id) {
 
         FavoritesInstance
                 .child(fuser.getUid()).addValueEventListener(new ValueEventListener() {
@@ -556,7 +551,7 @@ public class TripFragment extends BaseFragment {
             }
         });
 
-    }
+    }*/
 
 
     public void getAllVisit(FirebaseUser fuser) {
@@ -596,25 +591,22 @@ public class TripFragment extends BaseFragment {
                             if (!Objects.requireNonNull(user).getId().equalsIgnoreCase(fuser.getUid())) {
 
                                 if (travel_with_user.contains(user.getGender()) && Integer.parseInt(user.getAge()) >= ageFrom && Integer.parseInt(user.getAge()) <= ageTo) {
+                                    UserImg userImg = new UserImg(user, "", 0);
                                     FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                            fav=0;
                                             if (snapshot.hasChild(user.getId()))
-                                                fav = 1;
+                                               userImg.setFav(1);
 
                                             PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                                                 @Override
                                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                    pictureUrl = "";
                                                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
                                                         Upload upload = ds.getValue(Upload.class);
                                                         if (Objects.requireNonNull(upload).getType() == 1) {
-                                                            pictureUrl = upload.getUrl();
+                                                            userImg.setPictureUrl(upload.getUrl());
                                                         }
                                                     }
-
-                                                    UserImg userImg = new UserImg(user, pictureUrl, fav);
 
                                                     TripsInstance.orderByKey().equalTo(user.getId())
                                                             .addValueEventListener(new ValueEventListener() {

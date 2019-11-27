@@ -53,8 +53,6 @@ public class TrashActivity extends BaseActivity {
     @BindView(R.id.search_users)
     EditText searchUsers;
 
-    String pictureUrl = "";
-    int fav;
     FirebaseUser fuser;
     private UserAdapter userAdapter;
     List<UserImg> mUsers = new ArrayList<>();
@@ -192,32 +190,30 @@ public class TrashActivity extends BaseActivity {
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     if (dataSnapshot.hasChild(user.getId())) {
 
+                                        UserImg userImg=new UserImg(user, "", 0);
                                         FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                                                 if (snapshot.hasChild(user.getId())) {
-                                                    fav = 1;
-                                                } else {
-                                                    fav = 0;
+                                                    userImg.setFav(1);
                                                 }
 
 
                                         PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                pictureUrl="";
                                                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
                                                     Upload upload = ds.getValue(Upload.class);
 
                                                     if (Objects.requireNonNull(upload).getType() == 1) {
-                                                        pictureUrl = upload.getUrl();
+                                                        userImg.setPictureUrl(upload.getUrl());
                                                     }
                                                 }
 
 
-                                                        mUsers.add(new UserImg(user, pictureUrl, fav));
+                                                        mUsers.add(userImg);
 
                                                         userAdapter = new UserAdapter(TrashActivity.this, mUsers, true, true,new UserAdapter.UserInterface() {
                                                             @Override

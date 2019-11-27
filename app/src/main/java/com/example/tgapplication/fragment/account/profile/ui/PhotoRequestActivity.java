@@ -49,11 +49,9 @@ public class PhotoRequestActivity extends BaseActivity {
     @BindView(R.id.given_permits_count)
     TextView givenPermitsCount;
     private FirebaseUser fuser;
-    String pictureUrl;
     ArrayList<UserImg> viewPhotoRequestList = new ArrayList<>();
     ArrayList<UserImg> photoPermitsList = new ArrayList<>();
     ArrayList<UserImg> givenPermitsList = new ArrayList<>();
-    int fav;
     int prcount, ppcount, gpcount;
 
 
@@ -126,52 +124,54 @@ public class PhotoRequestActivity extends BaseActivity {
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 User user = dataSnapshot.getValue(User.class);
                                 if(user!=null)
-                                PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                {
+                                    UserImg userImg=new UserImg(user,"",0);
 
-                                        pictureUrl = "";
-                                        for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
+                                    PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                            Upload mainPhoto = snapshot1.getValue(Upload.class);
-                                            if (Objects.requireNonNull(mainPhoto).type == 1)
-                                                pictureUrl = mainPhoto.getUrl();
+                                            for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
 
+                                                Upload mainPhoto = snapshot1.getValue(Upload.class);
+                                                if (Objects.requireNonNull(mainPhoto).type == 1)
+                                                    userImg.setPictureUrl(mainPhoto.getUrl());
+
+                                            }
+                                            FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                                    if (snapshot.hasChild(user.getId())) {
+                                                        userImg.setFav(1);
+                                                    }
+                                                    viewPhotoRequestList.add(userImg);
+
+                                                    if(!permit.isReceiverCheck())
+                                                    {
+                                                        prcount++;
+                                                    }
+
+                                                    if(prcount>0)
+                                                    {
+                                                        Log.i(TAG, "onCompleted: givenPermitsList " + prcount);
+                                                        photoRqstCount.setVisibility(View.VISIBLE);
+                                                        photoRqstCount.setText(String.valueOf(prcount));
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                }
+                                            });
                                         }
-                                        FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                                                if (snapshot.hasChild(user.getId())) {
-                                                    fav = 1;
-                                                } else {
-                                                    fav = 0;
-                                                }
-                                                viewPhotoRequestList.add(new UserImg(user, pictureUrl, fav));
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                                        }
+                                    });
 
-                                                if(!permit.isReceiverCheck())
-                                                {
-                                                    prcount++;
-                                                }
-
-                                                if(prcount>0)
-                                                {
-                                                    Log.i(TAG, "onCompleted: givenPermitsList " + prcount);
-                                                    photoRqstCount.setVisibility(View.VISIBLE);
-                                                    photoRqstCount.setText(String.valueOf(prcount));
-                                                }
-                                            }
-
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                                    }
-                                });
+                                }
                             }
 
                             @Override
@@ -202,56 +202,56 @@ public class PhotoRequestActivity extends BaseActivity {
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 User user = dataSnapshot.getValue(User.class);
                                 if(user!=null)
-                                PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                {
+                                    UserImg userImg=new UserImg(user,"",0);
+                                    PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                        pictureUrl = "";
-                                        for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
+                                            for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
 
-                                            Upload mainPhoto = snapshot1.getValue(Upload.class);
-                                            if (Objects.requireNonNull(mainPhoto).type == 1)
-                                                pictureUrl = mainPhoto.getUrl();
+                                                Upload mainPhoto = snapshot1.getValue(Upload.class);
+                                                if (Objects.requireNonNull(mainPhoto).type == 1)
+                                                    userImg.setPictureUrl(mainPhoto.getUrl());
+
+                                            }
+                                            FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                                    if (snapshot.hasChild(user.getId())) {
+                                                        userImg.setFav(1);
+                                                    }
+                                                    photoPermitsList.add(userImg);
+
+                                                    if(!permit.isSenderCheck())
+                                                    {
+                                                        ppcount++;
+                                                    }
+
+                                                    if(ppcount>0)
+                                                    {
+                                                        Log.i(TAG, "onCompleted: photoPermitsList " + ppcount);
+                                                        photoPermitsCount.setVisibility(View.VISIBLE);
+                                                        photoPermitsCount.setText(String.valueOf(ppcount));
+                                                    }
+
+
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                }
+                                            });
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
                                         }
-                                        FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                                                if (snapshot.hasChild(user.getId())) {
-                                                    fav = 1;
-                                                } else {
-                                                    fav = 0;
-                                                }
-                                                photoPermitsList.add(new UserImg(user, pictureUrl, fav));
-
-                                                if(!permit.isSenderCheck())
-                                                {
-                                                    ppcount++;
-                                                }
-
-                                                if(ppcount>0)
-                                                {
-                                                    Log.i(TAG, "onCompleted: photoPermitsList " + ppcount);
-                                                    photoPermitsCount.setVisibility(View.VISIBLE);
-                                                    photoPermitsCount.setText(String.valueOf(ppcount));
-                                                }
-
-
-                                            }
-
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                    }
-                                });
+                                    });
+                                }
                             }
 
                             @Override
@@ -285,54 +285,55 @@ public class PhotoRequestActivity extends BaseActivity {
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 User user = dataSnapshot.getValue(User.class);
                                 if(user!=null)
-                                PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                {
+                                    UserImg userImg=new UserImg(user,"",0);
+                                    PicturesInstance.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                        pictureUrl = "";
-                                        for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
+                                            for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
 
-                                            Upload mainPhoto = snapshot1.getValue(Upload.class);
-                                            if (Objects.requireNonNull(mainPhoto).type == 1)
-                                                pictureUrl = mainPhoto.getUrl();
+                                                Upload mainPhoto = snapshot1.getValue(Upload.class);
+                                                if (Objects.requireNonNull(mainPhoto).type == 1)
+                                                   userImg.setPictureUrl(mainPhoto.getUrl());
+
+                                            }
+                                            FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                                    if (snapshot.hasChild(user.getId())) {
+                                                        userImg.setFav(1);
+                                                    }
+                                                    givenPermitsList.add(userImg);
+
+                                                    if(!permit.isReceiverCheck())
+                                                    {
+                                                        gpcount++;
+                                                    }
+
+                                                    if(gpcount>0)
+                                                    {
+                                                        Log.i(TAG, "onCompleted: givenPermitsList " + gpcount);
+                                                        givenPermitsCount.setVisibility(View.VISIBLE);
+                                                        givenPermitsCount.setText(String.valueOf(gpcount));
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                }
+                                            });
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
                                         }
-                                        FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    });
 
-                                                if (snapshot.hasChild(user.getId())) {
-                                                    fav = 1;
-                                                } else {
-                                                    fav = 0;
-                                                }
-                                                givenPermitsList.add(new UserImg(user, pictureUrl, fav));
-
-                                                if(!permit.isReceiverCheck())
-                                                {
-                                                    gpcount++;
-                                                }
-
-                                                if(gpcount>0)
-                                                {
-                                                    Log.i(TAG, "onCompleted: givenPermitsList " + gpcount);
-                                                    givenPermitsCount.setVisibility(View.VISIBLE);
-                                                    givenPermitsCount.setText(String.valueOf(gpcount));
-                                                }
-                                            }
-
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                    }
-                                });
+                                }
                             }
 
                             @Override

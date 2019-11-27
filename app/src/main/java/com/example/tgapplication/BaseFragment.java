@@ -305,7 +305,7 @@ public abstract class BaseFragment extends Fragment {
 
                 if(!textType)
                 {
-                    last_msg.setTextColor(getResources().getColor(R.color.black));
+                    last_msg.setTextColor(mContext.getResources().getColor(R.color.black));
                 }
 
             }

@@ -56,6 +56,8 @@ public class VerifyPhoneActivity extends BaseActivity {
     private FirebaseUser fuser;
     private String mVerificationId;
 
+    String mobile,mobileCode;
+
     AdView mAdmobView;
 
     @Override
@@ -68,8 +70,9 @@ public class VerifyPhoneActivity extends BaseActivity {
         mAuth = FirebaseAuth.getInstance();
 
         Intent intent = getIntent();
-        String mobile = intent.getStringExtra("mobile");
-        sendVerificationCode(mobile);
+        mobile = intent.getStringExtra("mobile");
+        mobileCode= intent.getStringExtra("mobileCode");
+        sendVerificationCode(mobile,mobileCode);
         initAdmob();
     }
 
@@ -87,9 +90,9 @@ public class VerifyPhoneActivity extends BaseActivity {
         }
     }
 
-    private void sendVerificationCode(String mobile) {
+    private void sendVerificationCode(String mobile, String mobileCode) {
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                "+91" + mobile,
+                mobileCode + mobile,
                 60,
                 TimeUnit.SECONDS,
                 TaskExecutors.MAIN_THREAD,
@@ -157,7 +160,7 @@ public class VerifyPhoneActivity extends BaseActivity {
                                 //verification successful we will start the profile activity
                                 FirebaseUser user = task.getResult().getUser();
                                 snackBar(clVerify,user.getPhoneNumber()+" "+user.getUid());
-                                setPhoneNumber(fuser.getUid(),user.getPhoneNumber());
+                                setPhoneNumber(fuser.getUid(),mobile,mobileCode);
                                 updateUI(user);
 
                             } else {
@@ -196,7 +199,7 @@ public class VerifyPhoneActivity extends BaseActivity {
 
         Log.i(TAG, "registerPhoneNumber: "+user.getUid()+" "+user.getDisplayName()+" "+ user.getEmail()+" "+ user.getProviderId()+" "+ user.getPhoneNumber());
 
-        User userClass = new User(Objects.requireNonNull(user).getUid(), user.getPhoneNumber(), "offline", user.getPhoneNumber(), "", "18","", user.getProviderId(), "", "", "", "", "", "", travel_with, looking_for, range_age, "", user.getPhoneNumber(), user.getPhoneNumber(), "", "", 1, false, "");
+        User userClass = new User(Objects.requireNonNull(user).getUid(), user.getPhoneNumber(), "offline", user.getPhoneNumber(), "", "18","", user.getProviderId(), "", "", "", "", "", "", travel_with, looking_for, range_age, "", user.getPhoneNumber(), mobile, mobileCode, "", "", 1, false, "");
         UsersInstance.child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid()).setValue(userClass);
     }
 
