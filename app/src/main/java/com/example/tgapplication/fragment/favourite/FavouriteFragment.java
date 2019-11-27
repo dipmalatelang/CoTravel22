@@ -216,7 +216,7 @@ String fusername;
 
                             if (Objects.requireNonNull(user).getId().equalsIgnoreCase(id)) {
 
-                                UserImg userImg=new UserImg(user, "", 0);
+                                UserImg userImg=new UserImg(user, "", 1);
                                 FavoritesInstance.child(fuser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {

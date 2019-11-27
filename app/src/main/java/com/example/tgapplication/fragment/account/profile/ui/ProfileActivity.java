@@ -197,6 +197,10 @@ public class ProfileActivity extends BaseActivity {
         LinearLayoutManager ll_manager = new LinearLayoutManager(ProfileActivity.this);
         rvTripValue.setLayoutManager(ll_manager);
 
+        if (sharedPreferences.contains("Name")) {
+            fusername = (sharedPreferences.getString("Name", ""));
+        }
+
         setDataToProfile();
         initAdmob();
     }
@@ -895,9 +899,6 @@ public class ProfileActivity extends BaseActivity {
                 if (textProfile.getText().toString().equalsIgnoreCase("Request Private photos") && privateValue == 1) {
                     alertDialogAlreadyRequest();
                 } else if (textProfile.getText().toString().equalsIgnoreCase("Request Private photos")) {
-                    if (sharedPreferences.contains("Name")) {
-                        fusername = (sharedPreferences.getString("Name", ""));
-                    }
                     alertDialogRequestPermission(fusername);
                 } else {
                     startActivity(new Intent(this, EditPhotoActivity.class));
@@ -931,7 +932,7 @@ public class ProfileActivity extends BaseActivity {
                         tripL.getUserImg().setFav(1);
                         ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
                         if (notify) {
-                            sendNotifiaction(fuser.getUid(), tripL.getUser().getId(), tripL.getUser().getName(), "has added you to Favourite");
+                            sendNotifiaction(fuser.getUid(), tripL.getUser().getId(), fusername, "has added you to Favourite");
                         }
                         notify = false;
                     }
@@ -946,7 +947,7 @@ public class ProfileActivity extends BaseActivity {
                         userL.setFav(1);
                         ivFavUser.setImageResource(R.drawable.ic_action_fav_remove);
                         if (notify) {
-                            sendNotifiaction(fuser.getUid(), userL.getUser().getId(), userL.getUser().getName(), "has added you to Favourite");
+                            sendNotifiaction(fuser.getUid(), userL.getUser().getId(), fusername, "has added you to Favourite");
                         }
                         notify = false;
                     }
