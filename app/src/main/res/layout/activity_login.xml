@@ -17,8 +17,8 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="56dp"
             android:layout_marginEnd="8dp"
-            android:padding="8dp"
             android:background="#33FFFFFF"
+            android:padding="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -52,12 +52,12 @@
                             android:id="@+id/input_email"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:drawableStart="@drawable/ic_account_box_white_24dp"
+                            android:drawablePadding="5dp"
                             android:hint="Email"
                             android:inputType="textEmailAddress"
                             android:padding="10dp"
                             android:textColor="@color/white"
-                            android:drawableStart="@drawable/ic_account_box_white_24dp"
-                            android:drawablePadding="5dp"
                             android:textCursorDrawable="@drawable/cursor_primary"
                             android:textSize="16sp" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -74,14 +74,14 @@
                             android:id="@+id/input_password"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:drawableStart="@drawable/ic_lock_white_24dp"
                             android:drawableEnd="@drawable/ic_action_eye_off"
+                            android:drawablePadding="5dp"
                             android:hint="Password"
                             android:inputType="textPassword"
                             android:padding="10dp"
                             android:textColor="@color/white"
                             android:textCursorDrawable="@drawable/cursor_primary"
-                            android:drawableStart="@drawable/ic_lock_white_24dp"
-                            android:drawablePadding="5dp"
                             android:textSize="16sp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -93,54 +93,59 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/ripple_primary_color"
-                    android:text="Login"
                     android:drawableStart="@drawable/ic_verified_user_white_24dp"
                     android:paddingStart="5dp"
                     android:paddingEnd="5dp"
-                    android:textSize="16sp"
+                    android:text="Login"
                     android:textColor="@drawable/color_white_to_black"
+                    android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textInput_password" />
 
-
-                <Button
-                    android:id="@+id/btn_phone_login"
-                    android:layout_width="match_parent"
-                    android:layout_height="35dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/ripple_primary_color"
-                    android:text="Phone Login"
-                    android:drawableStart="@drawable/ic_verified_user_white_24dp"
-                    android:paddingStart="5dp"
-                    android:paddingEnd="5dp"
-                    android:textSize="16sp"
-                    android:textColor="@drawable/color_white_to_black"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/btn_login" />
-
                 <com.facebook.login.widget.LoginButton
                     android:id="@+id/login_button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
                     android:layout_marginTop="16dp"
                     android:padding="4dp"
-                    android:textSize="16sp"
                     android:textColor="@drawable/color_white_to_black"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/btn_phone_login" />
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toStartOf="@+id/btn_phone_login"
+                    app:layout_constraintStart_toStartOf="@+id/btn_login"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_login" />
+
+
+                <TextView
+                    android:id="@+id/btn_phone_login"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="11dp"
+                    android:background="@drawable/ripple_primary_color"
+                    android:drawableStart="@drawable/ic_phone_android_white_24dp"
+                    android:gravity="center_vertical"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:text="Login with Phone"
+                    android:textAlignment="center"
+                    android:textColor="@drawable/color_white_to_black"
+                    android:textSize="16sp"
+                    android:padding="2dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/login_button"
+                    app:layout_constraintEnd_toEndOf="@+id/btn_login"
+                    app:layout_constraintStart_toEndOf="@+id/login_button"
+                    app:layout_constraintTop_toTopOf="@+id/login_button"
+                    tools:ignore="MissingConstraints" />
 
                 <TextView
                     android:id="@+id/link_signup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginTop="8dp"
-                    android:text="Forget Password..?"
+                    android:layout_marginTop="72dp"
                     android:fontFamily="@font/montserrat"
+                    android:text="Forget Password..?"
                     android:textColor="@drawable/color_white_to_black"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -155,18 +160,14 @@
                     android:fontFamily="sans-serif-smallcaps"
                     android:gravity="center"
                     android:text="@string/register"
-                    android:textStyle="bold"
                     android:textColor="@drawable/color_white_to_black"
                     android:textSize="20sp"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/link_signup" />
+                    app:layout_constraintTop_toBottomOf="@+id/link_signup"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

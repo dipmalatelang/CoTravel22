@@ -34,15 +34,18 @@
             android:gravity="center"
             android:text="@string/add_phone"
             android:textColor="@drawable/color_white_to_black"
-            android:textSize="20sp"
+            android:textSize="22sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
-            android:layout_width="80dp"
+            android:id="@+id/llsp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:background="@drawable/bg_border_white"
             app:layout_constraintEnd_toStartOf="@+id/ed_number"
             app:layout_constraintStart_toStartOf="parent"
@@ -50,25 +53,25 @@
 
             <Spinner
                 android:id="@+id/spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:paddingTop="4dp"
-                android:paddingStart="8dp"
-                android:paddingBottom="4dp"
-                android:background="@color/transparent"/>
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:backgroundTint="@color/white"
+                android:padding="5dp"
+                android:singleLine="true"
+                app:layout_constraintTop_toBottomOf="@+id/tv_age_text" />
         </LinearLayout>
 
         <EditText
             android:id="@+id/ed_number"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
             android:layout_marginTop="40dp"
-            android:textColor="@color/white"
+            android:background="@drawable/bg_border_white"
+            android:gravity="center"
             android:inputType="phone"
             android:maxLength="12"
-            android:gravity="center"
-            android:background="@drawable/bg_border_white"
+            android:hint="Phone number"
+            android:textColor="@color/white"
             android:theme="@style/TextInputLayoutAppearance"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_title_text" />
@@ -80,6 +83,7 @@
             android:layout_height="51dp"
             android:layout_marginTop="24dp"
             android:gravity="center"
+            android:textSize="15sp"
             android:text="@string/phone_verify"
             android:textColor="@drawable/color_white_to_black"
             app:layout_constraintEnd_toEndOf="parent"
