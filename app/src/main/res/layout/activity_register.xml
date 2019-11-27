@@ -65,6 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Name"
+                android:fontFamily="@font/montserrat"
                 android:drawableStart="@drawable/ic_account_box_white_24dp"
                 android:drawablePadding="5dp"
                 android:textSize="16sp"/>

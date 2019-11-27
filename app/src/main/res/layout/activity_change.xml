@@ -19,9 +19,9 @@
         android:layout_margin="10dp"
         android:gravity="center"
         android:padding="10dp"
+        android:background="#33FFFFFF"
         android:scrollbars="vertical"
         android:visibility="visible"
-        android:background="#33FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.842"
@@ -69,36 +69,43 @@
             app:layout_constraintVertical_bias="0.214" />
 
 
-        <EditText
-            android:id="@+id/etCurrentPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:drawableEnd="@drawable/ic_visibility_off_purple_24dp"
-            android:drawablePadding="10dp"
-            android:hint="Password"
-            android:inputType="textPassword"
-            android:padding="15dp"
-            android:textColor="@color/white"
-            style="@style/text_view_style"
-            app:layout_constraintEnd_toEndOf="@+id/tv_title_text"
-            app:layout_constraintStart_toStartOf="@+id/tv_title_text"
-            app:layout_constraintTop_toBottomOf="@+id/tv_title_text" />
+    <EditText
+        android:id="@+id/etCurrentPassword"
+        android:layout_marginTop="10dp"
+        android:drawableEnd="@drawable/ic_action_eye_off"
+        android:hint="Password"
+        android:theme="@style/TextInputLayoutAppearance"
+        app:layout_constraintEnd_toEndOf="@+id/tv_title_text"
+        app:layout_constraintStart_toStartOf="@+id/tv_title_text"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:padding="10dp"
+        android:textColor="@color/white"
+        android:drawablePadding="5dp"
+        android:textCursorDrawable="@drawable/cursor_primary"
+        android:textSize="16sp"
+        />
+
+
+
 
         <EditText
             android:id="@+id/etNewpassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:drawableEnd="@drawable/ic_visibility_off_purple_24dp"
+            android:drawableEnd="@drawable/ic_action_eye_off"
             android:drawablePadding="10dp"
             android:hint="New Password"
             android:inputType="textPassword"
             android:padding="15dp"
-            style="@style/text_view_style"
             android:textColor="@color/white"
-            android:textCursorDrawable="@drawable/cursor_white"
+            android:textSize="16sp"
 
+            android:textCursorDrawable="@drawable/cursor_white"
+            android:theme="@style/TextInputLayoutAppearance"
             app:layout_constraintEnd_toEndOf="@+id/etCurrentPassword"
             app:layout_constraintStart_toStartOf="@+id/etCurrentPassword"
             app:layout_constraintTop_toBottomOf="@+id/etCurrentPassword" />
@@ -108,14 +115,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:drawableEnd="@drawable/ic_visibility_off_purple_24dp"
+            android:drawableEnd="@drawable/ic_action_eye_off"
             android:drawablePadding="10dp"
             android:hint=" Confirm Password"
             android:inputType="textPassword"
             android:padding="15dp"
+            android:textSize="16sp"
+
             android:textColor="@color/white"
             android:textCursorDrawable="@drawable/cursor_primary"
-            style="@style/text_view_style"
+            android:theme="@style/TextInputLayoutAppearance"
             app:layout_constraintEnd_toEndOf="@+id/etNewpassword"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/etNewpassword"

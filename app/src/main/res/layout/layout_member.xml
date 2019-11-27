@@ -69,8 +69,9 @@
             android:layout_height="wrap_content"
             android:text="TextView"
             android:textSize="18sp"
+            android:singleLine="true"
             style="@style/text_view_style"
-            android:fontFamily="@font/quando"
+            android:fontFamily="@font/montserrat"
             android:gravity="center"/>
 
 
@@ -82,6 +83,7 @@
             style="@style/text_view_style"
             android:text="TextView"
             android:textStyle="italic"
+            android:singleLine="true"
             android:gravity="center"/>
 
 
