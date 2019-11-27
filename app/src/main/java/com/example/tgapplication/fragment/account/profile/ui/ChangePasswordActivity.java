@@ -170,12 +170,12 @@ public class ChangePasswordActivity extends BaseActivity {
                 if (!input_password.getTransformationMethod().toString().contains("Password")) {
                     input_password.setTransformationMethod(new PasswordTransformationMethod());
                     input_password.setSelection(input_password.getText().length());
-                    input_password.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_visibility_off_purple_24dp, 0);
+                    input_password.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_eye_off, 0);
 
                 } else {
                     input_password.setTransformationMethod(new HideReturnsTransformationMethod());
                     input_password.setSelection(input_password.getText().length());
-                    input_password.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_remove_red_eye_black_24dp, 0);
+                    input_password.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_eye, 0);
                 }
                 return true;
             }

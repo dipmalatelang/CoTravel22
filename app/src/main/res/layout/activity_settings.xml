@@ -5,10 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:backgroundTint="#80000000"
-    android:backgroundTintMode="src_over"
-    android:background="@drawable/img2">
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -34,20 +31,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:orientation="vertical"
-        android:gravity="center"
         android:layout_margin="8dp"
+        android:layout_marginTop="383dp"
+        android:gravity="center"
+        android:orientation="vertical"
         android:padding="8dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:background="#33FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@android:drawable/picture_frame"
+
         app:layout_constraintTop_toBottomOf="@+id/appbar"
-        tools:layout_editor_absoluteX="5dp">
+        tools:layout_editor_absoluteX="8dp">
 
         <Switch
             android:id="@+id/switchDisplayNumber"
-            style="@style/text_view_style"
+            style="@style/text_view_style1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserrat"
@@ -67,15 +63,14 @@
 
         <TextView
             android:id="@+id/tv_notification"
-            style="@style/text_view_style"
+            style="@style/text_view_style1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Notification"
-            android:textAllCaps="true"
-            android:textStyle="bold"
             android:layout_marginBottom="5dp"
             android:fontFamily="@font/montserrat"
+            android:text="Notification"
+            android:textAllCaps="true"
             app:layout_constraintTop_toBottomOf="@+id/view1"
             tools:layout_editor_absoluteX="-8dp" />
 
@@ -90,29 +85,31 @@
 
 
             <TextView
+                style="@style/text_view_style1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:drawableStart="@drawable/ic_email_black_24dp"
                 android:drawablePadding="5dp"
-                android:hint="Email"
-                android:textSize="18sp"
                 android:fontFamily="@font/montserrat"
+                android:text="Email"
                 android:padding="2dp"
-                style="@style/text_view_style"
+                android:textColor="@color/black"
+                android:textSize="16sp"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:layout_editor_absoluteX="8dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Switch
             android:id="@+id/switchEmailAllNotify"
-            style="@style/text_view_style"
+            style="@style/text_view_style1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
+            android:textColor="@color/gray_bg"
             android:fontFamily="@font/montserrat"
             android:text=" All activity Notifications "
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
             app:layout_constraintTop_toBottomOf="@+id/textInput_email"
             tools:ignore="MissingConstraints"
             tools:layout_editor_absoluteX="8dp">
@@ -122,12 +119,14 @@
 
         <Switch
             android:id="@+id/switchEmailMsgNotify"
-            style="@style/text_view_style"
+            style="@style/text_view_style1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="2dp"
             android:fontFamily="@font/montserrat"
+            android:textColor="@color/gray_bg"
+
             android:text=" Only notifications about new messages"
             app:layout_constraintTop_toBottomOf="@+id/switchEmailAllNotify"
             tools:layout_editor_absoluteX="8dp">
@@ -147,33 +146,37 @@
 
 
             <TextView
+                style="@style/text_view_style1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
                 android:drawableStart="@drawable/ic_phone_android_black_24dp"
                 android:drawablePadding="5dp"
-                android:hint="Phone"
-                android:padding="2dp"
                 android:fontFamily="@font/montserrat"
-                style="@style/text_view_style"
+                android:text="Phone"
+                android:padding="2dp"
+
+
+                android:textColor="@color/black"
                 android:textCursorDrawable="@color/purple"
-                android:textSize="18sp"
-                android:layout_marginBottom="5dp"
+                android:textSize="16sp"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:layout_editor_absoluteX="8dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Switch
             android:id="@+id/switchSmsMsgNotify"
-            style="@style/text_view_style"
+            style="@style/text_view_style1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="52dp"
+            android:textColor="@color/gray_bg"
             android:fontFamily="@font/montserrat"
             android:text=" SMS notifications about new messages"
             app:layout_constraintTop_toBottomOf="@+id/textInput_phone"
             tools:ignore="MissingConstraints"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
             tools:layout_editor_absoluteX="5dp">
 
 
