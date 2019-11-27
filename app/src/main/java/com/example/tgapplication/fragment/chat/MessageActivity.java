@@ -140,6 +140,7 @@ public class MessageActivity extends BaseActivity {
                                     .listener(new RequestListener<Bitmap>() {
                                         @Override
                                         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                                            profile_image.setImageResource(R.drawable.no_photo_female);
 
                                             return false;
                                         }

@@ -140,6 +140,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         editor.putString("Gender",user.getGender());
         editor.putBoolean("DisplayPhone",user.isShow_number());
         editor.putString("Phone",user.getPhone());
+        editor.putString("mobileCode",user.getMobileCode());
         editor.putString("TravelWith",new Gson().toJson(user.getTravel_with()));
         editor.putString("AgeRange",new Gson().toJson(user.getRange_age()));
 
@@ -373,9 +374,10 @@ public abstract class BaseActivity extends AppCompatActivity {
                 .child(id).child("id").setValue(id);
     }
 
-    public void setPhoneNumber(String id, String mobile)
+    public void setPhoneNumber(String id, String mobile, String mobileCode)
     {
         UsersInstance.child(id).child("phone").setValue(mobile);
+        UsersInstance.child(id).child("mobileCode").setValue(mobileCode);
     }
 
     public void setShowNumber(String id, boolean show_number)
