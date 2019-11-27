@@ -71,7 +71,7 @@
             android:textSize="18sp"
             android:singleLine="true"
             style="@style/text_view_style"
-            android:fontFamily="@font/quando"
+            android:fontFamily="@font/montserrat"
             android:gravity="center"/>
 
 
